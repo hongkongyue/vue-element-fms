@@ -72,3 +72,5 @@ npm run build
 - [iView](https://www.iviewui.com/) 基于Vue的一套UI组件库
 - [Mock.js](http://mockjs.com/) 生成随机数据，拦截 Ajax 请求 让前端攻城师独立于后端进行开发
 - [json-server](https://github.com/typicode/json-server) 搭建JSON服务器 配合mockjs完成前端Mock服务
+ <img src="https://github.com/hongkongyue/img/blob/master/A-1.jpg">
+ <img src="https://github.com/hongkongyue/img/blob/master/A-2.png">
