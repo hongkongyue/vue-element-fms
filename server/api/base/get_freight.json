@@ -1,0 +1,10 @@
+{
+  "code": "1",
+  "msg": "查询成功",
+  "data": {
+    "over_freight": 0.00,
+    "order_code": "DX20180521048095",
+    "sum_freight": 6.00,
+    "base_freight": 6.00
+  }
+}

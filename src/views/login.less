@@ -1,0 +1,60 @@
+body{
+  overflow:auto;
+}
+.login{
+  width: 100%;
+  min-width: 1100px;
+  height: 100%;
+  background-image: url('../assets/bg.png');
+  background-image: url('../assets/body-bg.png');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  &-top{
+      position: absolute;
+      top:0px;
+      left:0px;
+      height: 74px;
+      width: 100%;
+      background: url('../assets/logo.png') no-repeat 31px 17px #191B1C;
+      box-shadow: 0 1px 0 0 #3A3F41;
+      font-family: "微软雅黑";
+      font-size: 24px;
+      color: #FFFFFF;
+      text-indent: 71px;
+      line-height: 74px;
+      letter-spacing: 3.27px;
+  }
+  &-bottom{
+       position:relative;
+        width: 1100px; height: 100%;
+        width: 1100px; height: 85%;
+        margin:0 auto;
+
+  }
+  &-tit{
+     position: absolute;
+     top:30%;
+     left:0%;
+     height: 74px;
+      transform: translateX(0%);
+      font-family:"微软雅黑";
+      font-size: 44px;
+      color: #FFFFFF;
+  }
+  &-con{
+      position: absolute;
+      right: 0px;
+      top: 50%;
+      transform: translateY(-60%);
+      width: 350px;
+      .ivu-card-body{ padding: 3px 16px 16px 16px; }
+      .ivu-card-head{ padding: 16px 16px 10px 16px;border: 0px; }
+      .com-tit{
+        font-size: 14px;
+        color: #407DC8;
+        font-weight: 100;
+      }
+      .validate{ position: absolute; top:0px; right:0px;}
+  }
+}

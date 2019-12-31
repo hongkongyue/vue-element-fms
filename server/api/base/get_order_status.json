@@ -1,0 +1,41 @@
+{
+  "code": "1",
+  "msg": "操作成功",
+  "data": [{
+    "statusName": "草稿",
+    "statusCode": "100"
+  }, {
+    "statusName": "待审核",
+    "statusCode": "200"
+  }, {
+    "statusName": "已驳回",
+    "statusCode": "250"
+  }, {
+    "statusName": "已审核",
+    "statusCode": "300"
+  }, {
+    "statusName": "推送失败",
+    "statusCode": "350"
+  }, {
+    "statusName": "已推送",
+    "statusCode": "400"
+  }, {
+    "statusName": "已发货",
+    "statusCode": "600"
+  }, {
+    "statusName": "归还中",
+    "statusCode": "700"
+  }, {
+    "statusName": "部分归还",
+    "statusCode": "750"
+  }, {
+    "statusName": "已关闭",
+    "statusCode": "900"
+  }, {
+    "statusName": "已取消",
+    "statusCode": "950"
+  }, {
+    "statusName": "已完成",
+    "statusCode": "800"
+  }]
+}
