@@ -6,7 +6,10 @@
                 <el-button v-if="judgeMenu.indexOf('查询') !== -1" size="small" type="primary" @click="onSearch">查询</el-button>
             </el-form-item>
             <el-form-item size="small">
-                <el-button v-if="judgeMenu.indexOf('同步') !== -1" size="small" type="primary" @click="onImport">同步</el-button>
+                <el-button v-if="judgeMenu.indexOf('同步') !== -1" size="small" type="primary" @click="onSync">同步</el-button>
+            </el-form-item>
+             <el-form-item size="small">
+                <el-button v-if="judgeMenu.indexOf('导出') !== -1" size="small" type="primary" @click="checkExport">导出</el-button>
             </el-form-item>
             <el-form-item size="small">
                 <el-button size="small" type="default" @click="onReset">重置</el-button>
@@ -133,6 +136,31 @@
             </el-tab-pane>
         </el-tabs>
     </section>
+      <!-- 导出 -->
+    <Modal v-model="exportVisible" title="导出" @on-cancel='cancelExport' :width="430" class-name="customize-modal-center">
+        <Row class="margin-bottom-10 background-color-white exhibition">
+            <el-form :inline="true" ref="ruleForm" :model="exportObj" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="rules">
+                <Col v-show="!moreLarge">
+                    <el-form-item label="导出类型" size="small" label-width="95px" prop="platform">
+                        <el-select  v-model="exportObj.selected" filterable placeholder="请选择" style="width:150px">
+                            <el-option label="导出主表" value="1"></el-option>
+                            <el-option label="导出主表+明细" value="2"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </Col>
+                <Col v-show="moreLarge" style="text-align:center">
+                       目前要导出的数据超过10万条，确定继续导出吗？
+                </Col>
+                <el-form-item style="padding-left:130px">
+                    <Button type="primary" v-if="!moreLarge" @click="getExportTotal">确认</Button>
+                    <!-- 二次确认 -->
+                    <Button type="primary" v-if="moreLarge" @click="onImport">确认</Button> 
+                    <Button type="default" @click="cancelExport">取消</Button>
+                </el-form-item>
+            </el-form>
+        </Row>
+        <div slot="footer"></div>
+    </Modal>
 </div>
 </template>
 
@@ -143,6 +171,11 @@ export default {
 
     data() {
         return {
+             exportObj:{
+                       selected:''
+            },
+            exportVisible:false,
+            moreLarge:false,
             activeName: 'first',
             timeAA: null,
             // tableList:[],//合计
@@ -525,7 +558,7 @@ export default {
 
         },
         //同步
-        onImport() {
+        onSync() {
             let data = {}
             this.request('order_sync', data, false).then(res => {
                 if (res.code == '1') {
@@ -748,7 +781,146 @@ export default {
             this.currentPage = val
             this.getData()
         },
-
+        checkSelection() {
+            let arr = w2ui.scmOrder.getSelection()
+            if (arr.length > 0) {
+                return true
+            }
+            return false
+        },
+       //导出相关
+        checkExport(){
+                 if(this.checkSelection()){
+                    // this.onImport()
+                    this.exportVisible=true
+                 }else{
+                     this.exportVisible=true
+                 }
+        },
+        cancelExport(){
+                   this.exportVisible=false;
+                   this.moreLarge=false;
+                   this.exportObj.selected=''
+        },
+        getExportTotal(){
+              if(!this.exportObj.selected) return this.$message.error('请选择导出类型')
+              let data={}
+                        data.pageSize = this.pagesize
+                        data.currentPage = this.currentPage
+                        data.years   = this.formSearch.years
+                        data.goodsNo = this.formSearch.goodsNo
+                        data.purchaseOrderNo = this.formSearch.ordersNo
+                        data.designNumber = this.formSearch.designsNo
+                        data.companyId  = this.formSearch.company
+                        data.supplierId = this.formSearch.supplier
+                        this.exportObj.selected==1?    data.inclusionDetails=true:data.inclusionDetails=false;
+                        this.formSearch.documentDate ? data.createStart = this.formSearch.documentDate[0] : delete data.createStart //单据日期
+                        this.formSearch.documentDate ? data.createEnd = this.formSearch.documentDate[1] : delete data.createEnd
+                        this.formSearch.orderDate ?    data.orderDateStart = this.formSearch.orderDate[0] : delete data.orderDateStart //下单日期
+                        this.formSearch.orderDate ?    data.orderDateEnd = this.formSearch.orderDate[1] : delete data.orderDateEnd
+                        w2ui.scmOrder.getSelection().length>0?data.ids= w2ui.scmOrder.getSelection():delete data.ids
+                        this.exportObj.selected==1? data.inclusionDetails=false:data.inclusionDetails=true;
+            this.request('payable_bizpurchaseorder_exportCount',data,false).then(res=>{
+               if(res.code==1){
+                   if(res.data>100000){
+                       this.moreLarge=true
+                   }else{
+                       this.moreLarge=false
+                       this.onImport()
+                   }
+               }else{
+                   this.$message.error(res.msg)
+               }
+           })
+        },
+         //导出
+        onImport(){
+                    let data = {}
+                        data.pageSize = this.pagesize
+                        data.currentPage = this.currentPage
+                        data.years   = this.formSearch.years
+                        data.goodsNo = this.formSearch.goodsNo
+                        data.purchaseOrderNo = this.formSearch.ordersNo
+                        data.designNumber = this.formSearch.designsNo
+                        data.companyId  = this.formSearch.company
+                        data.supplierId = this.formSearch.supplier
+                        this.exportObj.selected==1?    data.inclusionDetails=true:data.inclusionDetails=false;
+                        this.formSearch.documentDate ? data.createStart = this.formSearch.documentDate[0] : delete data.createStart //单据日期
+                        this.formSearch.documentDate ? data.createEnd = this.formSearch.documentDate[1] : delete data.createEnd
+                        this.formSearch.orderDate ?    data.orderDateStart = this.formSearch.orderDate[0] : delete data.orderDateStart //下单日期
+                        this.formSearch.orderDate ?    data.orderDateEnd = this.formSearch.orderDate[1] : delete data.orderDateEnd
+                        w2ui.scmOrder.getSelection().length>0?data.ids= w2ui.scmOrder.getSelection():delete data.ids
+                        this.exportObj.selected==1? data.inclusionDetails=false:data.inclusionDetails=true;
+                      this.request('payable_bizpurchaseorder_export', data, false).then(res => {
+                        if (res.code == 1) {
+                            this.cancelExport()
+                            this.getKeyD(res.data)
+                        } else {
+                            this.$message({
+                                message: res.msg,
+                                type: 'error'
+                            });
+                        }
+                }) 
+        },
+          getKeyD(key) {
+            const h = this.$createElement;
+            let data = {}
+                data.taskKey = key
+                this.timeBB = setTimeout(() => {
+                    this.request('getProcessResultByTaskKey', data, false).then(res => {
+                        if (res.code == 1) {
+                            if (res.data.processStatus !== 0) {
+                                this.$notify.success({
+                                    title: res.data.title,
+                                    message: h('p', null, [
+                                        h('a', {
+                                            on: {
+                                                click: this.clickA(res.data.subTitle)
+                                            }
+                                        }, res.data.subTitle.indexOf('[') == -1 ? res.data.subTitle : "下载链接"),
+                                    ]),
+                                    duration: 0,
+                                });
+                                this.cleanKey(key)
+                                function myStopFunction() {
+                                    clearTimeout(this.timeBB);
+                                }
+                            } else {
+                                this.$notify.success({
+                                    title: res.data.title,
+                                    message: res.data.subTitle,
+                                    duration: 3000
+                                });
+                                this.getKeyD(key)
+                            }
+                        } else {
+                            this.$message.warning(res.msg)
+                        }
+                    })
+                }, 5000)
+        },
+        clickA(url) {
+            console.log(url)
+            if (url.indexOf('[') == -1) {
+                console.log('没有地址')
+            } else {
+                url.replace()
+                let aPos = url.indexOf('[');
+                let bPos = url.indexOf(']');
+                let r = url.substr(aPos + 1, bPos - aPos - 1);
+                window.location.href = r
+            }
+        },
+        cleanKey(key) {
+            let data = {}
+                data.taskKey = key
+            this.request('delByTaskKey', data, false).then(res => {
+                if (res.code == 1) {
+                    console.log('oooo')
+                }
+            })
+        },
     }
 }
 </script> 

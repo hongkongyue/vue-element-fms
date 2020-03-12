@@ -2,6 +2,23 @@
 <div>
     <header class="headerstyle">
         <el-form :inline="true" :model="formSearch" class="demo-form-inline ">
+            <div>
+                <el-form-item size="small">
+                    <el-button v-if="judgeMenu.indexOf('查询') !== -1" size="small" type="primary" @click="onSearch">查询</el-button>
+                </el-form-item>
+                <el-form-item size="small">
+                    <el-button size="small" type="default" @click="onReset">重置</el-button>
+                </el-form-item>
+                <el-form-item size="small">
+                    <el-button v-if="judgeMenu.indexOf('导出') !== -1" size="small" type="primary" @click="onImport">导出</el-button>
+                </el-form-item>
+                <el-form-item size="small">
+                    <el-button v-if="judgeMenu.indexOf('自动核销') !== -1" size="small" type="primary" @click="onWrite">自动核销</el-button>
+                </el-form-item>
+                <el-form-item size="small">
+                    <el-button v-if="judgeMenu.indexOf('强制核销') !== -1" size="small" type="primary" @click="forceWrite">强制核销</el-button>
+                </el-form-item>
+            </div>
             <el-form-item><span style="color:red">*</span></el-form-item>
             <el-form-item label="平台：" size="small">
                 <el-select v-model="formSearch.code" @change="changebasicPlatformId(formSearch.code)" filterable placeholder="请选择" style="width:150px">
@@ -49,21 +66,6 @@
             </el-form-item>
             <el-form-item size="small">
                 <el-button v-if="show == true" @click="changeHidden" style="float:right" size="small"><i class="el-icon-top"></i></el-button>
-            </el-form-item>
-            <el-form-item size="small">
-                <el-button v-if="judgeMenu.indexOf('查询') !== -1" size="small" type="primary" @click="onSearch">查询</el-button>
-            </el-form-item>
-            <el-form-item size="small">
-                <el-button size="small" type="default" @click="onReset">重置</el-button>
-            </el-form-item>
-            <el-form-item size="small">
-                <el-button v-if="judgeMenu.indexOf('导出') !== -1" size="small" type="primary" @click="onImport">导出</el-button>
-            </el-form-item>
-            <el-form-item size="small">
-                <el-button v-if="judgeMenu.indexOf('自动核销') !== -1" size="small" type="primary" @click="onWrite">自动核销</el-button>
-            </el-form-item>
-            <el-form-item size="small">
-                <el-button v-if="judgeMenu.indexOf('强制核销') !== -1" size="small" type="primary" @click="forceWrite">强制核销</el-button>
             </el-form-item>
         </el-form>
     </header>
@@ -282,6 +284,12 @@ export default {
                     reorderColumns: true,
                     reorderRows: true,
                     columns: [{
+                            field: 'index',
+                            caption: '序号',
+                            size: '80px',
+                            sortable: true,
+                            info: true
+                        },{
                             field: 'verifyTime',
                             caption: '核销时间',
                             size: '100px',
@@ -785,6 +793,7 @@ export default {
 
                     if (res.data.records) {
                         for (let i = 0, len = res.data.records.length; i < len; i++) {
+                            res.data.records[i].index =i+1
                             res.data.records[i].recid = res.data.records[i].id
                         }
                         this.initTable(res.data.records, res.data.sums)

@@ -2,18 +2,8 @@
 <div>
     <header class="headerstyle">
         <el-form :inline="true" :model="formSearch" class="demo-form-inline ">
-            <!-- <el-form-item label="岗位编码："   size="small">
-                              <el-select v-model="formSearch.code" filterable placeholder="请选择" style="width:150px">
-                                  <el-option v-for="item in companyCodeOptions" :key="item.code" :label="item.code" :value="item.code"></el-option>
-                              </el-select>
-                          </el-form-item> -->
-            <el-form-item label="版本号：" size="small">
-                <el-input style="width:140px" v-model="formSearch.version" placeholder="请输入版本号"></el-input>
-                <!-- <el-select v-model="formSearch.basicStationName" filterable placeholder="请选择" style="width:150px">
-                                  <el-option v-for="item in companyCodeOptions" :key="item.basicStationName" :label="item.basicStationName" :value="item.basicStationName"></el-option>
-                              </el-select> -->
-            </el-form-item>
-            <el-form-item size="small">
+            <div>
+                <el-form-item size="small">
                 <!-- -->
                 <el-button v-if="judgeMenu.indexOf('查询') !== -1" size="small" type="primary" @click="onSearch">查询</el-button>
             </el-form-item>
@@ -30,6 +20,19 @@
             <el-form-item size="small">
                 <el-button v-if="judgeMenu.indexOf('删除') !== -1" size="small" type="primary" @click="onDel">删除</el-button>
             </el-form-item>
+            </div>
+            <!-- <el-form-item label="岗位编码："   size="small">
+                              <el-select v-model="formSearch.code" filterable placeholder="请选择" style="width:150px">
+                                  <el-option v-for="item in companyCodeOptions" :key="item.code" :label="item.code" :value="item.code"></el-option>
+                              </el-select>
+                          </el-form-item> -->
+            <el-form-item label="版本号：" size="small">
+                <el-input style="width:140px" v-model="formSearch.version" placeholder="请输入版本号"></el-input>
+                <!-- <el-select v-model="formSearch.basicStationName" filterable placeholder="请选择" style="width:150px">
+                                  <el-option v-for="item in companyCodeOptions" :key="item.basicStationName" :label="item.basicStationName" :value="item.basicStationName"></el-option>
+                              </el-select> -->
+            </el-form-item>
+            
         </el-form>
     </header>
     <section class="middle">

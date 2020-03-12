@@ -2,11 +2,7 @@
     <div>
         <header class="headerstyle">
             <el-form :inline="true" :model="formSearch" class="demo-form-inline ">
-                <el-form-item label="平台名称："   size="small">
-                    <el-select v-model="formSearch.region" @change="searchCode(formSearch.region)" filterable placeholder="请选择" style="width:150px">
-                        <el-option v-for="item in platformOptions" :key="item.name" :label="item.name" :value="item.name"></el-option>
-                    </el-select>
-                </el-form-item>
+              <div>
                 <el-form-item   size="small">
                     <el-button v-if="judgeMenu.indexOf('查询') !== -1" size="small" type="primary" @click="onSearch">查询</el-button>
                 </el-form-item>
@@ -19,6 +15,13 @@
                 <el-form-item   size="small">
                       <el-button v-if="judgeMenu.indexOf('修改') !== -1" size="small" type="primary" @click="clickTable">编辑</el-button>
                   </el-form-item>
+              </div>
+                <el-form-item label="平台名称："   size="small">
+                    <el-select v-model="formSearch.region" @change="searchCode(formSearch.region)" filterable placeholder="请选择" style="width:150px">
+                        <el-option v-for="item in platformOptions" :key="item.name" :label="item.name" :value="item.name"></el-option>
+                    </el-select>
+                </el-form-item>
+                
             </el-form>
         </header>
         <section class="middle">

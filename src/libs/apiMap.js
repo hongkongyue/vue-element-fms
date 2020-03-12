@@ -36,7 +36,7 @@ const methodMap = {
     masterData_brand_update  :{url:'/eop-boot/masterData/brand/update'  ,method:'post'}, //品牌更新
     // 人员
     masterData_staff_selector:{url:'/eop-boot/masterData/staff/multipleSelector', method:'post'},//人员-下拉框
-    masterData_staff_page:{url:'/eop-boot/masterData/staff/page',   method:'post'},         //人员-列表分页查询
+    masterData_staff_page:{url:'/eop-boot/masterData/staff/page',    method:'post'},         //人员-列表分页查询
     masterData_staff_sync:{url:'/eop-boot/masterData/staff/sync',    method:'post'},        //人员-同步
     masterData_staff_export:{url:'/eop-boot/masterData/staff/export', method:'post'},        //人员-导出
 
@@ -283,7 +283,7 @@ const methodMap = {
       closed_check:{url:'/eop-boot/payable/payable-closed-order/check',method:'post'},//校验（author:lmy
       closed_doBizService:{url:'/eop-boot/payable/payable-closed-order/doBizService',method:'post'},//操作按钮（author:lmy
       payable_payable_closed_order_getDetailByClosedNo:{url:'/eop-boot/payable/payable-closed-order/getDetailByClosedNo',method:'post'},//明细获取
-
+      payable_payable_closed_order_createCloseDetail:{url:'/eop-boot/payable/payable-closed-order/createCloseDetail',method:'post'},
       //销售出库
       bizStockOut_page:{url:'/eop-boot/stocks/bizStockOut/page',method:'post'},               //销售出库主表(石明科)
       bizStockOut_Detail_page:{url:'/eop-boot/stocks/bizStockOut/Detail/page',method:'post'},//销售出库子表明细查询(石明科)
@@ -342,13 +342,15 @@ const methodMap = {
       masterData_deductionDiscount_update:{url:'/eop-boot/masterData/deductionDiscount/update', method:'post'},//更新
       masterData_deductionDiscount_delete:{url:'/eop-boot/masterData/deductionDiscount/delete', method:'post'},//删除
       masterData_deductionDiscount_uploadAsync:{url:'/eop-boot/masterData/deductionDiscount/uploadAsync', method:'post'},//异步导入文件
-
+ 
       //成本折扣
       //返单记录
       returnRecord_page:{url:'/eop-boot/stocks/returnRecord/page',method:'post'},//查询
+      stocks_returnRecord_exportAsync:{url:'/eop-boot/stocks/returnRecord/exportAsync',method:'post'},
 
       //成本减值率表
       discount_page:{url:'/eop-boot/discount/cost/page',method:'post'},//查询
+      discount_cost_exportAsync:{url:'/eop-boot/discount/cost/exportAsync',method:'post'},//导出
 
       //改标记录
       markchange_page:{url:'/eop-boot/markchange/markChangeRecord/page',method:'post'},//查询
@@ -374,6 +376,97 @@ const methodMap = {
       discount_dict_update:{url:'/eop-boot/discount/dict/update',method:'post'}, //减值字典-修改
       discount_dict_add:{url:'/eop-boot/discount/dict/add',method:'post'}, //减值字典-新增
 
+      //付款登记
+      payable_paymentRegistration_add:{url:'/eop-boot/payable/paymentRegistration/add',method:'post'},//新增
+      payable_paymentRegistration_update:{url:'/eop-boot/payable/paymentRegistration/update',method:'post'},//更新
+      payable_paymentRegistration_delete:{url:'/eop-boot/payable/paymentRegistration/delete',method:'post'},//删除
+      payable_paymentRegistration_export:{url:'/eop-boot/payable/paymentRegistration/export',method:'post'},//导出
+      payable_paymentRegistration_pageQuery:{url:'/eop-boot/payable/paymentRegistration/pageQuery',method:'post'},//查询
+      payable_paymentRegistration_import:{url:'/eop-boot/payable/paymentRegistration/import',method:'post'},//导入
+
+      //到票登记
+      payable_billArrivalRegistration_page:{url:'/eop-boot/payable/billArrivalRegistration/page',method:'post'},//查询
+      payable_billArrivalRegistration_add:{url:'/eop-boot/payable/billArrivalRegistration/add', method:'post'},//新增
+      payable_billArrivalRegistration_update:{url:'/eop-boot/payable/billArrivalRegistration/update', method:'post'},//更新
+      payable_billArrivalRegistration_delete:{url:'/eop-boot/payable/billArrivalRegistration/delete', method:'post'},//删除
+      payable_billArrivalRegistration_uploadAsync:{url:'/eop-boot/payable/billArrivalRegistration/uploadAsync', method:'post'},//导入
+      payable_billArrivalRegistration_exportAsync:{url:'/eop-boot/payable/billArrivalRegistration/exportAsync', method:'post'},//导出
+
+      //导出项目
+      payable_reconciliationOrder_exportCount:{url:'/eop-boot/payable/reconciliationOrder/exportCount', method:'post'},//对账单统计
+      payable_deductionOrder_count:{url:'/eop-boot/payable/deductionOrder/count', method:'post'},//扣款单统计
+      payable_deductionAdvice_count:{url:'/eop-boot/payable/deductionAdvice/count', method:'post'},//扣款建议统计
+      payable_deductionAdvice_exportAsync:{url:'/eop-boot/payable/deductionAdvice/exportAsync', method:'post'},//扣款建议导出
+      payable_deductionOrder_exportAsync:{url:'/eop-boot/payable/deductionOrder/exportAsync', method:'post'},//扣款单导出
+      payable_bizpurchaseorder_exportCount:{url:'/eop-boot/payable/biz-purchase-order/exportCount', method:'post'},//采购订单统计
+      payable_bizpurchaseorder_export:{url:'/eop-boot/payable/biz-purchase-order/export', method:'post'},//采购订单导出
+
+      payable_settlementOrder_preExportCount:{url:'/eop-boot/payable/settlementOrder/preExportCount',  method:'post'},  //异步导出前总条数提示(zhuzhixian)
+      payable_settlementOrder_exportAsync:{url:'/eop-boot/payable/settlementOrder/exportAsync',method:'post'},//列表异步导出(zhuzhixian)
+      stocks_bizStockIn_getExportCount:{url:'/eop-boot/stocks/bizStockIn/getExportCount',method:'post'},     //采购入库-导出条数查询(石明科)
+      stocks_bizStockIn_exportAsync:{url:'/eop-boot/stocks/bizStockIn/exportAsync',method:'post'},           //采购入库-导出(石明科)
+      payable_payableclosedorder_exportAsync:{url:'/eop-boot/payable/payable-closed-order/exportAsync',method:'post'},//关单登记导出
+      payable_payableclosedorder_exportCount:{url:'/eop-boot/payable/payable-closed-order/exportCount',method:'post'},//关单登记导出
+
+      //面料开发
+      basicMeasureUnit_queryAll:{url:'/eop-boot/masterData/basicMeasureUnit/queryAll', method:'get'},//获取所有计量单位信息
+      basicMeasureUnit_syncMeasureUnit:{url:'/eop-boot/masterData/basicMeasureUnit/syncMeasureUnit', method:'get'},//计量单位同步
+      color_syncColor:{url:'/eop-boot/masterData/color/syncColor', method:'post'},//同步色号颜色SCM➡FMS接口
+      color_page:{url:'/eop-boot/masterData/color/page', method:'post'},//分页查询颜色档案接口
+      color_selector:{url:'/eop-boot/masterData/color/selector', method:'post'},//色系下拉接口
+      materialType_type:{url:'/eop-boot/masterData/materialType/page', method:'post'},//物料类型-列表筛选
+      materialType_sync:{url:'/eop-boot/masterData/materialType/sync', method:'post'},//物料类型-同步
+      materialType_selector:{url:'/eop-boot/masterData/materialType/selector', method:'post'},//物料类型-下拉
+      
+      fabric_developCycle_select:{url:'/eop-boot/fabric/developCycle/select',method:'post'},//开发周期-列表筛选
+      fabric_developCycle_uploadAsync:{url:'/eop-boot/fabric/developCycle/uploadAsync',method:'post'},//开发周期-异步导入
+      fabric_developCycle_update:{url:'/eop-boot/fabric/developCycle/update',method:'post'},//开发周期-修改
+      fabricDevelop_configurationPlan_selector:{url:'/eop-boot/fabricDevelop/configurationPlan/selector',method:'post'},//配置方案下拉接口
+      fabricDevelop_taskConfiguration_getTaskConfigurationList:{url:'/eop-boot/fabricDevelop/taskConfiguration/getTaskConfigurationList',method:'post'},//查询任务配置信息接口
+      fabricDevelop_taskConfiguration_saveOrUpdate:{url:'/eop-boot/fabricDevelop/taskConfiguration/saveOrUpdate',method:'post'},
+      masterData_staff_getStaffByParam:{url:'/eop-boot/masterData/staff/getStaffByParam',method:'post'},//获取人员下拉选项-根据名称模糊搜索
+      masterData_staff_singleSelector:{url:'/eop-boot/masterData/staff/singleSelector',method:'post'},//获取人员下拉选项
+      masterData_staff_getDepartmentByCode:{url:'/eop-boot/masterData/staff/getDepartmentByCode',method:'post'},//根据员工号获取部门信息
+      fabricDevelop_taskConfiguration_deleteByIdList:{url:'/eop-boot/fabricDevelop/taskConfiguration/deleteByIdList',method:'post'},//根据任务配置id删除任务配置信息
+      fabric_developMaterialEnter_detail:{url:'/eop-boot/fabric/developMaterialEnter/detail',method:'post'},//录入面料任务-明细
+
+      uploadImg:{url:'/eop-boot/masterData/ossFileAddress/upload',method:'post'},//文件上传
+      fabric_developMaterialEnter_submit:{url:'/eop-boot/fabric/developMaterialEnter/submit',method:'post'},//录入面料任务-提交任务
+      fabric_fabricTaskDetail_dingding:{url:'/eop-boot/fabric/fabricTaskDetail/dingding',method:'post'},//（待完成）面料开发流程列表接口
+      fabric_fabricTaskDetail_page:{url:'/eop-boot/fabric/fabricTaskDetail/page',method:'post'},//（进行中，已完成）面料开发流程列表接口
+      queryProcessStatus:{url:'/eop-boot/fabric/fabric-develop-initiate/queryProcessStatus',method:'post'},//查询任务流状态列表
+      queryProcess_page:{url:'/eop-boot/fabric/fabric-develop-initiate/page',method:'post'},//查询发起流程列表
+      report_queryReport:{url:'/eop-boot/fabric/report/queryReport',method:'post'},//报表主表查询
+      report_queryReportDetail:{url:'/eop-boot/fabric/report/queryReportDetail',method:'post'},//报表附表查询
+      fabric_fabric_develop_pricing_queryPricingDetail:{url:'/eop-boot/fabric/fabric-develop-pricing/queryPricingDetail',method:'post'},//查询核价详情
+      fabric_developMaterialEnter_inProgress:{url:'/eop-boot/fabric/developMaterialEnter/inProgress',method:'post'},//改变任务状态
+
+      fabricDevelop_poEnter_detail:{url:'/eop-boot/fabricDevelop/poEnter/detail',method:'post'},//查询采购信息详情
+      fabricDevelop_poEnter_enterPurchaseDetail:{url:'/eop-boot/fabricDevelop/poEnter/enterPurchaseDetail',method:'post'},//采购提交接口
+      masterData_basicMeasureUnit_pullDown:{url:'/eop-boot/masterData/basicMeasureUnit/pullDown',method:'get'},//计量单位
+      fabricDevelop_poEnter_revoke:{url:'/eop-boot/fabricDevelop/poEnter/revoke',method:'post'},//撤回
+
+      getListByTaskConfigurationId:{url:'/eop-boot/fabricDevelop/taskStaffMapping/getListByTaskConfigurationId',method:'post'},//根据任务配置id查询人员信息
+      queryNextId:{url:'/eop-boot/fabric/fabric-develop-initiate/queryNextId',method:'post'},//查询任务发起下一级任务id
+      add_fabric:{url:'/eop-boot/fabric/fabric-develop-initiate/add',method:'post'},//面料开发发起流程
+      cancelCheck_fabric:{url:'/eop-boot/fabric/fabric-develop-initiate/cancelCheck',method:'post'},//取消流程校验
+      cancel_fabric:{url:'/eop-boot/fabric/fabric-develop-initiate/cancel',method:'post'},//取消流程
+      queryConfirmTask:{url:'/eop-boot/fabric/developConfirm/queryConfirmTask',method:'post'},//开发确认任务详情查看
+      deliverConfirmTask:{url:'/eop-boot/fabric/developConfirm/deliverConfirmTask',method:'post'},//开发确认任务转交
+      inspectConfirmTask:{url:'/eop-boot/fabric/developConfirm/inspectConfirmTask',method:'post'},//开发确认任务送检
+      retraceConfirmTask:{url:'/eop-boot/fabric/developConfirm/retraceConfirmTask',method:'post'},//开发确认任务回撤
+
+      //检测
+      fabricDevelopCheck_verfiy:{url:'/eop-boot/fabric/fabricDevelopCheck/verify',method:'post'},//检测任务-合格与不合格
+      fabricDevelopCheck_revoke:{url:'/eop-boot/fabric/fabricDevelopCheck/revoke',method:'post'},//检测任务-撤回
+      fabricDevelopCheck_detail:{url:'/eop-boot/fabric/fabricDevelopCheck/detail',method:'post'},//检测任务-详情
+
+      //核价
+      pricing_revoke:{url:'/eop-boot/fabric/fabric-develop-pricing/revoke',method:'post'},//核价任务撤回
+      pricing_submit:{url:'/eop-boot/fabric/fabric-develop-pricing/pricing',method:'post'},//核价结果提交
+      queryPricingDetail:{url:'/eop-boot/fabric/fabric-develop-pricing/queryPricingDetail',method:'post'},//查询核价详情
+      fabric_developMaterialEnter_revokeTask:{url:'/eop-boot/fabric/developMaterialEnter/revokeTask',method:'post'},//面料回退
+      pricing_conform:{url:'/eop-boot/fabric/fabric-develop-pricing/conform',method:'post'},//发起人确认任务-确认
 };
 export default methodMap; 
 //   /business/get_develop_simple,

@@ -32,11 +32,12 @@
                     <breadcrumb-nav :currentPath="currentPath"></breadcrumb-nav>
                 </div>
             </div> -->
-            <div class="header-avator-con">
+            <div class="header-avator-con" style="width:350px">
+                
                 <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen>
                 <lock-screen v-if="false"></lock-screen>
-                <change-mode style="padding-left:20px"></change-mode>
-              
+                <change-mode style="padding-left:20px;padding-right:30px"></change-mode>
+                <span  style="font-size:13px;cursor:pointer;position:relative;top:4px" @click="goHead">{{Version+'版本更新日志'}}</span>
                 <div class="user-dropdown-menu-con">
                     <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
                         <Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
@@ -196,6 +197,11 @@ export default {
     //         }
     //       })
     //   },
+        goHead(){
+              this.$router.push({
+                  name:'publishLog'
+              })
+        },
         init() {
             this.userName = Cookies.get('user');
             this.checkTag(this.$route.name);

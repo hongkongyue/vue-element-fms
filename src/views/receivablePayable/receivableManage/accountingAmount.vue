@@ -2,6 +2,17 @@
      <div>
           <header class="headerstyle">
                 <el-form :inline="true" :model="formSearch" class="demo-form-inline ">
+                         <div>
+                          <el-form-item    size="small">
+                              <el-button v-if="judgeMenu.indexOf('查询') !== -1"  size="small" type="primary" @click="onSearch">查询</el-button>
+                          </el-form-item>
+                           <el-form-item   size="small">
+                              <el-button   size="small" type="default" @click="onReset">重置</el-button>
+                          </el-form-item>
+                           <el-form-item   size="small">
+                              <el-button v-if="judgeMenu.indexOf('导出') !== -1"  size="small" type="primary" @click="onImport">导出</el-button>
+                          </el-form-item>
+                         </div>
                           <el-form-item><span style="color:red">*</span></el-form-item>
                           <el-form-item label="平台："   size="small">
                               <el-select v-model="formSearch.plathFormId" @change="changebasicPlatformId(formSearch.plathFormId)" filterable placeholder="请选择" style="width:150px">
@@ -37,15 +48,6 @@
                           </el-form-item>
                           <el-form-item    size="small">
                              <el-button v-if="show == true" @click="changeHidden" style="float:right" size="small"><i class="el-icon-top"></i></el-button>
-                          </el-form-item>
-                          <el-form-item    size="small">
-                              <el-button v-if="judgeMenu.indexOf('查询') !== -1"  size="small" type="primary" @click="onSearch">查询</el-button>
-                          </el-form-item>
-                           <el-form-item   size="small">
-                              <el-button   size="small" type="default" @click="onReset">重置</el-button>
-                          </el-form-item>
-                           <el-form-item   size="small">
-                              <el-button v-if="judgeMenu.indexOf('导出') !== -1"  size="small" type="primary" @click="onImport">导出</el-button>
                           </el-form-item>
                 </el-form>
           </header>

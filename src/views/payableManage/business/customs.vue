@@ -11,15 +11,24 @@
             <el-form-item v-if="judgeMenu.indexOf('取消审核') !== -1" size="small">
                 <el-button size="small" type="primary" @click="offExamine">取消审核</el-button>
             </el-form-item>
-            <el-form-item v-if="judgeMenu.indexOf('确认结算') !== -1" size="small">
-                <el-button size="small" type="primary" @click="onConfirm">确认结算</el-button>
+            <el-form-item v-if="judgeMenu.indexOf('代销结算') !== -1" size="small">
+                <el-button size="small" type="primary" @click="onConfirm">代销结算</el-button>
             </el-form-item>
             <el-form-item v-if="judgeMenu.indexOf('代销转经销') !== -1" size="small">
                 <el-button size="small" type="primary" @click="onTurnAround">代销转经销</el-button>
             </el-form-item>
+            <el-form-item v-if="judgeMenu.indexOf('经销转代销') !== -1" size="small">
+                <el-button size="small" type="primary" @click="distributionAndresale">经销转代销</el-button>
+            </el-form-item>
+            <el-form-item v-if="judgeMenu.indexOf('生成结算明细') !== -1" size="small">
+                <el-button size="small" type="primary" @click="generateSettlementDetails">生成结算明细</el-button>
+            </el-form-item>
             <el-form-item v-if="judgeMenu.indexOf('删除') !== -1" size="small">
                 <el-button size="small" type="primary" @click="onDelete">删除</el-button>
             </el-form-item>
+             <el-form-item size="small" class="marginT0">
+                        <el-button v-if="judgeMenu.indexOf('导出') != -1" size="small" type="primary" @click="checkExport">导出</el-button>
+                    </el-form-item>
             <el-form-item size="small">
                 <el-button size="small" type="default" @click="onReset">重置</el-button>
             </el-form-item>
@@ -141,6 +150,31 @@
             </el-tab-pane>
         </el-tabs>
     </section>
+     <!-- 导出 -->
+    <Modal v-model="exportVisible" title="导出" @on-cancel='cancelExport' :width="430" class-name="customize-modal-center">
+        <Row class="margin-bottom-10 background-color-white exhibition">
+            <el-form :inline="true" ref="ruleForm" :model="exportObj" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="rules">
+                <Col v-show="!moreLarge">
+                    <el-form-item label="导出类型" size="small" label-width="95px" prop="platform">
+                        <el-select  v-model="exportObj.selected" filterable placeholder="请选择" style="width:150px">
+                            <el-option label="导出主表" value="1"></el-option>
+                            <el-option label="导出主表+明细" value="2"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </Col>
+                <Col v-show="moreLarge" style="text-align:center">
+                       目前要导出的数据超过10万条，确定继续导出吗？
+                </Col>
+                <el-form-item style="padding-left:130px">
+                    <Button type="primary" v-if="!moreLarge" @click="getExportTotal">确认</Button>
+                    <!-- 二次确认 -->
+                    <Button type="primary" v-if="moreLarge" @click="onImport">确认</Button> 
+                    <Button type="default" @click="cancelExport">取消</Button>
+                </el-form-item>
+            </el-form>
+        </Row>
+        <div slot="footer"></div>
+    </Modal>
 </div>
 </template>
 
@@ -154,6 +188,11 @@ export default {
 // logList,
     data() {
         return {
+             exportObj:{
+                       selected:''
+            },
+            exportVisible:false,
+            moreLarge:false,
             logList:[],
             delaiList:[],
             supplierList:[],
@@ -259,6 +298,7 @@ export default {
                 customsList  : state => state.customs.customsList,
                 customsLogList :  state => state.customs.customsLogList,
                 customsId  :  state => state.customs.id,
+                recordHttpList:state=>state.customs.recordHttpList,
       }),
     destroyed() {
        this.resetCommit()
@@ -285,6 +325,7 @@ export default {
                 this.$store.commit('clearcustomsList')
                 this.$store.commit('clearcustomsId')
                 this.$store.commit('clearcustomsLogList')
+                this.$store.commit('clearinitRecordHttpList')
         },
         getSupply() {
             this.request('masterData_supplier_selector', {}, false).then(res => {
@@ -407,6 +448,83 @@ export default {
                 this.$message.error('请勾选确认结算数据')
             }
         },
+        //生成结算明细
+        generateSettlementDetails(){
+           let arr = w2ui.customs.getSelection()
+            let data = {};
+            data.bizType = 7
+            data.idList = arr
+            if (this.checkSelection()) {
+                this.request('closed_check', data, false).then((res) => {
+                    if (res.code == 1) {
+                        this.$prompt('确定要把选中的数据生成结算明细吗', '操作确认', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                        }).then(({
+                            value
+                        }) => {
+                            console.log(value,'88888')
+                            data.remark = '生成结算明细 备注:' +''+(value? value :'无')
+                            this.request('closed_doBizService', data, false).then((res) => {
+                                if (res.code == 1) {
+                                    this.$message.success(res.msg)
+                                    this.getData()
+                                } else {
+                                    this.$message.error(res.msg)
+                                }
+                            })
+                        }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消'
+                            });
+                        });
+                    } else {
+                        this.$message.error(res.msg)
+                    }
+                })
+            } else {
+                this.$message.error('请勾选要生成结算明细的数据')
+            } 
+        },
+        //经销转代销
+        distributionAndresale(){
+            let arr = w2ui.customs.getSelection()
+            let data = {};
+            data.bizType = 6
+            data.idList = arr
+            if (this.checkSelection()) {
+                this.request('closed_check', data, false).then((res) => {
+                    if (res.code == 1) {
+                        this.$prompt('确定要经销转代销选中的数据吗', '操作确认', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                        }).then(({
+                            value
+                        }) => {
+                            data.remark = '经销转代销 备注:' +''+(value?value:'无')
+                            this.request('closed_doBizService', data, false).then((res) => {
+                                if (res.code == 1) {
+                                    this.$message.success(res.msg)
+                                    this.getData()
+                                } else {
+                                    this.$message.error(res.msg)
+                                }
+                            })
+                        }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消'
+                            });
+                        });
+                    } else {
+                        this.$message.error(res.msg)
+                    }
+                })
+            } else {
+                this.$message.error('请勾选经销转代销数据')
+            }
+        },
         //代销转经销
         onTurnAround(){
             let arr = w2ui.customs.getSelection()
@@ -422,7 +540,7 @@ export default {
                         }).then(({
                             value
                         }) => {
-                            data.remark = '代销转经销 备注:' + +(value?value:'无')
+                            data.remark = '代销转经销 备注:' +''+(value?value:'无')
                             this.request('closed_doBizService', data, false).then((res) => {
                                 if (res.code == 1) {
                                     this.$message.success(res.msg)
@@ -492,9 +610,9 @@ export default {
 
         },
         getDocumentEncoding(id){
-            for(let i=0,len=this.list.length;i<len;i++){
-                if(this.list[i].recid==id){
-                    return this.list[i].documentEncoding
+            for(let i=0,len=this.recordHttpList.length;i<len;i++){
+                if(this.recordHttpList[i].recid==id){
+                    return this.recordHttpList[i].documentEncoding
                 }
             }  
         },
@@ -718,6 +836,12 @@ export default {
                             size: '100px',
                             sortable: true
                         },
+                        {
+                            field: 'settlementOrderCode',
+                            caption: '结算明细编号',
+                            size: '100px',
+                            sortable: true
+                        },
                     ],
                     onClick: function (event) {
                         self.activeName='first'
@@ -725,13 +849,17 @@ export default {
                         // self.$store.commit('getcustomsId',self.getDocumentEncoding(event.recid))
                         // self.$store.commit('clearcustomsLogList')
                         // self.logPage = 1;
-                        var record = this.get(event.recid)
+                        let record = this.get(event.recid)
+                        console.log(record,'888881212')
+                        console.log(event.recid)
                        setTimeout(function(){
                             if(w2ui.customs.getSelection().length == 1){
                                    let arr = w2ui.customs.getSelection()
-                                if(arr[0] != record.id){
-                                       // console.log('--------------')
+                                   console.log(arr,'999991212')
+                                if(arr[0]!= record.id){
+                                     console.log('走了')
                                 }else{
+                                    console.log('走了2')
                                     console.log(record.id)
                                     self.logPage = 1
                                     self.getGoodsList(self.getDocumentEncoding(event.recid))
@@ -778,150 +906,150 @@ export default {
 
         },
         //异步导出
-        onImport() {
-            let data = {}
-            data.pageSize = this.pagesize
-            data.currentPage = this.currentPage
-            this.formSearch.themID ? data.accRecvdBillNos = this.formSearch.themID.split(",") : delete data.accRecvdBillNos //账单ID列表
-            data.accRecvdPeriodIds = this.formSearch.time //账期ID列表
-            data.basicCompanyIds = this.formSearch.name //公司ID列表
-            data.basicPlatformId = this.formSearch.code //平台ID
-            data.basicStoreIds = this.formSearch.person //店铺ID列表
-            data.status = this.formSearch.status //状态 0 未核销 1已核销
-            this.request('accverification_asyncExport', data, false).then(res => {
-                if (res.code == 1) {
-                    this.getKey(res.data)
-                } else {
-                    this.$message({
-                        message: res.msg,
-                        type: 'warning'
-                    });
-                }
-            })
-        },
+        // onImport() {
+        //     let data = {}
+        //     data.pageSize = this.pagesize
+        //     data.currentPage = this.currentPage
+        //     this.formSearch.themID ? data.accRecvdBillNos = this.formSearch.themID.split(",") : delete data.accRecvdBillNos //账单ID列表
+        //     data.accRecvdPeriodIds = this.formSearch.time //账期ID列表
+        //     data.basicCompanyIds = this.formSearch.name //公司ID列表
+        //     data.basicPlatformId = this.formSearch.code //平台ID
+        //     data.basicStoreIds = this.formSearch.person //店铺ID列表
+        //     data.status = this.formSearch.status //状态 0 未核销 1已核销
+        //     this.request('accverification_asyncExport', data, false).then(res => {
+        //         if (res.code == 1) {
+        //             this.getKey(res.data)
+        //         } else {
+        //             this.$message({
+        //                 message: res.msg,
+        //                 type: 'warning'
+        //             });
+        //         }
+        //     })
+        // },
         //自动核销
-        onWrite() {
-            let data = {}
-            data.pageSize = this.pagesize
-            data.currentPage = this.currentPage
-            this.formSearch.themID ? data.accRecvdBillNos = this.formSearch.themID.split(",") : delete data.accRecvdBillNos //账单ID列表//账单ID列表
-            data.accRecvdPeriodIds = this.formSearch.time //账期ID列表
-            data.basicCompanyIds = this.formSearch.name //公司ID列表
-            data.basicPlatformId = this.formSearch.code //平台ID
-            data.basicStoreIds = this.formSearch.person //店铺ID列表
-            data.status = this.formSearch.status //状态 0 未核销 1已核销
-            this.request('accverification_asyncAutoVerify', data, false).then(res => {
-                if (res.code == 1) {
-                    this.getKeyD(res.data)
-                } else {
-                    this.$message({
-                        message: res.msg,
-                        type: 'warning'
-                    });
-                }
-            })
-        },
+        // onWrite() {
+        //     let data = {}
+        //     data.pageSize = this.pagesize
+        //     data.currentPage = this.currentPage
+        //     this.formSearch.themID ? data.accRecvdBillNos = this.formSearch.themID.split(",") : delete data.accRecvdBillNos //账单ID列表//账单ID列表
+        //     data.accRecvdPeriodIds = this.formSearch.time //账期ID列表
+        //     data.basicCompanyIds = this.formSearch.name //公司ID列表
+        //     data.basicPlatformId = this.formSearch.code //平台ID
+        //     data.basicStoreIds = this.formSearch.person //店铺ID列表
+        //     data.status = this.formSearch.status //状态 0 未核销 1已核销
+        //     this.request('accverification_asyncAutoVerify', data, false).then(res => {
+        //         if (res.code == 1) {
+        //             this.getKeyD(res.data)
+        //         } else {
+        //             this.$message({
+        //                 message: res.msg,
+        //                 type: 'warning'
+        //             });
+        //         }
+        //     })
+        // },
        
         //循环key
-        getKey(key) {
-            const h = this.$createElement;
-            let data = {}
-            data.taskKey = key
-            this.timeAA = setTimeout(() => {
-                this.request('getProcessResultByTaskKey', data, false).then(res => {
-                    if (res.code == 1) {
-                        if (res.data.processStatus !== 0) {
+        // getKey(key) {
+        //     const h = this.$createElement;
+        //     let data = {}
+        //     data.taskKey = key
+        //     this.timeAA = setTimeout(() => {
+        //         this.request('getProcessResultByTaskKey', data, false).then(res => {
+        //             if (res.code == 1) {
+        //                 if (res.data.processStatus !== 0) {
 
-                            this.$notify.success({
-                                title: res.data.title,
-                                message: h('p', null, [
-                                    h('a', {
-                                        on: {
-                                            click: this.clickA(res.data.subTitle)
-                                        }
-                                    }, res.data.subTitle.indexOf('[') == -1 ? res.data.subTitle : "下载链接"),
-                                ]),
-                                duration: 0,
-                            });
-                            this.cleanKey(key)
+        //                     this.$notify.success({
+        //                         title: res.data.title,
+        //                         message: h('p', null, [
+        //                             h('a', {
+        //                                 on: {
+        //                                     click: this.clickA(res.data.subTitle)
+        //                                 }
+        //                             }, res.data.subTitle.indexOf('[') == -1 ? res.data.subTitle : "下载链接"),
+        //                         ]),
+        //                         duration: 0,
+        //                     });
+        //                     this.cleanKey(key)
 
-                            function myStopFunction() {
-                                clearTimeout(this.timeAA);
-                            }
+        //                     function myStopFunction() {
+        //                         clearTimeout(this.timeAA);
+        //                     }
 
-                        } else {
-                            this.$notify.success({
-                                title: res.data.title,
-                                message: res.data.subTitle,
-                                duration: 3000
-                            });
-                            this.getKey(key)
-                        }
-                    } else {
-                        this.$message.warning(res.msg)
-                    }
-                })
-            }, 5000)
-        },
-        clickA(url) {
-            console.log(url)
-            if (url.indexOf('[') == -1) {
-                console.log('没有地址')
-            } else {
-                url.replace()
-                let aPos = url.indexOf('[');
-                let bPos = url.indexOf(']');
-                let r = url.substr(aPos + 1, bPos - aPos - 1);
-                window.location.href = r
-            }
-        },
-        getKeyD(key) {
-            const h = this.$createElement;
-            let data = {}
-            data.taskKey = key
-            this.timeBB = setTimeout(() => {
-                this.request('getProcessResultByTaskKey', data, false).then(res => {
-                    if (res.code == 1) {
-                        if (res.data.processStatus !== 0) {
-                            this.$notify.success({
-                                title: res.data.title,
-                                message: h('p', null, [
-                                    h('a', {
-                                        on: {
-                                            click: this.clickA(res.data.subTitle)
-                                        }
-                                    }, res.data.subTitle.indexOf('[') == -1 ? res.data.subTitle : "下载链接"),
-                                ]),
-                                duration: 0,
-                            });
-                            this.cleanKey(key)
+        //                 } else {
+        //                     this.$notify.success({
+        //                         title: res.data.title,
+        //                         message: res.data.subTitle,
+        //                         duration: 3000
+        //                     });
+        //                     this.getKey(key)
+        //                 }
+        //             } else {
+        //                 this.$message.warning(res.msg)
+        //             }
+        //         })
+        //     }, 5000)
+        // },
+        // clickA(url) {
+        //     console.log(url)
+        //     if (url.indexOf('[') == -1) {
+        //         console.log('没有地址')
+        //     } else {
+        //         url.replace()
+        //         let aPos = url.indexOf('[');
+        //         let bPos = url.indexOf(']');
+        //         let r = url.substr(aPos + 1, bPos - aPos - 1);
+        //         window.location.href = r
+        //     }
+        // },
+        // getKeyD(key) {
+        //     const h = this.$createElement;
+        //     let data = {}
+        //     data.taskKey = key
+        //     this.timeBB = setTimeout(() => {
+        //         this.request('getProcessResultByTaskKey', data, false).then(res => {
+        //             if (res.code == 1) {
+        //                 if (res.data.processStatus !== 0) {
+        //                     this.$notify.success({
+        //                         title: res.data.title,
+        //                         message: h('p', null, [
+        //                             h('a', {
+        //                                 on: {
+        //                                     click: this.clickA(res.data.subTitle)
+        //                                 }
+        //                             }, res.data.subTitle.indexOf('[') == -1 ? res.data.subTitle : "下载链接"),
+        //                         ]),
+        //                         duration: 0,
+        //                     });
+        //                     this.cleanKey(key)
 
-                            function myStopFunction() {
-                                clearTimeout(this.timeBB);
-                            }
-                        } else {
-                            this.$notify.success({
-                                title: res.data.title,
-                                message: res.data.subTitle,
-                                duration: 3000
-                            });
-                            this.getKeyD(key)
-                        }
-                    } else {
-                        this.$message.warning(res.msg)
-                    }
-                })
-            }, 5000)
-        },
-        cleanKey(key) {
-            let data = {}
-            data.taskKey = key
-            this.request('delByTaskKey', data, false).then(res => {
-                if (res.code == 1) {
-                    console.log('oooo')
-                }
-            })
-        },
+        //                     function myStopFunction() {
+        //                         clearTimeout(this.timeBB);
+        //                     }
+        //                 } else {
+        //                     this.$notify.success({
+        //                         title: res.data.title,
+        //                         message: res.data.subTitle,
+        //                         duration: 3000
+        //                     });
+        //                     this.getKeyD(key)
+        //                 }
+        //             } else {
+        //                 this.$message.warning(res.msg)
+        //             }
+        //         })
+        //     }, 5000)
+        // },
+        // cleanKey(key) {
+        //     let data = {}
+        //     data.taskKey = key
+        //     this.request('delByTaskKey', data, false).then(res => {
+        //         if (res.code == 1) {
+        //             console.log('oooo')
+        //         }
+        //     })
+        // },
         changeCode(code) {
             console.log(code)
             let data = {}
@@ -1003,7 +1131,8 @@ export default {
                             res.data.records[i].index =i+1
                             res.data.records[i].recid = res.data.records[i].id
                         }
-                        this.list=res.data.records;
+                        // this.list=res.data.records;
+                        this.$store.commit('initRecordHttpList',res.data.records)
                         this.initTable(res.data.records, res.data.currentPageSum, res.data.totalPageSum)
                         // this.hasData=true
                     } else {
@@ -1157,7 +1286,139 @@ export default {
             });
             return sums;
       },
-
+     //导出相关
+        checkExport(){
+                 if(this.checkSelection()){
+                    // this.onImport()
+                    this.exportVisible=true
+                 }else{
+                     this.exportVisible=true
+                 }
+        },
+        cancelExport(){
+                   this.exportVisible=false;
+                   this.moreLarge=false;
+                   this.exportObj.selected=''
+        },
+        getExportTotal(){
+           if(!this.exportObj.selected) return this.$message.error('请选择导出类型')
+                    let data={}
+                        data.pageSize = this.pagesize
+                        data.currentPage = this.currentPage
+                        data.years = this.formSearch.year //年份
+                        data.goodsNo = this.formSearch.goodsNo //大货款号
+                        data.purchaseOrderNo = this.formSearch.ordersNo //采购单号
+                        data.supplierId = this.formSearch.supplier //供应商
+                        data.billingType = this.formSearch.settlement //结算类型
+                        data.allowSettlement = this.formSearch.agreeSettlement //允许结算
+                        data.documentStatus = this.formSearch.status //单据状态
+                        this.formSearch.documentDate ? data.createStart = this.formSearch.documentDate[0] : delete data.createStart //单据日期
+                        this.formSearch.documentDate ? data.createEnd = this.formSearch.documentDate[1] : delete data.createEnd
+                        this.formSearch.orderDate ? data.completeStartTime = this.formSearch.orderDate[0] : delete data.completeStartTime //关单起始时间
+                        this.formSearch.orderDate ? data.completeEndTime = this.formSearch.orderDate[1] : delete data.completeEndTime
+                        w2ui.customs.getSelection().length>0?data.ids= w2ui.customs.getSelection():delete data.ids
+                        this.exportObj.selected==1? data.containDetail=false:data.containDetail=true;
+           this.request('payable_payableclosedorder_exportCount',data,false).then(res=>{
+               if(res.code==1){
+                   if(res.data>100000){
+                       this.moreLarge=true
+                   }else{
+                       this.moreLarge=false
+                       this.onImport()
+                   }
+               }else{
+                   this.$message.error(res.msg)
+               }
+           })
+        },
+        //导出
+        onImport(){
+                    let data={}
+                        data.pageSize = this.pagesize
+                        data.currentPage = this.currentPage
+                        data.years = this.formSearch.year //年份
+                        data.goodsNo = this.formSearch.goodsNo //大货款号
+                        data.purchaseOrderNo = this.formSearch.ordersNo //采购单号
+                        data.supplierId = this.formSearch.supplier //供应商
+                        data.billingType = this.formSearch.settlement //结算类型
+                        data.allowSettlement = this.formSearch.agreeSettlement //允许结算
+                        data.documentStatus = this.formSearch.status //单据状态
+                        this.formSearch.documentDate ? data.createStart = this.formSearch.documentDate[0] : delete data.createStart //单据日期
+                        this.formSearch.documentDate ? data.createEnd = this.formSearch.documentDate[1] : delete data.createEnd
+                        this.formSearch.orderDate ? data.completeStartTime = this.formSearch.orderDate[0] : delete data.completeStartTime //关单起始时间
+                        this.formSearch.orderDate ? data.completeEndTime = this.formSearch.orderDate[1] : delete data.completeEndTime
+                        w2ui.customs.getSelection().length>0?data.ids= w2ui.customs.getSelection():delete data.ids
+                        this.exportObj.selected==1? data.containDetail=false:data.containDetail=true;
+                      this.request('payable_payableclosedorder_exportAsync', data, false).then(res => {
+                        if (res.code == 1) {
+                            this.cancelExport()
+                            this.getKeyD(res.data)
+                        } else {
+                            this.$message({
+                                message: res.msg,
+                                type: 'error'
+                            });
+                        }
+                }) 
+        },
+          getKeyD(key) {
+            const h = this.$createElement;
+            let data = {}
+                data.taskKey = key
+            this.timeBB = setTimeout(() => {
+                this.request('getProcessResultByTaskKey', data, false).then(res => {
+                    if (res.code == 1) {
+                        if (res.data.processStatus !== 0) {
+                            this.$notify.success({
+                                title: res.data.title,
+                                message: h('p', null, [
+                                    h('a', {
+                                        on: {
+                                            click: this.clickA(res.data.subTitle)
+                                        }
+                                    }, res.data.subTitle.indexOf('[') == -1 ? res.data.subTitle : "下载链接"),
+                                ]),
+                                duration: 0,
+                            });
+                            this.cleanKey(key)
+                            function myStopFunction() {
+                                clearTimeout(this.timeBB);
+                            }
+                        } else {
+                            this.$notify.success({
+                                title: res.data.title,
+                                message: res.data.subTitle,
+                                duration: 3000
+                            });
+                            this.getKeyD(key)
+                        }
+                    } else {
+                        this.$message.warning(res.msg)
+                    }
+                })
+            }, 5000)
+        },
+        clickA(url) {
+            console.log(url)
+            if (url.indexOf('[') == -1) {
+                console.log('没有地址')
+            } else {
+                url.replace()
+                let aPos = url.indexOf('[');
+                let bPos = url.indexOf(']');
+                let r = url.substr(aPos + 1, bPos - aPos - 1);
+                window.location.href = r
+            }
+        },
+        cleanKey(key) {
+            let data = {}
+                data.taskKey = key
+            this.request('delByTaskKey', data, false).then(res => {
+                if (res.code == 1) {
+                    console.log('oooo')
+                }
+            })
+        },
     }
 }
 </script> 

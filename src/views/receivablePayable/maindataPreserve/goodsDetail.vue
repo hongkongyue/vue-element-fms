@@ -2,7 +2,14 @@
      <div>
           <header class="headerstyle">
                 <el-form :inline="true" :model="formData" ref="formData" class="demo-form-inline ">
-                         
+                         <div>
+                             <el-form-item   size="small">
+                              <el-button v-if="judgeMenu.indexOf('查询') !== -1" size="small" type="primary" @click="onSearch">查询</el-button>
+                          </el-form-item>
+                          <el-form-item   size="small">
+                              <el-button  size="small" type="default" @click="onReset">重置</el-button>
+                          </el-form-item>
+                         </div>
                           <el-form-item label="品牌" size="small">
                               <el-select v-model="formData.brandId" placeholder="请选择" style="width:160px" filterable multiple>
                                  <el-option v-for="v in brandList" :key="v.id"  :label="v.name"  :value="v.id"></el-option>
@@ -30,12 +37,7 @@
                                    <el-option label="冬季"  value="冬季"></el-option>
                               </el-select>
                           </el-form-item>
-                          <el-form-item   size="small">
-                              <el-button v-if="judgeMenu.indexOf('查询') !== -1" size="small" type="primary" @click="onSearch">查询</el-button>
-                          </el-form-item>
-                          <el-form-item   size="small">
-                              <el-button  size="small" type="default" @click="onReset">重置</el-button>
-                          </el-form-item>
+                          
                            <!-- <el-form-item   size="small">
                               <el-button v-if="judgeMenu.indexOf('新增') !== -1" size="small" type="primary" @click="onAdd">新增</el-button>
                           </el-form-item>

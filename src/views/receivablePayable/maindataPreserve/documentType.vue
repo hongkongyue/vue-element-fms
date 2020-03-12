@@ -2,6 +2,23 @@
      <div>
           <header class="headerstyle">
                 <el-form :inline="true" :model="formData" class="demo-form-inline ">
+                  <div>
+                    <el-form-item    size="small">
+                               <!--  -->
+                              <el-button   v-if="judgeMenu.indexOf('查询') !== -1"  size="small" type="primary" @click="onSearch">查询</el-button>
+                          </el-form-item>
+                           <el-form-item   size="small">
+                              <el-button   size="small" type="default" @click="onReset">重置</el-button>
+                          </el-form-item>
+                          <el-form-item    size="small">
+                                <!-- -->
+                              <el-button  v-if="judgeMenu.indexOf('新增') !== -1"   size="small" type="primary" @click="onAdd" >新增</el-button>
+                          </el-form-item>
+                           <el-form-item    size="small">
+                                <!-- -->
+                              <el-button  v-if="judgeMenu.indexOf('修改') !== -1"    size="small" type="primary" @click="onEdit">编辑</el-button>
+                           </el-form-item>
+                  </div>
                           <el-form-item label="单据类型"   size="small">
                                 <el-input v-model.trim="formData.name" maxlength="20" placeholder="请输入" style="width:120px"></el-input>
                               <!-- <el-select v-model="formData.basicPlatformId" @change="changebasicPlatformId(formData.basicPlatformId)" placeholder="请选择" style="width:100px" filterable>
@@ -25,21 +42,7 @@
                                    <el-option  label="停用" value="0"></el-option>
                              </el-select>
                           </el-form-item>
-                          <el-form-item    size="small">
-                               <!--  -->
-                              <el-button   v-if="judgeMenu.indexOf('查询') !== -1"  size="small" type="primary" @click="onSearch">查询</el-button>
-                          </el-form-item>
-                           <el-form-item   size="small">
-                              <el-button   size="small" type="default" @click="onReset">重置</el-button>
-                          </el-form-item>
-                          <el-form-item    size="small">
-                                <!-- -->
-                              <el-button  v-if="judgeMenu.indexOf('新增') !== -1"   size="small" type="primary" @click="onAdd" >新增</el-button>
-                          </el-form-item>
-                           <el-form-item    size="small">
-                                <!-- -->
-                              <el-button  v-if="judgeMenu.indexOf('修改') !== -1"    size="small" type="primary" @click="onEdit">编辑</el-button>
-                           </el-form-item>
+                          
                 </el-form>
           </header>
           <section class="middle">

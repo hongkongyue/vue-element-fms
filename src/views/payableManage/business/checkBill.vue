@@ -16,7 +16,7 @@
                         <el-button v-if="judgeMenu.indexOf('删除') != -1" size="small" type="primary" @click="onDel">删除</el-button>
                     </el-form-item>
                       <el-form-item size="small" class="marginT0">
-                        <el-button v-if="judgeMenu.indexOf('导出') != -1" size="small" type="primary" @click="onImport">导出</el-button>
+                        <el-button v-if="judgeMenu.indexOf('导出') != -1" size="small" type="primary" @click="checkExport">导出</el-button>
                     </el-form-item>
                      <el-form-item size="small" class="marginT0">
                         <el-button size="small" type="default" @click="onReset">重置</el-button>
@@ -174,6 +174,12 @@
                             label="结算类型">
                             </el-table-column>
                             <el-table-column
+                            prop="closeTime"
+                            align="center"
+                            min-width="120"
+                            label="关单时间">
+                            </el-table-column>
+                            <el-table-column
                             prop="settlementOrderCode"
                             align="center"
                             min-width="120"
@@ -263,6 +269,31 @@
         </el-tab-pane>
         </el-tabs>
     </section>
+     <!-- 导出 -->
+    <Modal v-model="exportVisible" title="导出" @on-cancel='cancelExport' :width="430" class-name="customize-modal-center">
+        <Row class="margin-bottom-10 background-color-white exhibition">
+            <el-form :inline="true" ref="ruleForm" :model="exportObj" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="rules">
+                <Col v-show="!moreLarge">
+                    <el-form-item label="导出类型" size="small" label-width="95px" prop="platform">
+                        <el-select  v-model="exportObj.selected" filterable placeholder="请选择" style="width:150px">
+                            <el-option label="导出主表" value="1"></el-option>
+                            <el-option label="导出主表+明细" value="2"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </Col>
+                <Col v-show="moreLarge" style="text-align:center">
+                       目前要导出的数据超过10万条，确定继续导出吗？
+                </Col>
+                <el-form-item style="padding-left:130px">
+                    <Button type="primary" v-if="!moreLarge" @click="getExportTotal">确认</Button>
+                    <!-- 二次确认 -->
+                    <Button type="primary" v-if="moreLarge" @click="onImport">确认</Button> 
+                    <Button type="default" @click="cancelExport">取消</Button>
+                </el-form-item>
+            </el-form>
+        </Row>
+        <div slot="footer"></div>
+    </Modal>
 </div>
 </template>
 
@@ -274,6 +305,11 @@ import { mapState } from 'vuex'
 export default {
     data() {
         return {
+            exportObj:{
+                       selected:''
+            },
+            exportVisible:false,
+            moreLarge:false,
             show:false,
             loading: false,
             activeName:'first',
@@ -287,7 +323,8 @@ export default {
             adjustList   : [],          //  调整扣款的列表 
             logList      : [],            // 日
             formSearch   : {
-                         periodId:''
+                         periodId:'',
+                         year:'',
             },
             addBillObj:{},
             total: 0,
@@ -922,6 +959,54 @@ export default {
                      this.$message.error('请勾选取消删除数据')
             }
         },
+        //导出相关
+        checkExport(){
+                 if(this.checkSelection()){
+                    // this.onImport()
+                    this.exportVisible=true
+                 }else{
+                     this.exportVisible=true
+                 }
+        },
+        cancelExport(){
+                   this.exportVisible=false;
+                   this.moreLarge=false;
+                   this.exportObj.selected=''
+        },
+        getExportTotal(){
+           if(!this.exportObj.selected) return this.$message.error('请选择导出类型')
+                    let data={}
+                        data.companyId         = this.formSearch.companyId                    
+                        data.supplierId        = this.formSearch.supplierId                 
+                        data.periodId          = this.formSearch.periodId                     
+                        data.year              = filters.get_unix_only(this.formSearch.year) 
+                        data.bizCode           = this.formSearch.bizCode                     
+                        data.purchaseOrderNo   = this.formSearch.purchaseOrderNo
+                        data.startDate         = this.formSearch.date?filters.get_year_month_day(this.formSearch.date[0]):''
+                        data.endDate           = this.formSearch.date?filters.get_year_month_day(this.formSearch.date[1]):''
+                        data.status            = this.formSearch.status!=''?Number(this.formSearch.status):''
+                        data.auditStartDate    = this.formSearch.time?filters.get_year_month_day(this.formSearch.time[0]):''
+                        data.auditEndDate      = this.formSearch.time?filters.get_year_month_day(this.formSearch.time[1]):''
+                        data.status==0?'' : data.status==1?'' : delete  data.status
+                        data.startDate?'': delete  data.startDate
+                        data.endDate?  '': delete data.endDate
+                        data.auditStartDate?'': delete  data.auditStartDate
+                        data.auditEndDate?  '': delete data.auditEndDate
+                        w2ui.checkBill.getSelection().length>0?data.ids= w2ui.checkBill.getSelection():delete data.ids
+                        this.exportObj.selected==1? data.inclusionDetails=false:data.inclusionDetails=true;
+           this.request('payable_reconciliationOrder_exportCount',data,false).then(res=>{
+               if(res.code==1){
+                   if(res.data>100000){
+                       this.moreLarge=true
+                   }else{
+                       this.moreLarge=false
+                       this.onImport()
+                   }
+               }else{
+                   this.$message.error(res.msg)
+               }
+           })
+        },
         //导出
         onImport(){
                     let data={}
@@ -941,8 +1026,11 @@ export default {
                         data.endDate?  '': delete data.endDate
                         data.auditStartDate?'': delete  data.auditStartDate
                         data.auditEndDate?  '': delete data.auditEndDate
+                        w2ui.checkBill.getSelection().length>0?data.ids= w2ui.checkBill.getSelection():delete data.ids
+                        this.exportObj.selected==1? data.inclusionDetails=false:data.inclusionDetails=true;
                       this.request('payable_reconciliationOrder_export', data, false).then(res => {
                         if (res.code == 1) {
+                            this.cancelExport()
                             this.getKeyD(res.data)
                         } else {
                             this.$message({

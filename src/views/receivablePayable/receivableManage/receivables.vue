@@ -3,6 +3,14 @@
     <header class="headerstyle">
 
         <el-form :inline="true" :model="formSearch" class="demo-form-inline ">
+            <div>
+                <el-form-item size="small">
+                <el-button v-if="judgeMenu.indexOf('查询') !== -1" size="small" type="primary" @click="onSearch">查询</el-button>
+                </el-form-item>
+                <el-form-item size="small">
+                    <el-button size="small" type="default" @click="onReset">重置</el-button>
+                </el-form-item>
+            </div>
             <el-form-item label="平台：" size="small">
                 <el-select v-model="formSearch.code" @change="changebasicPlatformId(formSearch.code)" filterable placeholder="请选择" style="width:150px">
                     <el-option v-for="item in platformOptions" :key="item.name" :label="item.name" :value="item.name"></el-option>
@@ -58,18 +66,12 @@
             <el-form-item size="small">
                 <el-button v-if="show == true" @click="changeHidden" style="float:right" size="small"><i class="el-icon-top"></i></el-button>
             </el-form-item>
-            <el-form-item size="small">
-                <el-button v-if="judgeMenu.indexOf('查询') !== -1" size="small" type="primary" @click="onSearch">查询</el-button>
-            </el-form-item>
-            <el-form-item size="small">
-                <el-button size="small" type="default" @click="onReset">重置</el-button>
-            </el-form-item>
         </el-form>
 
     </header>
 
     <section class="middle">
-        <div v-if="newTime !== null" style="float:left;position:relative;top:5px;">数据最新更新时间：{{this.newTime}}</div>
+        <!-- <div v-if="newTime !== null" style="float:left;position:relative;top:5px;">数据最新更新时间：{{this.newTime}}</div> -->
         <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[1000, 5000, 10000, 20000]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
         <!-- 筛选列选项 -->
@@ -197,7 +199,11 @@ export default {
             orderNoList: [],
             sectionNoList: [],
             delaiList: [], //明细
-            statusList: ['收入', '退款'],
+            statusList: ['收入', '退款',
+                'JIT/JITX客退明细月度','JIT/JITX其他明细月度','JIT/JITX销售明细月度','JIT/JITX差异明细月度',
+                'JIT/JITX活动折扣明细月度','JIT/JITX客退明细进度','JIT/JITX销售明细进度','JIT/JITX差异明细进度',
+                'JIT/JITX活动折扣明细进度','MP订单明细月度','MP订单明细进度','OXO账单明细月度','OXO唯品会优惠明细月度',
+                'OXO账单调整明细进度','OXO账单明细进度','OXO应收费用明细进度','OXO唯品会优惠明细进度'],
             activeName: 'first',
             logList: [], //日志
             billNo: '',
@@ -402,6 +408,13 @@ export default {
                     reorderColumns: true,
                     reorderRows: true,
                     columns: [
+                        {
+                            field: 'index',
+                            caption: '序号',
+                            size: '80px',
+                            sortable: true,
+                            info: true
+                        },
                         // { field: 'id', caption: 'ID', size: '100px' },
                         {
                             field: 'lastUpdated',
@@ -615,6 +628,7 @@ export default {
                 if (res.code == 1) {
                     if (res.data.data) {
                         for (let i = 0, len = res.data.data.length; i < len; i++) {
+                            res.data.data[i].index =i+1
                             res.data.data[i].recid = res.data.data[i].id
                         }
                         this.initTable(res.data.data, res.data.currentPageSummary, res.data.totalPageSummary)

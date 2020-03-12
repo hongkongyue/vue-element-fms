@@ -3,12 +3,15 @@
     <header class="headerstyle">
         <el-form :inline="true" :model="formData" class="demo-form-inline ">
             <div>
+                <el-form-item size="small">
+                    <el-button v-if="judgeMenu.indexOf('查询') !== -1" size="small"  type="primary" @click="onSearch">查询</el-button>
+                </el-form-item>
+                <el-form-item size="small">
+                    <el-button size="small" type="default" @click="onReset">重置</el-button>
+                </el-form-item>
                  <el-form-item size="small">
-                <el-button v-if="judgeMenu.indexOf('查询') !== -1" size="small"  type="primary" @click="onSearch">查询</el-button>
-            </el-form-item>
-            <el-form-item size="small">
-                <el-button size="small" type="default" @click="onReset">重置</el-button>
-            </el-form-item>
+                    <el-button v-if="judgeMenu.indexOf('导出') !== -1" size="small"  type="primary" @click="onExport">导出</el-button>
+                </el-form-item>
             </div>
             <el-form-item label="年份" size="small">
                 <el-date-picker style="width:120px" v-model="formData.year" type="year" value-format="yyyy" placeholder="请选择"> </el-date-picker>
@@ -61,6 +64,7 @@ import {mapState} from 'vuex'
 export default {
     data() {
         return {
+            total:0,
             brandList: [],
             dialogVisible: false,
             addformdata: {
@@ -520,7 +524,86 @@ export default {
         showLog(row) {
             this.getLoglist(row.id)
         },
-
+        //异步导出
+        onExport() {
+            let data = {}
+                data.currentPage = this.page
+                data.pageSize = this.pageSize
+                data.merchantCode = this.formData.barCode
+                data.goodsNo = this.formData.goodsNo
+                data.basicCompanyId = this.formData.company
+                this.formData.brandId? data.basicBrandId = this.formData.brandId:delete data.basicBrandId
+                this.formData.year ? data.year = Number(this.formData.year) : delete data.year
+            this.request('discount_cost_exportAsync', data, false).then(res => {
+                if (res.code == 1) {
+                    this.getKey(res.data)
+                } else {
+                    this.$message({
+                        message: res.msg,
+                        type: 'warning'
+                    });
+                }
+            })
+        },
+        //循环key
+        getKey(key) {
+            const h = this.$createElement;
+            let data = {}
+            data.taskKey = key
+            this.timeAA = setTimeout(() => {
+                this.request('getProcessResultByTaskKey', data, false).then(res => {
+                    if (res.code == 1) {
+                        if (res.data.processStatus) {
+                            this.$notify.success({
+                                title: res.data.title,
+                                message: h('p', null, [
+                                    h('a', {
+                                        on: {
+                                            click: this.clickA(res.data.subTitle)
+                                        }
+                                    }, res.data.subTitle.indexOf('[') == -1 ? res.data.subTitle : "下载链接"),
+                                ]),
+                                duration: 0,
+                            });
+                            this.cleanKey(key)
+                            function myStopFunction() {
+                                clearTimeout(this.timeAA);
+                            }
+                        } else {
+                            this.$notify.success({
+                                title: res.data.title,
+                                message: res.data.subTitle,
+                                duration: 3000
+                            });
+                            this.getKey(key)
+                        }
+                    } else {
+                        this.$message.warning(res.msg)
+                    }
+                })
+            }, 5000)
+        },
+        clickA(url) {
+            console.log(url)
+            if (url.indexOf('[') == -1) {
+                console.log('没有地址')
+            } else {
+                url.replace()
+                let aPos = url.indexOf('[');
+                let bPos = url.indexOf(']');
+                let r = url.substr(aPos + 1, bPos - aPos - 1);
+                window.location.href = r
+            }
+        },
+        cleanKey(key) {
+            let data = {}
+            data.taskKey = key
+            this.request('delByTaskKey', data, false).then(res => {
+                if (res.code == 1) {
+                    console.log('oooo')
+                }
+            })
+        },
     }
 }
 </script>

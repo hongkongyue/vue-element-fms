@@ -7,14 +7,14 @@
                           <!-- <i class="ivu-icon">
                            <icon :name="item.icon" :scale="1.5"></icon>
                          </i> -->
-                         <Icon style="color:white" :type="item.icon" size="24" />
+                         <Icon style="color:white" :type="item.icon" size="18" />
                          <!-- <Icon style="color:white" v-if="index == 2" type="md-settings" size="24" />
                          <Icon style="color:white" v-if="index == 1" type="logo-yen" size="24" /> -->
                     </div>
                     <DropdownMenu  slot="list">
-                        <template  v-for="(child, i) in item.children">
+                        <template  v-for="(child, i) in item.children" >
                             <DropdownItem v-if="child.children.length<1" :name="child.url+'?code='+child.code"  :key="i"><Icon :type="child.icon"></Icon><span style="padding-left:10px;">{{itemTitle(child)}}</span></DropdownItem>
-                            <Dropdown transfer v-else-if="child.children.length>=1" :key="i" placement="right-start">
+                            <Dropdown transfer v-else-if="child.children.length>=1" :key="i" placement="right-start" style="max-height:400px!important">
                                         <DropdownItem>
                                         <span style="padding-left:10px;">{{ itemTitle(child) }}</span>
                                         <!-- <Icon type="ios-arrow-right"></Icon> -->
@@ -97,3 +97,10 @@ export default {
     }
 };
 </script>
+<style >
+.ivu-select-dropdown {
+    min-width: 150px;
+    max-height: 900px!important;
+   
+}
+</style>

@@ -30,8 +30,11 @@
                 <el-button size="small" type="primary" @click="onDownload">下载模板</el-button>
             </el-form-item>
             <el-form-item size="small" v-if="judgeMenu.indexOf('导入') !== -1">
-                <el-button size="small" type="primary" @click="onImport">导入</el-button>
+                <el-button size="small" type="primary" @click="onImportBill">导入</el-button>
             </el-form-item>
+              <el-form-item size="small" class="marginT0">
+                    <el-button v-if="judgeMenu.indexOf('导出') !== -1" size="small" type="primary" @click="checkExport">导出</el-button>
+                </el-form-item>
             <el-form-item size="small">
                 <el-button size="small" type="default" @click="onReset">重置</el-button>
             </el-form-item>
@@ -384,6 +387,31 @@
             </el-tab-pane>
         </el-tabs>
     </section>
+     <!-- 导出 -->
+    <Modal v-model="exportVisible" title="导出" @on-cancel='cancelExport' :width="430" class-name="customize-modal-center">
+        <Row class="margin-bottom-10 background-color-white exhibition">
+            <el-form :inline="true" ref="ruleForm" :model="exportObj" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="rules">
+                <Col v-show="!moreLarge">
+                    <el-form-item label="导出类型" size="small" label-width="95px" prop="platform">
+                        <el-select  v-model="exportObj.selected" filterable placeholder="请选择" style="width:150px">
+                            <el-option label="导出主表" value="1"></el-option>
+                            <el-option label="导出主表+明细" value="2"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </Col>
+                <Col v-show="moreLarge" style="text-align:center">
+                       结算明细主单超过100000行, 确认导出？
+                </Col>
+                <el-form-item style="padding-left:130px">
+                    <Button type="primary" v-if="!moreLarge" @click="getExportTotal">确认</Button>
+                    <!-- 二次确认 -->
+                    <Button type="primary" v-if="moreLarge" @click="onImport">确认</Button> 
+                    <Button type="default" @click="cancelExport">取消</Button>
+                </el-form-item>
+            </el-form>
+        </Row>
+        <div slot="footer"></div>
+    </Modal>
 </div>
 </template>
 
@@ -395,6 +423,11 @@ export default {
 
     data() {
         return {
+            exportObj:{
+                       selected:''
+            },
+            exportVisible:false,
+            moreLarge:false,
             purchaseOrderNoObj: {}, //通过采购单号获取采购单数据
             deductionTypeDownload: '',
             deductionTypeAdd: '',
@@ -701,6 +734,7 @@ export default {
                             batch: '',
                             goodsNo: '',
                             discount: '',
+                            remark:''
                         }
                     } else {
                         this.$message.error(res.msg)
@@ -714,7 +748,7 @@ export default {
             this.editVisible = false
         },
         //导入
-        onImport() {
+        onImportBill() {
             this.importVisible = true
         },
         //导入
@@ -796,10 +830,33 @@ export default {
                 this.$message.error('请先选择扣款类型')
             } else {
                 let data = {}
-                data.deductionType = this.deductionTypeDownload
-                downLoad.downLoad(data, '/eop-boot/payable/deductionAdvice/templateFile')
-                this.downloadVisible = false
-                this.deductionTypeDownload = ''
+                switch(this.deductionTypeDownload){
+                    case'大货延期':
+                    location.href="https://eptison.oss-cn-hangzhou.aliyuncs.com/upload/prd/eop-fms/payableDeductionAdviceController/templateFile/大货延期导入模板.xlsx"
+                    break;
+                    case'其他原因':
+                    location.href="https://eptison.oss-cn-hangzhou.aliyuncs.com/upload/prd/eop-fms/payableDeductionAdviceController/templateFile/其他原因导入模板.xlsx"
+                    break;
+                    case'拍照样延期':
+                    location.href="https://eptison.oss-cn-hangzhou.aliyuncs.com/upload/prd/eop-fms/payableDeductionAdviceController/templateFile/拍照样延期导入模板.xlsx"
+                    break;
+                     case'取消原因':
+                    location.href="https://eptison.oss-cn-hangzhou.aliyuncs.com/upload/prd/eop-fms/payableDeductionAdviceController/templateFile/取消原因导入模板.xlsx"
+                    break;
+                      case'质量原因':
+                    location.href="https://eptison.oss-cn-hangzhou.aliyuncs.com/upload/prd/eop-fms/payableDeductionAdviceController/templateFile/质量原因导入模板.xlsx"
+                    break;
+                }
+                setTimeout(()=>{
+                      this.downloadVisible       = false
+                      this.deductionTypeDownload = ''
+                },1500)
+                
+                // data.deductionType = this.deductionTypeDownload
+
+                // downLoad.downLoad(data, '/eop-boot/payable/deductionAdvice/templateFile')
+                // this.downloadVisible = false
+                // this.deductionTypeDownload = ''
             }
         },
         //取消下载文件
@@ -1366,7 +1423,137 @@ export default {
             this.currentPage = val
             this.getData()
         },
-
+               //导出相关
+        checkExport(){
+                 if(this.checkSelection()){
+                    // this.onImport()
+                     this.exportVisible=true
+                 }else{
+                     this.exportVisible=true
+                 }
+        },
+        cancelExport(){
+                   this.exportVisible=false;
+                   this.moreLarge=false;
+                   this.exportObj.selected=''
+        },
+        getExportTotal(){
+           if(!this.exportObj.selected) return this.$message.error('请选择导出类型')
+           let data={}
+                        data.pageSize = this.pagesize
+                        data.currentPage = this.currentPage
+                        data.year = this.formSearch.year
+                        data.goodsNo = this.formSearch.goodsNo
+                        data.purchaseOrderNo = this.formSearch.oddsNo //制单号
+                        data.supplierId = this.formSearch.supplier //供应商ID
+                        data.deductionType = this.formSearch.deductionType //扣款类型
+                        data.targetPurchaseOrderNo = this.formSearch.settlementsNo //结算制单号
+                        data.status = this.formSearch.status //单据状态
+                        data.companyId = this.formSearch.name //公司ID
+                        this.formSearch.documentDate ? data.startDate = this.formSearch.documentDate[0] : delete data.startDate //开始时间
+                        this.formSearch.documentDate ? data.endDate = this.formSearch.documentDate[1] : delete data.endDate //结束时间
+                        w2ui.deductionAdvice.getSelection().length>0?data.ids= w2ui.deductionAdvice.getSelection():delete data.ids
+                        this.exportObj.selected==1? data.inclusionDetails=false:data.inclusionDetails=true;
+           this.request('payable_deductionAdvice_count',data,false).then(res=>{
+               if(res.code==1){
+                   if(res.data>100000){
+                       this.moreLarge=true
+                   }else{
+                       this.moreLarge=false
+                       this.onImport()
+                   }
+               }else{
+                   this.$message.error(res.msg)
+               }
+           })
+        },
+         //导出
+        onImport(){
+                    let data={}
+                        data.pageSize = this.pagesize
+                        data.currentPage = this.currentPage
+                        data.year = this.formSearch.year
+                        data.goodsNo = this.formSearch.goodsNo
+                        data.purchaseOrderNo = this.formSearch.oddsNo //制单号
+                        data.supplierId = this.formSearch.supplier //供应商ID
+                        data.deductionType = this.formSearch.deductionType //扣款类型
+                        data.targetPurchaseOrderNo = this.formSearch.settlementsNo //结算制单号
+                        data.status = this.formSearch.status //单据状态
+                        data.companyId = this.formSearch.name //公司ID
+                        this.formSearch.documentDate ? data.startDate = this.formSearch.documentDate[0] : delete data.startDate //开始时间
+                        this.formSearch.documentDate ? data.endDate = this.formSearch.documentDate[1] : delete data.endDate //结束时间
+                        w2ui.deductionAdvice.getSelection().length>0?data.ids= w2ui.deductionAdvice.getSelection():delete data.ids
+                        this.exportObj.selected==1? data.inclusionDetails=false:data.inclusionDetails=true;
+                      this.request('payable_deductionAdvice_exportAsync', data, false).then(res => {
+                        if (res.code == 1) {
+                            this.cancelExport()
+                            this.getKeyD(res.data)
+                        } else {
+                            this.$message({
+                                message: res.msg,
+                                type: 'error'
+                            });
+                        }
+                }) 
+        },
+          getKeyD(key) {
+            const h = this.$createElement;
+            let data = {}
+                data.taskKey = key
+            this.timeBB = setTimeout(() => {
+                this.request('getProcessResultByTaskKey', data, false).then(res => {
+                    if (res.code == 1) {
+                        if (res.data.processStatus !== 0) {
+                            this.$notify.success({
+                                title: res.data.title,
+                                message: h('p', null, [
+                                    h('a', {
+                                        on: {
+                                            click: this.clickA(res.data.subTitle)
+                                        }
+                                    }, res.data.subTitle.indexOf('[') == -1 ? res.data.subTitle : "下载链接"),
+                                ]),
+                                duration: 0,
+                            });
+                            this.cleanKey(key)
+                            function myStopFunction() {
+                                clearTimeout(this.timeBB);
+                            }
+                        } else {
+                            this.$notify.success({
+                                title: res.data.title,
+                                message: res.data.subTitle,
+                                duration: 3000
+                            });
+                            this.getKeyD(key)
+                        }
+                    } else {
+                        this.$message.warning(res.msg)
+                    }
+                })
+            }, 5000)
+        },
+        clickA(url) {
+            console.log(url)
+            if (url.indexOf('[') == -1) {
+                console.log('没有地址')
+            } else {
+                url.replace()
+                let aPos = url.indexOf('[');
+                let bPos = url.indexOf(']');
+                let r = url.substr(aPos + 1, bPos - aPos - 1);
+                window.location.href = r
+            }
+        },
+        cleanKey(key) {
+            let data = {}
+                data.taskKey = key
+            this.request('delByTaskKey', data, false).then(res => {
+                if (res.code == 1) {
+                    console.log('oooo')
+                }
+            })
+        },
     }
 }
 </script> 

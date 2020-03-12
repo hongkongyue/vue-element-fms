@@ -2,12 +2,8 @@
      <div>
           <header class="headerstyle">
                 <el-form :inline="true" :model="formData" class="demo-form-inline ">
-                          <el-form-item label="平台名称" size="small">
-                              <el-select v-model="formData.name" placeholder="平台名称" style="width:100px" filterable>
-                                  <el-option v-for="v in platFormList" :key="v.id" :label="v.name" :value="v.name"></el-option>
-                              </el-select>
-                          </el-form-item>
-                          <el-form-item   size="small">
+                  <div>
+                    <el-form-item   size="small">
                               <el-button v-if="judgeMenu.indexOf('查询') !== -1" size="small" type="primary" @click="onSearch">查询</el-button>
                           </el-form-item>
                            <el-form-item   size="small">
@@ -19,6 +15,12 @@
                            <el-form-item    size="small">
                               <el-button v-if="judgeMenu.indexOf('修改') !== -1"   size="small" type="primary" @click="onEdit">编辑</el-button>
                            </el-form-item>
+                  </div>
+                          <el-form-item label="平台名称" size="small">
+                              <el-select v-model="formData.name" placeholder="平台名称" style="width:100px" filterable>
+                                  <el-option v-for="v in platFormList" :key="v.id" :label="v.name" :value="v.name"></el-option>
+                              </el-select>
+                          </el-form-item>
                 </el-form>
           </header>
           <el-row>

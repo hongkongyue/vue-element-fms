@@ -2,6 +2,20 @@
      <div>
           <header class="headerstyle">
                 <el-form :inline="true" :model="formSearch" class="demo-form-inline ">
+                  <div>
+                     <el-form-item   size="small">
+                              <el-button v-if="judgeMenu.indexOf('查询') !== -1"  size="small" type="primary" @click="onSearch">查询</el-button>
+                          </el-form-item>
+                           <el-form-item   size="small">
+                              <el-button  size="small" type="default" @click="onReset">重置</el-button>
+                          </el-form-item>
+                           <el-form-item   size="small">
+                              <el-button v-if="judgeMenu.indexOf('同步') !== -1" size="small" type="primary" @click="onAdd">同步</el-button>
+                          </el-form-item>
+                          <el-form-item   size="small">
+                              <el-button v-if="judgeMenu.indexOf('修改') !== -1" size="small" type="primary" @click="clickTable">编辑</el-button>
+                          </el-form-item>
+                  </div>
                           <!-- <el-form-item label="岗位编码："   size="small">
                               <el-select v-model="formSearch.code" filterable placeholder="请选择" style="width:150px">
                                   <el-option v-for="item in companyCodeOptions" :key="item.code" :label="item.code" :value="item.code"></el-option>
@@ -17,18 +31,7 @@
                                   <el-option v-for="item in companyNameOptions" :key="item" :label="item.name" :value="item.name"></el-option>
                               </el-select>
                           </el-form-item>
-                          <el-form-item   size="small">
-                              <el-button v-if="judgeMenu.indexOf('查询') !== -1"  size="small" type="primary" @click="onSearch">查询</el-button>
-                          </el-form-item>
-                           <el-form-item   size="small">
-                              <el-button  size="small" type="default" @click="onReset">重置</el-button>
-                          </el-form-item>
-                           <el-form-item   size="small">
-                              <el-button v-if="judgeMenu.indexOf('同步') !== -1" size="small" type="primary" @click="onAdd">同步</el-button>
-                          </el-form-item>
-                          <el-form-item   size="small">
-                              <el-button v-if="judgeMenu.indexOf('修改') !== -1" size="small" type="primary" @click="clickTable">编辑</el-button>
-                          </el-form-item>
+                         
                 </el-form>
           </header>
           <section class="middle">

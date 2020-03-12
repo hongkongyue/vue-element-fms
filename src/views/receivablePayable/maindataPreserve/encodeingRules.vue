@@ -2,17 +2,8 @@
 <div>
     <header class="headerstyle">
         <el-form :inline="true" :model="formData" class="demo-form-inline ">
-            <el-form-item label="单据名称" size="small">
-                <el-select v-model="formData.ruleName" placeholder="单据名称" style="width:100px" filterable>
-                    <el-option v-for="item in billList" :key="item" :label="item" :value="item"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="公司名称" size="small">
-                <el-select v-model="formData.basicCompanyId" placeholder="公司名称" style="width:100px" filterable>
-                    <el-option v-for="item in companyList" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item size="small">
+            <div>
+                <el-form-item size="small">
                 <el-button v-if="judgeMenu.indexOf('查询') !== -1" size="small" type="primary" @click="onSearch">查询</el-button>
             </el-form-item>
             <el-form-item size="small">
@@ -24,6 +15,18 @@
             <el-form-item size="small">
                 <el-button v-if="judgeMenu.indexOf('修改') !== -1" size="small" type="primary" @click="onEdit">编辑</el-button>
             </el-form-item>
+            </div>
+            <el-form-item label="单据名称" size="small">
+                <el-select v-model="formData.ruleName" placeholder="单据名称" style="width:100px" filterable>
+                    <el-option v-for="item in billList" :key="item" :label="item" :value="item"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="公司名称" size="small">
+                <el-select v-model="formData.basicCompanyId" placeholder="公司名称" style="width:100px" filterable>
+                    <el-option v-for="item in companyList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                </el-select>
+            </el-form-item>
+            
         </el-form>
     </header>
     <section class="middle">
@@ -95,7 +98,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="公司名称" size="small" label-width="95px" prop="basicCompanyIds">
-                    <el-select v-model="editformdata.basicCompanyIds" placeholder="公司名称" style="width:120px" filterable>
+                    <el-select v-model="editformdata.basicCompanyIds" multiple placeholder="公司名称" style="width:120px" filterable>
                         <el-option v-for="item in companyList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>

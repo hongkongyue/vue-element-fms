@@ -9,6 +9,42 @@ const appRouter = [
         component: Main,
         children: [
             {
+                path: 'unitFile',
+                title: '单位档案',
+                name: 'unitFile',
+                meta: {
+                    title: '/主数据/单位档案',
+                    path: '/receivablePayable/unitFile',
+                    label: '单位档案'
+                },
+                component: () => import('@/views/receivablePayable/maindataPreserve/unitFile.vue'),
+                hidden: false
+            },
+            {
+                path: 'colorFile',
+                title: '颜色档案',
+                name: 'colorFile',
+                meta: {
+                    title: '/主数据/颜色档案',
+                    path: '/receivablePayable/colorFile',
+                    label: '颜色档案'
+                },
+                component: () => import('@/views/receivablePayable/maindataPreserve/colorFile.vue'),
+                hidden: false
+            },
+            {
+                path: 'materialTypeFile',
+                title: '物料类型档案',
+                name: 'materialTypeFile',
+                meta: {
+                    title: '/主数据/物料类型档案',
+                    path: '/receivablePayable/materialTypeFile',
+                    label: '物料类型档案'
+                },
+                component: () => import('@/views/receivablePayable/maindataPreserve/materialTypeFile.vue'),
+                hidden: false
+            },
+            {
                 path: 'deductionDiscount',
                 title: '扣款折扣',
                 name: 'deductionDiscount',
@@ -66,6 +102,18 @@ const appRouter = [
                     label: '系统日志'
                 },
                 component: () => import('@/views/receivablePayable/maindataPreserve/log.vue'),
+                hidden: false
+            },
+            {
+                path: 'publishLog',
+                title: '版本更新日志',
+                name: 'publishLog',
+                meta: {
+                    title: '/主数据/版本更新日志',
+                    path: '/receivablePayable/publishLog',
+                    label: '版本更新日志'
+                },
+                component: () => import('@/views/receivablePayable/maindataPreserve/publishLog.vue'),
                 hidden: false
             },
             {
@@ -818,6 +866,32 @@ const appRouter = [
                     import('@/views/payableManage/business/delayAllocation.vue'),
                 hidden: false
             },
+            {
+                path: 'registerBill',
+                title: '到票登记',
+                name: 'registerBill',
+                meta: {
+                    title: '/应付管理/到票登记',
+                    path: '/payableManage/registerBill',
+                    label: '到票登记'
+                },
+                component: () =>
+                    import('@/views/payableManage/business/registerBill.vue'),
+                hidden: false
+            },
+            {
+                path: 'registerPay',
+                title: '付款登记',
+                name: 'registerPay',
+                meta: {
+                    title: '/应付管理/付款登记',
+                    path: '/payableManage/registerPay',
+                    label: '付款登记'
+                },
+                component: () =>
+                    import('@/views/payableManage/business/registerPay.vue'),
+                hidden: false
+            },
         ]
     },
     //成本折扣
@@ -865,6 +939,288 @@ const appRouter = [
                 },
                 component: () =>
                     import ('@/views/costDiscount/costReduction.vue'),
+                hidden: false
+            },
+        ]
+    },
+    //面料管理
+    {
+        path:'/fabricManagement',
+        icon:'',
+        name:'fabricManagement',
+        title:'面料开发管理',
+        component:Main,
+        children:[
+            {
+                path: '/fabricManagement/taskConfig',
+                title: '任务配置',
+                name: 'taskConfig',
+                meta:{
+                    title:'/面料开发管理/任务配置',
+                    path:'/fabricManagement/taskConfig',
+                    label:'任务配置'
+                },
+                component: () =>
+                    import ('@/views/fabricManagement/taskConfig.vue'),
+                hidden: false
+            },
+            {
+                path: '/fabricManagement/developCycle',
+                title: '开发周期',
+                name: 'developCycle',
+                meta:{
+                    title:'/面料开发管理/开发周期',
+                    path:'/fabricManagement/developCycle',
+                    label:'开发周期'
+                },
+                component: () =>
+                    import ('@/views/fabricManagement/developCycle.vue'),
+                hidden: false
+            },
+            {
+                path: '/fabricManagement/fabriclist',
+                title: '录入面料信息任务列表',
+                name: 'fabriclist',
+                meta:{
+                    title:'/面料开发流程/录入面料信息任务列表',
+                    path:'/fabricManagement/fabriclist',
+                    label:'录入面料信息任务列表'
+                },
+                component: () =>
+                    import ('@/views/fabricManagement/fabricSchedule/fabriclist.vue'),
+                hidden: false
+            },
+            {
+                path: '/fabricManagement/fabricdetail',
+                title: '录入面料信息详情',
+                name: 'fabricdetail',
+                meta:{
+                    title:'/面料开发流程/录入面料信息详情',
+                    path:'/fabricManagement/fabricdetail',
+                    label:'录入面料信息详情'
+                },
+                component: () =>
+                    import ('@/views/fabricManagement/fabricSchedule/fabricdetail.vue'),
+                hidden: true
+            },
+            {
+                path: '/fabricManagement/fabriccomplated',
+                title: '录入面料信息完成页',
+                name: 'fabriccomplated',
+                meta:{
+                    title:'/面料开发流程/录入面料信息完成页',
+                    path:'/fabricManagement/fabriccomplated',
+                    label:'录入面料信息完成页'
+                },
+                component: () =>
+                    import ('@/views/fabricManagement/fabricSchedule/fabriccomplated.vue'),
+                hidden: true
+            },
+            {
+                path: '/fabricManagement/purchaseList',
+                title: '录入采购信息任务列表',
+                name: 'purchaseList',
+                meta:{
+                    title:'/面料开发流程/录入采购信息任务列表',
+                    path:'/fabricManagement/fabriccomplated',
+                    label:'录入采购信息任务列表'
+                },
+                component: () =>
+                    import ('@/views/fabricManagement/fabricSchedule/purchaseList.vue'),
+                hidden: false
+            },
+            {
+                path: '/fabricManagement/purchasingdetail',
+                title: '录入采购信息详情页',
+                name: 'purchasingdetail',
+                meta:{
+                    title:'/面料开发流程/录入采购信息详情页',
+                    path:'/fabricManagement/purchasingdetail',
+                    label:'录入采购信息详情页'
+                },
+                component: () =>
+                    import ('@/views/fabricManagement/fabricSchedule/purchasingdetail.vue'),
+                hidden: true
+            },
+            {
+                path: '/fabricManagement/purchasingcomplated',
+                title: '录入采购信息完成页',
+                name: 'purchasingcomplated',
+                meta:{
+                    title:'/面料开发流程/录入采购信息完成页',
+                    path:'/fabricManagement/purchasingcomplated',
+                    label:'录入采购信息完成页'
+                },
+                component: () =>
+                    import ('@/views/fabricManagement/fabricSchedule/purchasingcomplated.vue'),
+                hidden: true
+            },
+              { path: '/fabricManagement/fabricDevelop',
+                title: '面料开发',
+                name: 'fabricDevelop',
+                meta:{
+                    title:'/面料开发管理/面料开发',
+                    path:'/fabricManagement/fabricDevelop',
+                    label:'面料开发'
+                },
+                component: () =>
+                    import ('@/views/fabricManagement/fabricDevelop.vue'),
+                hidden: false
+            },
+            { path: '/fabricManagement/developConfirmList',
+                title: '开发确认任务列表',
+                name: 'developConfirmList',
+                meta:{
+                    title:'/面料开发管理/开发确认任务列表',
+                    path:'/fabricManagement/developConfirmList',
+                    label:'开发确认任务列表'
+                },
+                component: () =>
+                    import ('@/views/fabricManagement/developConfirmList.vue'),
+                hidden: false
+            },
+            { path: '/fabricManagement/developConfirmConduct',
+                title: '开发确认详情',
+                name: 'developConfirmConduct',
+                meta:{
+                    title:'/面料开发管理/开发确认详情',
+                    path:'/fabricManagement/developConfirmConduct',
+                    label:'开发确认详情'
+                },
+                component: () =>
+                    import ('@/views/fabricManagement/developConfirmConduct.vue'),
+                hidden: true
+            },
+            { path: '/fabricManagement/developConfirmComplete',
+                title: '开发确认完成页',
+                name: 'developConfirmComplete',
+                meta:{
+                    title:'/面料开发管理/开发确认完成页',
+                    path:'/fabricManagement/developConfirmComplete',
+                    label:'开发确认完成页'
+                },
+                component: () =>
+                    import ('@/views/fabricManagement/developConfirmComplete.vue'),
+                hidden: false
+            },
+            { path: '/fabricManagement/testingList',
+                title: '检测任务列表',
+                name: 'testingList',
+                meta:{
+                    title:'/面料开发管理/检测任务列表',
+                    path:'/fabricManagement/testingList',
+                    label:'检测任务列表'
+                },
+                component: () =>
+                    import ('@/views/fabricManagement/testingList.vue'),
+                hidden: false
+            },
+            { path: '/fabricManagement/testingConduct',
+                title: '检测详情',
+                name: 'testingConduct',
+                meta:{
+                    title:'/面料开发管理/检测详情',
+                    path:'/fabricManagement/testingConduct',
+                    label:'检测详情'
+                },
+                component: () =>
+                    import ('@/views/fabricManagement/testingConduct.vue'),
+                hidden: false
+            },
+            { path: '/fabricManagement/testingComplete',
+                title: '检测完成页',
+                name: 'testingComplete',
+                meta:{
+                    title:'/面料开发管理/检测完成页',
+                    path:'/fabricManagement/testingComplete',
+                    label:'检测完成页'
+                },
+                component: () =>
+                    import ('@/views/fabricManagement/testingComplete.vue'),
+                hidden: false
+            },
+            { path: '/fabricManagement/pricingList',
+                title: '核价任务列表',
+                name: 'pricingList',
+                meta:{
+                    title:'/面料开发管理/核价任务列表',
+                    path:'/fabricManagement/pricingList',
+                    label:'核价任务列表'
+                },
+                component: () =>
+                    import ('@/views/fabricManagement/pricingList.vue'),
+                hidden: false
+            },
+            { path: '/fabricManagement/pricingConduct',
+                title: '核价详情',
+                name: 'pricingConduct',
+                meta:{
+                    title:'/面料开发管理/核价详情',
+                    path:'/fabricManagement/pricingConduct',
+                    label:'核价详情'
+                },
+                component: () =>
+                    import ('@/views/fabricManagement/pricingConduct.vue'),
+                hidden: false
+            },
+            { path: '/fabricManagement/pricingComplete',
+                title: '核价完成页',
+                name: 'pricingComplete',
+                meta:{
+                    title:'/面料开发管理/核价完成页',
+                    path:'/fabricManagement/pricingComplete',
+                    label:'核价完成页'
+                },
+                component: () =>
+                    import ('@/views/fabricManagement/pricingComplete.vue'),
+                hidden: false
+            },
+            { path: '/fabricManagement/personList',
+                title: '发起人确认任务列表',
+                name: 'personList',
+                meta:{
+                    title:'/面料开发管理/发起人确认任务列表',
+                    path:'/fabricManagement/personList',
+                    label:'发起人确认任务列表'
+                },
+                component: () =>
+                    import ('@/views/fabricManagement/personList.vue'),
+                hidden: false
+            },
+            { path: '/fabricManagement/personConduct',
+                title: '发起人确认详情',
+                name: 'personConduct',
+                meta:{
+                    title:'/面料开发管理/发起人确认详情',
+                    path:'/fabricManagement/personConduct',
+                    label:'发起人确认详情'
+                },
+                component: () =>
+                    import ('@/views/fabricManagement/personConduct.vue'),
+                hidden: false
+            },
+            { path: '/fabricManagement/personComplete',
+                title: '发起人确认完成页',
+                name: 'personComplete',
+                meta:{
+                    title:'/面料开发管理/发起人确认完成页',
+                    path:'/fabricManagement/personComplete',
+                    label:'发起人确认完成页'
+                },
+                component: () =>
+                    import ('@/views/fabricManagement/personComplete.vue'),
+                hidden: false
+            },
+            { path: '/fabricManagement/reportForm',
+                title: '面料开发报表',
+                name: 'reportForm',
+                meta:{
+                    title:'/面料开发管理/面料开发报表',
+                    path:'/fabricManagement/reportForm',
+                    label:'面料开发报表'
+                },
+                component: () =>
+                    import ('@/views/fabricManagement/reportForm.vue'),
                 hidden: false
             },
         ]

@@ -1,7 +1,7 @@
 <template>
 <div>
     <header class="headerstyle">
-        <el-form :inline="true" :model="formData" class="demo-form-inline ">
+        <el-form :inline="true" :model="formData" class="demo-form-inline">
             <div>
                  <el-form-item size="small">
                 <el-button v-if="judgeMenu.indexOf('查询') !== -1" size="small" type="primary" @click="onSearch">查询</el-button>
@@ -9,6 +9,9 @@
             <el-form-item size="small">
                 <el-button size="small" type="default" @click="onReset">重置</el-button>
             </el-form-item>
+             <el-form-item size="small">
+                    <el-button v-if="judgeMenu.indexOf('导出') !== -1" size="small"  type="primary" @click="onExport">导出</el-button>
+                </el-form-item>
             </div>
             <el-form-item label="年份" size="small">
                 <el-date-picker style="width:120px" v-model="formData.year" value-format="yyyy" type="year" placeholder="请选择"> </el-date-picker>
@@ -378,11 +381,11 @@ export default {
             data.pageSize = this.pageSize
             data.year = this.formData.year //年份
             data.companyId = this.formData.company //公司ID
-            data.brandId = this.formData.brandId //品牌ID
+            data.brandId = this.formData.brandId   //品牌ID
             data.goodsNo = this.formData.goodsNo 
             data.merchantCode = this.formData.barCode
             this.formData.time ? data.startTime = this.formData.time[0] : delete data.startTime
-            this.formData.time ? data.endTime = this.formData.time[1] : delete data.endTime
+            this.formData.time ? data.endTime = this.formData.time[1]   : delete data.endTime
             // data.companyName = this.formData.company
             // data.leader = this.formData.response
             // data.name = this.formData.department
@@ -508,7 +511,88 @@ export default {
         showLog(row) {
             this.getLoglist(row.id)
         },
-
+        //异步导出
+        onExport() {
+            let data = {}
+                data.currentPage = this.page
+                data.pageSize = this.pageSize
+                data.year = this.formData.year //年份
+                data.companyId = this.formData.company //公司ID
+                data.brandId = this.formData.brandId   //品牌ID
+                data.goodsNo = this.formData.goodsNo 
+                data.merchantCode = this.formData.barCode
+                this.formData.time ? data.startTime = this.formData.time[0] : delete data.startTime
+                this.formData.time ? data.endTime = this.formData.time[1]   : delete data.endTime
+            this.request('stocks_returnRecord_exportAsync', data, false).then(res => {
+                if (res.code == 1) {
+                    this.getKey(res.data)
+                } else {
+                    this.$message({
+                        message: res.msg,
+                        type: 'warning'
+                    });
+                }
+            })
+        },
+        //循环key
+        getKey(key) {
+            const h = this.$createElement;
+            let data = {}
+            data.taskKey = key
+            this.timeAA = setTimeout(() => {
+                this.request('getProcessResultByTaskKey', data, false).then(res => {
+                    if (res.code == 1) {
+                        if (res.data.processStatus) {
+                            this.$notify.success({
+                                title: res.data.title,
+                                message: h('p', null, [
+                                    h('a', {
+                                        on: {
+                                            click: this.clickA(res.data.subTitle)
+                                        }
+                                    }, res.data.subTitle.indexOf('[') == -1 ? res.data.subTitle : "下载链接"),
+                                ]),
+                                duration: 0,
+                            });
+                            this.cleanKey(key)
+                            function myStopFunction() {
+                                clearTimeout(this.timeAA);
+                            }
+                        } else {
+                            this.$notify.success({
+                                title: res.data.title,
+                                message: res.data.subTitle,
+                                duration: 3000
+                            });
+                            this.getKey(key)
+                        }
+                    } else {
+                        this.$message.warning(res.msg)
+                    }
+                })
+            }, 5000)
+        },
+        clickA(url) {
+            console.log(url)
+            if (url.indexOf('[') == -1) {
+                console.log('没有地址')
+            } else {
+                url.replace()
+                let aPos = url.indexOf('[');
+                let bPos = url.indexOf(']');
+                let r = url.substr(aPos + 1, bPos - aPos - 1);
+                window.location.href = r
+            }
+        },
+        cleanKey(key) {
+            let data = {}
+            data.taskKey = key
+            this.request('delByTaskKey', data, false).then(res => {
+                if (res.code == 1) {
+                    console.log('oooo')
+                }
+            })
+        },
     }
 }
 </script>

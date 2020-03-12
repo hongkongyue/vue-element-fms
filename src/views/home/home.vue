@@ -232,7 +232,7 @@
     <Row :gutter="10">
         <Col span="8" class="fastMenu system_link">
         <Card>
-            <div v-for="(item,index) in third_party_system_list" v-bind:key="index" class="res_item" @mouseenter="mouseEnter(item.ref,index)" 
+            <div v-for="(item,index) in third_party_system_list" v-bind:key="index" v-if="index!=0" class="res_item" @mouseenter="mouseEnter(item.ref,index)" 
                 @mouseleave="mouseLeave(item.ref,index)" @click='third_party_jump(item.ref)'>
                 <p :ref="item.ref" :style="{background:item.ref == 'FineReport' ? '' : 'white','margin-left':'5px'}">
                     <img :src="item.img_url" :title="item.title"
@@ -280,7 +280,7 @@
                 <div style="height:150px"></div>
             </Card>
             </Col>
-            <Col span="8" :style="{marginBottom: '10px'}">
+            <!-- <Col span="8" :style="{marginBottom: '10px'}">
             <Card>
                 <p slot="title" class="card-title">
                     <Icon type="android-checkbox-outline"></Icon>
@@ -288,8 +288,8 @@
                 </p>
                 <update-log></update-log>
                 <!-- <div style="height:150px"></div> -->
-            </Card>
-            </Col>
+            <!-- </Card>
+            </Col> --> 
             <Col span="8" :style="{marginBottom: '10px'}">
             <Card>
                 <p slot="title" class="card-title">

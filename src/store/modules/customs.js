@@ -4,9 +4,17 @@ const customs = {
                        id          :  '', //存储的id
                  customsList       :  [], //货品明细
                  customsLogList    :  [], //日志列表
+                 recordHttpList    :  [],// 数据列表
 
        },
    mutations: {
+       initRecordHttpList(state,list){
+                        state.recordHttpList=[];
+                        state.recordHttpList=list     
+       },
+       clearinitRecordHttpList(state){
+                        state.recordHttpList=[]; 
+       },
        getcustomsList(state,list){
                          state.customsList=[];
                          state.customsList=list
