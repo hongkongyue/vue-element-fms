@@ -3,41 +3,40 @@
     <header class="headerstyle">
         <el-form :inline="true" :model="formData" class="demo-form-inline ">
             <div>
+               <el-form-item label="单据名称" size="small">
+                    <el-select v-model="formData.ruleName" placeholder="单据名称" style="width:100px" filterable>
+                        <el-option v-for="item in billList" :key="item" :label="item" :value="item"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="公司名称" size="small">
+                    <el-select v-model="formData.basicCompanyId" placeholder="公司名称" style="width:100px" filterable>
+                        <el-option v-for="item in companyList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item size="small">
-                <el-button v-if="judgeMenu.indexOf('查询') !== -1" size="small" type="primary" @click="onSearch">查询</el-button>
-            </el-form-item>
-            <el-form-item size="small">
+                    <el-button v-if="judgeMenu.indexOf('查询') !== -1" size="small" type="primary" @click="onSearch">查询</el-button>
+                </el-form-item>
+                <el-form-item size="small">
                 <el-button size="small" type="default" @click="onReset">重置</el-button>
-            </el-form-item>
-            <el-form-item size="small">
-                <el-button v-if="judgeMenu.indexOf('新增') !== -1" size="small" type="primary" @click="onAdd">新增</el-button>
-            </el-form-item>
-            <el-form-item size="small">
-                <el-button v-if="judgeMenu.indexOf('修改') !== -1" size="small" type="primary" @click="onEdit">编辑</el-button>
-            </el-form-item>
+                </el-form-item>
+                <el-form-item size="small">
+                    <el-button v-if="judgeMenu.indexOf('新增') !== -1" size="small" type="primary" @click="onAdd">新增</el-button>
+                </el-form-item>
+                <el-form-item size="small">
+                    <el-button v-if="judgeMenu.indexOf('修改') !== -1" size="small" type="primary" @click="onEdit">编辑</el-button>
+                </el-form-item>
             </div>
-            <el-form-item label="单据名称" size="small">
-                <el-select v-model="formData.ruleName" placeholder="单据名称" style="width:100px" filterable>
-                    <el-option v-for="item in billList" :key="item" :label="item" :value="item"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="公司名称" size="small">
-                <el-select v-model="formData.basicCompanyId" placeholder="公司名称" style="width:100px" filterable>
-                    <el-option v-for="item in companyList" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                </el-select>
-            </el-form-item>
-            
         </el-form>
     </header>
-    <section class="middle">
+    <section class="middle" :style="{minHeight:showBink?'740px':'520px'}">
         <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
-        <el-table @selection-change="selection" @select-all="selection" @select="selection" ref="multipleTable" :data="list" style="width: 100%" class="pointer" border tooltip-effect="dark" max-height="250" @row-click="showLog" highlight-current-row>
+        <el-table @selection-change="selection" @select-all="selection" @select="selection" ref="multipleTable" :data="list" style="width: 100%" class="pointer" border tooltip-effect="dark" :maxHeight="tableHieght" @row-click="showLog" highlight-current-row>
             <el-table-column type="selection" width="55">
             </el-table-column>
             <el-table-column type="index" width="55" label="序号" align="center">
             </el-table-column>
-            <el-table-column prop="name" label="单据名称" min-width="120" align="center">
+            <el-table-column prop="name" label="单据名称" min-width="120" align="center" show-overflow-tooltip>
                 <!-- <template slot-scope="scope">{{ scope.row.date }}</template> -->
             </el-table-column>
             <el-table-column prop="basicCompanyName" label="公司" min-width="120" align="center" show-overflow-tooltip>
@@ -63,13 +62,12 @@
             <el-table-column prop="enableStr" label="启用状态" min-width="120" align="center" show-overflow-tooltip>
             </el-table-column>
         </el-table>
-    </section>
-    <section class="footer" style="margin-bottom:0px">
+         <section class="footer" style="margin-bottom:0px">
         <!-- <span class="pl20"><i class="el-icon-arrow-up pointer "></i></span> -->
         <div style="width:100%;font-size:20px;">操作日志</div>
     </section>
-    <section class="middle">
-        <el-table :data="logList" style="width: 100%" border tooltip-effect="dark" max-height="250">
+    <section class="log">
+        <el-table :data="logList" style="width: 100%" border tooltip-effect="dark" max-height="230">
             <el-table-column prop="operator" label="操作员" min-width="120" align="center">
             </el-table-column>
             <el-table-column prop="operateTime" label="操作时间" align="center" min-width="120">
@@ -81,6 +79,8 @@
         <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div>
         <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>
     </section>
+    </section>
+   
     <!-- 新增弹框 -->
     <Modal v-model="dialogVisible" :styles="mystyle" :rules="rules" :title="dialogtitle" @on-cancel='cancel' :width="300" class-name="customize-modal-center">
         <Row class="margin-bottom-10 background-color-white exhibition">
@@ -198,7 +198,9 @@
 
 <script>
 import filters from '../../../filter/'
+import {debounce} from 'mixins/debounce'
 export default {
+    mixins:[debounce],
     data() {
         return {
             editywlxList:[],

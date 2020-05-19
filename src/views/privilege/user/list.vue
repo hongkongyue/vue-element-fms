@@ -38,7 +38,7 @@
                           </el-form-item> -->
                 </el-form>
           </header>
-          <section class="middle">
+          <section class="middle" :style="{minHeight:showBink?'740px':'520px'}">
           <el-pagination  style="margin-bottom:10px;text-align:right"  
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
@@ -145,7 +145,9 @@
 
 <script>
   import filters from '../../../filter/'
-  export default {
+  import {debounce} from 'mixins/debounce'
+export default {
+    mixins:[debounce],
     data() {
       return {
           formSearch:{},

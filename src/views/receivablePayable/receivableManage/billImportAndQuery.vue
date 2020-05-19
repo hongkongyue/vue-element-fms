@@ -63,17 +63,16 @@
             
         </el-form>
     </header>
-    <section class="middle">
+    <section class="middle" :style="{minHeight:showBink?'690px':'690px'}">
         <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[1000, 5000, 10000, 20000]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
 
         <div id="main" style="width: 100%; height: 400px;"></div>
-    </section>
 
-    <section class="footer" style="margin-bottom:0px">
+        
+        <section class="footer" style="margin-bottom:0px">
         <div style="width:100%;font-size:20px;">操作日志</div>
     </section>
-    <section class="middle">
         <el-table :data="goodsList" style="width: 100%" border tooltip-effect="dark" max-height="250">
             <el-table-column prop="operator" label="操作员" min-width="120" align="center">
             </el-table-column>
@@ -89,6 +88,11 @@
         <div class="getmore" v-if="goodsList.length>0&&dataFlag" @click="getMore">点击加载更多</div>
         <div class="getmore" v-if="goodsList.length>0&&!dataFlag">没有更多了…</div>
     </section>
+
+    
+    <!-- <section class="middle">
+        
+    </section> -->
     <!-- 导入弹框 -->
 
     <Modal :mask-closable="false" v-model="dialogVisible" :styles="mystyle" @on-cancel="importCancel" title="导入账单" :width="750" class-name="customize-modal-center">
@@ -326,7 +330,9 @@ import {
     type
 } from 'os'
 import { fstat } from 'fs'
+import {debounce} from 'mixins/debounce'
 export default {
+    mixins:[debounce],
     data() {
         return {
             yunjiLogo:false,
@@ -1547,10 +1553,10 @@ export default {
             data.id = cancelId
             this.request('uploadRemove', data, false).then(res => {
                 if (res.code == 1) {
-                    this.$message.warning(res.msg);
+                    this.$message.success('删除成功');
                     this.getData()
                 } else {
-                    this.$message.warning(res.msg);
+                    this.$message.error(res.msg);
                 }
             })
         },

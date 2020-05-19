@@ -51,7 +51,7 @@
                           </el-form-item>
                 </el-form>
           </header>
-          <section class="middle">
+          <section class="middle" :style="{minHeight:showBink?'670px':'470px'}">
           <!-- 筛选列选项 -->
           <el-popover style="margin-top:0px;float:left"  placement="right" title="列筛选" trigger="click">
             <el-checkbox-group  v-model="titleArray" ref="currentRow">
@@ -83,8 +83,10 @@
 <script>
    import filters from '../../../filter/'
    import instance from '../../../filter/downLoad.js'
+   import {debounce} from 'mixins/debounce'
    console.log(instance)
   export default {
+      mixins:[debounce],
     data() {
       return {
         show    : false,

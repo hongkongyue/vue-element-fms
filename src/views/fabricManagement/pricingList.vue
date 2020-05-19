@@ -32,6 +32,9 @@
                         <Page style="margin-top:5px;text-align:right" :total="total" :page-size="pageSize" :current="page" show-sizer show-total show-elevator @on-change="currentChange1" @on-page-size-change="sizeChange1"></Page>
                          <Table :columns="columns" size="small" highlight-row :data="list1" @on-row-dblclick="edit"></Table>
                     </Row>
+                    <Modal title="查看大图" v-model="visible"> 
+                    <img :src="bigstyleImg" v-if="visible" style="width: 100%">
+                </Modal>
                 </TabPane>
                 <TabPane label="已完成" name='ywc'>
                     <Row class="background-color-white exhibition" style="min-height:630px;padding-left:0px">
@@ -55,6 +58,8 @@ export default {
     name: 'pricingList',
     data() {
         return {
+            bigstyleImg:'',
+            visible:false,
             userInfo: '', //缓存
             columns: [{
                     title: '序号',
@@ -68,6 +73,59 @@ export default {
                     align: 'center',
                     minWidth: 100,
                 },
+                {
+                    title: '样品图1',
+                    key: 'breviaryStyleImg',
+                    align: 'center',
+                    minWidth: 100,
+                    render: (h, params) => {
+                           if(params.row.breviaryStyleImg){
+                               return h('div',{
+                                   style: {
+                                                        height:'40px',
+                                                        textAlign:'center',
+                                                        lineHeight:'40px'
+                                                },
+                               },
+                               [h('img', {         
+                                           style: {
+                                                        width: 'auto',
+                                                        height: 'auto',
+                                                        maxWidth: '100%',
+                                                        maxHeight: '100%',
+                                                        objectFit: 'cover'
+                                                },
+                                            domProps:{
+                                                       src:params.row.breviaryStyleImg,
+                                             },
+                                            on: {
+                                                  click: () => {
+                                                                this.bigstyleImg = params.row.breviaryStyleImg
+                                                              this.visible=true;
+                                                            }
+                                                }
+                                                    }, '')
+                                                    
+                                                    
+                                    ])    
+                           }else{
+                                  return h('img', {
+                                           style: {
+                                                     display: 'inline-block',
+                                                     height:'40px',
+                                                },
+                                            domProps:{
+                                                       src:'https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1562574299&di=846b4c904bd54d3c3821fa5938888c69&src=http://hbimg.b0.upaiyun.com/bdaca9a07e1a8947c00c2f826ebf848750927aa24963-cATwbg_fw658',
+                                             },
+                                            on: {
+                                                  click: () => {  
+
+                                                   }
+                                                }
+                                                    }, '');  
+                           }             
+                        }
+                    },
                 {
                     title: '任务名称',
                     key: 'taskConfigurationName',
@@ -371,6 +429,8 @@ export default {
                             taskDetailId: id,
                         }
                     });
+                }else{
+                    this.$message.error(res.msg)
                 }
             })
         },

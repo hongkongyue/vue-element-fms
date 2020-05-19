@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- 数据列表 -->
-        <Row class="background-color-white exhibition" style="min-height:630px;padding-left:0px">
+        <Row :style="{minHeight:showBink?'830px':'620px'}" class="background-color-white exhibition" >
              <Form :model="formSearch" class="search" ref="formSearch" :label-width="80" inline label-position="right" :rules="rules" @keydown.native.enter.prevent="search">
             
                     <Form-item label="" :label-width='40'>
@@ -31,13 +31,17 @@
                         <span>
                               <!-- <img v-if="scope.row.materialImg" :src="scope.row.materialImg" style="width:40px;height:40px" />
                               <img v-else  :src="noPict"> -->
-                                <div class="demo-image__preview">
+                                <div v-if="scope.row.styleImg" class="demo-image__preview">
                                     <el-image  @click.native="getLargePict(scope.row.styleImg)"
                                         style="width: 40px; height: 40px"
                                         :src="scope.row.styleImg" 
                                         :preview-src-list="[scope.row.styleImg]">
                                     </el-image>
                                 </div>
+                                 <div v-if="!scope.row.styleImg" >
+                                    <el-image style="width: 40px; height: 40px" :src = noneUrl></el-image>
+                                </div>
+
                         </span>
                 </template>
             </el-table-column>
@@ -46,12 +50,15 @@
                         <span>
                               <!-- <img v-if="scope.row.materialImg" :src="scope.row.materialImg" style="width:40px;height:40px" />
                               <img v-else  :src="noPict"> -->
-                                <div class="demo-image__preview">
+                                <div v-if="scope.row.styleImg2" class="demo-image__preview">
                                     <el-image  @click.native="getLargePict(scope.row.styleImg2)"
                                         style="width: 40px; height: 40px"
                                         :src="scope.row.styleImg2" 
                                         :preview-src-list="[scope.row.styleImg2]">
                                     </el-image>
+                                </div>
+                                 <div v-if="!scope.row.styleImg2" >
+                                    <el-image style="width: 40px; height: 40px" :src = noneUrl></el-image>
                                 </div>
                         </span>
                 </template>
@@ -92,7 +99,52 @@
     
         <Row style="margin-top:30px">
         <!-- <Table size="small" :columns="columnsTwo" highlight-row :data="dataTwwo"></Table> -->
-        <el-table ref="multipleTable" :data="tableData" size="mini" style="width: 100%" @row-click="showLog" border tooltip-effect="dark" max-height="350" @selection-change="handleSelectionChange">
+        <el-table v-if="showNodataTable"  :data="tableData1" size="mini" style="width: 100%" @row-click="showLog" border tooltip-effect="dark" max-height="350" @selection-change="handleSelectionChange">
+            <el-table-column type="index" width="55" label="序号" align="center" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="basicSupplierShortName" label="供应商简称" min-width="120" align="center" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column prop="supplierMaterialNo" label="供应商物料编号" min-width="120" align="center" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column prop="supplierMaterialColorNo" label="供应商物料色号" min-width="120" align="center" show-overflow-tooltip>
+            </el-table-column>
+            <!-- <el-table-column prop="price" label="物料编号" min-width="90" align="center" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column prop="unit" label="物料名称" min-width="90" align="center" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column prop="singleDosage" label="颜色" min-width="80" align="center" show-overflow-tooltip>
+            </el-table-column> -->
+            <el-table-column prop="fabricWidth" label="门幅（cm）" min-width="90" align="center" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column prop="fabricWeight" label="克重（g/m2)" min-width="150" align="center" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column prop="unit" label="单位" min-width="150" align="center" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column prop="ingredient" label="成分" min-width="80" align="center" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column prop="moq" label="起订量" min-width="140" align="center" show-overflow-tooltip>
+            </el-table-column>
+             <!-- <el-table-column prop="lastUpdated" label="物料规格" min-width="140" align="center" show-overflow-tooltip>
+            </el-table-column> -->
+             <el-table-column prop="loss" label="默认损耗（%）" min-width="140" align="center" show-overflow-tooltip>
+            </el-table-column>
+             <el-table-column prop="loopedWeft" label="纬缩(%)" min-width="140" align="center" show-overflow-tooltip>
+            </el-table-column>
+             <el-table-column prop="knees" label="经缩(%)" min-width="140" align="center" show-overflow-tooltip>
+            </el-table-column>
+             <el-table-column prop="productCycle" label="生产周期" min-width="140" align="center" show-overflow-tooltip>
+            </el-table-column>
+             <el-table-column prop="orderCycle" label="订货周期" min-width="140" align="center" show-overflow-tooltip>
+            </el-table-column>
+             <el-table-column prop="kilogramsOfRice" label="公斤米数" min-width="140" align="center" show-overflow-tooltip>
+            </el-table-column>
+             <el-table-column prop="remark" label="备注" min-width="140" align="center" show-overflow-tooltip>
+            </el-table-column>
+             <el-table-column prop="developer" label="开发人" min-width="140" align="center" show-overflow-tooltip>
+            </el-table-column>
+              <el-table-column prop="enterTime" label="录入时间" min-width="140" align="center" show-overflow-tooltip>
+            </el-table-column>
+        </el-table>
+        <el-table v-else ref="multipleTable" :data="tableData" size="mini" style="width: 100%" @row-click="showLog" border tooltip-effect="dark" max-height="350" @selection-change="handleSelectionChange">
             <el-table-column type="index" width="55" label="序号" align="center" show-overflow-tooltip></el-table-column>
             <el-table-column prop="basicSupplierShortName" label="供应商简称" min-width="120" align="center" show-overflow-tooltip>
             </el-table-column>
@@ -144,14 +196,14 @@
                 <Col>
                     <el-form-item label="供应商简称：" size="small" label-width="115px" prop="basicSupplierId">
                        <el-select v-model="formData.basicSupplierId" placeholder="请选择" style="width:160px" filterable>
-                                <el-option v-for="v in supplyList" :key="v.id" :label="v.shortName" :value="v.id"></el-option>
+                                <el-option  v-for="v in supplyList"  v-if="v.shortName" :key="v.id" :label="v.shortName" :value="v.id"></el-option>
                         </el-select>
                        </el-form-item>
                     <el-form-item label="供应商物料编号：" size="small" label-width="135px" prop="supplierMaterialNo">
-                        <el-input v-model="formData.supplierMaterialNo" maxlength="160" style="width:150px" ></el-input>
+                        <el-input v-model="formData.supplierMaterialNo" maxlength="20" style="width:150px" ></el-input>
                     </el-form-item>
                      <el-form-item label="供应商物料色号：" size="small" label-width="135px" prop="supplierMaterialColorNo">
-                        <el-input  v-model="formData.supplierMaterialColorNo" maxlength="100"  style="width:150px"></el-input>
+                        <el-input  v-model="formData.supplierMaterialColorNo" maxlength="20"  style="width:150px"></el-input>
                     </el-form-item>
                 </Col>
                 <Col>
@@ -172,6 +224,7 @@
                            <el-input v-model="formData.ingredient" style="width:160px" maxlength="50"></el-input>
                     </el-form-item>
                     <el-form-item label="起订量：" size="small" label-width="115px" prop="moq">
+                        <!-- <el-input v-model.number="formData.moq" maxlength="10" oninput="value=value.replace(/[^\d.]/g,'')" style="width:150px"></el-input> -->
                        <el-input v-model.number="formData.moq" style="width:160px" max="99999"></el-input>
                     </el-form-item>
                      <el-form-item label="默认损耗(%)：" size="small" label-width="125px">
@@ -215,9 +268,12 @@
 </template>
 
 <script>
+import {debounce} from 'mixins/debounce'
     export default {
+         mixins: [debounce],
         data() {
             return {
+                noneUrl:'https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1562574299&di=846b4c904bd54d3c3821fa5938888c69&src=http://hbimg.b0.upaiyun.com/bdaca9a07e1a8947c00c2f826ebf848750927aa24963-cATwbg_fw658',
                 value1:'',
                 visible: false,
                 red_packet_table_row_index:-1,
@@ -228,8 +284,11 @@
                 supplyList:[],//供应商下拉列表
                 changeVisible:false,
                 dialogVisible:false,
+                showNodataTable:false,
                 tableData:[],
+                tableData1:[],
                 formSearch:{},
+
                 formData:{
                         basicSupplierId:'',
                         supplierMaterialNo:'',
@@ -287,6 +346,9 @@
                 },
             }
         },
+        destroyed(){
+              this.tableData=[]
+        },
         mounted() {
                 this.userInfo = JSON.parse(window.sessionStorage.getItem('userinfo')); 
                 this.getData()
@@ -299,6 +361,7 @@
 
         },
         methods: {
+            
             getIn(){
                    this.dialogVisible=true
             },
@@ -350,7 +413,7 @@
                 getsupplyName(id){
                    for(let i=0,len=this.supplyList.length;i<len;i++){
                        if(this.supplyList[i].id==id){
-                           return this.supplyList[i].name
+                           return this.supplyList[i].shortName
                        }
                    }
                 },
@@ -383,7 +446,9 @@
                     this.request('fabricDevelop_poEnter_enterPurchaseDetail',data,false).then(res=>{
                            if(res.code==1){
                                       this.cancel()
-                                      this.$root.eventHub.$emit('closePageFromOtherPage', 'purchasingdetail');//关闭新增页面
+                                    //  setTimeout(()=>{
+                                     this.$root.eventHub.$emit('closePageFromOtherPage', 'purchasingdetail');//关闭新增页面
+                                    //  },200) 
                                 //    this.$router.push({name: 'returnAudit'});//跳转
                                       this.$router.push({
                                                           name:'purchasingcomplated',
@@ -410,6 +475,11 @@
                                        if(res.code==1){
                                                if(res.data){
                                                     // this.supplierMaterialColorNo=res.data.supplierMaterialColorNo
+                                                    if(res.data.processStatus=='核价已完成'||res.data.processStatus=='已取消'){
+                                                          this.showNodataTable=true
+                                                    }else{
+                                                          this.showNodataTable=false  
+                                                    }
                                                     this.tableData=[res.data]
                                                }else{
                                                     this.tableData=[] 
@@ -426,7 +496,7 @@
                               let { taskNo }=this.$route.query
                               let data={}
                                   data.taskNo=taskNo
-                        this.request('fabric_fabric_develop_pricing_queryPricingDetail', data, false).then((res) => {
+                        this.request('specialPricingDetail', data, false).then((res) => {
                             if(res.code==1){
                                      if(res.data){
                                            this.list=[res.data]

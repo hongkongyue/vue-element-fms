@@ -46,7 +46,7 @@
                            </el-form-item> -->
                 </el-form>
           </header>
-           <section class="middle">
+           <section class="middle" :style="{minHeight:showBink?'680px':'480px'}">
                 <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[1000, 5000, 10000, 20000]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
                 </el-pagination>
                 <div id="goodsDetail" style="width: 100%; height: 400px;"></div>
@@ -55,7 +55,9 @@
 </template>
 <script>
   import filters from '../../../filter/'
+  import {debounce} from 'mixins/debounce'
   export default {
+    mixins:[debounce],
     data() {
       return {
         page              :1,

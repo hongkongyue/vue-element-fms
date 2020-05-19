@@ -59,7 +59,7 @@
                           </Col>
                 </el-form>
           </header>
-          <section class="middle">
+          <section class="middle" :style="{minHeight:showBink?'680px':'480px'}">
           <el-pagination  style="margin-bottom:10px;text-align:right"  
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
@@ -77,7 +77,7 @@
                  class="pointer"
                  border
                  tooltip-effect="dark"
-                 max-height="250"
+                 :maxHeight="tableHieght"
                  highlight-current-row 
                  @row-click="showLog"
                   >
@@ -244,44 +244,45 @@
                       <template slot-scope="scope">{{ scope.row.onJob==1?'否':'是' }}</template>
                 </el-table-column>
          </el-table>
+               <section class="footer" style="margin-bottom:0px;margin-top:10px">
+                  <div style="width:100%;font-size:20px;">操作日志</div>
+                </section>
+                <section class="log">
+                        <el-table
+                        :data="logList"
+                          style="width: 100%"
+                          border
+                          tooltip-effect="dark"
+                          max-height="250"
+                        
+                        >
+                        <el-table-column
+                          prop="operator"
+                          label="操作员"
+                          min-width="120"
+                          align="center"
+                          >
+                        </el-table-column>
+                        <el-table-column
+                          prop="operateTime"
+                          label="操作时间"
+                          align="center"
+                          min-width="120">
+                            <template slot-scope="scope">{{scope.row.operateTime}}</template>
+                        </el-table-column>
+                        <el-table-column
+                          prop="logContent"
+                          label="操作记录"
+                          min-width="120"
+                          align="center"
+                          show-overflow-tooltip>
+                  </el-table-column>
+                </el-table>  
+                <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div> 
+                <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>   
+              </section>
         </section>
-        <section class="footer" style="margin-bottom:0px">
-           <div style="width:100%;font-size:20px;">操作日志</div>
-        </section>
-        <section class="middle">
-                <el-table
-                 :data="logList"
-                  style="width: 100%"
-                  border
-                  tooltip-effect="dark"
-                  max-height="250"
-                
-                 >
-                <el-table-column
-                  prop="operator"
-                  label="操作员"
-                  min-width="120"
-                  align="center"
-                  >
-                </el-table-column>
-                <el-table-column
-                  prop="operateTime"
-                  label="操作时间"
-                  align="center"
-                  min-width="120">
-                    <template slot-scope="scope">{{scope.row.operateTime}}</template>
-                </el-table-column>
-                <el-table-column
-                  prop="logContent"
-                  label="操作记录"
-                  min-width="120"
-                  align="center"
-                  show-overflow-tooltip>
-          </el-table-column>
-         </el-table>  
-         <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div> 
-         <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>   
-       </section>
+        
      </div>
 </template>
 
@@ -289,8 +290,10 @@
 <script charset="UTF-8">
   import filters from '../../../filter/'
   import downLoad from '../../../filter/downLoad'
-import { setTimeout } from 'timers';
+  import { setTimeout } from 'timers';
+  import {debounce} from 'mixins/debounce'
   export default {
+    mixins:[debounce],
     data() {
       return {
         dialogVisible:false,
@@ -505,6 +508,13 @@ import { setTimeout } from 'timers';
       padding: 20px 20px 10px 20px;
       margin-bottom:10px;
     }
+    .middle{
+     width: 99%;
+    margin: 0 auto;
+    background: #fff;
+    padding: 0px 10px 10px 10px;
+    margin-top: 0px;
+    }
     .getmore{
           padding-top: 6px;
           width:100%;
@@ -538,5 +548,7 @@ import { setTimeout } from 'timers';
        width:99.9% !important;
 
 }
-
+    // @media (height > 600px) {
+    //         body { background: #000;}
+    //     }
 </style>

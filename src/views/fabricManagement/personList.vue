@@ -354,6 +354,8 @@ export default {
                             obj:row
                         }
                     });
+                }else{
+                    this.$message.error(res.msg)
                 }
             })
         },

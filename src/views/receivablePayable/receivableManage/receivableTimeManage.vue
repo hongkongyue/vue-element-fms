@@ -33,7 +33,7 @@
           <el-row>
               <!-- <el-col :span="20"> -->
                 <div class="grid-content bg-purple-light">
-                       <section class="middle">
+                       <section class="middle" :style="{minHeight:showBink?'740px':'520px'}">
                              <el-table 
                                     ref="multipleTable"
                                     :data="list"
@@ -86,12 +86,11 @@
                                       show-overflow-tooltip>
                                     </el-table-column>
                           </el-table>
-                          </section>
+
                           <section class="footer" style="margin-bottom:0px">
                               <div style="width:100%;font-size:20px;">操作日志</div>
                           </section>
-                          <section class="middle">
-                              <el-table
+                          <el-table
                               :data="logList"
                                 style="width: 100%"
                                 border
@@ -123,7 +122,12 @@
                       </el-table>  
                       <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div> 
                       <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>   
-                    </section>
+                          </section>
+                          
+                          
+                          <!-- <section class="middle">
+                              
+                    </section> -->
                 </div>
             <!-- </el-col> -->
           </el-row>
@@ -212,7 +216,9 @@
 
 <script>
   import filters from '../../../filter/'
+  import {debounce} from 'mixins/debounce'
   export default {
+    mixins:[debounce],
     data() {
       return {
         add:false,
@@ -381,6 +387,7 @@
                                   this.list      =  res.data
                                   this.total     =  res.data.count
                             }else{
+                              this.$message.error(res.msg)
                                   this.list      =  []
                                   this.total     =  '0' 
                             }

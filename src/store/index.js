@@ -15,6 +15,8 @@ import common from './modules/common'
 import order from './modules/order'
 import quickRepeatOrder from './modules/quickRepeatOrder'
 import costReduction from './modules/costReduction'
+import invoiceregister from './modules/invoiceregister'
+import paymentBill from './modules/paymentBill'
 
 Vue.use(Vuex);
 
@@ -30,6 +32,8 @@ const store = new Vuex.Store({
     setdetail, //应付管理结算明细模块
     checkBill, //对账单模块
     deduction, //扣款单
+    invoiceregister,
+    paymentBill,
     customs,
     app,
     user,

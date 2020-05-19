@@ -26,7 +26,7 @@
             </el-form-item>
         </el-form>
     </header>
-    <section class="middle">
+    <section class="middle" :style="{minHeight:showBink?'740px':'520px'}">
         <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
         <el-table @selection-change="selection" @select-all="selection" @select="selection" ref="multipleTable" :data="list" style="width: 100%" class="pointer" border tooltip-effect="dark" max-height="250" highlight-current-row @row-click="showLog">
@@ -47,11 +47,11 @@
                 <template slot-scope="scope">{{scope.row.enable==1?'启用':'禁用'}}</template>
             </el-table-column>
         </el-table>
-    </section>
-    <section class="footer" style="margin-bottom:0px">
+
+        <section class="footer" style="margin-bottom:0px">
         <div style="width:100%;font-size:20px;">操作日志</div>
     </section>
-    <section class="middle">
+    <!-- <section class="middle"> -->
         <el-table :data="logList" style="width: 100%" border tooltip-effect="dark" max-height="170">
             <el-table-column prop="operator" label="操作员" min-width="120" align="center">
             </el-table-column>
@@ -63,13 +63,17 @@
         </el-table>
         <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div>
         <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>
+    <!-- </section> -->
     </section>
+    
 </div>
 </template>
 
 <script>
 import filters from '../../../filter/'
+import {debounce} from 'mixins/debounce'
 export default {
+    mixins:[debounce],
     data() {
         return {
             IDS: [],

@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- 数据列表 -->
-        <Row class="background-color-white exhibition" style="min-height:630px;padding-left:0px">
+        <Row class="background-color-white exhibition" style="padding-left:0px">
             
             <Page style="margin-top:5px;text-align:right" :total="total" :page-size="pageSize" :current="page" show-sizer show-total
                 show-elevator @on-change="currentChange" @on-page-size-change="sizeChange"></Page>
@@ -99,22 +99,22 @@
                                         }
                                     }
                                 }, '查看'),
-                                 h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px',
-                                        width:'50px'
-                                    },
-                                    on: {
-                                        click: (e) => {
-                                            const {taskConfigurationId,id,taskNo}=params.row
-                                            this.backTask(taskConfigurationId,id,taskNo)
-                                        }
-                                    }
-                                }, '撤回'),
+                                //  h('Button', {
+                                //     props: {
+                                //         type: 'primary',
+                                //         size: 'small'
+                                //     },
+                                //     style: {
+                                //         marginRight: '5px',
+                                //         width:'50px'
+                                //     },
+                                //     on: {
+                                //         click: (e) => {
+                                //             const {taskConfigurationId,id,taskNo}=params.row
+                                //             this.backTask(taskConfigurationId,id,taskNo)
+                                //         }
+                                //     }
+                                // }, '撤回'),
                                ]);  
                             }
                              

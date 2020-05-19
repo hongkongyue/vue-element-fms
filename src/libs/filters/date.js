@@ -241,6 +241,7 @@ export const moneyFilters = (num) => {
             num=Number(num).toFixed(2)  
             return num && num.toString().replace(/(\d)(?=(\d{3})+\.)/g, function($0, $1) {return $1 + ","; });
       }else{
+            num=Number(num).toFixed(2)  
             return num && num.toString().replace(/(\d)(?=(\d{3})+\.)/g, function($0, $1) {return $1 + ","; });
       }
   }else{
@@ -253,26 +254,30 @@ export const singlePrice = (num) => {
    if(num){
         if(String(num).includes('.')){
             if(String(num).split('.')[1].length==1){
-                      num=Number(num).toFixed(6)  
+                       num=Number(num).toFixed(6)  
                 return num && num.toString().replace(/(\d)(?=(\d{3})+\.)/g, function($0, $1) { return $1 + ","; });
             }else if(String(num).split('.')[1].length==2){
-                     num=Number(num).toFixed(6) 
+                      num=Number(num).toFixed(6) 
                   return num && num.toString().replace(/(\d)(?=(\d{3})+\.)/g, function($0, $1) {return $1 + ","; });
             }else if(String(num).split('.')[1].length==3){
-                     num=Number(num).toFixed(6) 
+                      num=Number(num).toFixed(6) 
                 return num && num.toString().replace(/(\d)(?=(\d{3})+\.)/g, function($0, $1) {return $1 + ","; });
             }else if(String(num).split('.')[1].length==4){
-                    num=Number(num).toFixed(6) 
+                     num=Number(num).toFixed(6) 
                 return num && num.toString().replace(/(\d)(?=(\d{3})+\.)/g, function($0, $1) {return $1 + ","; });
             }else if(String(num).split('.')[1].length==5){
                      num=Number(num).toFixed(6) 
                 return num && num.toString().replace(/(\d)(?=(\d{3})+\.)/g, function($0, $1) {return $1 + ","; });
             }else if(String(num).split('.')[1].length==6){
+                    num=Number(num).toFixed(6) 
                 return num && num.toString().replace(/(\d)(?=(\d{3})+\.)/g, function($0, $1) {return $1 + ","; });
-            }
+            }else if(String(num).split('.')[1].length==9){
+                    num=Number(num).toFixed(9) 
+              return num && num.toString().replace(/(\d)(?=(\d{3})+\.)/g, function($0, $1) {return $1 + ","; });
+          }
       
       }else{
-            num=Number(num).toFixed(6)  
+            num=Number(num).toFixed(6)
             return num && num.toString().replace(/(\d)(?=(\d{3})+\.)/g, function($0, $1) { return $1 + ","; });  
       }
    }else{

@@ -1,12 +1,12 @@
 <template>
     <div>
         <!-- 数据列表 -->
-        <Row class="background-color-white exhibition" style="min-height:630px;padding-left:0px">
-             <Form :model="formSearch" class="search" ref="formSearch" :label-width="80" inline label-position="right" :rules="rules" @keydown.native.enter.prevent="search">
-                    <!-- <Form-item label="" :label-width='40'>
+        <Row :style="{minHeight:showBink?'830px':'620px'}" class="background-color-white exhibition" style="min-height:630px;padding-left:0px">
+             <!-- <Form :model="formSearch" class="search" ref="formSearch" :label-width="80" inline label-position="right" :rules="rules" @keydown.native.enter.prevent="search">
+                    <Form-item label="" :label-width='40'>
                       <el-button type="primary" size="small" @click="getIn">录入</el-button>
-                    </Form-item> -->
-            </Form>
+                    </Form-item>
+            </Form> -->
             <el-table :data="list" size="mini" style="width: 100%"  border tooltip-effect="dark" max-height="350" @selection-change="handleSelectionChange">
             <el-table-column type="index" width="55" label="序号" align="center"></el-table-column>
             <el-table-column prop="taskNo"            label="任务流编号" min-width="90" align="center" show-overflow-tooltip>
@@ -22,19 +22,22 @@
             <el-table-column prop="kinds"      label="面辅料品类分类" min-width="120" align="center" show-overflow-tooltip>
             </el-table-column>
             <el-table-column prop="specialCategory"              label="是否特殊工艺"   min-width="120" align="center" show-overflow-tooltip>
-                 <template slot-scope="scope">{{scope.row.specialCategory == 1 ? '是' : '否'}}</template>
+                <template slot-scope="scope">{{scope.row.specialCategory == 1 ? '是' : '否'}}</template>
             </el-table-column>
             <el-table-column prop="styleImg"               label="样品图1"        min-width="80" align="center" show-overflow-tooltip>
                  <template slot-scope="scope">
                         <span>
                               <!-- <img v-if="scope.row.materialImg" :src="scope.row.materialImg" style="width:40px;height:40px" />
                               <img v-else  :src="noPict"> -->
-                                <div class="demo-image__preview">
+                                <div v-if="scope.row.styleImg" class="demo-image__preview">
                                     <el-image  @click.native="getLargePict(scope.row.styleImg)"
                                         style="width: 40px; height: 40px"
                                         :src="scope.row.styleImg" 
                                         :preview-src-list="[scope.row.styleImg]">
                                     </el-image>
+                                </div>
+                                 <div v-if="!scope.row.styleImg" >
+                                    <el-image style="width: 40px; height: 40px" :src = noPict></el-image>
                                 </div>
                         </span>
                 </template>
@@ -44,21 +47,24 @@
                         <span>
                               <!-- <img v-if="scope.row.materialImg" :src="scope.row.materialImg" style="width:40px;height:40px" />
                               <img v-else  :src="noPict"> -->
-                                <div class="demo-image__preview">
+                                <div v-if="scope.row.styleImg2" class="demo-image__preview">
                                     <el-image  @click.native="getLargePict(scope.row.styleImg2)"
                                         style="width: 40px; height: 40px"
                                         :src="scope.row.styleImg2" 
                                         :preview-src-list="[scope.row.styleImg2]">
                                     </el-image>
                                 </div>
+                                 <div v-if="!scope.row.styleImg2" >
+                                    <el-image style="width: 40px; height: 40px" :src = noPict></el-image>
+                                </div>
                         </span>
                 </template>
             </el-table-column>
             <el-table-column prop="realMaterial" label="是否有实物" min-width="90" align="center" show-overflow-tooltip>
-                 <template slot-scope="scope">{{scope.row.realMaterial == 1 ? '是' : '否'}}</template>
+                <template slot-scope="scope">{{scope.row.realMaterial == 1 ? '是' : '否'}}</template>
             </el-table-column>
             <el-table-column prop="contrastColor" label="是否撞色" min-width="150" align="center" show-overflow-tooltip>
-                 <template slot-scope="scope">{{scope.row.contrastColor == 1 ? '是' : '否'}}</template>
+                <template slot-scope="scope">{{scope.row.contrastColor == 1 ? '是' : '否'}}</template>
             </el-table-column>
             <el-table-column prop="developer" label="开发员" min-width="150" align="center" show-overflow-tooltip>
             </el-table-column>
@@ -91,17 +97,20 @@
         <!-- <Table size="small" :columns="columnsTwo" highlight-row :data="dataTwwo"></Table> -->
         <el-table  :data="tableData" size="mini" style="width: 100%"  border tooltip-effect="dark" max-height="350" >
             <el-table-column type="index" width="55" label="序号" align="center" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="projectName" label="图片" min-width="60" align="center" show-overflow-tooltip>
+            <el-table-column prop="materialImg" label="图片" min-width="60" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
                         <span>
                               <!-- <img v-if="scope.row.materialImg" :src="scope.row.materialImg" style="width:40px;height:40px" />
                               <img v-else  :src="noPict"> -->
-                                <div class="demo-image__preview">
+                                <div v-if="scope.row.materialImg" class="demo-image__preview">
                                     <el-image  @click.native="getLargePict(scope.row.materialImg)"
                                         style="width: 40px; height: 40px"
                                         :src="scope.row.materialImg" 
                                         :preview-src-list="[scope.row.materialImg]">
                                     </el-image>
+                                </div>
+                                <div v-if="!scope.row.materialImg" >
+                                    <el-image style="width: 40px; height: 40px" :src = noPict></el-image>
                                 </div>
                         </span>
                 </template>
@@ -169,10 +178,10 @@
             <el-form :inline="true" ref="ruleForm" :model="formData" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="rules">
                 <Col>
                     <el-form-item label="年份：" size="small" label-width="55px" >
-                        <el-input  v-model="formData.year"  style="width:160px" readonly  :disabled="true"></el-input>
+                        <el-input  v-model="formData.year"  style="width:160px" readonly :disabled="true" ></el-input>
                     </el-form-item>
                     <el-form-item label="月份：" size="small" label-width="75px" prop="taskRank">
-                        <el-input v-model="formData.month" maxlength="160" style="width:160px"  readonly  :disabled="true"></el-input>
+                        <el-input v-model="formData.month" maxlength="160" style="width:160px"  readonly   :disabled="true"></el-input>
                     </el-form-item>
                      <!-- <el-form-item label="物料编号：" size="small" label-width="95px" prop="numbercode">
                         <el-input disabled v-model="formData.taskRank" maxlength="160"  style="width:160px"  show-word-limit></el-input>
@@ -248,7 +257,9 @@
 </template>
 
 <script>
-    export default {
+import {debounce} from 'mixins/debounce'
+export default {
+    mixins:[debounce],
         data() {
             return {
                 noPict:'https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1562574299&di=846b4c904bd54d3c3821fa5938888c69&src=http://hbimg.b0.upaiyun.com/bdaca9a07e1a8947c00c2f826ebf848750927aa24963-cATwbg_fw658',
@@ -281,7 +292,6 @@
                          third:'',
                          sku:'',
                          remark:'',
-
                 },
                 userInfo: {},
                 firstLevelList:[],
@@ -318,6 +328,9 @@
                 },
             }
         },
+        destroyed(){
+              this.tableData=[]
+        },
         mounted() {
                 this.userInfo = JSON.parse(window.sessionStorage.getItem('userinfo')); 
                 this.getTableData()
@@ -331,7 +344,7 @@
              },
              getColor(color){
                      let data={}
-                         data.colorName=color
+                         data.colorNo=color
                          this.request('color_page',data,false).then(res=>{
                              if(res.code==1){
                                  if(res.data.records){
@@ -349,6 +362,14 @@
              getSelectMaterialType(level,parentId){
                       let data={}
                           data.level=level;
+
+                          if(level==2){
+                              this.formData.second=''
+                              this.formData.third=''
+                          }
+                          if(level==3){
+                               this.formData.third='' 
+                          }
                           if(level>1){
                              data.parentId=parentId
                           }
@@ -377,7 +398,7 @@
                             this.srcList=[url]
              },
              submitRecord(){
-                     let {taskNo,taskDetailId}=this.$route.query
+                     let {taskNo,taskDetailId,taskConfigurationId,taskConfigurationName}=this.$route.query
                      
                      let  data={}
                           data.taskNo=taskNo
@@ -394,14 +415,17 @@
                           data.thirdMaterialTypeCode=this.getfirstName(4,this.formData.third)
                           data.materialSpecification=this.formData.sku
                           data.riskRemark          =this.formData.remark
-                          data.id                  =this.tableData[0].id
+                          data.id                  =this.tableData[0]?this.tableData[0].id:''
                           data.taskDetailId        =taskDetailId
-                          data.taskConfigurationId =this.list[0]?this.list[0].taskConfigurationId:''
-                          data.taskConfigurationName=this.list[0]?this.list[0].taskConfigurationName:''
+                          data.taskConfigurationId  =taskConfigurationId
+                          data.taskConfigurationName=taskConfigurationName
                           if(!data.materialImg)return this.$message.error('图片不能为空')
                           this.request('fabric_developMaterialEnter_submit',data,false).then(res=>{
                                if(res.code==1){
-                                   
+                                      this.cancel()
+                                    //    setTimeout(()=>{
+                                            this.$root.eventHub.$emit('closePageFromOtherPage', 'fabricdetail');//关闭新增页面
+                                    //    },200) 
                                       this.$router.push({
                                                           name:'fabriccomplated',
                                                           query: { 
@@ -409,6 +433,7 @@
                                                                  taskDetailId:taskDetailId
                                                          }
                                                  })
+                                    
                                }else{
                                     this.$message.error(res.msg)
                                }
@@ -463,14 +488,14 @@
                                        if(res.code==1){
                                                if(res.data){
                                                     this.supplierMaterialColorNo=res.data.supplierMaterialColorNo
-                                                    this.tableData.push(res.data)
+                                                    this.tableData=[res.data]
                                                }else{
                                                     this.tableData=[] 
                                                }
                                                 
                                        }else{
-                                                    this.tableData=[]
                                                     this.$message.error(res.msg)
+                                                    this.tableData=[]
                                        }
                                   })
                 },
@@ -479,14 +504,13 @@
                               let { taskNo }=this.$route.query
                               let data={}
                                   data.taskNo=taskNo
-                        this.request('fabric_fabric_develop_pricing_queryPricingDetail', data, false).then((res) => {
+                        this.request('specialPricingDetail', data, false).then((res) => {
                             if(res.code==1){
-                                    if(res.data){
-                                         this.list=[res.data]
-                                    }else{
-                                         this.list=[]
-                                    }
-                                    
+                                     if(res.data){
+                                           this.list=[res.data]
+                                     }else{
+                                           this.list       = []
+                                     }
                               }else{
                                      
                                      this.list       = []
@@ -551,8 +575,8 @@
                     },
                cancel(){
                         this.dialogVisible=false;
-                        this.imgShowUrl=''
-                        // this.resetForm('ruleForm')
+                         this.imgShowUrl=''
+                        this.resetForm('ruleForm')
                },
         }       
     }

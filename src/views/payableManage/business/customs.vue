@@ -47,6 +47,11 @@
             <el-form-item label="制单号：" size="small">
                 <el-input v-model="formSearch.ordersNo" style="width:150px"></el-input>
             </el-form-item>
+            <el-form-item label=" 公 司 ：" size="small" >
+                        <el-select v-model="formSearch.companyId" filterable placeholder="请选择" style="width:150px">
+                    <el-option v-for="item in companyCodeOptions" :key="item.name" :label="item.name" :value="item.id"></el-option>
+                </el-select>
+                    </el-form-item>
             <el-form-item label="供应商：" size="small">
                 <el-select v-model="formSearch.supplier" value-key="id" filterable placeholder="请选择" style="width:150px">
                     <el-option v-for="item in supplierList" :key="item.name" :label="item.name" :value="item.id"></el-option>
@@ -55,6 +60,11 @@
             <el-form-item label="结算类型：" size="small">
                 <el-select v-model="formSearch.settlement" value-key="id" filterable placeholder="请选择" style="width:150px">
                     <el-option v-for="item in settlementList" :key="item.name" :label="item.name" :value="item.value"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="是否结算：" size="small">
+                <el-select v-model="formSearch.settle" value-key="id" filterable placeholder="请选择" style="width:150px">
+                    <el-option v-for="item in settleList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item v-if="show == true" label="允许结算：" size="small">
@@ -87,7 +97,7 @@
         </el-form>
     </header>
     <section class="middle">
-        <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[1000, 5000, 10000, 20000]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[1000, 5000, 10000, 20000]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
 
         <div id="main" style="width: 100%; height: 400px;"></div>
@@ -120,16 +130,16 @@
                     <el-table-column prop="photoSampleNum" label="拍照样数量" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column prop="taxIncludedTotalPurchaseUnitPrice" label="含税总采购单价" min-width="120" align="center" show-overflow-tooltip>
-                          <template slot-scope="scope">{{scope.row.taxIncludedTotalPurchaseUnitPrice|singlePrice}}</template>
+                          <template slot-scope="scope"><div style="text-align:right">{{scope.row.taxIncludedTotalPurchaseUnitPrice|singlePrice}}</div></template>
                     </el-table-column>
                     <el-table-column prop="taxIncludedPurchaseUnitPrice" label="含税采购单价" min-width="120" align="center" show-overflow-tooltip>
-                         <template slot-scope="scope">{{scope.row.taxIncludedPurchaseUnitPrice|singlePrice}}</template>
+                         <template slot-scope="scope"><div style="text-align:right">{{scope.row.taxIncludedPurchaseUnitPrice|singlePrice}}</div></template>
                     </el-table-column>
                     <el-table-column prop="taxIncludedTrialFee" label="含税试制费单价" min-width="120" align="center" show-overflow-tooltip>
-                      <template slot-scope="scope">{{scope.row.taxIncludedTrialFee|singlePrice}}</template>
+                      <template slot-scope="scope"><div style="text-align:right">{{scope.row.taxIncludedTrialFee|singlePrice}}</div></template>
                     </el-table-column>
                     <el-table-column prop="contractAmount" label="合约金额" min-width="120" align="center" show-overflow-tooltip>
-                        <template slot-scope="scope">{{scope.row.contractAmount|moneyFilters}}</template>
+                        <template slot-scope="scope"><div style="text-align:right">{{scope.row.contractAmount|moneyFilters}}</div></template>
                     </el-table-column>
                      <el-table-column prop="remark" label="备注" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
@@ -183,11 +193,14 @@
      import filters from '../../../filter/'
      let delaiList = [];
      let logList = [];
+     var record={}
 export default {
 // delaiList,
 // logList,
     data() {
         return {
+            settleList:[{name:'是',id:1},{name:'否',id:0}],
+            companyList:[],
              exportObj:{
                        selected:''
             },
@@ -309,10 +322,12 @@ export default {
         this.getSupply()
         // this.getShop()
         this.getBrandList()
+        //this.getCompany()
         this.getButtonJurisdiction() //按钮权限
         this.initTable([], '')
     },
     methods: {
+        
         handleClick(tab, event) {
             if(tab.name=='first'){
                
@@ -465,9 +480,9 @@ export default {
                         }) => {
                             console.log(value,'88888')
                             data.remark = '生成结算明细 备注:' +''+(value? value :'无')
-                            this.request('closed_doBizService', data, false).then((res) => {
+                            this.request('closed_doBizService', data, true).then((res) => {
                                 if (res.code == 1) {
-                                    this.$message.success(res.msg)
+                                    this.$message.success('成功')
                                     this.getData()
                                 } else {
                                     this.$message.error(res.msg)
@@ -503,9 +518,9 @@ export default {
                             value
                         }) => {
                             data.remark = '经销转代销 备注:' +''+(value?value:'无')
-                            this.request('closed_doBizService', data, false).then((res) => {
+                            this.request('closed_doBizService', data, true).then((res) => {
                                 if (res.code == 1) {
-                                    this.$message.success(res.msg)
+                                    this.$message.success('成功')
                                     this.getData()
                                 } else {
                                     this.$message.error(res.msg)
@@ -541,9 +556,9 @@ export default {
                             value
                         }) => {
                             data.remark = '代销转经销 备注:' +''+(value?value:'无')
-                            this.request('closed_doBizService', data, false).then((res) => {
+                            this.request('closed_doBizService', data, true).then((res) => {
                                 if (res.code == 1) {
-                                    this.$message.success(res.msg)
+                                    this.$message.success('成功')
                                     this.getData()
                                 } else {
                                     this.$message.error(res.msg)
@@ -793,6 +808,7 @@ export default {
                             caption: '面料总成本',
                             size: '100px',
                             sortable: true,
+                            render:'money'
                         },
                         {
                             field: 'deferredDays',
@@ -1110,6 +1126,8 @@ export default {
             data.goodsNo = this.formSearch.goodsNo //大货款号
             data.purchaseOrderNo = this.formSearch.ordersNo //采购单号
             data.supplierId = this.formSearch.supplier //供应商
+            data.companyId = this.formSearch.companyId
+            data.settle = this.formSearch.settle
             data.billingType = this.formSearch.settlement //结算类型
             data.allowSettlement = this.formSearch.agreeSettlement //允许结算
             data.documentStatus = this.formSearch.status //单据状态
@@ -1309,6 +1327,8 @@ export default {
                         data.goodsNo = this.formSearch.goodsNo //大货款号
                         data.purchaseOrderNo = this.formSearch.ordersNo //采购单号
                         data.supplierId = this.formSearch.supplier //供应商
+                        data.companyId = this.formSearch.companyId
+                        data.settle = this.formSearch.settle
                         data.billingType = this.formSearch.settlement //结算类型
                         data.allowSettlement = this.formSearch.agreeSettlement //允许结算
                         data.documentStatus = this.formSearch.status //单据状态
@@ -1333,13 +1353,15 @@ export default {
         },
         //导出
         onImport(){
-                    let data={}
+                    let data={} 
                         data.pageSize = this.pagesize
                         data.currentPage = this.currentPage
                         data.years = this.formSearch.year //年份
                         data.goodsNo = this.formSearch.goodsNo //大货款号
                         data.purchaseOrderNo = this.formSearch.ordersNo //采购单号
                         data.supplierId = this.formSearch.supplier //供应商
+                        data.companyId = this.formSearch.companyId 
+                        data.settle = this.formSearch.settle //是否结算
                         data.billingType = this.formSearch.settlement //结算类型
                         data.allowSettlement = this.formSearch.agreeSettlement //允许结算
                         data.documentStatus = this.formSearch.status //单据状态

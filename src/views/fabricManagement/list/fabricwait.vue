@@ -1,5 +1,5 @@
 <template>
-    <div class="layout "  style="min-height:630px;padding-left:0px">
+    <div class="layout "  style="padding-left:0px">
          <!-- <Content> -->
              <Page style="margin-top:5px;text-align:right" :total="total" :page-size="pageSize" :current="page" show-sizer show-total
                                 show-elevator @on-change="currentChange" @on-page-size-change="sizeChange">

@@ -26,7 +26,7 @@
                           </el-form-item>
                 </el-form>
           </header>
-          <section class="middle">
+          <section class="middle" :style="{minHeight:showBink?'680px':'480px'}">
           <el-pagination  style="margin-bottom:10px;text-align:right"  
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
@@ -47,7 +47,7 @@
                  class="pointer"
                  border
                  tooltip-effect="dark"
-                 max-height="250"
+                 :maxHeight="tableHieght"
                  highlight-current-row 
                  @row-click="showLog"
                   >
@@ -107,44 +107,45 @@
                       <template slot-scope="scope">{{ scope.row.status==1?'冻结':'解冻'}}</template>
                 </el-table-column>
          </el-table>
+                <section class="footer" style="margin-bottom:0px;margin-top:10px">
+                      <div style="width:100%;font-size:20px;">操作日志</div>
+                </section>
+                <section class="middle">
+                        <el-table
+                        :data="logList"
+                          style="width: 100%"
+                          border
+                          tooltip-effect="dark"
+                          max-height="170"
+                        
+                        >
+                        <el-table-column
+                          prop="operator"
+                          label="操作员"
+                          min-width="120"
+                          align="center"
+                          >
+                        </el-table-column>
+                        <el-table-column
+                          prop="operateTime"
+                          label="操作时间"
+                          align="center"
+                          min-width="120">
+                            <template slot-scope="scope">{{scope.row.operateTime}}</template>
+                        </el-table-column>
+                        <el-table-column
+                          prop="logContent"
+                          label="操作记录"
+                          min-width="120"
+                          align="center"
+                          show-overflow-tooltip>
+                      </el-table-column>
+                </el-table>  
+                <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div> 
+                <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>
+              </section>
         </section>
-        <section class="footer" style="margin-bottom:0px">
-               <div style="width:100%;font-size:20px;">操作日志</div>
-        </section>
-        <section class="middle">
-                 <el-table
-                 :data="logList"
-                  style="width: 100%"
-                  border
-                  tooltip-effect="dark"
-                  max-height="170"
-                
-                 >
-                <el-table-column
-                  prop="operator"
-                  label="操作员"
-                  min-width="120"
-                  align="center"
-                  >
-                </el-table-column>
-                <el-table-column
-                  prop="operateTime"
-                  label="操作时间"
-                  align="center"
-                  min-width="120">
-                    <template slot-scope="scope">{{scope.row.operateTime}}</template>
-                </el-table-column>
-                <el-table-column
-                  prop="logContent"
-                  label="操作记录"
-                  min-width="120"
-                  align="center"
-                  show-overflow-tooltip>
-              </el-table-column>
-         </el-table>  
-         <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div> 
-         <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>
-       </section>
+    
           <!--新增弹框 -->
           <Modal v-model="dialogVisible" :styles="mystyle" :rules="rules" :title="dialogtitle"  @on-cancel='cancel' :width="810" @on-ok="editSubmit"
             class-name="customize-modal-center"> 
@@ -231,7 +232,9 @@
 </template>
 <script>
   import filters from '../../../filter/'
+  import {debounce} from 'mixins/debounce'
   export default {
+    mixins:[debounce],
     data() {
       return {
         userInfo     : {},             //用户信息
@@ -508,6 +511,13 @@
       width:99%;margin:0 auto;background:#fff;
       padding: 20px 20px 10px 20px;
       margin-bottom:10px;
+    }
+        .middle{
+      width: 99%;
+      margin: 0 auto;
+      background: #fff;
+      padding: 0px 10px 10px 10px;
+      margin-top: 0px;
     }
     .getmore{
           padding-top: 6px;

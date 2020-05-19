@@ -1,0 +1,362 @@
+<template>
+    <div>
+        <!-- 数据列表 -->
+        <Row class="background-color-white exhibition" style="padding-left:0px">
+            
+            <Page style="margin-top:5px;text-align:right;margin-bottom:10px" :total="total" :page-size="pageSize" :current="page" show-sizer show-total
+                show-elevator @on-change="currentChange" @on-page-size-change="sizeChange"></Page>
+                <Table  :columns="columns" size="small" @on-row-click="clickRow" highlight-row :data="list"></Table>
+                <section class="footer" style="margin-bottom:0px">
+        <!-- <span class="pl20"><i class="el-icon-arrow-up pointer "></i></span> -->
+                <div style="width:100%;font-size:14px;">操作日志</div>
+                </section>
+                 <section class="log">
+                        <el-table :data="logList" style="width: 100%" border tooltip-effect="dark" max-height="230">
+                            <el-table-column prop="operator" label="操作员" min-width="120" align="center">
+                            </el-table-column>
+                            <el-table-column prop="operateTime" label="操作时间" align="center" min-width="120">
+                                <template slot-scope="scope">{{scope.row.operateTime}}</template>
+                            </el-table-column>
+                            <el-table-column prop="logContent" label="操作记录" min-width="120" align="center" show-overflow-tooltip>
+                            </el-table-column>
+                        </el-table>
+                        <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div>
+                        <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>
+                    </section>
+        </Row>
+    </div>
+</template>
+
+<script>
+    export default {
+        data() {
+            return {
+                visible: false,
+                red_packet_table_row_index:-1,
+                list:[],
+                logList:[],
+                columns: [
+                     {
+                        title: '序号',
+                        type: 'index',
+                        align: 'center',
+                        width: 70,
+
+                    },
+                    {
+                        title: '消息编号',
+                        key: 'messageNo',
+                        align: 'center',
+                        minWidth: 190,
+                    },
+                    {
+                        title: '消息类型',
+                        key: 'messageType',
+                        align: 'center',
+                        minWidth: 120,
+                    },
+                    {
+                        title: '发起人',
+                        key: 'createUser',
+                        align: 'center',
+                        minWidth: 120,
+                    },
+                     {
+                        title: '发起部门',
+                        key: 'createUserDepartment',
+                        align: 'center',
+                        minWidth: 120,
+                    },
+                    {
+                        title: '到达时间',
+                        key: 'created',
+                        align: 'center',
+                        minWidth: 160,
+                    },
+                    {
+                        title: '共计时长',
+                        key  : 'sumTime',
+                        align: 'center',
+                        minWidth: 140,
+                    },
+                     {
+                        title: '操作',
+                        key: 'lastUpdateUser',
+                        align: 'center',
+                        width: 220,
+                        fixed :'right',
+                        render: (h, params) => {
+                            // if(params.row.lastUpdateUser){
+                            //   return h('div', [
+                               
+                            //    ]);
+                            // }else{
+                                return h('div', [
+                                      h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        marginRight: '5px',
+                                        width:'50px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                               this.$router.push({
+                                                          name:'planningMessageDetail',
+                                                          query: { 
+                                                                 id:params.row.id,
+                                                         }
+                                                 })
+                                        }
+                                    }
+                                }, '查看'),
+                                //   h('Button', {
+                                //     props: {
+                                //         type: 'primary',
+                                //         size: 'small'
+                                //     },
+                                //     style: {
+                                //         marginRight: '5px',
+                                //         width:'50px'
+                                //     },
+                                //     on: {
+                                //         click: () => {
+                                //                this.$router.push({
+                                //                           name:'planningAdjustmentComplated',
+                                //                           query: { 
+                                //                                  taskNo: params.row.taskNo,
+                                //                                  taskDetailId:params.row.id,
+                                //                                  taskConfigurationId:params.row.taskConfigurationId
+                                //                          }
+                                //                  })
+                                //         }
+                                //     }
+                                // }, '撤回'),
+                               ]);  
+                            }
+                             
+                        },
+                    // },
+                ],
+                userInfo: {},
+                total: 0,
+                page: 1,
+                pageSize: 10,
+            }
+        },
+        mounted() {
+                this.userInfo = JSON.parse(window.sessionStorage.getItem('userinfo')); 
+                //  this.getTaskId();
+                //           setTimeout(()=>{
+                //                  this.initdata()
+                //         },1000)
+        },
+        activated() {
+
+        },
+        methods: {
+                clickSearch(){
+                             this.getTaskId();
+                        setTimeout(()=>{
+                               this.initdata()
+                        },1000)
+                  },
+                // 撤回任务号
+                backTask(taskConfigurationId,id,taskNo){
+                            let data={}
+                                // data.id=id
+                                data.taskConfigurationId=taskConfigurationId
+                                // data.taskConfigurationName=taskConfigurationName
+                                data.taskDetailId=id
+                                data.taskNo=taskNo
+                            this.request('fabric_developMaterialEnter_revokeTask', data, false).then((res) => {
+                                if(res.code==1){
+                                        this.$message.success('撤回成功')
+                                        this.initdata()
+                                    }else{
+                                        this.$message.error(res.msg)
+                                    }
+                        })
+                },
+                 search() {
+                            this.page =1
+                           this.initdata()
+                    },  
+                 currentChange(page) {
+                            this.page = page
+                            this.initdata()
+                    },
+                 sizeChange(pageSize) {
+                            this.pageSize = pageSize
+                             this.initdata()
+                    },
+                //初始化第一个列表数据
+                  getTaskId(){
+                        let data={}
+                        this.request('fabricDevelop_taskConfiguration_getTaskConfigurationList',data,false).then(res=>{
+                                   if(res.code==1){
+                                         this.task=res.data;
+                                   }      
+                        })
+                    }, 
+                  getID(){
+                         for(let i=0,len=this.task.length;i<len;i++){
+                             if(this.task[i].taskName.indexOf('录入面料信息')>-1){
+                                 return this.task[i].id
+                             }
+                         }     
+                  },
+                  initdata(){
+                      this.logList = []
+                           let data={};
+                               data.currentPage           = this.page;
+                               data.pageSize              = this.pageSize
+                               data.status                = 1
+                            this.request('page_query_task_message', data, false).then((res) => {
+                            if(res.code==1){
+                                   this.list =res.data.records
+                                   this.total=res.data.count
+                            }else{
+                                   this.$message.error(res.msg)
+                            }
+                        })    
+                    },
+                    clickRow(row){
+                        this.getLoglist(row.id)
+                    },
+                    getLoglist(billNo) {
+            this.billNo = billNo
+            this.logPage = 1
+            let data = {}
+            data.billNo = "boss_message_user_mapping_prefix_" + this.billNo
+            data.pageSize = 3
+            data.currentPage = this.logPage
+            this.request('billLog_getPagingByBillNo', data, true).then((res) => {
+                if (res.code == 1) {
+                    if (res.data.length < data.pageSize) {
+                        this.dataFlag = false
+                    } else {
+                        this.dataFlag = true
+                    }
+                    if (this.logPage == 1) {
+                        this.logList = res.data
+                    } else {
+                        this.logList = this.logList.concat(res.data)
+                    }
+                }
+            })
+        },
+        getMore() {
+            this.logPage++
+            let data = {}
+            data.billNo = "boss_message_user_mapping_prefix_" + this.billNo
+            data.pageSize = 3
+            data.currentPage = this.logPage
+            this.request('billLog_getPagingByBillNo', data, true).then((res) => {
+                if (res.code == 1) {
+                    if (res.data.length < data.pageSize) {
+                        this.dataFlag = false
+                    } else {
+                        this.dataFlag = true
+                    }
+                    if (this.logPage == 1) {
+                        this.logList = res.data
+                    } else {
+                        this.logList = this.logList.concat(res.data)
+                    }
+                }
+            })
+        },
+        }       
+    }
+</script>
+
+<style scoped>
+    .ivu-modal-footer{
+        border-top:0;
+    }
+        .demo-upload-list{
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            text-align: center;
+            line-height: 60px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            overflow: hidden;
+            background: #fff;
+            position: relative;
+            box-shadow: 0 1px 1px rgba(0,0,0,.2);
+            margin-right: 4px;
+        }
+        .demo-upload-list img{
+            width: 100%;
+            height: 100%;
+        }
+        .demo-upload-list-cover{
+            display: none;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,.6);
+        }
+        .demo-upload-list:hover .demo-upload-list-cover{
+            display: block;
+        }
+        .demo-upload-list-cover i{
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            margin: 0 2px;
+        }
+        .headerstyle,
+        .main,
+        .middle,
+        .footer {
+            width: 99%;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px 20px 10px 20px;
+            margin-bottom: 10px;
+        }
+
+        .getmore {
+            padding-top: 6px;
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .pointer {
+            cursor: pointer;
+        }
+
+        .pl20 {
+            padding-left: 20px
+        }
+
+        .el-table__row td {
+            padding: 0;
+        }
+
+        /* 用来设置当前页面element全局table 选中某行时的背景色*/
+        .el-table__body tr.current-row>td {
+            background-color: #f19944 !important;
+            /* color: #f19944; */
+            /* 设置文字颜色，可以选择不设置 */
+        }
+
+        /* 用来设置当前页面element全局table 鼠标移入某行时的背景色*/
+        .el-table--enable-row-hover .el-table__body tr:hover>td {
+            background-color: #f19944;
+            /* color: #f19944; */
+            /* 设置文字颜色，可以选择不设置 */
+        }
+</style>

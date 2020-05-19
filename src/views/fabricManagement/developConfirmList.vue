@@ -29,10 +29,13 @@
                 <TabPane label="进行中" name='jxz'>
                     <Row class="background-color-white exhibition" style="max-height:530px;padding-left:0px">
                         <Page style="margin-top:5px;text-align:right" :total="total" :page-size="pageSize" :current="page" show-sizer show-total show-elevator @on-change="currentChange1" @on-page-size-change="sizeChange1"></Page>
-                        <Table :columns="columns" size="small" highlight-row :data="list1" @on-row-click="clickRow"></Table>
+                        <Table :columns="columns" height="530" size="small" highlight-row :data="list1" @on-row-click="clickRow"></Table>
                         
                     </Row>
-                    <div style="height:20px"></div>
+                    <Modal title="查看大图" v-model="visible"> 
+                    <img :src="bigstyleImg" v-if="visible" style="width: 100%">
+                </Modal>
+                    <div style="height:80px"></div>
                     <Row>
                         <div style="font-size:20px">操作日志</div>
                         
@@ -104,6 +107,7 @@ export default {
     name: 'developConfirmList',
     data() {
         return {
+            visible:false,
             turnvisible:false,
             logsList:[],
             userInfo: '', //缓存
@@ -119,6 +123,59 @@ export default {
                     align: 'center',
                     minWidth: 100,
                 },
+                {
+                    title: '样品图1',
+                    key: 'breviaryStyleImg',
+                    align: 'center',
+                    minWidth: 100,
+                    render: (h, params) => {
+                           if(params.row.breviaryStyleImg){
+                               return h('div',{
+                                   style: {
+                                                        height:'40px',
+                                                        textAlign:'center',
+                                                        lineHeight:'40px'
+                                                },
+                               },
+                               [h('img', {         
+                                           style: {
+                                                        width: 'auto',
+                                                        height: 'auto',
+                                                        maxWidth: '100%',
+                                                        maxHeight: '100%',
+                                                        objectFit: 'cover'
+                                                },
+                                            domProps:{
+                                                       src:params.row.breviaryStyleImg,
+                                             },
+                                            on: {
+                                                  click: () => {
+                                                                this.bigstyleImg = params.row.breviaryStyleImg
+                                                              this.visible=true;
+                                                            }
+                                                }
+                                                    }, '')
+                                                    
+                                                    
+                                    ])    
+                           }else{
+                                  return h('img', {
+                                           style: {
+                                                     display: 'inline-block',
+                                                     height:'40px',
+                                                },
+                                            domProps:{
+                                                       src:'https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1562574299&di=846b4c904bd54d3c3821fa5938888c69&src=http://hbimg.b0.upaiyun.com/bdaca9a07e1a8947c00c2f826ebf848750927aa24963-cATwbg_fw658',
+                                             },
+                                            on: {
+                                                  click: () => {  
+
+                                                   }
+                                                }
+                                                    }, '');  
+                           }             
+                        }
+                    },
                 {
                     title: '任务名称',
                     key: 'taskConfigurationName',
@@ -236,6 +293,12 @@ export default {
                     minWidth: 150,
                 },
                 {
+                    title: '开发有效时间',
+                    key: 'developEffectiveTime',
+                    align: 'center',
+                    minWidth: 150,
+                },
+                {
                     title: '操作',
                     key: 'operate',
                     minWidth: 150,
@@ -282,6 +345,7 @@ export default {
                     }
                 }
             ],
+            bigstyleImg:'',
             List: [],
             changeRoute: '',
             list1: [],
@@ -491,6 +555,8 @@ export default {
                             taskDetailId: id,
                         }
                     });
+                }else{
+                    this.$message.error(res.msg)
                 }
             })
         },

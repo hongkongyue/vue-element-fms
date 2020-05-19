@@ -91,6 +91,16 @@
                 <el-date-picker style="width:370px" v-model="formSearch.date" type="daterange" range-separator="~" start-placeholder="开始日期" end-placeholder="结束日期">
                 </el-date-picker>
             </el-form-item>
+            <el-form-item v-if="show==true" label="对账状态：" size="small" label-width="100px">
+                <el-select v-model="formSearch.settleStatus" filterable placeholder="请选择" style="width:120px">
+                    <el-option label="未对账" value="0"></el-option>
+                    <el-option label="已对账" value="1"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item v-if="show==true" label="结算单号：" size="small" label-width="100px">
+                <el-input v-model="formSearch.bizCode" filterable placeholder="请输入" style="width:120px">
+                </el-input>
+            </el-form-item>
             <el-form-item size="small" label-width="100px">
                 <el-button v-if="show == false" @click="changeShow" style="float:right" size="small"><i class="el-icon-bottom"></i></el-button>
             </el-form-item>
@@ -126,13 +136,13 @@
                         <el-table-column prop="stockInQty" align="center" min-width="120" label="入库数量">
                         </el-table-column>
                         <el-table-column prop="taxIncludedTotalPurchaseUnitPrice" align="center" min-width="120" label="含税总采购单价">
-                             <template slot-scope="scope">{{scope.row.taxIncludedTotalPurchaseUnitPrice|singlePrice}}</template>
+                             <template slot-scope="scope"><div style="text-align:right">{{scope.row.taxIncludedTotalPurchaseUnitPrice|singlePrice}}</div></template>
                         </el-table-column>
                         <el-table-column prop="taxIncludedPurchaseUnitPrice" align="center" min-width="120" label="含税采购单价">
-                             <template slot-scope="scope">{{scope.row.taxIncludedPurchaseUnitPrice|singlePrice}}</template>
+                             <template slot-scope="scope"><div style="text-align:right">{{scope.row.taxIncludedPurchaseUnitPrice|singlePrice}}</div></template>
                         </el-table-column>
                         <el-table-column prop="taxIncludedTrialFee" align="center" min-width="120" label="含税试制费单价">
-                             <template slot-scope="scope">{{scope.row.taxIncludedTrialFee|singlePrice}}</template>
+                             <template slot-scope="scope"><div style="text-align:right">{{scope.row.taxIncludedTrialFee|singlePrice}}</div></template>
                         </el-table-column>
                     </el-table>
                 </section>
@@ -155,6 +165,7 @@
                         <el-table-column prop="goodsNo" align="center" min-width="120" label="大货款号">
                         </el-table-column>
                         <el-table-column prop="deductionAmount" align="center" min-width="120" label="扣款金额">
+                            <template slot-scope="scope"><div style="text-align:right">{{scope.row.deductionAmount|moneyFilters}}</div></template>
                         </el-table-column>
                         <el-table-column prop="deductionType" align="center" min-width="120" label="扣款类型">
                         </el-table-column>
@@ -184,7 +195,7 @@
             <el-form :inline="true" ref="ruleForm" :model="addBillObj" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="rules">
                 <Col>
                 <el-form-item label="指定账期" size="small" label-width="95px" prop="platform">
-                    <el-select v-model="addBillObj.period" filterable placeholder="请选择" style="width:150px">
+                    <el-select v-model="addBillObj.period" filterable placeholder="请选择" style="width:200px">
                         <el-option v-for="item in billList" :key="item.name" :label="item.name" :value="item.period"></el-option>
                     </el-select>
                 </el-form-item>
@@ -321,6 +332,8 @@ export default {
                 periodId: '',
                 supplierId: '',
                 companyId: '',
+                settleStatus:'',
+                bizCode:'',
             },
             addBillObj: {
                 period: ''
@@ -431,6 +444,12 @@ export default {
                             size: '100px',
                             sortable: true,
                         },
+                         {
+                            field: 'settleStatus',
+                            caption: '对账状态',
+                            size: '100px',
+                            sortable: true,
+                        },
                         {
                             field: 'bizCode',
                             caption: '单据编号',
@@ -479,6 +498,12 @@ export default {
                             sortable: true
                         },
                         {
+                            field: 'photoSampleNum',
+                            caption: '拍照样数量',
+                            size: '100px',
+                            sortable: true
+                        },
+                        {
                             field: 'totalSettlementQty',
                             caption: '结算总数',
                             size: '100px',
@@ -488,25 +513,43 @@ export default {
                             field: 'totalFabricAmount',
                             caption: '面料总额',
                             size: '100px',
-                            sortable: true
+                            sortable: true,
+                            render:'money',
+                        },
+                         {
+                            field: 'photoSampleGoodsAmount',
+                            caption: '拍照样贷款金额',
+                            size: '100px',
+                            sortable: true,
+                             render:'money',
                         },
                         {
                             field: 'totalGoodsAmount',
                             caption: '货款总额',
                             size: '100px',
-                            sortable: true
+                            sortable: true,
+                             render:'money',
+                        },
+                         {
+                            field: 'photoSampleTrialAmount',
+                            caption: '拍照样试制费金额',
+                            size: '100px',
+                            sortable: true,
+                             render:'money',
                         },
                         {
                             field: 'totalTaxTrialAmount',
                             caption: '试制费总额',
                             size: '100px',
-                            sortable: true
+                            sortable: true,
+                            render:'money',
                         },
                         {
                             field: 'totalDeductionAmount',
                             caption: '扣款总额',
                             size: '100px',
-                            sortable: true
+                            sortable: true,
+                            render:'money',
                         },
                         {
                             field: 'settlementType',
@@ -518,7 +561,8 @@ export default {
                             field: 'totalSettlementAmount',
                             caption: '结算总额',
                             size: '100px',
-                            sortable: true
+                            sortable: true,
+                             render:'money',
                         },
                         {
                             field: 'reconciliationOrderCode',
@@ -547,6 +591,12 @@ export default {
                         {
                             field: 'generationType',
                             caption: '生成方式',
+                            size: '100px',
+                            sortable: true
+                        },
+                        {
+                            field: 'remark',
+                            caption: '备注',
                             size: '100px',
                             sortable: true
                         },
@@ -595,9 +645,12 @@ export default {
                         summary: true
                     },
                     index: '<span>当页小计</span>',
+                    photoSampleNum:currentPageSum.photoSampleNum,
                     totalSettlementQty: currentPageSum.totalSettlementQty,
                     totalFabricAmount: currentPageSum.totalFabricAmount,
+                    photoSampleGoodsAmount:currentPageSum.photoSampleGoodsAmount,
                     totalGoodsAmount: currentPageSum.totalGoodsAmount,
+                    photoSampleTrialAmount: currentPageSum.photoSampleTrialAmount,
                     totalTaxTrialAmount: currentPageSum.totalTaxTrialAmount,
                     totalDeductionAmount: currentPageSum.totalDeductionAmount,
                     totalSettlementAmount: currentPageSum.totalSettlementAmount
@@ -606,9 +659,12 @@ export default {
                         summary: true
                     },
                     index: '<span >合计</span>',
+                    photoSampleNum:totalPageSum.photoSampleNum,
                     totalSettlementQty: totalPageSum.totalSettlementQty,
                     totalFabricAmount: totalPageSum.totalFabricAmount,
+                    photoSampleGoodsAmount:totalPageSum.photoSampleGoodsAmount,
                     totalGoodsAmount: totalPageSum.totalGoodsAmount,
+                    photoSampleTrialAmount: totalPageSum.photoSampleTrialAmount,
                     totalTaxTrialAmount: totalPageSum.totalTaxTrialAmount,
                     totalDeductionAmount: totalPageSum.totalDeductionAmount,
                     totalSettlementAmount: totalPageSum.totalSettlementAmount
@@ -677,6 +733,8 @@ export default {
             data.closeStockInStatus == 0 ? '' : data.closeStockInStatus == 1 ? '' : delete data.closeStockInStatus
             data.startDate ? '' : delete data.startDate
             data.endDate ? '' : delete data.endDate
+            data.bizCode=this.formSearch.bizCode
+            data.settleStatus=this.formSearch.settleStatus!=''?Number(this.formSearch.settleStatus):''
             this.request('payable_settlementOrder_page', data, true).then(res => {
                 if (res.code == 1) {
                     this.total = res.data.count;
@@ -1004,7 +1062,7 @@ export default {
             data.ids = arr;
             data.periodId = this.addBillObj.period;
             data.periodNo = this.getNumber(this.addBillObj.period)
-            this.request('payable_settlementOrder_command', data, false).then((res) => {
+            this.request('payable_settlementOrder_command', data, true).then((res) => {
                 if (res.code == 1) {
                     this.$message.success('生成对账单成功')
                     this.cancelGenerate()

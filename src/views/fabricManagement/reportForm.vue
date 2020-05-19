@@ -16,17 +16,43 @@
             <el-form-item label="任务流编号：" size="small">
                 <el-input v-model="formSearch.taskNo" maxlength="20" style="width:150px"></el-input>
             </el-form-item>
+            <el-form-item label="供应商简称：" size="small">
+                <el-input v-model="formSearch.basicSupplierShortName" maxlength="20" style="width:150px"></el-input>
+            </el-form-item>
+            <el-form-item label="供应商物料色号：" size="small">
+                <el-input v-model="formSearch.supplierMaterialColorNo" maxlength="20" style="width:150px"></el-input>
+            </el-form-item>
             <el-form-item label="流程状态：" size="small">
                 <el-select v-model="formSearch.processStatus" value-key="id" filterable placeholder="请选择" style="width:150px">
-                    <el-option v-for="item in statusList" :key="item" :label="item" :value="item"></el-option>
+                    <el-option v-show="item!='已完成'" v-for="item in statusList" :key="item" :label="item" :value="item"></el-option>
                 </el-select>
+            </el-form-item>
+            <el-form-item label="提交日期：" size="small" v-if="show == true">
+                <el-date-picker v-model="formSearch.submitDay" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item label="要求完成日期：" size="small" v-if="show == true">
+                <el-date-picker v-model="formSearch.finishDay" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item label="开发员：" size="small">
+                <el-select v-model="formSearch.developerId" filterable placeholder="请选择" style="width:150px">
+                    <el-option  v-for="item in developerList" :key="item.id" :label="item.basicUserName" :value="item.basicUserId"></el-option>
+                </el-select>
+              </el-form-item>
+             <el-form-item size="small">
+                <el-button v-if="show == false" @click="changeShow" style="float:right" size="small"><i class="el-icon-bottom"></i></el-button>
+            </el-form-item>
+            <el-form-item size="small">
+                <el-button v-if="show == true" @click="changeHidden" style="float:right" size="small"><i class="el-icon-top"></i></el-button>
+
             </el-form-item>
         </el-form>
     </header>
-    <section class="middle">
+    <section class="middle" :style="{minHeight:showBink?'690px':'480px'}">
         <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[10, 20, 30, 40]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
-        <el-table ref="multipleTable" :data="tableData" style="width: 100%" @row-click="showLog" border tooltip-effect="dark" max-height="450" @selection-change="handleSelectionChange">
+        <el-table ref="multipleTable" :data="tableData" style="width: 100%" @row-click="showLog" border tooltip-effect="dark" max-height="250" @selection-change="handleSelectionChange">
             <el-table-column type="index" width="55" label="序号" align="center"></el-table-column>
             <el-table-column prop="taskNo" label="任务流编号" align="center" min-width="120">
             </el-table-column>
@@ -47,17 +73,23 @@
             </el-table-column>
             <el-table-column prop="styleImg" label="样品图1" min-width="120" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
-                    <div @click="imgClick(scope.row.styleImg)">
+                    <div v-if="scope.row.styleImg" @click="imgClick(scope.row.styleImg)">
                         <el-image style="width: 40px; height: 40px" :src="scope.row.styleImg" :preview-src-list="[scope.row.styleImg]">
                         </el-image>
+                    </div>
+                    <div v-if="!scope.row.styleImg">
+                        <el-image style="width: 40px; height: 40px" :src=noneUrl></el-image>
                     </div>
                 </template>
             </el-table-column>
             <el-table-column prop="styleImg2" label="样图2" min-width="120" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
-                    <div @click="imgClick(scope.row.styleImg2)">
+                    <div v-if="scope.row.styleImg2" @click="imgClick(scope.row.styleImg2)">
                         <el-image style="width: 40px; height: 40px" :src="scope.row.styleImg2" :preview-src-list="[scope.row.styleImg2]">
                         </el-image>
+                    </div>
+                    <div v-if="!scope.row.styleImg2">
+                        <el-image style="width: 40px; height: 40px" :src=noneUrl></el-image>
                     </div>
                 </template>
             </el-table-column>
@@ -82,7 +114,7 @@
             </el-table-column>
             <el-table-column prop="inspectTime" label="检测时间" min-width="120" align="center" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="price" label="核准价格（元/米）" min-width="120" align="center" show-overflow-tooltip>
+            <el-table-column prop="price" label="核准价格（元/米）" min-width="130" align="center" show-overflow-tooltip>
             </el-table-column>
             <el-table-column prop="remark" label="备注" min-width="120" align="center" show-overflow-tooltip>
             </el-table-column>
@@ -90,22 +122,24 @@
             </el-table-column>
             <el-table-column prop="pricingTime" label="核价时间" min-width="120" align="center" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="confirmTime" label="发起人确认时间" min-width="120" align="center" show-overflow-tooltip>
-            </el-table-column>
+            <!-- <el-table-column prop="confirmTime" label="发起人确认时间" min-width="120" align="center" show-overflow-tooltip>
+            </el-table-column> -->
         </el-table>
-    </section>
-    <!-- <section class="footer" style="margin-bottom:0px">
-           <div style="width:100%;font-size:20px;">操作日志</div>
-        </section> -->
-    <section class="middle">
-        <!-- <Table ref="currentRowTable" @on-select-cancel="choiceId" @on-select-all-cancel="choiceId" max-height='550' @on-select="choiceId" @on-select-all="choiceId" :columns="columns" size="small" highlight-row :data="list"></Table> -->
-        <el-table :data="logList" style="width: 100%" border tooltip-effect="dark" max-height="250">
+
+        <el-table :data="logList" style="width: 100%;margin-top:30px" border tooltip-effect="dark" max-height="150">
 
             <el-table-column prop="operator" label="图片" min-width="120" align="center">
                 <template slot-scope="scope">
-                    <div @click="imgClick(scope.row.materialImg)">
+                    <!-- <div @click="imgClick(scope.row.materialImg)">
                         <el-image style="width: 40px; height: 40px" :src="scope.row.materialImg" :preview-src-list="[scope.row.materialImg]">
                         </el-image>
+                    </div> -->
+                    <div v-if="scope.row.materialImg" @click="imgClick(scope.row.materialImg)">
+                        <el-image style="width: 40px; height: 40px" :src="scope.row.materialImg" :preview-src-list="[scope.row.materialImg]">
+                        </el-image>
+                    </div>
+                    <div v-if="!scope.row.materialImg">
+                        <el-image style="width: 40px; height: 40px" :src=noneUrl></el-image>
                     </div>
                 </template>
             </el-table-column>
@@ -167,21 +201,24 @@
             </el-table-column>
             <el-table-column prop="materialEnterTime" label="面料录入时间" min-width="120" align="center" show-overflow-tooltip>
             </el-table-column>
-
         </el-table>
-        <!-- <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div> 
-         <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>    -->
     </section>
+ 
+        
 </div>
 </template>
 
 <script>
 import Util from 'libs/util'
+import { commonMixins } from 'mixins/common';
 import downLoad from '../../filter/downLoad'
+import {debounce} from 'mixins/debounce'
 export default {
+    mixins: [commonMixins,debounce],
     data() {
         return {
-            statusList:[],
+            noneUrl: 'https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1562574299&di=846b4c904bd54d3c3821fa5938888c69&src=http://hbimg.b0.upaiyun.com/bdaca9a07e1a8947c00c2f826ebf848750927aa24963-cATwbg_fw658',
+            statusList: [],
             url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
             srcList: [],
             logList: [], //日志
@@ -191,6 +228,7 @@ export default {
             changeVisible: false, //编辑
             formSearch: {},
             total: 0,
+            show:false,
             pagesize: 10,
             currentPage: 1,
             tableData: [],
@@ -198,19 +236,53 @@ export default {
             rowObj: {}, //选择的数据对象
             judgeMenu: [],
             buttonList: [], //按钮权限
+            developerList:[],
         }
     },
     mounted() {
         this.getData()
         this.getStatusList()
         this.getButtonJurisdiction() //按钮权限
+        this.init()
     },
     methods: {
+        init(){
+            let data={}
+             this.request('queryNextId', data, true).then((res) => {
+                if (res.code == 1) {
+                    // this.queryNextId = 
+                    this.getPersonList(res.data)
+                    // this.personList = res.data
+                }
+            })
+        },
+         //获取人员下拉
+        getPersonList(id) {
+            let data = {}
+            data.taskConfigurationId = id
+            this.request('getListByTaskConfigurationId', data, true).then((res) => {
+                if (res.code == 1) {
+                    this.developerList = res.data
+                }
+            })
+        },
         //导出
-        onImport(){
+        onImport() {
             let data = Util.deepClone(this.formSearch);
-            downLoad.downLoad(data,'/eop-boot/fabric/report/downloadXlsx')
-            console.log(data,'00000000000000')
+            !!this.formSearch.submitDay ? data.submitStartTime = Util.dateFormat(this.formSearch.submitDay[0],'yyyy-MM-dd') : delete data.submitStartTime
+            !!this.formSearch.submitDay ? data.submitEndTime = Util.dateFormat(this.formSearch.submitDay[1],'yyyy-MM-dd') : delete data.submitEndTime
+            !!this.formSearch.finishDay ? data.requireStartDate = Util.dateFormat(this.formSearch.finishDay[0],'yyyy-MM-dd') : delete data.requireStartDate
+            !!this.formSearch.finishDay ? data.requireEndDate = Util.dateFormat(this.formSearch.finishDay[1],'yyyy-MM-dd') : delete data.requireEndDate
+            // downLoad.downLoad(data, '/eop-boot/fabric/report/downloadXlsx')
+            // console.log(data, '00000000000000')
+            this.request('report_downloadXlsx', data, true).then(res => {
+                if (res.code == 1) {
+                    this.getKey(res.data)
+                }else{
+                    this.$message.error(res.msg);
+                    
+                }
+            })
         },
         imgClick(url) {
             this.srcList = [url]
@@ -252,6 +324,10 @@ export default {
         getData() {
             this.logList = []
             let data = Util.deepClone(this.formSearch);
+            !!this.formSearch.submitDay ? data.submitStartTime = Util.dateFormat(this.formSearch.submitDay[0],'yyyy-MM-dd') : delete data.submitStartTime
+            !!this.formSearch.submitDay ? data.submitEndTime = Util.dateFormat(this.formSearch.submitDay[1],'yyyy-MM-dd') : delete data.submitEndTime
+            !!this.formSearch.finishDay ? data.requireStartDate = Util.dateFormat(this.formSearch.finishDay[0],'yyyy-MM-dd') : delete data.requireStartDate
+            !!this.formSearch.finishDay ? data.requireEndDate = Util.dateFormat(this.formSearch.finishDay[1],'yyyy-MM-dd') : delete data.requireEndDate
             data.pageSize = this.pagesize
             data.currentPage = this.currentPage
             this.request('report_queryReport', data, true).then(res => {
@@ -267,7 +343,7 @@ export default {
             this.request('report_queryReportDetail', data, true).then((res) => {
                 if (res.code == 1) {
                     this.logList = res.data
-                }else{
+                } else {
                     this.logList = []
                 }
             })
@@ -289,6 +365,12 @@ export default {
             console.log(`当前页: ${val}`);
             this.currentPage = val
             this.getData()
+        },
+        changeShow() {
+            this.show = true
+        },
+        changeHidden() {
+            this.show = false
         },
     }
 }
@@ -329,7 +411,17 @@ export default {
     width: 99.9% !important;
 
 }
+
 .el-icon-circle-close:before {
- color:white
+    color: white
+}
+</style><style>
+.el-image-viewer__close {
+    color: #fff !important;
+}
+
+.el-image-viewer__prev,
+.el-image-viewer__next {
+    display: none;
 }
 </style>

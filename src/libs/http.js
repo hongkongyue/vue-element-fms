@@ -41,6 +41,47 @@ Http.install = function (Vue) {
       console.log('url 错误', '返回结果：err = ', '无法请求，无效的请求！', '\n');
     }
   };
+
+  /**
+   * 全局请求接口解决uri带参数问题，后端有些getById, 用id获取具体VO, 而不需要再包个就一个参数QO
+   * @param method 方法
+   * @param vars 对应后端PathVariable, 前端apiMap.js映射uri需要修改成 ${vars.xxxx}, 而非后端{xxxx} 作为占位符.
+   *             完整url例子, /eop-boot/basicsupplierstaff/basic-supplier-staff/update/${vars.id}
+   *                   对应后端controller接口  /basicsupplierstaff/basic-supplier-staff/update/{id}
+   * @param opts 参数
+   * @param toast 是否提示
+   * @returns {string}
+   */
+  Vue.prototype.requestWithUriVars = function (method, vars, opts, toast) {
+    let m = methodMap[method];
+    if (m) {
+      let optsType = typeof (opts);
+      if (optsType === null || optsType !== 'object') {
+        opts = {};
+      }
+      if (typeof m.method === 'undefined') {
+        console.log('method 错误', '缺少请求 method 方法', '\n');
+        return false;
+      }
+      //如果有给 toast 参数则显示 loading 加载数据
+      if (toast && typeof (toast) === 'boolean') {
+        Vue.prototype.$loading('加载中...');
+      } else if (toast && typeof (toast) === 'string') {
+        Vue.prototype.$loading(toast);
+      }
+      if (m.method === 'get') {
+        return Vue.prototype.apiGet(eval("`" + m.url + "`"), opts);
+      } else if (m.method === 'post') {
+        return Vue.prototype.apiPost(eval("`" + m.url + "`"), opts);
+      } else {
+        return false;
+      }
+    } else {
+      closeLoading();
+      console.log('url 错误', '返回结果：err = ', '无法请求，无效的请求！', '\n');
+    }
+  };
+
   /**
    * POST 请求 无提示
    * @param url 请求URL

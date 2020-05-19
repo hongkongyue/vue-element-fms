@@ -35,7 +35,7 @@
             
         </el-form>
     </header>
-    <section class="middle">
+    <section class="middle"  :style="{minHeight:showBink?'680px':'480px'}">
         <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[10, 20, 30, 40]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
         <el-table ref="multipleTable" :data="tableData" style="width: 100%" border tooltip-effect="dark" max-height="550" @selection-change="selection">
@@ -133,7 +133,9 @@
 <script>
 import filters from '../../../filter/'
 import E from 'wangeditor'
+import {debounce} from 'mixins/debounce'
 export default {
+    mixins:[debounce],
     data() {
         return {
             changeVisible: false, //编辑

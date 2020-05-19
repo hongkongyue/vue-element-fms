@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- 数据列表 -->
-        <Row class="background-color-white exhibition" style="min-height:630px;padding-left:0px">
+        <Row :style="{minHeight:showBink?'830px':'620px'}" class="background-color-white exhibition">
              <Form :model="formSearch" class="search" ref="formSearch" :label-width="80" inline label-position="right" :rules="rules" @keydown.native.enter.prevent="search">
             
                     <!-- <Form-item label="" :label-width='40'>
@@ -26,17 +26,27 @@
             <el-table-column prop="specialCategory"              label="是否特殊工艺"   min-width="120" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">{{scope.row.specialCategory == 1 ? '是' : '否'}}</template>
             </el-table-column>
-            <el-table-column prop="styleImg1"               label="样品图1"        min-width="80" align="center" show-overflow-tooltip>
+            <el-table-column prop="styleImg"               label="样品图1"        min-width="80" align="center" show-overflow-tooltip>
                  <template slot-scope="scope">
                         <span>
                               <!-- <img v-if="scope.row.materialImg" :src="scope.row.materialImg" style="width:40px;height:40px" />
                               <img v-else  :src="noPict"> -->
-                                <div class="demo-image__preview">
+                                <!-- <div class="demo-image__preview">
                                     <el-image  @click.native="getLargePict(scope.row.styleImg)"
                                         style="width: 40px; height: 40px"
                                         :src="scope.row.styleImg" 
                                         :preview-src-list="[scope.row.styleImg]">
                                     </el-image>
+                                </div> -->
+                                  <div v-if="scope.row.styleImg" class="demo-image__preview">
+                                    <el-image  @click.native="getLargePict(scope.row.styleImg)"
+                                        style="width: 40px; height: 40px"
+                                        :src="scope.row.styleImg" 
+                                        :preview-src-list="[scope.row.styleImg]">
+                                    </el-image>
+                                </div>
+                                 <div v-if="!scope.row.styleImg" >
+                                    <el-image style="width: 40px; height: 40px" :src = noneUrl></el-image>
                                 </div>
                         </span>
                 </template>
@@ -46,12 +56,22 @@
                         <span>
                               <!-- <img v-if="scope.row.materialImg" :src="scope.row.materialImg" style="width:40px;height:40px" />
                               <img v-else  :src="noPict"> -->
-                                <div class="demo-image__preview">
+                                <!-- <div class="demo-image__preview">
                                     <el-image  @click.native="getLargePict(scope.row.styleImg2)"
                                         style="width: 40px; height: 40px"
                                         :src="scope.row.styleImg2" 
                                         :preview-src-list="[scope.row.styleImg2]">
                                     </el-image>
+                                </div> -->
+                                 <div v-if="scope.row.styleImg2" class="demo-image__preview">
+                                    <el-image  @click.native="getLargePict(scope.row.styleImg2)"
+                                        style="width: 40px; height: 40px"
+                                        :src="scope.row.styleImg2" 
+                                        :preview-src-list="[scope.row.styleImg2]">
+                                    </el-image>
+                                </div>
+                                 <div v-if="!scope.row.styleImg2" >
+                                    <el-image style="width: 40px; height: 40px" :src = noneUrl></el-image>
                                 </div>
                         </span>
                 </template>
@@ -219,9 +239,12 @@
 </template>
 
 <script>
+   import {debounce} from 'mixins/debounce'
     export default {
+         mixins: [debounce],
         data() {
             return {
+                noneUrl:'https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1562574299&di=846b4c904bd54d3c3821fa5938888c69&src=http://hbimg.b0.upaiyun.com/bdaca9a07e1a8947c00c2f826ebf848750927aa24963-cATwbg_fw658',
                 value1:'',
                 visible: false,
                 red_packet_table_row_index:-1,
@@ -425,7 +448,7 @@
                               let { taskNo }=this.$route.query
                               let data={}
                                   data.taskNo=taskNo
-                        this.request('fabric_fabric_develop_pricing_queryPricingDetail', data, false).then((res) => {
+                        this.request('specialPricingDetail', data, false).then((res) => {
                             if(res.code==1){
                                      if(res.data){
                                            this.list=[res.data]

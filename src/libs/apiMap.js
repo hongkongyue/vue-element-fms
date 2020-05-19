@@ -70,8 +70,7 @@ const methodMap = {
    //应收管理启用时间
     received_accReceivedPeriod_commonQuery :{url:'/eop-boot/received/accReceivedPeriod/commonQuery',method:'post'},//查询
     received_accReceivedPeriod_addBatch    :{url:'/eop-boot/received/accReceivedPeriod/addBatch'   ,method:'post'},//查询
-    masterData_department_enable           :{url:'/eop-boot/masterData/department/enable',          method:'post'},//部门-启用禁用
-      //账单导入与查询   
+      //账单导入与查询
      acc_received_file_record_page:{url:'/eop-boot/received/acc-received-file-record/page', method:'post'},    //分页查询
      accountPeriod_selector:{url:'/eop-boot/sys/accountPeriod/selector', method:'post'},    //业务账期下拉选择查询
      uploadStdSync:{url:'/eop-boot/received/acc-received-file-record/uploadStdSync', method:'post'},    //通用模板文件上传导入
@@ -189,11 +188,6 @@ const methodMap = {
       masterData_warehouse_add  :{url:'/eop-boot/masterData/warehouse/add',               method:'post'},   //  仓库新增
       masterData_warehouse_update:{url:'/eop-boot/masterData/warehouse/update',           method:'post'},   //   仓库修改
       masterData_warehouse_delete:{url:'/eop-boot/masterData/warehouse/delete',           method:'post'}, 
-
-      masterData_warehouse_page    : {url:'/eop-boot/masterData/warehouse/page',            method:'post'},   //  仓库分页查询 
-      masterData_warehouse_add     : {url:'/eop-boot/masterData/warehouse/add',             method:'post'},   //  仓库新增
-      masterData_warehouse_update  : {url:'/eop-boot/masterData/warehouse/update',          method:'post'},   //   仓库修改
-      masterData_warehouse_delete  : {url:'/eop-boot/masterData/warehouse/delete',          method:'post'}, 
       masterData_warehouse_selector: {url:'/eop-boot/masterData/warehouse/selector',        method:'post'}, //仓库下拉
 
       //主数据  业务类型
@@ -227,16 +221,15 @@ const methodMap = {
       payable_reconciliationOrder_export :{url:'/eop-boot/payable/reconciliationOrder/export',    method:'post'},//对账单-异步导出
       //供应商
       supplier_page:{url:'/eop-boot/masterData/supplier/page',method:'post'},//供应商列表查询（author:张明杰
-      supplier_constant:{url:'/eop-boot/masterData/supplier/constant',method:'post'},//供应商页面下拉（author:张明杰
       supplier_add:{url:'/eop-boot/masterData/supplier/add',method:'post'},//供应商新增（author:张明杰
       supplier_update:{url:'/eop-boot/masterData/supplier/update',method:'post'},//供应商修改（author:张明杰
-      supplier_multipleSelector:{url:'/eop-boot/masterData/staff/multipleSelector',method:'post'},//生产理单员（author:张明杰
       supplier_constant:{url:'/eop-boot/masterData/supplier/constant',method:'post'},//供应商页面下拉（author:张明杰
       supplier_multipleSelector:{url:'/eop-boot/masterData/staff/multipleSelector',method:'post'},//生产理单员（author:张明杰
       supplier_getPagingByBillNo:{url:'/eop-boot/billLog/getPagingByBillNo',method:'post'},//供应商日志（author:张明杰
       supplier_provinceSelector:{url:'/eop-boot/masterData/district/provinceSelector',method:'post'},//省份下拉（author:张明杰
       supplier_citySelector:{url:'/eop-boot/masterData/district/citySelector',method:'post'},//根据 省份查询城市（author:张明杰
       supplier_sync:{url:'/eop-boot//masterData/supplier/sync',method:'post'},//同步供应商数据（author:张明杰
+      supplier_selector:{url:'/eop-boot//masterData/supplier/selector',method:'post'},//供应商下拉接口（author:lxx
 
       //scm采购单
       order_pageQuery:{url:'/eop-boot/payable/biz-purchase-order/pageQuery',method:'post'},//分页查询（author:lxx
@@ -255,10 +248,6 @@ const methodMap = {
       deductionAdvice_add:{url:'/eop-boot/payable/deductionAdvice/add',method:'post'},//扣款建议-新增（author:lmy
       deductionAdvice_update:{url:'/eop-boot/payable/deductionAdvice/update',method:'post'},//扣款建议-修改（author:lmy
 
-      masterData_code_page   : {url:'/eop-boot/masterData/code/page',              method:'post'},  //单据类型-列表筛选
-      masterData_code_add    : {url:'/eop-boot/masterData/code/add',               method:'post'},  //单据类型-新增
-      masterData_code_update : {url:'/eop-boot/masterData/code/update',            method:'post'},  //单据类型-修改
-      masterData_code_delete : {url:'/eop-boot/masterData/code/delete',            method:'post'},  //单据类型-修改
       //商品详情
       masterData_sys_s_page :  {url:'/eop-boot/masterData/sys-spu/page',            method:'post'},  //商品分页查询
       masterData_warehouse_booleanWareHouse:{url:'/eop-boot/masterData/warehouse/booleanWareHouse',method:'post'}, //仓库编码校验
@@ -267,9 +256,6 @@ const methodMap = {
       core_realCoreStock_page:{url:'/eop-boot/core/realCoreStock/page',            method:'post'},//实时库存(许克胜)
       core_core_export       :{url:'/eop-boot/core/export',                        method:'post'},//实时库存或历史库存导出（许克胜）
 
-      deductionAdvice_command:{url:'/eop-boot/payable/deductionAdvice/command',                method:'post'},//扣款建议-审核/取消审核/删除/关闭（author:lmy
-      deductionAdvice_templateFile:{url:'/eop-boot/payable/deductionAdvice/templateFile',      method:'post'},//扣款建议-下载模板文件（author:lmy
-      deductionAdvice_uploadAsync:{url:'/eop-boot/payable/deductionAdvice/uploadAsync',        method:'post'},//扣款建议-文件导入（author:lmy
 
       //扣款单
       payable_deductionOrder_page   :{url:'/eop-boot/payable/deductionOrder/page',            method:'post'},    //扣款单-列表筛选
@@ -316,7 +302,6 @@ const methodMap = {
       
       //库存盘点单
       adjustment_stock_page:{url:'/eop-boot/core/adjustment/stock/page',method:'post'},//库存盘点单主数据分页查询
-      adjustment_stock_getDetails:{url:'/eop-boot/core/adjustment/stock/getDetails',method:'post'},//库存盘点单对应货品明细查询
       adjustment_stock_saveStockAdjust:{url:'/eop-boot/core/adjustment/saveStockAdjust',method:'post'},//新增库存盘点单
       adjustment_stock_selectGood:{url:'/eop-boot/core/adjustment/selectGood',method:'post'},//根据商家编码查询货品信息
       adjustment_stock_queryStockDateByBusDate:{url:'/eop-boot/core/adjustment/queryStockDateByBusDate',method:'post'},//根据业务日期查询库存帐期
@@ -408,6 +393,66 @@ const methodMap = {
       payable_payableclosedorder_exportAsync:{url:'/eop-boot/payable/payable-closed-order/exportAsync',method:'post'},//关单登记导出
       payable_payableclosedorder_exportCount:{url:'/eop-boot/payable/payable-closed-order/exportCount',method:'post'},//关单登记导出
 
+      //供应商权限-岗位
+      basic_supplier_position_selector:{url:'/eop-boot/basicsupplierposition/basic-supplier-position/selector',method:'post'},
+      basic_supplier_position_page_query:{url:'/eop-boot/basicsupplierposition/basic-supplier-position/pageQuery',method:'post'},
+      basic_supplier_position_update:{url:'/eop-boot/basicsupplierposition/basic-supplier-position/update',method:'post'},
+      basic_supplier_position_add:{url:'/eop-boot/basicsupplierposition/basic-supplier-position/add',method:'post'},
+
+      //供应商权限-人员
+      basic_supplier_staff_add:{url:'/eop-boot/basicsupplierstaff/basic-supplier-staff/add',method:'post'},
+      basic_supplier_staff_update:{url:'/eop-boot/basicsupplierstaff/basic-supplier-staff/update',method:'post'},
+      basic_supplier_staff_page_query:{url:'/eop-boot/basicsupplierstaff/basic-supplier-staff/pageQuery',method:'post'},
+      basic_supplier_staff_export:{url:'/eop-boot/basicsupplierstaff/basic-supplier-staff/export',method:'post'},
+      basic_supplier_staff_selector:{url:'/eop-boot/basicsupplierstaff/basic-supplier-staff/selector',method:'post'},
+      masterData_supplier_selectFunction:{url:'/eop-boot/masterData/supplier/selectFunction',method:'post'},
+      masterData_supplier_addFunctions:{url:'/eop-boot/masterData/supplier/addFunctions',method:'post'},//选 未勾选所有功能配置提交
+      //供应商权限-资源管理
+      basic_supplier_menu_get_resource_permission_tree:{url:'/eop-boot/basicsuppliermenupermission/basic-supplier-menu-permission/getResourcePermissionTree',method:'post'},//资源列表
+      basic_supplier_menu_permission_add:{url:'/eop-boot/basicsuppliermenupermission/basic-supplier-menu-permission/add',method:'post'},//资源新增
+      basic_supplier_menu_permission_update:{url:'/eop-boot/basicsuppliermenupermission/basic-supplier-menu-permission/update',method:'post'},//资源修改
+      basic_supplier_menu_permission_get_whole_resource_tree:{url:'/eop-boot/basicsuppliermenupermission/basic-supplier-menu-permission/getWholeResourceTree/${vars.isContainBtn}',method:'post'},//上级菜单
+      basic_supplier_menu_permission_del:{url:'/eop-boot/basicsuppliermenupermission/basic-supplier-menu-permission/del/${vars.id}',method:'post'},//资源删除
+
+
+    //系统自动生成业务编码
+      auto_create_biz_code:{url:'/eop-boot/autoCreateCode/getCode',method:'post'}, //liuxx 入参：（”编码前缀“,编码后续数字长度）
+
+
+      //供应商角色
+      basicsupplierrole_basic_supplier_role_selector:{url:'/eop-boot/basicsupplierrole/basic-supplier-role/selector',method:'post'},//下拉
+      basicsupplierrole_basic_supplier_role_page:{url:'/eop-boot/basicsupplierrole/basic-supplier-role/page',method:'post'},//分页
+      autoCreateCode_getCode:{url:'/eop-boot/autoCreateCode/getCode',method:'post'},//系统自动生成对应编码
+      basicsuppliermenupermission_basic_supplier_menu_permission_getWholeResourceTree:{url:'/eop-boot/basicsuppliermenupermission/basic-supplier-menu-permission/getWholeResourceTree/${vars.isContainBtn}',method:'post'},
+      basicsupplierrol_basic_supplier_role_add:{url:'/eop-boot/basicsupplierrole/basic-supplier-role/add',method:'post'},//角色新增
+      basicsupplierstaff_basic_supplier_staf_selector:{url:'/eop-boot/basicsupplierstaff/basic-supplier-staff/selector',method:'post'},//下拉
+      basicsupplierrole_basic_supplier_role_getPermissionOfCurrentRole:{url:'/eop-boot/basicsupplierrole/basic-supplier-role/getPermissionOfCurrentRole/${vars.id}',method:'post'},//下拉
+      basicsupplierrole_basic_supplier_role_getUserOfCurrentRole:{url:'/eop-boot/basicsupplierrole/basic-supplier-role/getUserOfCurrentRole/${vars.id}',method:'post'},//下拉
+      basicsupplieruser_basi_supplier_user_selector:{url:'/eop-boot/basicsupplieruser/basic-supplier-user/selector',   method:'post'},//用户下拉
+      basicsupplierrole_basic_supplier_role_update:{url:'/eop-boot/basicsupplierrole/basic-supplier-role/update',      method:'post'},//角色更新
+      basicsupplieruser_basic_supplier_user_pageQuery:{url:'/eop-boot/basicsupplieruser/basic-supplier-user/pageQuery',method:'post'},//根据userCode
+      // basicsupplieruser_basic_supplier_user_pageQuery:{url:'/eop-boot/basicsupplieruser/basic-supplier-user/pageQuery',method:'post'},//分页
+
+      //用户
+      basicsupplierposition_basic_supplier_position_selector:{url:'/eop-boot/basicsupplierposition/basic-supplier-position/selector', method:'post'},//岗位下拉
+      basicsupplieruser_basic_supplier_user_selector:{url:'/eop-boot/basicsupplieruser/basic-supplier-user/selector',method:'post'},// 人员下拉
+      basicsupplierstaff1_basic_supplie_staff_selector:{url:'/eop-boot/basicsupplierstaff/basic-supplier-staff/selector',method:'post'},//人员下拉
+      // basicsupplieruser_basic_supplier_user_pageQuery:{url:'/eop-boot/basicsupplieruser/basic-supplier-user/pageQuery',method:'post'},//分页查询
+      basicsupplierrole_basic_supplier_rol_selector:{url:'/eop-boot/basicsupplierrole/basic-supplier-role/selector',method:'post'},//角色下拉
+
+      basicsupplieruser_basic_supplier_user_update:{url:'/eop-boot/basicsupplieruser/basic-supplier-user/update',method:'post'},//用户更新
+    
+      basicsupplieruser_basic_supplier_user_getRoleByCurrentUser:{url:'/eop-boot/basicsupplieruser/basic-supplier-user/getRoleByCurrentUser/${vars.id}',method:'post'},//下拉
+      basicsupplieruser_basic_supplier_user_getPermissionByCurrentUser:{url:'/eop-boot/basicsupplieruser/basic-supplier-user/getPermissionByCurrentUser/${vars.id}',method:'post'},//当前用户的所有权限
+      basicsupplieruser_basic_supplier_user_reBuildPwd:{url:'/eop-boot/basicsupplieruser/basic-supplier-user/reBuildPwd/${vars.id}',method:'post'},//当前用户的所有权限
+      basicsupplieruser_basic_supplier_user_unLock:   {url:'/eop-boot/basicsupplieruser/basic-supplier-user/unLock/${vars.id}',method:'post'},//当前用户的所有权限
+      basicsupplieruser_basic_supplier_user_unBindWx:{url:'/eop-boot/basicsupplieruser/basic-supplier-user/unBindWx/${vars.id}',method:'post'},//
+      basicsupplieruser_basic_supplier_user_add:{url:'/eop-boot/basicsupplieruser/basic-supplier-user/add',method:'post'},//新增
+
+      //问题反馈数据
+      biz_supplier_feedback_pageQuery:{url:'/eop-boot/basicsupplier/feedback/pageQuery',method:'post'},//查询
+      feedback_update:{url:'/eop-boot/basicsupplier/feedback/update',method:'post'},//确认问题
+
       //面料开发
       basicMeasureUnit_queryAll:{url:'/eop-boot/masterData/basicMeasureUnit/queryAll', method:'get'},//获取所有计量单位信息
       basicMeasureUnit_syncMeasureUnit:{url:'/eop-boot/masterData/basicMeasureUnit/syncMeasureUnit', method:'get'},//计量单位同步
@@ -438,6 +483,7 @@ const methodMap = {
       queryProcess_page:{url:'/eop-boot/fabric/fabric-develop-initiate/page',method:'post'},//查询发起流程列表
       report_queryReport:{url:'/eop-boot/fabric/report/queryReport',method:'post'},//报表主表查询
       report_queryReportDetail:{url:'/eop-boot/fabric/report/queryReportDetail',method:'post'},//报表附表查询
+      report_downloadXlsx:{url:'/eop-boot/fabric/report/downloadXlsx',method:'post'},//报表导出
       fabric_fabric_develop_pricing_queryPricingDetail:{url:'/eop-boot/fabric/fabric-develop-pricing/queryPricingDetail',method:'post'},//查询核价详情
       fabric_developMaterialEnter_inProgress:{url:'/eop-boot/fabric/developMaterialEnter/inProgress',method:'post'},//改变任务状态
 
@@ -467,6 +513,205 @@ const methodMap = {
       queryPricingDetail:{url:'/eop-boot/fabric/fabric-develop-pricing/queryPricingDetail',method:'post'},//查询核价详情
       fabric_developMaterialEnter_revokeTask:{url:'/eop-boot/fabric/developMaterialEnter/revokeTask',method:'post'},//面料回退
       pricing_conform:{url:'/eop-boot/fabric/fabric-develop-pricing/conform',method:'post'},//发起人确认任务-确认
+      specialPricingDetail:{url:'/eop-boot/fabric/fabric-develop-pricing/specialPricingDetail',method:'post'},//查询核价详情2
+      //任务配置
+      configuration_list:{url:'/eop-boot/fms-supplier/configuration/list',method:'post'},//任务配置-列表
+      configuration_changeStatus:{url:'/eop-boot/fms-supplier/configuration/changeStatus',method:'post'},//任务配置-修改任务状态
+      configuration_insertOrUpdate:{url:'/eop-boot/fms-supplier/configuration/insertOrUpdate',method:'post'},//任务配置-新增或修改
+      configurationPlan_selector:{url:'/eop-boot/fabricDevelop/configurationPlan/selector',method:'post'},//配置方案下拉接口
+      configurationPlan_detail:{url:'/eop-boot/fms-supplier/configuration/detail',method:'post'},//任务配置-详情
+
+      //应付二期
+
+      //支付方式配置
+      basicpayablepayway_getAll:{url:'/eop-boot/masterdata/basicpayablepayway/getAll',method:'post'},//查询列表
+      basicpayablepayway_add:{url:'/eop-boot/masterdata/basicpayablepayway/add',method:'post'},//新增
+      basicpayablepayway_update:{url:'/eop-boot/masterdata/basicpayablepayway/update',method:'post'},//编辑
+
+      basicpayablepayway_delete:{url:'/eop-boot/masterdata/basicpayablepayway/delete/${vars.id}',method:'post'},//删除
+
+      //合格证洗唛打印
+      washlabel_page:{url:'/eop-boot/washlabel/manage/page',method:'post'},//查询列表
+      washlabel_getDetailByQo:{url:'/eop-boot/washlabel/manage/getDetailByQo',method:'post'},//查询列表
+      washlabel_submit:{url:'/eop-boot/washlabel/manage/submit',method:'post'},//提交任务
+      washlabel_finish:{url:'/eop-boot/washlabel/manage/finish',method:'post'},//完成任务
+      washlabel_print:{url:'/eop-boot/washlabel/manage/print',method:'post'},//全部打印
+      washlabel_brandSelector:{url:'/eop-boot/masterData/goodsManager/brandSelector',method:'post'},//品牌下拉-lxx
+      washlabel_checkGoodsNoExist:{url:'/eop-boot/masterData/goodsManager/checkGoodsNoExist',method:'post'},//校验大货编码是否存在-lxx
+      washlabel_getSizeByGoodsNoAndColor:{url:'/eop-boot/masterData/goodsManager/getSizeByGoodsNoAndColor',method:'post'},//校验大货编码是否存在-lxx
+      washlabel_getCode:{url:'/eop-boot/autoCreateCode/getCode',method:'post'},//自动编码获取
+      washlabel_createTask:{url:'/eop-boot/washlabel/manage/createTask',method:'post'},//新增打印申请
+      washlabel_updateTask:{url:'/eop-boot/washlabel/manage/updateTask',method:'post'},//更新打印申请
+      washlabel_getMainOrderById:{url:'/eop-boot/washlabel/manage/getMainOrderById',method:'post'},//获取主单数据
+      washlabel_reprint:{url:'/eop-boot/washlabel/manage/reprint',method:'post'},//合格证或洗唛部分打印(补打)-朱智贤
+      washlabel_refreshData:{url:'/eop-boot/washlabel/manage/refreshData',method:'post'},//刷新子表数据
+      washlabel_changeReprintNum:{url:'/eop-boot/washlabel/manage/changeReprintNum',method:'post'},//修改补打数-朱智贤
+      washlabel_importTask:{url:'/eop-boot/washlabel/manage/importTask',method:'post'},//导入任务
+      washlabel_rejectTask:{url:'/eop-boot/washlabel/manage/rejectTask/${vars.id}',method:'post'},//变更任务-朱智贤
+
+      //boss一期主数据
+      year_sync:{url:'/eop-boot/masterData/year/sync',method:'post'},//同步scm年份信息
+      year_page:{url:'/eop-boot/masterData/year/page',method:'post'},//查询年份列表
+      season_sync:{url:'/eop-boot/masterData/season/sync',method:'post'},//同步scm季节信息
+      season_page:{url:'/eop-boot/masterData/season/page',method:'post'},//查询季节列表
+      basicDevelopType_page:{url:'/eop-boot/masterData/basicDevelopType/page',method:'post'},//开发类型分页条件查询
+      basicDevelopType_addOrUpdate:{url:'/eop-boot/masterData/basicDevelopType/addOrUpdate',method:'post'},//开发类型新增or编辑
+      waveBand_page:{url:'/eop-boot/masterData/waveBand/page',method:'post'},//波段列表筛选
+      waveBand_sync:{url:'/eop-boot/masterData/waveBand/sync',method:'post'},//波段同步
+      waveBand_selector:{url:'/eop-boot/masterData/basicDevelopType/selector',method:'post'},//开发类型下拉
+      waveBand_update:{url:'/eop-boot/masterData/waveBand/update',method:'post'},//波段编辑
+      basicStyleType_sync:{url:'/eop-boot/masterData/basicStyleType/sync',method:'post'},//款式类型同步
+      basicStyleType_pageQuery:{url:'/eop-boot/masterData/basicStyleType/pageQuery',method:'post'},//款式类型查询
+      basicStyleType_getStyleTree:{url:'/eop-boot/masterData/basicStyleType/getStyleTree',method:'post'},//款式类型树形列表获取
+      basicStyleType_getAllSelector:{url:'/eop-boot/masterData/basicStyleType/getAllSelector',method:'post'},//款式类型下拉获取
+
+      //人员配置
+      sendDingTalkConfig_userSelector:{url:'/eop-boot/boss/sendDingTalkConfig/userSelector',method:'post'},//接收人下拉
+      sendDingTalkConfig_page:{url:'/eop-boot/boss/sendDingTalkConfig/page',method:'post'},//列表筛选
+      sendDingTalkConfig_add:{url:'/eop-boot/boss/sendDingTalkConfig/add',method:'post'},//新增
+      sendDingTalkConfig_update:{url:'/eop-boot/boss/sendDingTalkConfig/update',method:'post'},//编辑
+      sendDingTalkConfig_delete:{url:'/eop-boot/boss/sendDingTalkConfig/delete',method:'post'},//删除
+      //企划管理
+      getByPuniqueKey:{url:'/eop-boot/masterData/basicStyleType/getByPuniqueKey',method:'post'},//查询品类下拉
+
+      basicpayablepayway_delete:{url:'/eop-boot/masterdata/basicpayablepayway/delete',method:'post'},//删除
+
+      // 应付单
+      eop_boot_payable_page:{url:'/eop-boot/payable/page',method:'post'},  //应付单列表
+      eop_boot_payable_audit:{url:'/eop-boot/payable/audit',method:'post'},//应付单审核
+      eop_boot_payable_payable_unaudit:{url:'/eop-boot/payable/unaudit',method:'post'},//应付单反审核
+      eop_boot_payable_detail:{url:'/eop-boot/payable/detail',method:'post'},         //应付单详情
+      eop_boot_payable_exportTotal:{url:'/eop-boot/payable/exportTotal',method:'post'},//应付单导出条数查询
+      eop_boot_payable_exportAsync:{url:'/eop-boot/payable/exportAsync',method:'post'},//应付单导出
+
+      //应付核销记录
+      accPayable_Verification_page:{url:'/eop-boot/accPayable/Verification/page',          method:'post'},          //应付核销记录
+      accPayable_Verification_export:{url:'/eop-boot/accPayable/Verification/export',      method:'post'},          //应付核销-异步导出
+      accPayable_Verification_pageCount:{url:'/eop-boot/accPayable/Verification/pageCount',method:'post'},          //统计
+      //排款建议
+      accPayable_dischargeAdvice_getSyncDate:{url:'/eop-boot/accPayable/dischargeAdvice/getSyncDate',method:'post'},//获得排款建议更新时间
+      accPayable_dischargeAdvice_pageQuery:{url:'/eop-boot/accPayable/dischargeAdvice/pageQuery',  method:'post'},
+      accPayable_dischargeAdvice_sync:{url:'/eop-boot/accPayable/dischargeAdvice/sync',  method:'post'}, //生成排款建议
+      accPayable_dischargeAdvice_export:{url:'/eop-boot/accPayable/dischargeAdvice/export',method:'post'},//导出
+      accPayable_dischargeAdvice_checkCanBeCreated:{url:'/eop-boot/accPayable/dischargeAdvice/checkCanBeCreated', method:'post'},//校验是否可生成排款单
+      accPayable_dischargeAdvice_checkUnpaidFabricAmount:{url:'/eop-boot/accPayable/dischargeAdvice/checkUnpaidFabricAmount',method:'post'},//校验是否存在应付未付面料款金额不为0
+      accPayable_dischargeAdvice_createAccPayableDischarge:{url:'/eop-boot/accPayable/dischargeAdvice/createAccPayableDischarge',method:'post'},//确认生成排款单
+      //付款单
+      acc_acc_payment_query_page:{url:'/eop-boot/acc/acc-payment/query/page',method:'post'},//分页查询列表
+      acc_acc_payment_delete:{url:'/eop-boot/acc/acc-payment/delete',method:'post'},//删除付款单-支持批量
+      acc_acc_payment_save:{url:'/eop-boot/acc/acc-payment/save',method:'post'},    //新增付款单
+      acc_acc_payment_update:{url:'/eop-boot/acc/acc-payment/update',method:'post'},//编辑付款单
+      masterdata_basicpayablepayway_selector:{url:'/eop-boot/masterdata/basicpayablepayway/selector', method:'post'},//支付方式下拉
+      acc_acc_payment_uploadAsync:{url:'/eop-boot/acc/acc-payment/uploadAsync',method:'post'},//导入付款单
+      acc_acc_payment_audit:{url:'/eop-boot/acc/acc-payment/audit',            method:'post'},//审核
+      acc_acc_payment_cancelAudit:{url:'/eop-boot/acc/acc-payment/cancelAudit',method:'post'},//取消审核
+
+      //开票建议
+      advice_page:{url:'/eop-boot/accpayableinvoiceadvice/acc-payable-invoice-advice/pageQuery',method:'post'},  //分页查询
+      advice_getDetail:{url:'/eop-boot/accpayableinvoiceadvice/acc-payable-invoice-advice/getDetail',method:'post'},  //明细获取
+      advice_export:{url:'/eop-boot/accpayableinvoiceadvice/acc-payable-invoice-advice/export',method:'post'},  //导出
+
+      //排款单
+      acc_acc_payable_discharge_page:{url:'/eop-boot/acc/acc-payable-discharge/page',method:'post'},//分页查询排款单
+      acc_acc_payable_discharge_export:{url:'/eop-boot/acc/acc-payable-discharge/export',method:'post'},//导出
+      acc_acc_payable_discharge_detail:{url:'/eop-boot/acc/acc-payable-discharge/detail',method:'post'},//查询排款单明细
+      acc_acc_payable_discharge_update:{url:'/eop-boot/acc/acc-payable-discharge/update',method:'post'},//编辑排款单
+      acc_acc_payable_discharge_audit:{url:'/eop-boot/acc/acc-payable-discharge/audit',  method:'post'},//审核排款单
+      acc_acc_payable_discharge_cancelAudit:{url:'/eop-boot/acc/acc-payable-discharge/cancelAudit',method:'post'},//取消审核排款单
+      acc_acc_payable_discharge_close:{url:'/eop-boot/acc/acc-payable-discharge/close', method:'post'},//关闭排款单
+      acc_acc_payable_discharge_delete:{url:'/eop-boot/acc/acc-payable-discharge/delete',method:'post'},//删除排款单
+      acc_acc_payable_discharge_exportTotal:{url:'/eop-boot/acc/acc-payable-discharge/exportTotal',method:'post'},//导出排款单总数
+      acc_acc_payable_discharge_checkCanAudit:{url:'/eop-boot/acc/acc-payable-discharge/checkCanAudit',method:'post'},//审核校验是否存在应付未付面料款金额>0
+      
+      //发票登记
+      accPayable_invoiceRegister_page:{url:'/eop-boot/accPayable/invoiceRegister/page',method:'post'},//发票登记主单查询
+      accPayable_invoiceRegisterDetail_queryDetail:{url:'/eop-boot/accPayable/invoiceRegisterDetail/queryDetail',method:'post'},//发票登记子表查询
+      accPayable_invoiceRegister_add:{url:'/eop-boot/accPayable/invoiceRegister/add',method:'post'},//生成发票登记
+      accPayable_invoiceRegister_update:{url:'/eop-boot/accPayable/invoiceRegister/update',method:'post'},//编辑
+      accPayable_invoiceRegister_examine:{url:'/eop-boot/accPayable/invoiceRegister/examine',method:'post'},//审核
+      accPayable_invoiceRegister_cancelExamine:{url:'/eop-boot/accPayable/invoiceRegister/cancelExamine',method:'post'},//取消审核
+      accPayable_invoiceRegister_deleted:{url:'/eop-boot/accPayable/invoiceRegister/deleted',method:'post'},//删除
+      accPayable_invoiceRegister_settle:{url:'/eop-boot/accPayable/invoiceRegister/settle',method:'post'},//立账
+      accPayable_invoiceRegister_cancelSettle:{url:'/eop-boot/accPayable/invoiceRegister/cancelSettle',method:'post'},//取消立账
+
+      supplier_allSelector:{url:'/eop-boot/masterData/supplier/allSelector',method:'post'},//供应商下拉接口
+
+      //企划管理
+      tree_statusCount:{url:'/eop-boot/boss/goods_planning_manage/statusCount',method:'post'},//企划管理查询树结构
+      goods_planning_manage_query:{url:'/eop-boot/boss/goods_planning_manage/query',method:'post'},//分页查询企划管理
+      goods_planning_manage_detail:{url:'/eop-boot/boss/goods_planning_manage/detail',method:'post'},//查询企划管理明细
+      goods_planning_manage_add:{url:'/eop-boot/boss/goods_planning_manage/add',method:'post'},//新增企划管理
+      goods_planning_manage_edit:{url:'/eop-boot/boss/goods_planning_manage/edit',method:'post'},//编辑企划管理
+      goods_planning_manage_command:{url:'/eop-boot/boss/goods_planning_manage/command',method:'post'},//审核/取消审核
+      goods_planning_manage_close:{url:'/eop-boot/boss/goods_planning_manage/close',method:'post'},//关闭
+      goods_planning_manage_startAgain:{url:'/eop-boot/boss/goods_planning_manage/startAgain',method:'post'},//重新启用-高璐
+      goods_planning_manage_delete:{url:'/eop-boot/boss/goods_planning_manage/delete',method:'post'},//删除企划管理
+      goods_planning_manage_send:{url:'/eop-boot/boss/goods_planning_manage/send',method:'post'},//推送-刘新星
+      goods_planning_manage_uploadAsync:{url:'/eop-boot/boss/goods_planning_manage/uploadAsync',method:'post'},//导入-高璐
+      goods_planning_manage_export:{url:'/eop-boot/boss/goods_planning_manage/export',method:'post'},//导出（详见查询参数）
+      goods_planning_manage_exportCount:{url:'/eop-boot/boss/goods_planning_manage/exportCount',method:'post'},//导出前的统计（详见查询参数）
+      goods_planning_manage_createAdjust:{url:'/eop-boot/boss/goods_planning_manage/createAdjust',method:'post'},//发起调整指令
+      goods_planning_manage_createCheck:{url:'/eop-boot/boss/goods_planning_manage/createCheck',method:'post'},//新增企划校验品牌
+      goods_planning_manage_versionSelector:{url:'/eop-boot/boss/goods_planning_manage/versionSelector',method:'post'},//查看历史-版本下拉-高璐
+      goods_planning_manage_queryHistory:{url:'/eop-boot/boss/goods_planning_manage/queryHistory',method:'post'},//查看历史-高璐
+
+      //企划调整
+      queryForSimulation:{url:'/eop-bootboss/bossGoodsPlanningAdujust/queryForSimulation',method:'post'},//查询(zzx)
+
+      //波段下拉
+      waveBand_selector_masterData:{url:'/eop-boot/masterData/waveBand/selector',        method:'post'},//下拉框（默认不传参）
+      goods_planning_manage_constant:{url:'/eop-boot/boss/goods_planning_manage/constant',        method:'post'},//查询字典下拉数据
+
+      //计费参数配置
+      boss_delayCostConfig_page:{url:'/eop-boot/boss/delayCostConfig/page',               method:'post'},//分页查询
+      boss_delayCostConfig_add :{url:'/eop-boot/boss/delayCostConfig/add',                method:'post'},//新增
+      boss_delayCostConfig_update:{url:'/eop-boot/boss/delayCostConfig/update',           method:'post'},//修改
+      boss_delayCostConfig_deleted:{url:'/eop-boot/boss/delayCostConfig/deleted',         method:'post'},//删除
+
+      //根据任务状态、任务类型分页查询企划调整任务/调整审核任务列表-高璐
+      boss_boss_adjust_task_page_query_adjust_task:{url:'/eop-boot/boss/boss_adjust_task/page_query_adjust_task',method:'post'},      //地址 企划调整任务/调整审核任务列表
+      boss_boss_adjust_task_update_adjust_task_status:{url:'/eop-boot/boss/boss_adjust_task/update_adjust_task_status',method:'post'}, //更新企划调整/调整审核任务状态-高璐
+      boss_boss_adjust_task_audit:{url:'/eop-boot/boss/boss_adjust_task/audit',method:'post'},//企划调整任务-审核
+      boss_bossGoodsPlanningAdujust_queryAdhustDetail:{url:'/eop-boot/boss/bossGoodsPlanningAdujust/queryAdhustDetail',method:'post'},  //查询企划调整任务明细
+      boss_bossGoodsPlanningAdujust_queryOriginDevelop:{url:'/eop-boot/boss/bossGoodsPlanningAdujust/queryOriginDevelop',method:'post'},//企划调整任务查询原开发款数列表
+      boss_boss_adjust_task_callBack:{url:'/eop-boot/boss/boss_adjust_task/callBack',method:'post'},//撤回-刘新星
+      boss_bossGoodsPlanningAdujust_commit:{url:'/eop-boot/boss/bossGoodsPlanningAdujust/commit',method:'post'},//提交企划调整
+      boss_bossGoodsPlanningAdujust_queryOriginDevelop:{url:'/eop-boot/boss/bossGoodsPlanningAdujust/queryOriginDevelop',method:'post'},//企划调整任务查询原开发款数列表
+
+
+      //企划消息列表
+      page_query_task_message:{url:'/eop-boot/boss/boss_task_message/page_query_task_message',method:'post'},//根据消息状态分页查询消息列表-高璐
+      update_task_message_status:{url:'/eop-boot/boss/boss_task_message/update_task_message_status',method:'post'},//更新企划消息状态-高璐
+      bossGoodsPlanningParameterSend_showMainOrder:{url:'/eop-boot/boss/bossGoodsPlanningParameterSend/showMainOrder',method:'post'},//企划消息列表-主表列表获取-刘新星
+      bossGoodsPlanningParameterSend_showDetailOrder:{url:'/eop-boot/boss/bossGoodsPlanningParameterSend/showDetailOrder',method:'post'},//企划消息列表-子表列表获取-刘新星
+      boss_bossGoodsPlanningAdujust_editDesignStatus:{url:'/eop-boot/boss/bossGoodsPlanningAdujust/editDesignStatus',method:'post'},//修改设计款号状态
+
+      //品牌企划跟进
+      pageBrandFollow:{url:'/eop-boot/boss/business/pageBrandFollow',method:'post'},   //分页查询-品牌企划跟进
+      exportBrandFollow:{url:'/eop-boot/boss/business/exportBrandFollow',method:'post'},//导出-品牌企划跟进
+
+      //商品企划跟进
+      goodsFollow_page:{url:'/eop-boot/boss/goodsFollow/page',method:'post'},//列表筛选
+      goodsFollow_detail:{url:'/eop-boot/boss/goodsFollow/detail',method:'post'},//明细
+      goodsFollow_exportCount:{url:'/eop-boot/boss/goodsFollow/exportCount',method:'post'},//导出前的统计
+      goodsFollow_export:{url:'/eop-boot/boss/goodsFollow/export',method:'post'},//导出
+
+      //计费参数配置
+      boss_delayCostConfig_page:{url:'/eop-boot/boss/delayCostConfig/page',        method:'post'},              //分页查询
+      boss_delayCostConfig_add:{url:'/eop-boot/boss/delayCostConfig/add',          method:'post'},              //新增
+      boss_delayCostConfig_update:{url:'/eop-boot/boss/delayCostConfig/update',    method:'post'},              //修改
+      boss_delayCostConfig_deleted:{url:'/eop-boot/boss/delayCostConfig/deleted',  method:'post'},              //删除
+      boss_goods_planning_manage_constant:{url:'/eop-boot/boss/goods_planning_manage/constant',method:'post'},  //查询字典下拉数据
+
+      boss_business_pageClassFollow:{url:'/eop-boot/boss/business/pageClassFollow', method:'post'},//品类企划跟进
+      masterData_basicStyleType_getSecondLevel:{url:'/eop-boot/masterData/basicStyleType/getSecondLevel',method:'post'},//二级品类下拉
+      boss_business_exportClassFollow:{url:'/eop-boot/boss/business/exportClassFollow',method:'post'},//导出-品类企划跟进
+
+      //企划延期计费单
+      boss_bossDelayCostDetail_pageQuery:{url:'/eop-boot/boss/bossDelayCostDetail/pageQuery',   method:'post'},//分页
+      boss_bossDelayCostDetail_getDetails:{url:'/eop-boot/boss/bossDelayCostDetail/getDetails', method:'post'},//明细获取
+      boss_bossDelayCostDetail_export:{url:'/eop-boot/boss/bossDelayCostDetail/export',method:'post'},//导出
+
 };
 export default methodMap; 
 //   /business/get_develop_simple,

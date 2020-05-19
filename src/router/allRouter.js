@@ -9,6 +9,78 @@ const appRouter = [
         component: Main,
         children: [
             {
+                path: 'developType',
+                title: '开发类型',
+                name: 'developType',
+                meta: {
+                    title: '/主数据/开发类型',
+                    path: '/receivablePayable/developType',
+                    label: '开发类型'
+                },
+                component: () => import('@/views/receivablePayable/maindataPreserve/developType.vue'),
+                hidden: false
+            },
+            {
+                path: 'wavedand',
+                title: '波段',
+                name: 'wavedand',
+                meta: {
+                    title: '/主数据/波段',
+                    path: '/receivablePayable/wavedand',
+                    label: '波段'
+                },
+                component: () => import('@/views/receivablePayable/maindataPreserve/wavedand.vue'),
+                hidden: false
+            },
+            {
+                path: 'year',
+                title: '年份',
+                name: 'year',
+                meta: {
+                    title: '/主数据/年份',
+                    path: '/receivablePayable/year',
+                    label: '年份'
+                },
+                component: () => import('@/views/receivablePayable/maindataPreserve/year.vue'),
+                hidden: false
+            },
+            {
+                path: 'season',
+                title: '季节',
+                name: 'season',
+                meta: {
+                    title: '/主数据/季节',
+                    path: '/receivablePayable/season',
+                    label: '季节'
+                },
+                component: () => import('@/views/receivablePayable/maindataPreserve/season.vue'),
+                hidden: false
+            },
+            {
+                path: 'styleType',
+                title: '款式类型',
+                name: 'styleType',
+                meta: {
+                    title: '/主数据/款式类型',
+                    path: '/receivablePayable/styleType',
+                    label: '款式类型'
+                },
+                component: () => import('@/views/receivablePayable/maindataPreserve/styleType.vue'),
+                hidden: false
+            },
+            {
+                path: 'payConfig',
+                title: '支付方式配置',
+                name: 'payConfig',
+                meta: {
+                    title: '/主数据/支付方式配置',
+                    path: '/receivablePayable/payConfig',
+                    label: '支付方式配置'
+                },
+                component: () => import('@/views/receivablePayable/maindataPreserve/payConfig.vue'),
+                hidden: false
+            },
+            {
                 path: 'unitFile',
                 title: '单位档案',
                 name: 'unitFile',
@@ -892,6 +964,136 @@ const appRouter = [
                     import('@/views/payableManage/business/registerPay.vue'),
                 hidden: false
             },
+            {
+                path: 'billspayable',
+                title: '应付单',
+                name: 'billspayable',
+                meta: {
+                    title: '/应付管理/应付单',
+                    path : '/payableManage/billspayable',
+                    label: '应付单'
+                },
+                component: () =>
+                    import('@/views/payableManage/business/billspayable.vue'),
+                hidden: false
+            },
+            {
+                path: 'rankMoneySuggest',
+                title: '排款建议',
+                name: 'rankMoneySuggest',
+                meta: {
+                    title: '/应付管理/排款建议',
+                    path : '/payableManage/rankMoneySuggest',
+                    label: '排款建议'
+                },
+                component: () =>
+                    import('@/views/payableManage/business/rankMoneySuggest.vue'),
+                hidden: false
+            },
+            {
+                path: 'rankMoneyBill',
+                title: '排款单',
+                name: 'rankMoneyBill',
+                meta: {
+                    title: '/应付管理/排款单',
+                    path : '/payableManage/rankMoneyBill',
+                    label: '排款单'
+                },
+                component: () =>
+                    import('@/views/payableManage/business/rankMoneyBill.vue'),
+                hidden: false
+            },
+            {
+                path: 'rankMoneyBillDetail',
+                title: '排款详情',
+                name: 'rankMoneyBillDetail',
+                meta: {
+                    title: '/应付管理/排款详情',
+                    path : '/payableManage/rankMoneyBillDetail',
+                    label: '排款详情'
+                },
+                component: () =>
+                    import('@/views/payableManage/business/rankMoneyBillDetail.vue'),
+                hidden: false
+            },
+            {
+                path: 'paymentBill',
+                title: '付款单',
+                name: 'paymentBill',
+                meta: {
+                    title: '/应付管理/付款单',
+                    path : '/payableManage/paymentBill',
+                    label: '付款单'
+                },
+                component: () =>
+                    import('@/views/payableManage/business/paymentBill.vue'),
+                hidden: false
+            },
+            {
+                path: 'invoiceAdvice',
+                title: '开票建议',
+                name: 'invoiceAdvice',
+                meta: {
+                    title: '/应付管理/开票建议',
+                    path : '/payableManage/invoiceAdvice',
+                    label: '开票建议'
+                },
+                component: () =>
+                    import('@/views/payableManage/business/invoiceAdvice.vue'),
+                hidden: false
+            },
+            {
+                path: 'invoiceRegister',
+                title: '发票登记',
+                name: 'invoiceRegister',
+                meta: {
+                    title: '/应付管理/发票登记',
+                    path : '/payableManage/invoiceRegister',
+                    label: '发票登记'
+                },
+                component: () =>
+                    import('@/views/payableManage/business/invoiceRegister.vue'),
+                hidden: false
+            },
+            {
+                path: 'invoiceRegisterDetail',
+                title: '发票登记编辑',
+                name: 'invoiceRegisterDetail',
+                meta: {
+                    title: '/应付管理/发票登记编辑',
+                    path : '/payableManage/invoiceRegisterDetail',
+                    label: '发票登记编辑'
+                },
+                component: () =>
+                    import('@/views/payableManage/business/invoiceRegisterDetail.vue'),
+                hidden: false
+            },
+            {
+                path: 'verificationRecord',
+                title: '应付核销记录',
+                name: 'verificationRecord',
+                meta: {
+                    title: '/应付管理/应付核销记录',
+                    path : '/payableManage/verificationRecord',
+                    label: '应付核销记录'
+                },
+                component: () =>
+                    import('@/views/payableManage/business/verificationRecord.vue'),
+                hidden: false
+            },
+            {
+                path: 'test',
+                title: '测试',
+                name: 'test',
+                meta: {
+                    title: '/应付管理/测试',
+                    path: '/payableManage/test',
+                    label: '测试'
+                },
+                component: () =>
+                    import('@/views/payableManage/business/test.vue'),
+                hidden: false
+            },
         ]
     },
     //成本折扣
@@ -940,6 +1142,148 @@ const appRouter = [
                 component: () =>
                     import ('@/views/costDiscount/costReduction.vue'),
                 hidden: false
+            },
+        ]
+    },
+    //供应商权限
+    {
+        path: '/supplier_privilege',
+        icon: '',
+        name: 'supplier_privilege',
+        title: '供应商平台权限配置',
+        component: Main,
+        children: [
+            {
+                path: 'position_list',
+                title: '岗位',
+                name: 'position_list',
+                meta: {
+                    title: '/供应商平台权限配置/岗位',
+                    path: '/supplier_privilege/position_list',
+                    label: '岗位'
+                },
+                component: () => import('@/views/supplierPrivilege/position/position_list.vue'),
+                hidden: false
+            },
+            {
+                path: 'staff_list',
+                title: '人员',
+                name: 'staff_list',
+                meta: {
+                    title: '/供应商平台权限配置/人员',
+                    path: '/supplier_privilege/staff_list',
+                    label: '人员'
+                },
+                component: () => import('@/views/supplierPrivilege/staff/staff_list.vue'),
+                hidden: false
+            },
+            {
+                path: 'resource_list',
+                title: '资源管理',
+                name: 'resource_list',
+                meta: {
+                    title: '/供应商平台权限配置/资源管理',
+                    path: '/supplier_privilege/resource_list',
+                    label: '人员'
+                },
+                component: () => import('@/views/supplierPrivilege/menu/resource_list.vue'),
+                hidden: false
+            },
+            {
+                path: 'supply_role_list',
+                title: '角色',
+                name: 'supply_role_list',
+                meta: {
+                    title: '/供应商平台权限配置/角色',
+                    path: '/supplier_privilege/supply_role_list',
+                    label: '角色'
+                },
+                component: () => import('@/views/supplierPrivilege/role/list.vue'),
+                hidden: false
+            },
+            {
+                path: 'add_supply_role',
+                title: '新增角色',
+                name: 'add_supply_role',
+                meta: {
+                    title: '/供应商平台权限配置/角色',
+                    path: '/supplier_privilege/add_supply_role',
+                    label: '新增角色'
+                },
+                component: () => import('@/views/supplierPrivilege/role/add.vue'),
+                hidden: true
+            },
+            {
+                path: 'edit_supply_role',
+                title: '编辑角色',
+                name: 'edit_supply_role',
+                meta: {
+                    title: '/供应商平台权限配置/角色',
+                    path: '/supplier_privilege/edit_supply_role',
+                    label: '编辑角色'
+                },
+                component: () => import('@/views/supplierPrivilege/role/edit.vue'),
+                hidden: true
+            },
+            {
+                path: 'supply_user_list',
+                title: '用户',
+                name: 'supply_user_list',
+                meta: {
+                    title: '/供应商平台权限配置/用户',
+                    path: '/supplier_privilege/supply_user_list',
+                    label: '用户'
+                },
+                component: () => import('@/views/supplierPrivilege/user/list.vue'),
+                hidden: false
+            },
+            {
+                path: 'add_supply_user',
+                title: '增加用户',
+                name: 'add_supply_user',
+                meta: {
+                    title: '/供应商平台权限配置/增加用户',
+                    path: '/supplier_privilege/add_supply_user',
+                    label: '增加用户'
+                },
+                component: () => import('@/views/supplierPrivilege/user/add.vue'),
+                hidden: true
+            },
+            {
+                path: 'edit_supply_user',
+                title: '编辑用户',
+                name: 'edit_supply_user',
+                meta: {
+                    title: '/供应商平台权限配置/编辑用户',
+                    path: '/supplier_privilege/edit_supply_user',
+                    label: '编辑用户'
+                },
+                component: () => import('@/views/supplierPrivilege/user/edit.vue'),
+                hidden: true
+            },
+            {
+                path: 'vop_taskConfig',
+                title: '任务配置',
+                name: 'vop_taskConfig',
+                meta: {
+                    title: '/供应商平台权限配置/任务配置',
+                    path: '/supplier_privilege/vop_taskConfig',
+                    label: '任务配置'
+                },
+                component: () => import('@/views/supplierPrivilege/business/vop_taskConfig.vue'),
+                hidden: true
+            },
+            {
+                path: 'question',
+                title: '问题反馈数据',
+                name: 'question',
+                meta: {
+                    title: '/供应商平台权限配置/问题反馈数据',
+                    path: '/supplier_privilege/question',
+                    label: '问题反馈数据'
+                },
+                component: () => import('@/views/supplierPrivilege/business/question.vue'),
+                hidden: true
             },
         ]
     },
@@ -1222,6 +1566,286 @@ const appRouter = [
                 component: () =>
                     import ('@/views/fabricManagement/reportForm.vue'),
                 hidden: false
+            },
+        ]
+    },
+    //吊牌洗唛打印
+    {
+        path:'/tagsPrint',
+        icon:'',
+        name:'tagsPrint',
+        title:'吊牌洗唛打印',
+        component:Main,
+        children:[
+            {
+                path: '/tagsPrint/applyForPrint',
+                title: '打印申请',
+                name: 'applyForPrint',
+                meta:{
+                    title:'/吊牌洗唛打印/打印申请',
+                    path:'/tagsPrint/applyForPrint',
+                    label:'打印申请'
+                },
+                component: () =>
+                    import ('@/views/tagsPrint/applyForPrint.vue'),
+                hidden: false
+            },
+            {
+                path: '/tagsPrint/addPrint',
+                title: '新增申请',
+                name: 'addPrint',
+                meta:{
+                    title:'/吊牌洗唛打印/新增申请',
+                    path:'/tagsPrint/addPrint',
+                    label:'新增申请'
+                },
+                component: () =>
+                    import ('@/views/tagsPrint/addPrint.vue'),
+                hidden: false
+            },
+            {
+                path: '/tagsPrint/editPrint',
+                title: '编辑申请',
+                name: 'editPrint',
+                meta:{
+                    title:'/吊牌洗唛打印/编辑申请',
+                    path:'/tagsPrint/editPrint',
+                    label:'编辑申请'
+                },
+                component: () =>
+                    import ('@/views/tagsPrint/editPrint.vue'),
+                hidden: false
+            },
+            {
+                path: '/tagsPrint/printDetails',
+                title: '详情页',
+                name: 'printDetails',
+                meta:{
+                    title:'/吊牌洗唛打印/详情页',
+                    path:'/tagsPrint/printDetails',
+                    label:'详情页'
+                },
+                component: () =>
+                    import ('@/views/tagsPrint/printDetails.vue'),
+                hidden: false
+            },
+        ]
+    },
+    //boss
+    {
+        path:'/boss-bussiness',
+        icon:'',
+        name:'boss-bussiness',
+        title:'大商品',
+        component:Main,
+        children:[
+            {
+                path: 'personConfig',
+                title: '人员配置',
+                name: 'personConfig',
+                meta:{
+                    title:'/大商品/人员配置',
+                    path:'/boss-bussiness/personConfig',
+                    label:'人员配置'
+                },
+                component: () =>
+                    import ('@/views/boss-bussiness/goodsProject/personConfig.vue'),
+                hidden: false
+            },
+            {
+                path: 'projectManagement',
+                title: '企划管理',
+                name: 'projectManagement',
+                meta:{
+                    title:'/大商品/企划管理',
+                    path:'/boss-bussiness/projectManagement',
+                    label:'企划管理'
+                },
+                component: () =>
+                    import ('@/views/boss-bussiness/goodsProject/projectManagement.vue'),
+                hidden: false
+            },
+            {
+                path: 'planningAdjustmentTask',
+                title: '企划调整任务列表',
+                name: 'planningAdjustmentTask',
+                meta:{
+                    title:'/大商品/企划调整任务列表',
+                    path:'/boss-bussiness/planningAdjustmentTask',
+                    label:'企划调整任务列表'
+                },
+                component: () =>
+                    import ('@/views/boss-bussiness/goodsProject/planningAdjustmentTask.vue'),
+                hidden: false
+            },
+            {//planningAdjustmentDetail
+                path: 'planningAdjustmentAuditTask',
+                title: '企划调整审核任务列表',
+                name: 'planningAdjustmentAuditTask',
+                meta:{
+                    title:'/大商品/企划调整审核任务列表',
+                    path:'/boss-bussiness/planningAdjustmentAuditTask',
+                    label:'企划调整审核任务列表'
+                },
+                component: () =>
+                    import ('@/views/boss-bussiness/goodsProject/planningAdjustmentAuditTask.vue'),
+                hidden: false
+            },
+            {//planningAdjustmentDetail
+                path: 'planningAdjustmentDetail',
+                title: '企划调整确认详情',
+                name: 'planningAdjustmentDetail',
+                meta:{
+                    title:'/大商品/企划调整确认详情',
+                    path:'/boss-bussiness/planningAdjustmentDetail',
+                    label:'企划调整确认详情'
+                },
+                component: () =>
+                    import ('@/views/boss-bussiness/goodsProject/planningAdjustmentDetail.vue'),
+                hidden: true
+            },
+            {//planningAdjustmentDetail
+                path: 'planningAdjustmentComplated',
+                title: '企划调整确认详情完成页',
+                name: 'planningAdjustmentComplated',
+                meta:{
+                    title:'/大商品/企划调整确认详情完成页',
+                    path:'/boss-bussiness/planningAdjustmentComplated',
+                    label:'企划调整确认详情完成页'
+                },
+                component: () =>
+                    import ('@/views/boss-bussiness/goodsProject/planningAdjustmentComplated.vue'),
+                hidden: true
+            },
+            {//planningAdjustmentDetail
+                path: 'planningAdjustmentAuditDetail',
+                title: '企划调整审核确认详情',
+                name: 'planningAdjustmentAuditDetail',
+                meta:{
+                    title:'/大商品/企划调整审核确认详情',
+                    path:'/boss-bussiness/planningAdjustmentAuditDetail',
+                    label:'企划调整审核确认详情'
+                },
+                component: () =>
+                    import ('@/views/boss-bussiness/goodsProject/planningAdjustmentAuditDetail.vue'),
+                hidden: true
+            },
+             {//planningAdjustmentDetail
+                path: 'planningAdjustmentAuditComplated',
+                title: '企划调整审核确认完成页',
+                name: 'planningAdjustmentAuditComplated',
+                meta:{
+                    title:'/大商品/企划调整审核确认完成页',
+                    path:'/boss-bussiness/planningAdjustmentAuditComplated',
+                    label:'企划调整审核确认完成页'
+                },
+                component: () =>
+                    import ('@/views/boss-bussiness/goodsProject/planningAdjustmentAuditComplated.vue'),
+                hidden: true
+            },
+            {
+                path: 'projectChange',
+                title: '企划调整',
+                name: 'projectChange',
+                meta:{
+                    title:'/大商品/企划调整',
+                    path:'/boss-bussiness/projectChange',
+                    label:'企划调整'
+                },
+                component: () =>
+                    import ('@/views/boss-bussiness/goodsProject/projectChange.vue'),
+                hidden: false
+            },
+            {
+                path: 'planningMessageTask',
+                title: '企划消息列表',
+                name: 'planningMessageTask',
+                meta:{
+                    title:'/大商品/企划消息列表',
+                    path:'/boss-bussiness/planningMessageTask',
+                    label:'企划消息列表'
+                },
+                component: () =>
+                    import ('@/views/boss-bussiness/goodsProject/planningMessageTask.vue'),
+                hidden: false
+            },
+            {
+                path: 'planningMessageDetail',
+                title: '企划消息确认详情',
+                name: 'planningMessageDetail',
+                meta:{
+                    title:'/大商品/企划消息确认详情',
+                    path:'/boss-bussiness/planningMessageDetail',
+                    label:'企划消息确认详情'
+                },
+                component: () =>
+                    import ('@/views/boss-bussiness/goodsProject/planningMessageDetail.vue'),
+                hidden: true
+            },
+            {
+                path: 'categoryPlanningFollowUp',
+                title: '品类企划跟进',
+                name: 'categoryPlanningFollowUp',
+                meta:{
+                    title:'/大商品/品类企划跟进',
+                    path:'/boss-bussiness/categoryPlanningFollowUp',
+                    label:'品类企划跟进'
+                },
+                component: () =>
+                    import ('@/views/boss-bussiness/goodsProject/categoryPlanningFollowUp.vue'),
+                hidden: true
+            },
+            {
+                path: 'productPlanningFollowUp',
+                title: '商品企划跟进',
+                name: 'productPlanningFollowUp',
+                meta:{
+                    title:'/大商品/商品企划跟进',
+                    path:'/boss-bussiness/productPlanningFollowUp',
+                    label:'商品企划跟进'
+                },
+                component: () =>
+                    import ('@/views/boss-bussiness/goodsProject/productPlanningFollowUp.vue'),
+                hidden: true
+            },//billingParameterConfiguration
+            {
+                path: 'parameterConfiguration',
+                title: '计费参数配置',
+                name: 'parameterConfiguration',
+                meta:{
+                    title:'/大商品/计费参数配置',
+                    path:'/boss-bussiness/parameterConfiguration',
+                    label:'计费参数配置'
+                },
+                component: () =>
+                    import ('@/views/boss-bussiness/goodsProject/parameterConfiguration.vue'),
+                hidden:false
+            },//billingParameterConfiguration
+            {//planningDelayBilling
+                path: 'brandPlanningFollowUp',
+                title: '品牌企划跟进',
+                name: 'brandPlanningFollowUp',
+                meta:{
+                    title:'/大商品/品牌企划跟进',
+                    path:'/boss-bussiness/brandPlanningFollowUp',
+                    label:'品牌企划跟进'
+                },
+                component: () =>
+                    import ('@/views/boss-bussiness/goodsProject/brandPlanningFollowUp.vue'),
+                hidden: true
+            },
+             {//planningDelayBilling
+                path: 'planningDelayBilling',
+                title: '企划延期计费单',
+                name: 'planningDelayBilling',
+                meta:{
+                    title:'/大商品/企划延期计费单',
+                    path:'/boss-bussiness/planningDelayBilling',
+                    label:'企划延期计费单'
+                },
+                component: () =>
+                    import ('@/views/boss-bussiness/goodsProject/planningDelayBilling.vue'),
+                hidden: true
             },
         ]
     },

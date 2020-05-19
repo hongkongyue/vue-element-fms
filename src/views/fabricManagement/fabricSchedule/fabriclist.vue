@@ -1,6 +1,6 @@
 <template>
         <div>
-             <Row class="margin-bottom-10 background-color-white exhibition" style="padding-left:20px">
+             <Row class="margin-bottom-10 background-color-white exhibition" style="padding-left:20px" :style="{minHeight:showBink?'840px':'620px'}">
                 <Tabs type="card" @on-click="getInitRequest">
                         <TabPane label="待完成" name="a">
                              <wait-a ref="aa"></wait-a>
@@ -21,12 +21,14 @@
     import waitA from '../list/fabricwait.vue'
     import goingB  from '../list/fabricgoing.vue'
     import completedC from '../list/fabriced.vue'
+    import {debounce} from 'mixins/debounce'
     function formSearch() {
         return {
             search: ''
         }
     }
     export default {
+        mixins: [debounce],
         data() {
             return {
             }

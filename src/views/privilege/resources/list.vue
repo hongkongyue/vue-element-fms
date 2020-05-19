@@ -5,7 +5,7 @@
 </style>
 
 <template>
-    <div class="background-color-white exhibition" id="resource_list">
+    <div class="background-color-white exhibition" id="resource_list" :style="{minHeight:showBink?'840px':'620px'}" >
         <Row>
             <Col class="margin-bottom-10">
             <Button type="primary" @click="openModal('新增')">新增</Button>
@@ -264,7 +264,9 @@
         }
     }
 
-    export default {
+   import {debounce} from 'mixins/debounce'
+export default {
+    mixins:[debounce],
         name: "resource_list",
         data() {
             return {
@@ -648,7 +650,7 @@
                     this.request('resource_add', data, true).then(res => {
                     if (res.code==1) {
                         this.modal_visible = false;
-                        this.$message.success(res.msg)
+                        this.$message.success('新增成功')
                         this.getTableData()
                         this.tokenDirectLogin()
                         // setTimeout(()=>{
@@ -663,7 +665,7 @@
                     this.request('resource_update', data, true).then(res => {
                     if (res.code==1) {
                         this.modal_visible = false;
-                        this.$message.success(res.msg)
+                        this.$message.success('编辑成功')
                         this.getTableData()
                         this.tokenDirectLogin()
                         // setTimeout(()=>{
@@ -780,7 +782,7 @@
               data.parentResourceCode = this.menuRow.code //
               this.request('resource_add', data, true).then(res => {
                     if (res.code==1) {
-                        this.$message.success(res.msg)
+                        this.$message.success('新增成功')
                         this.getBTNData()
                     }else{
                         this.$message.error(res.msg)
@@ -799,7 +801,7 @@
               data.parentResourceCode = this.clumnsRow.code //
               this.request('resource_add', data, true).then(res => {
                     if (res.code==1) {
-                        this.$message.success(res.msg)
+                        this.$message.success('新增成功')
                         this.getClumsData()
                     }else{
                         this.$message.error(res.msg)

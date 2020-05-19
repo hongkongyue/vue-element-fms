@@ -4,6 +4,7 @@ const deduction = {
                         id          :  '', //存储的id
                 deductionList       :  [], //货品明细
                 deductionLogList    :  [], //日志列表
+                activeName          : 'first'
 
         },
     mutations: {
@@ -27,6 +28,12 @@ const deduction = {
                           state.deductionLogList=[];
                           state.deductionLogList=list
         },
+        initactiveName(state,str){
+                          state.activeName=str
+        },
+        clearactiveName(state){
+                          state.activeName='first'
+        }
     },
 };
 

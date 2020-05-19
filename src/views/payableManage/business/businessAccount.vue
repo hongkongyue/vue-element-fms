@@ -23,7 +23,7 @@
                           </el-form-item>
                 </el-form>
           </header>
-          <el-row>
+          <el-row  style="background:#fff;width:99%;margin:0 auto; padding-top:10px" :style="{minHeight:showBink?'720px':'500px'}">
             <el-col :span="4" >
                 <div class="grid-content bg-purple"  style="background:#fff!important">
                       <el-col style="text-align:center;height:40px;line-height:40px">
@@ -344,7 +344,9 @@
 
 <script>
   import filters from '../../../filter/'
+  import {debounce} from 'mixins/debounce'
   export default {
+    mixins:[debounce],
     data() {
       return {
         add:false,

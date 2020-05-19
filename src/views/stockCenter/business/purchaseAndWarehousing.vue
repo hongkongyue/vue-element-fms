@@ -70,7 +70,7 @@
                     <el-option v-for="item in companyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item v-if="show == true" label="OMS创建时间：" size="small">
+            <el-form-item v-if="show == true" label="入库时间：" size="small">
                 <el-date-picker v-model="formSearch.date" type="daterange" value-format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                 </el-date-picker>
             </el-form-item>
@@ -86,6 +86,18 @@
                   end-placeholder="结束日期"  style="width:290px" placeholer="请选择">
                 </el-date-picker>
             </el-form-item>
+            <el-form-item v-if="show==true" label="开票状态：" size="small" label-width="100px">
+                <el-select v-model="formSearch.invoiceStatus" filterable placeholder="请选择" style="width:120px">
+                    <el-option label="未完成" value="0"></el-option>
+                    <el-option label="已完成" value="1"></el-option>
+                </el-select>
+            </el-form-item>
+             <el-form-item v-if="show==true" label="是否生成结算明细：" size="small" label-width="140px">
+                <el-select v-model="formSearch.settle" filterable placeholder="请选择" style="width:120px">
+                   <el-option label="是" value="1"></el-option>
+                    <el-option label="否" value="0"></el-option>
+                </el-select>
+            </el-form-item>
             <el-form-item size="small">
                 <el-button v-if="show == false" @click="changeShow" style="float:right" size="small"><i class="el-icon-bottom"></i></el-button>
             </el-form-item>
@@ -99,7 +111,7 @@
         <el-form :model="formdialog">
             <el-form-item label="对账账期：" size="small">
                 <el-select v-model="formdialog.period" value-key="id" filterable placeholder="请选择" style="width:200px">
-                    <el-option v-for="item in periodList" :key="item.name" :label="item.name" :value="item"></el-option>
+                    <el-option v-for="item in periodList" :key="item.name" :label="item.name" :value="item.period"></el-option>
                 </el-select>
             </el-form-item>
         </el-form>
@@ -112,9 +124,8 @@
     <section class="middle">
         <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[1000, 5000, 10000, 20000]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
-        <div id="outStock" style="width: 100%; height: 400px;"></div>
-    </section>
-    <section class="footer" style="margin-bottom:0px">
+        <div id="outStock" style="width: 100%; height: 400px;margin-bottom:20px"></div>
+
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
             <el-tab-pane label="货品明细" name="first">
                 <el-table :data="goodsList" style="width: 100%" border tooltip-effect="dark" max-height="250" size="mini">
@@ -188,6 +199,9 @@
             </el-tab-pane>
         </el-tabs>
     </section>
+    <!-- <section class="footer" style="margin-bottom:0px">
+        
+    </section> -->
       <!-- 导出 -->
     <Modal v-model="exportVisible" title="导出" @on-cancel='cancelExport' :width="430" class-name="customize-modal-center">
         <Row class="margin-bottom-10 background-color-white exhibition">
@@ -231,7 +245,9 @@ export default {
             dateRange:[],
             newTableList:[],//test
             periodList:[],
-            formdialog: {},
+            formdialog: {
+                        period:'',
+            },
             dialogFormVisible: false,
             allowedList: [{
                 id: 1,
@@ -273,6 +289,7 @@ export default {
                 code: '',
                 name: '',
                 person: '',
+                invoiceStatus:'',
             },
             logList: [],
             total: 0,
@@ -361,25 +378,32 @@ export default {
                 }
             })
         },
+        getperiodNo(id){
+             for(let i=0,len=this.periodList.length;i<len;i++){
+                 if(this.periodList[i].period==id){
+                     return this.periodList[i].periodNo
+                 }
+            }
+        },
         dialogFormSave() {
-            if (this.formdialog.period == undefined || this.formdialog.period == '') {
+            if (!this.formdialog.period) {
                 this.$message.error('请先选择对账账期')
             } else {
                 let arr = w2ui.purchase.getSelection()
                 let data = {}
                 data.ids = arr
-                data.periodId = this.formdialog.period.period
-                data.periodNo = this.formdialog.period.periodNo
+                data.periodId = this.formdialog.period
+                data.periodNo = this.getperiodNo(this.formdialog.period)
                 this.request('bizStockIn_add', data, true).then(res => {
                     if (res.code == '1') {
                         this.$message.success(res.msg)
                         this.dialogFormVisible = false
-                        this.formdialog = {}
+                        this.formdialog.period = ''
                         this.getData()
                     } else {
                         this.$message.error(res.msg)
-                        this.dialogFormVisible = false
-                        this.formdialog = {}
+                        this.dialogFormVisible  = false
+                         this.formdialog.period =''
                     }
                 })
             }
@@ -491,24 +515,28 @@ export default {
                             field: 'taxTrialAmount',
                             caption: '含税试制费总额',
                             size: '100px',
+                            render:'money',
                             sortable: true
                         },
                         {
                             field: 'taxPurchaseAmount',
                             caption: '含税采购总额',
                             size: '100px',
+                            render:'money',
                             sortable: true
                         },
                         {
                             field: 'trialAmount',
                             caption: '不含税试制费总额',
                             size: '100px',
+                            render:'money',
                             sortable: true
                         },
                         {
                             field: 'purchaseAmount',
                             caption: '不含税采购总额',
                             size: '100px',
+                            render:'money',
                             sortable: true
                         },
                         {
@@ -541,6 +569,26 @@ export default {
                             size: '100px',
                             sortable: true
                         },
+                        //  {
+                        //     field: 'tryFeeInvoiceAmount',
+                        //     caption: '试制费已开票金额',
+                        //     size: '100px',
+                        //     render:'money',
+                        //     sortable: true
+                        // },
+                        // {
+                        //     field: 'goodsInvoiceAmount',
+                        //     caption: '货款已开票金额',
+                        //     size: '100px',
+                        //     render:'money',
+                        //     sortable: true
+                        // },
+                        // {
+                        //     field: 'invoiceStatus',
+                        //     caption: '开票状态',
+                        //     size: '100px',
+                        //     sortable: true
+                        // },
                         {
                             field: 'created',
                             caption: '创建时间',
@@ -549,7 +597,7 @@ export default {
                         },
                         {
                             field: 'poInTime',
-                            caption: 'OMS创建时间',
+                            caption: '入库时间',
                             size: '100px',
                             sortable: true
                         },
@@ -764,7 +812,9 @@ export default {
             this.formSearch.date ? data.omsStartDate = this.formSearch.date[0] : delete data.omsStartDate //开始时间
             this.formSearch.date ? data.omsEndDate = this.formSearch.date[1] : delete data.omsEndDate //结束时间
             data.startDate=filter.get_year_month_day(this.dateRange[0])
-            data.endDate=filter.get_year_month_day(this.dateRange[1])
+            data.endDate  =filter.get_year_month_day(this.dateRange[1])
+            data.invoiceStatus=this.formSearch.invoiceStatus!=''?Number(this.formSearch.invoiceStatus):''
+            this.formSearch.settle ? data.settle=Number(this.formSearch.settle):delete data.settle
             this.request('bizStockIn_page', data, true).then(res => {
                 if (res.code == 1) {
                     this.total = res.data.count;

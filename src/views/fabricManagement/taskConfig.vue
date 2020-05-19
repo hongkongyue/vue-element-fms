@@ -31,7 +31,7 @@
             </el-form-item>
         </el-form>
     </header>
-    <section class="middle">
+    <section class="middle" :style="{minHeight:showBink?'690px':'480px'}">
         <!-- <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[1000, 5000, 10000, 20000]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination> -->
         <!-- <div id="main" style="width: 100%; height: 400px;"></div> -->
@@ -61,6 +61,23 @@
             <el-table-column prop="lastUpdated" label="修改时间" min-width="120"     align="center"   show-overflow-tooltip>
             </el-table-column>
         </el-table>
+
+        <section class="footer" style="margin-bottom:0px">
+        <div style="width:100%;font-size:20px;">操作日志</div>
+    </section>
+    <!-- <section class="middle"> -->
+        <el-table :data="logList" style="width: 100%" border tooltip-effect="dark" max-height="250">
+            <el-table-column prop="operator" label="操作员" min-width="120" align="center">
+            </el-table-column>
+            <el-table-column prop="operateTime" label="操作时间" align="center" min-width="120">
+                <template slot-scope="scope">{{scope.row.operateTime}}</template>
+            </el-table-column>
+            <el-table-column prop="logContent" label="操作记录" min-width="120" align="center" show-overflow-tooltip>
+            </el-table-column>
+        </el-table>
+        <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div>
+        <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>
+    <!-- </section> -->
     </section>
       <!--新增弹框 -->
     <Modal v-model="dialogVisible" :styles="mystyle"  :title="dialogtitle" @on-cancel='cancel' :width="860"  class-name="customize-modal-center">
@@ -153,28 +170,15 @@
         </Row>
         <div slot="footer"></div>
     </Modal>
-    <section class="footer" style="margin-bottom:0px">
-        <div style="width:100%;font-size:20px;">操作日志</div>
-    </section>
-    <section class="middle">
-        <el-table :data="logList" style="width: 100%" border tooltip-effect="dark" max-height="250">
-            <el-table-column prop="operator" label="操作员" min-width="120" align="center">
-            </el-table-column>
-            <el-table-column prop="operateTime" label="操作时间" align="center" min-width="120">
-                <template slot-scope="scope">{{scope.row.operateTime}}</template>
-            </el-table-column>
-            <el-table-column prop="logContent" label="操作记录" min-width="120" align="center" show-overflow-tooltip>
-            </el-table-column>
-        </el-table>
-        <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div>
-        <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>
-    </section>
+    
 </div>
 </template>
 
 <script>
 import filters from '../../filter/'
+import {debounce} from 'mixins/debounce'
 export default {
+    mixins:[debounce],
     data() {
         return {
             staffList: [],
@@ -193,7 +197,7 @@ export default {
                           {taskName:'核价任务',       taskLevel:4},
                           {taskName:'录入采购信息',   taskLevel:5},
                           {taskName:'录入面料信息',   taskLevel:6},
-                          {taskName:'发起人确认任务', taskLevel:7}
+                        //   {taskName:'发起人确认任务', taskLevel:7}
                          ],
             projectList:[],
             formData: {
@@ -244,7 +248,7 @@ export default {
         this.getData()
         this.getButtonJurisdiction() //按钮权限
         this.getSelectList()
-        for(let i=0;i<8;i++){
+        for(let i=0;i<7;i++){
             if(i){
                 this.taskLevelList.push(i)
             }
@@ -305,7 +309,7 @@ export default {
                  })
         },
         getSelectList(){
-                  this.request('fabricDevelop_configurationPlan_selector',{},false).then(res=>{
+                  this.request('fabricDevelop_configurationPlan_selector',{planType:0},false).then(res=>{
                             if(res.code==1){
                                  this.projectList=res.data
                             }else{

@@ -10,10 +10,10 @@
                           </el-form-item> -->
         </el-form>
     </header>
-    <section class="middle">
+    <section class="middle"  :style="{minHeight:showBink?'730px':'530px'}">
         <!-- <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination> -->
-        <el-table @selection-change="selection" @select-all="selection" @select="selection" ref="multipleTable" :data="list" style="width: 100%" class="pointer" border tooltip-effect="dark" max-height="550" @row-click="showLog" highlight-current-row>
+        <el-table @selection-change="selection" @select-all="selection" @select="selection" ref="multipleTable" :data="list" style="width: 100%" class="pointer" border tooltip-effect="dark" max-height="500" @row-click="showLog" highlight-current-row>
             <!-- <el-table-column type="selection" width="55">
             </el-table-column> -->
             <el-table-column type="index" width="55" label="序号" align="center">
@@ -54,7 +54,9 @@
 
 <script>
 import filters from '../../../filter/'
+import {debounce} from 'mixins/debounce'
 export default {
+    mixins:[debounce],
     data() {
         return {
             dialogVisible: false,
@@ -128,7 +130,7 @@ export default {
             let data = {}
             this.request('basicMeasureUnit_syncMeasureUnit', data, true).then((res) => {
                 if (res.code == 1) {
-                    this.$message.success(res.msg)
+                    this.$message.success('同步成功')
                     this.getData()
                 }
             })

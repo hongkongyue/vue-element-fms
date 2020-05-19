@@ -156,6 +156,29 @@
                             @removeBtn='removeStore' :mode='mode' height='540px' filter openAll>
                         </tree-transfer>
                     </el-tab-pane>
+                    
+                    <el-tab-pane label="分配供应商" name="six">
+                        <div style="text-align: center">
+                          <el-transfer
+                            style="text-align: left; display: inline-block"
+                            v-model="valueSupplier"
+                            :props="{
+                              key: 'id',
+                              label: 'name'
+                            }"
+                            filterable
+                            :render-content="renderFunc"
+                            :titles="['待分配供应商', '已分配供应商']"
+                            :button-texts="['撤销分配', '分配']"
+                            :format="{
+                              noChecked: '${total}',
+                              hasChecked: '${checked}/${total}'
+                            }"
+                            @change="handleChangeSupplier"
+                            :data="dataSupplier">
+                          </el-transfer>
+                        </div>
+                    </el-tab-pane>
                 </el-tabs>
             </section>
             <Modal v-model="visible" @on-cancel="cancelvisible" :width="250" class-name="customize-modal-center" title="新密码">
@@ -176,6 +199,7 @@
   export default {
     data() {
       return {
+        dataSupplier:[],
         idString:'',
         userList:[],
         userNameList:[],
@@ -183,6 +207,7 @@
         dataPP:[],
         datags:[],
         valueBrand: [],
+        valueSupplier:[],
         valueCompany:[],
         valueStore:[],
         activeName:'first',
@@ -314,6 +339,8 @@
         this.getBrandList()//获取所有品牌
       }else if(a == 'five'){
         this.getGroupByPlatform()//获取所有店铺
+      }else if(a == 'six'){
+        this.getSupplier()
       }
     },
     getGroupByPlatform(){
@@ -406,6 +433,15 @@
                             }
                         }) 
         },
+        //获取供应商数据
+        getSupplier(){
+          let data={}
+                    this.request('supplier_allSelector', data, true).then((res) => {
+                            if (res.code == 1) {
+                                  this.dataSupplier=res.data
+                            }
+                        }) 
+    },
     getAllValueList(){
       let data = {}
       data.userId = this.$route.query.id
@@ -413,12 +449,17 @@
                 if (res.code==1) {
                   let company = []
                   let Brand = []
+                  let Supplier = []
                     res.data.companyList.map(function (item) {
                       company.push(item.id)
                     })
                     res.data.brandList.map(function (item) {
                       Brand.push(item.id)
                     })
+                    res.data.supplierList.map(function (item) {
+                      Supplier.push(item.id)
+                    })
+                    this.valueSupplier = Supplier
                     this.valueCompany = company
                     this.valueBrand = Brand
                     this.toData = res.data.storeList
@@ -427,6 +468,7 @@
                   }
               })
     },
+    
     //获取公司分配权限
       handleChangeCompany(value, direction, movedKeys){
         let data = {}
@@ -446,6 +488,20 @@
         let data = {}
         data.userId = this.$route.query.id
         data.allocationType = 'brand'
+        data.allocationIds = value
+        this.request('userMapping_allocation', data, true).then(res => { 
+                if (res.code==1) {
+                    this.$message.success(res.msg)
+                  }else{
+                    this.$message.warning(res.msg)
+                  }
+              })
+      },
+      //供应商分配权限
+      handleChangeSupplier(value, direction, movedKeys){
+        let data = {}
+        data.userId = this.$route.query.id
+        data.allocationType = 'supplier'
         data.allocationIds = value
         this.request('userMapping_allocation', data, true).then(res => { 
                 if (res.code==1) {
@@ -487,7 +543,7 @@
         this.request('bindingRoles', data, true).then(res => { 
                 if (res.code==1) {
                     this.getAllUserList()
-                    this.$message.success(res.msg)
+                    this.$message.success('添加成功')
                   }else{
                     this.$message.warning(res.msg)
                   }
@@ -527,7 +583,7 @@
         data.status = this.formSearch.status
         this.request('user_update', data, true).then(res => { 
                 if (res.code==1) {
-                  this.$message.success(res.msg)
+                  this.$message.success('保存成功')
                   }else{
                     this.$message.warning(res.msg)
                   }
@@ -544,7 +600,7 @@
             data.id = this.$route.query.id
             this.request('user_resetPassword', data, true).then(res => { 
                 if (res.code==1) {
-                  this.$message.success(res.msg)
+                  this.$message.success('重置成功')
                   this.visible = true
                   this.Password = res.data
                   }else{
@@ -563,7 +619,7 @@
             data.id = this.$route.query.id
             this.request('user_unlock', data, true).then(res => { 
                 if (res.code==1) {
-                  this.$message.success(res.msg)
+                  this.$message.success('解锁成功')
                   this.formSearch.status = '1'
                   }else{
                     this.$message.warning(res.msg)

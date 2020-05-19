@@ -21,16 +21,16 @@
             </el-form-item>
             <el-form-item label="流程状态" size="small">
                 <el-select v-model="formData.processStatus" placeholder="流程状态" style="width:150px" filterable>
-                    <el-option v-for="v in statusList" :key="v" :label="v" :value="v"></el-option>
+                    <el-option v-show="v!='已完成'" v-for="v in statusList" :key="v" :label="v" :value="v"></el-option>
                 </el-select>
             </el-form-item>
         </el-form>
     </header>
-    <section class="middle">
+    <section class="middle" :style="{minHeight:showBink?'690px':'480px'}">
         <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
         <!-- <Table ref="currentRowTable" @on-select-cancel="choiceId" @on-select-all-cancel="choiceId" max-height='550' @on-select="choiceId" @on-select-all="choiceId" :columns="columns" size="small" highlight-row :data="list"></Table> -->
-        <el-table @select-all="selectionAll" @select="selection" ref="multipleTable" :data="list" style="width: 100%" class="pointer" border tooltip-effect="dark" max-height="550" @row-click="showLog" highlight-current-row>
+        <el-table @select-all="selectionAll" @select="selection" ref="multipleTable" :data="list" style="width: 100%" class="pointer" border tooltip-effect="dark" max-height="390" @row-click="showLog" highlight-current-row>
             <el-table-column type="selection" width="55">
             </el-table-column>
             <el-table-column type="index" width="55" label="序号" align="center">
@@ -49,22 +49,28 @@
             </el-table-column>
             <el-table-column prop="specialCategory" label="是否特殊工艺" min-width="120" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">{{scope.row.specialCategory == 1 ? '是' : '否'}}</template>
-            </el-table-column>
-            <el-table-column prop="kinds" label="特殊工艺类目" min-width="120" align="center" show-overflow-tooltip>
+            </el-table-column> 
+            <el-table-column prop="specialProcessCategory" label="特殊工艺类目" min-width="120" align="center" show-overflow-tooltip>
             </el-table-column>
             <el-table-column prop="styleImg" label="样图1" min-width="120" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
-                    <div @click="imgClick(scope.row.styleImg)">
+                    <div v-if="scope.row.styleImg.length>0" @click="imgClick(scope.row.styleImg)">
                         <el-image style="width: 40px; height: 40px" :src="scope.row.styleImg" :preview-src-list="[scope.row.styleImg]">
                         </el-image>
+                    </div>
+                    <div v-if="scope.row.styleImg.length==0" >
+                        <el-image style="width: 40px; height: 40px" :src = noneUrl></el-image>
                     </div>
                 </template>
             </el-table-column>
             <el-table-column prop="styleImg2" label="样图2" min-width="120" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
-                    <div @click="imgClick(scope.row.styleImg2)">
+                    <div v-if="scope.row.styleImg2.length>0" @click="imgClick(scope.row.styleImg2)">
                         <el-image style="width: 40px; height: 40px" :src="scope.row.styleImg2" :preview-src-list="[scope.row.styleImg2]">
                         </el-image>
+                    </div>
+                    <div v-if="scope.row.styleImg2.length==0" >
+                       <el-image style="width: 40px; height: 40px" :src = noneUrl></el-image>
                     </div>
                 </template>
             </el-table-column>
@@ -153,15 +159,18 @@
                 <Col span="8">
                 <el-form-item label="设计师需求样品图" size="small" label-width="140px">
                     <div style="width: 100px; height: 100px" @click="clickImg('1')">
-                        <el-image style="width: 100px; height: 100px" :src="imgUrl1">
+                        <el-image v-if="imgUrl1.length>0" style="width: 100px; height: 100px" :src="imgUrl1">
                         </el-image>
+                       <el-image v-if="imgUrl1.length ==0" style="width: 100px; height: 100px" :src = noneUrl></el-image>
                     </div>
                 </el-form-item>
                 </Col>
                 <Col span="8">
-                <div style="width: 100px; height: 100px" @click="clickImg('2')">
-                    <el-image style="width: 100px; height: 100px" :src="imgUrl2"></el-image>
+                <div style="width: 100px; height: 100px" @click="clickImg('2')"> 
+                    <el-image v-if="imgUrl2.length>0" style="width: 100px; height: 100px" :src="imgUrl2"></el-image>
+                    <el-image v-if="imgUrl2.length == 0" style="width: 100px; height: 100px" :src = noneUrl></el-image>
                 </div>
+                
                 </Col>
                 </Col>
                 <Col span="24">
@@ -219,9 +228,12 @@
 
 <script>
 import Util from 'libs/util'
+import {debounce} from 'mixins/debounce'
 export default {
+    mixins: [debounce],
     data() {
         return {
+            noneUrl:'https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1562574299&di=846b4c904bd54d3c3821fa5938888c69&src=http://hbimg.b0.upaiyun.com/bdaca9a07e1a8947c00c2f826ebf848750927aa24963-cATwbg_fw658',
             getDay: '',
             userInfo: {},
             rowId: '',
@@ -391,7 +403,7 @@ export default {
             })
         },
         changeKinds(name) {
-            this.kindsList = []
+            // this.kindsList = []
             this.addformdata.specialCategory = ''
             this.addformdata.specialProcessCategory = ''
             console.log(name)
@@ -543,7 +555,8 @@ export default {
                             this.visible = false
                             this.addformdata = {
                                 specialProcessCategory:'',
-                                kinds:''
+                                kinds:'',
+                                specialCategory:''
                             }
                             this.$refs['ruleForm'].resetFields();
                             this.imgUrl1 = ''
@@ -567,7 +580,8 @@ export default {
             this.visible = false
                             this.addformdata = {
                                 specialProcessCategory:'',
-                                kinds:''
+                                kinds:'',
+                                specialCategory:''
                             }
                             this.$refs['ruleForm'].resetFields();
                             this.imgUrl1 = ''
@@ -805,7 +819,16 @@ export default {
     /* color: #f19944; */
     /* 设置文字颜色，可以选择不设置 */
 }
-.el-icon-circle-close:before {
- color:white
+.el-icon-circle-close {
+ color:white !important;
+}
+</style>
+
+<style>
+ .el-image-viewer__close{
+        color:#fff!important;
+    }
+.el-image-viewer__prev,.el-image-viewer__next{
+     display: none;
 }
 </style>

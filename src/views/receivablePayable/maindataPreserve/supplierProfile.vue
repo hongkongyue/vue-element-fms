@@ -19,6 +19,9 @@
             <el-form-item size="small">
                 <el-button v-if="judgeMenu.indexOf('同步') !== -1" size="small" type="primary" @click="getNewData">同步</el-button>
             </el-form-item>
+            <el-form-item size="small">
+                <el-button v-if="judgeMenu.indexOf('供应商功能启用配置') !== -1" size="small" type="primary" @click="progressShow">供应商功能启用配置</el-button>
+            </el-form-item>
         </el-form>
         <el-form :inline="true" :model="formSearch" class="demo-form-inline ">
             <el-form-item label="开发年份：" size="small">
@@ -33,17 +36,17 @@
             </el-form-item>
         </el-form>
     </header>
-    <section class="middle">
+    <section class="middle" :style="{minHeight:showBink?'680px':'480px'}" style="padding-top:10px">
         <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[10, 20, 30, 40]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
-        <el-table ref="multipleTable" @row-click="showLog" :data="tableData" style="width: 100%" border tooltip-effect="dark" max-height="250" @selection-change="handleSelectionChange">
+        <el-table ref="multipleTable" @row-click="showLog" :data="tableData" style="width: 100%" border tooltip-effect="dark" :maxHeight="tableHieght" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55">
             </el-table-column>
             <el-table-column type="index" width="55" label="序号" align="center"></el-table-column>
             <el-table-column prop="enable" label="启用" min-width="120" align="center">
                 <template slot-scope="scope">{{scope.row.enable == 0 ? '停用' : '启用'}}</template>
             </el-table-column>
-            <el-table-column prop="created" label="创建时间" align="center" min-width="120">
+            <el-table-column prop="created" label="创建时间" align="center" min-width="120" show-overflow-tooltip>
             </el-table-column>
             <el-table-column prop="dataSource" label="数据来源" align="center" min-width="120">
                 <template slot-scope="scope">{{scope.row.dataSource == '1' ? '同步' : '手动创建'}}</template>
@@ -78,24 +81,25 @@
             </el-table-column>
             <el-table-column prop="lastUpdated" label="最后修改时间" min-width="120" align="center" show-overflow-tooltip>
             </el-table-column>
-        </el-table>
+           </el-table>
+                <section class="footer" style="margin-bottom:0px;margin-top:0px">
+                    <div style="width:100%;font-size:20px;">操作日志</div>
+                </section>
+                <section class="log">
+                    <el-table :data="logList" style="width: 100%" border tooltip-effect="dark" max-height="250">
+                        <el-table-column prop="operator" label="操作员" min-width="120" align="center">
+                        </el-table-column>
+                        <el-table-column prop="operateTime" label="操作时间" align="center" min-width="120">
+                            <template slot-scope="scope">{{scope.row.operateTime}}</template>
+                        </el-table-column>
+                        <el-table-column prop="logContent" label="操作记录" min-width="120" align="center" show-overflow-tooltip>
+                        </el-table-column>
+                    </el-table>
+                    <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div>
+                    <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>
+                </section>
     </section>
-    <section class="footer" style="margin-bottom:0px">
-        <div style="width:100%;font-size:20px;">操作日志</div>
-    </section>
-    <section class="middle">
-        <el-table :data="logList" style="width: 100%" border tooltip-effect="dark" max-height="250">
-            <el-table-column prop="operator" label="操作员" min-width="120" align="center">
-            </el-table-column>
-            <el-table-column prop="operateTime" label="操作时间" align="center" min-width="120">
-                <template slot-scope="scope">{{scope.row.operateTime}}</template>
-            </el-table-column>
-            <el-table-column prop="logContent" label="操作记录" min-width="120" align="center" show-overflow-tooltip>
-            </el-table-column>
-        </el-table>
-        <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div>
-        <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>
-    </section>
+  
     <!-- 新增弹框 -->
     <Modal v-model="dialogVisible" @on-cancel="addCancel" :styles="mystyle" title="新增" :width="1000" class-name="customize-modal-center">
         <Row class="margin-bottom-10 background-color-white exhibition">
@@ -263,12 +267,17 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="账号1：" size="small">
-                            <el-input v-model="ruleForm.accountNumber1" style="width:150px"></el-input>
+                        <el-form-item label="开户行行号1：" size="small">
+                            <el-input v-model="ruleForm.bankCode1" style="width:150px"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row type="flex">
+                    <el-col :span="8">
+                        <el-form-item label="账号1：" size="small">
+                            <el-input v-model="ruleForm.accountNumber1" style="width:150px"></el-input>
+                        </el-form-item>
+                    </el-col>
                     <el-col :span="8">
                         <el-form-item label="账户2：" size="small">
                             <el-input v-model="ruleForm.account2" style="width:150px"></el-input>
@@ -279,13 +288,13 @@
                             <el-input v-model="ruleForm.accountName2" style="width:150px"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                </el-row>
+                <el-row type="flex">
+                     <el-col :span="8">
                         <el-form-item label="开户行2：" size="small">
                             <el-input v-model="ruleForm.openingBank2" style="width:150px"></el-input>
                         </el-form-item>
                     </el-col>
-                </el-row>
-                <el-row type="flex">
                     <el-col :span="8">
                         <el-form-item label="账号2：" size="small">
                             <el-input v-model="ruleForm.accountNumber2" style="width:150px"></el-input>
@@ -299,16 +308,16 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="加工厂：" size="small">
-                            <el-input v-model="ruleForm.factory" style="width:150px"></el-input>
-                        </el-form-item>
-                    </el-col>
                 </el-row>
                 <el-row type="flex">
-                    <el-col :span="24">
+                     <el-col :span="12">
+                        <el-form-item label="加工厂：" size="small">
+                            <el-input v-model="ruleForm.factory" style="width:300px"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
                         <el-form-item label="备注：" size="small">
-                            <el-input v-model="ruleForm.remark" style="width:775px"></el-input>
+                            <el-input v-model="ruleForm.remark" style="width:300px"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -506,48 +515,54 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="账户1：" size="small">
-                            <el-input :disabled='editDisabled' v-model="formChange.account1" style="width:150px"></el-input>
+                            <el-input  v-model.trim="formChange.account1" style="width:150px"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row type="flex">
                     <el-col :span="8">
                         <el-form-item label="账户名1：" size="small">
-                            <el-input :disabled='editDisabled' v-model="formChange.accountName1" style="width:150px"></el-input>
+                            <el-input  v-model.trim="formChange.accountName1" style="width:150px"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="开户行1：" size="small">
-                            <el-input :disabled='editDisabled' v-model="formChange.openingBank1" style="width:150px"></el-input>
+                            <el-input  v-model.trim="formChange.openingBank1" style="width:150px"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="账号1：" size="small">
-                            <el-input :disabled='editDisabled' v-model="formChange.accountNumber1" style="width:150px"></el-input>
+                        <el-form-item label="开户行行号1：" size="small">
+                            <el-input v-model.trim="formChange.bankCode1" style="width:150px"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row type="flex">
+                     <el-col :span="8">
+                        <el-form-item label="账号1：" size="small">
+                            <el-input  v-model.trim="formChange.accountNumber1" style="width:150px"></el-input>
+                        </el-form-item>
+                    </el-col>
                     <el-col :span="8">
                         <el-form-item label="账户2：" size="small">
-                            <el-input :disabled='editDisabled' v-model="formChange.account2" style="width:150px"></el-input>
+                            <!-- :disabled='editDisabled' -->
+                            <el-input  v-model.trim="formChange.account2"       style="width:150px"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="账户名2：" size="small">
-                            <el-input :disabled='editDisabled' v-model="formChange.accountName2" style="width:150px"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="开户行2：" size="small">
-                            <el-input :disabled='editDisabled' v-model="formChange.openingBank2" style="width:150px"></el-input>
+                            <el-input  v-model.trim="formChange.accountName2"    style="width:150px"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row type="flex">
+                     <el-col :span="8">
+                        <el-form-item label="开户行2：" size="small">
+                            <el-input  v-model.trim="formChange.openingBank2"     style="width:150px"></el-input>
+                        </el-form-item>
+                    </el-col>
                     <el-col :span="8">
                         <el-form-item label="账号2：" size="small">
-                            <el-input :disabled='editDisabled' v-model="formChange.accountNumber2" style="width:150px"></el-input>
+                            <el-input  v-model.trim="formChange.accountNumber2"   style="width:150px"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -558,16 +573,16 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="加工厂：" size="small">
-                            <el-input :disabled='editDisabled' v-model="formChange.factory" style="width:150px"></el-input>
-                        </el-form-item>
-                    </el-col>
                 </el-row>
                 <el-row type="flex">
-                    <el-col :span="24">
+                     <el-col :span="12">
+                        <el-form-item label="加工厂：" size="small">
+                            <el-input :disabled='editDisabled' v-model="formChange.factory" style="width:300px"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
                         <el-form-item label="备注：" size="small">
-                            <el-input :disabled='editDisabled' v-model="formChange.remark" style="width:775px"></el-input>
+                            <el-input :disabled='editDisabled' v-model="formChange.remark" style="width:300px"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -616,11 +631,39 @@
         </Row>
         <div slot="footer"></div>
     </Modal>
+    <!--流程配配置 -->
+      <Modal v-model="progressControl" :styles="mystyle" title="供应商功能启用配置" @on-cancel='progressCancel' :width="650" class-name="customize-modal-center">
+        <Row class="margin-bottom-10 background-color-white exhibition">
+            <el-form ref="formChange" :model="formData" :inline="true" label-width="120px" class="demo-form-inline demo-ruleForm" :label-position="left">
+                    <Col>
+                         <el-form-item label="供应商名称 : " size="small"> {{formData.name}}</el-form-item> <el-form-item label="供应商属性：" size="small">{{formData.options}}</el-form-item>
+                    </Col>
+                    <el-divider >流程</el-divider>
+                    <Col>
+                         <el-form-item label="面料货期流程 : "  size="small"><el-checkbox  v-model="check1" @change="getStatus" :false-label="false" :true-label="true" ></el-checkbox></el-form-item>
+                         <el-form-item label="合约货期流程 : " size="small"><el-checkbox   v-model="check2" @change="getStatus" :false-label="false"  :true-label="true" ></el-checkbox></el-form-item>
+                         <el-form-item label="开票建议 : " size="small"> <el-checkbox      v-model="check3" @change="getStatus" :false-label="false"  :true-label="true" ></el-checkbox></el-form-item>
+                         <el-form-item label="对账单确认 : " size="small"> <el-checkbox    v-model="check4" @change="getStatus" :false-label="false"  :true-label="true" ></el-checkbox></el-form-item>
+                    </Col>
+                
+            </el-form>
+            <Col span="24">
+            <div style="text-align:center">
+                    <Button type="primary" @click="progressConfirm">确认</Button>
+                    <Button type="default" @click="progressCancel">取消</Button>
+            </div>
+            </Col>
+
+        </Row>
+        <div slot="footer"></div>
+    </Modal>
 </div>
 </template>
 
 <script>
+ import {debounce} from 'mixins/debounce'
 export default {
+    mixins:[debounce],
     data() {
         return {
             leaveList: [],
@@ -692,6 +735,7 @@ export default {
                 cost: '', //试制费占比
                 discount: '',
                 dataSource: '', //数据来源
+                bankCode1:'', //开户行行号1
             },
             ruleForm: {
                 checked: true, //启用
@@ -733,6 +777,7 @@ export default {
                 cost: '', //试制费占比
                 discount: '',
                 dataSource: '', //数据来源
+                bankCode1:'',//来源
             },
             rules: {
                 omsID: [{
@@ -880,6 +925,17 @@ export default {
                 value: 1,
                 name: '入库'
             }],
+            progressControl:false,
+            formData:{
+                    name:'',
+                    options:'',
+            },
+            check1:false,
+            check2:false,
+            check3:false,
+            check4:false,
+            selectIDS:[],
+            subArr:[],
         }
     },
     mounted() {
@@ -893,6 +949,7 @@ export default {
         this.getProvinceSelector() //省份
         // this.getCitySelector()//城市
         this.getButtonJurisdiction() //按钮权限
+        this.getStatus()
     },
     methods: {
         //同步
@@ -1079,6 +1136,7 @@ export default {
                 }
             })
         },
+
         //新增
         addSave() {
             console.log(this.ruleForm.mobilePhone)
@@ -1125,6 +1183,7 @@ export default {
                     data.trialProductionFeeProportion = this.ruleForm.cost //试制费占比
                     data.chargeDiscount = this.ruleForm.discount //扣款折扣%
                     data.dataSource = '2' //数据来源
+                    data.bankCode1=this.ruleForm.bankCode1 
                     this.request('supplier_add', data, true).then(res => {
                         if (res.code == '1') {
                             this.$message.success(res.msg)
@@ -1171,8 +1230,12 @@ export default {
                             //     discount: '',
                             //     dataSource: '', //数据来源
                             // }
+                            for(let i in this.ruleForm){
+                                this.ruleForm[i]=''
+                            }
                             this.$refs['ruleForm'].resetFields();
                             this.cityList = []
+                            
                         } else {
                             this.$message.error(res.msg)
                             // this.dialogVisible = false
@@ -1191,7 +1254,160 @@ export default {
             this.$refs['ruleForm'].resetFields();
 
         },
-
+        progressConfirm(){
+               let data={}
+                   data.supplierId=this.formData.id
+                   data.infos=this.subArr
+               this.request('masterData_supplier_addFunctions',data,false).then(res=>{
+                    if(res.code==1){
+                        this.progressControl=false
+                        this.selectIDS=[];
+                        this.subArr=[]
+                        this.$message.success(res.msg)
+                        this.getData()
+                    }else{
+                        this.$message.error(res.msg)
+                    }
+               })       
+        },
+        progressCancel(){
+                this.progressControl=false;
+                this.check1=false;
+                this.check2=false
+                this.check3=false
+                this.check4=false
+        },
+        
+        getStatus(){
+                 if(this.check1){
+                    this.subArr.push({
+                          supplierId:this.formData.id,
+                          supplierCode:this.formData.code,
+                          supplierName:this.formData.name,
+                          supplierFunctionName:'面料货期流程',
+                          supplierType:this.formData.options,
+                          supplierShortName:this.formData.shortName,
+                          enable:1,
+                    })
+                   }else{
+                       for(let i=0,len=this.subArr.length;i<len;i++){
+                           if(this.subArr[i].supplierFunctionName=='面料货期流程'){
+                                this.subArr.splice(i,1);
+                           }
+                       }
+                   }
+                  if(this.check2){
+                    this.subArr.push({
+                          supplierId:this.formData.id,
+                          supplierCode:this.formData.code,
+                          supplierName:this.formData.name,
+                          supplierFunctionName:'合约货期流程',
+                          supplierType:this.formData.options,
+                          supplierShortName:this.formData.shortName,
+                          enable:1,
+                    })
+                   }else{
+                       for(let i=0,len=this.subArr.length;i<len;i++){
+                           if(this.subArr[i].supplierFunctionName=='合约货期流程'){
+                                this.subArr.splice(i,1);
+                           }
+                       }
+                   }
+                  if(this.check3){
+                    this.subArr.push({
+                          supplierId:this.formData.id,
+                          supplierCode:this.formData.code,
+                          supplierName:this.formData.name,
+                          supplierFunctionName:'开票建议',
+                          supplierType:this.formData.options,
+                          supplierShortName:this.formData.shortName,
+                          enable:1,
+                    })
+                   }else{
+                       for(let i=0,len=this.subArr.length;i<len;i++){
+                           if(this.subArr[i].supplierFunctionName=='开票建议'){
+                                this.subArr.splice(i,1);
+                           }
+                       }
+                   }
+                  if(this.check4){
+                    this.subArr.push({
+                          supplierId:this.formData.id,
+                          supplierCode:this.formData.code,
+                          supplierName:this.formData.name,
+                          supplierFunctionName:'对账单确认',
+                          supplierType:this.formData.options,
+                          supplierShortName:this.formData.shortName,
+                          enable:1,
+                    })
+                   }else{
+                       for(let i=0,len=this.subArr.length;i<len;i++){
+                           if(this.subArr[i].supplierFunctionName=='对账单确认'){
+                                this.subArr.splice(i,1);
+                           }
+                       }
+                   }
+                    for(let i = 0, len=this.subArr.length;i<len; i++){
+                        for(let j = i + 1; j < len; j++){
+                        if(this.subArr[i].supplierFunctionName ==this.subArr[j].supplierFunctionName){
+                                this.subArr.splice(j,1);
+                                  len--;
+                                  j--;
+                                }
+                             }
+                         }
+                    //  console.log(this.subArr,'000000000')
+        },
+        getProgressDetail(id){
+                let data={}
+                    data.supplierId=id
+               this.request('masterData_supplier_selectFunction',data,false).then(res=>{
+                   if(res.code==1){
+                           this.selectIDS=res.data
+                        //    setTimeout(()=>{
+                               this.givenStatus(res.data)
+                        //    },100)
+                   }
+               })
+        },
+        givenStatus(arr){
+                   if(arr.length==0){
+                        this.check1=false;
+                        this.check2=false
+                        this.check3=false
+                        this.check4=false 
+                   }else{
+                      for(let i=0,len=arr.length;i<len;i++){
+                        if(this.selectIDS[i].supplierFunctionName.indexOf('面料货期流程')>-1){
+                            this.check1=true
+                        }
+                        if(this.selectIDS[i].supplierFunctionName.indexOf('合约货期流程')>-1){
+                            this.check2=true
+                        }
+                        if(this.selectIDS[i].supplierFunctionName.indexOf('开票建议')>-1){
+                            this.check3=true
+                        }
+                        if(this.selectIDS[i].supplierFunctionName.indexOf('对账单')>-1){
+                            this.check4=true
+                        }
+                     }
+                   }
+                   
+        },
+        progressShow(){
+               let obj = this.rowObj
+               console.log(obj, '456789')
+            if (this.rowLenght == 0) {
+                this.$message.error('请先选择供应商功能启用配置的数据！')
+            } else if (this.rowLenght > 1) {
+                this.$message.error('一次只能选择一条数据！')
+            } else {
+                this.progressControl=true
+                this.formData=obj;
+                this.getProgressDetail(obj.id)
+                
+            }
+        },
         //编辑
         clickTable() {
             // console.log(this.rowObj, '/45678')
@@ -1244,6 +1460,7 @@ export default {
                 this.formChange.omsID = obj.codeOfOms //oms供应商id
                 this.formChange.cost = obj.trialProductionFeeProportion //试制费占比
                 this.formChange.discount = obj.chargeDiscount //扣款折扣%
+                this.formChange.bankCode1=obj.bankCode1
                 obj.dataSource == '1' ? this.formChange.dataSources = '同步' : this.formChange.dataSources = '手动创建' //数据来源
                 if (obj.dataSource !== '1') {
                     this.editDisabled = false
@@ -1304,6 +1521,7 @@ export default {
                 data.codeOfOms = this.formChange.omsID //oms供应商id
                 data.trialProductionFeeProportion = this.formChange.cost //试制费占比
                 data.chargeDiscount = this.formChange.discount //扣款折扣%
+                data.bankCode1=this.formChange.bankCode1//开户行行号1
                 // data.dataSource = this.formChange.dataSources  //数据来源
                 this.request('supplier_update', data, true).then(res => {
                     if (res.code == 1) {
@@ -1320,7 +1538,48 @@ export default {
         //编辑取消
         changeCancel() {
             this.changeVisible = false
-            this.formChange = {}
+            this.formChange = {
+                checked: false, //启用
+                years: '', //开发年份
+                type: '', //供应商类型
+                attribute: '', //属性
+                code: '', //供应商编号
+                abbreviation: '', //供应商简称
+                pinyin: "", //拼音代号
+                fullName: "", //供应商全称
+                grade: '', //等级
+                external: '', //外部开发
+                mainSupplier: "", //主供产品
+                person: '', //联系人
+                post: '', //职务
+                mobilePhone: '', //手机号
+                telephone: '', //电话
+                fax: '', //传真
+                email: '', //邮件
+                province: '', //省份
+                city: '', //城市
+                address: "", //地址
+                method: '', //结算方式
+                invoice: false, //开票
+                account1: '', //账户1
+                accountName1: "", //账户名1
+                openingBank1: '', //开户行1
+                accountNumber1: '', //账号1
+                account2: '', //账户2
+                accountName2: '', //账户名2
+                openingBank2: '', //开户行2
+                accountNumber2: '', //账号2
+                manager: '', //生产理单员
+                factory: '', //加工厂
+                remark: '', //备注
+                replacedOne: '', //需要替换的供应商
+                replacedTwo: '', //替换后的供应商
+                omsID: '', //oms供应商id
+                cost: '', //试制费占比
+                discount: '',
+                dataSource: '', //数据来源
+                bankCode1:'', //开户行行号1
+            }
         },
         handleSizeChange(val) {
             this.pagesize = val
@@ -1362,7 +1621,13 @@ export default {
     padding: 20px 20px 10px 20px;
     margin-bottom: 10px;
 }
-
+    .middle{
+      width: 99%;
+      margin: 0 auto;
+      background: #fff;
+      padding: 0px 10px 10px 10px;
+      margin-top: 0px;
+    }
 .getmore {
     padding-top: 6px;
     width: 100%;

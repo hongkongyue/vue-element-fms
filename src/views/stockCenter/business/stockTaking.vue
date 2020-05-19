@@ -187,12 +187,14 @@ export default {
                         {
                             field: 'merchantChildOrderNo',
                             caption: '总成本',
-                            size: '130px'
+                            size: '130px',
+                            render:'money',
                         },
                           {
                             field: 'merchantChildOrderNo',
                             caption: '总金额',
-                            size: '130px'
+                            size: '130px',
+                            render:'money',
                         },
                         {
                             field: 'orderTime',

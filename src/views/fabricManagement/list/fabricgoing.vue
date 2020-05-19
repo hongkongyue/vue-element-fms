@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- 数据列表 -->
-        <Row class="background-color-white exhibition" style="min-height:630px;padding-left:0px">
+        <Row class="background-color-white exhibition" style="padding-left:0px">
             <!--  -->
             <!-- <Table  ref="currentRowTable"  @on-row-dblclick="showChakan"	@on-row-click="selectRow" @on-select-cancel="choiceId" @on-select-all-cancel="choiceId"  @on-select="choiceId" @on-select-all="choiceId"	:columns="columns" size="small" highlight-row :data="list"></Table> -->
             

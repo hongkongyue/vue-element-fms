@@ -82,6 +82,13 @@
                 </el-date-picker>
             </el-form-item>
 
+            <el-form-item v-if="show==true" label="是否已生成扣款单：" size="small" label-width="140px">
+                <el-select v-model="formSearch.deduction" filterable placeholder="请选择" style="width:120px">
+                   <el-option label="是" value="1"></el-option>
+                    <el-option label="否" value="0"></el-option>
+                </el-select>
+            </el-form-item>
+
             <el-form-item size="small">
                 <el-button v-if="show == false" @click="changeShow" style="float:right" size="small"><i class="el-icon-bottom"></i></el-button>
             </el-form-item>
@@ -91,7 +98,7 @@
         </el-form>
     </header>
     <section class="middle">
-        <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[1000, 5000, 10000, 20000]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[1000, 5000, 10000, 20000]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
 
         <div id="main" style="width: 100%; height: 400px;"></div>
@@ -358,13 +365,13 @@
                     <el-table-column prop="afterClippingOrderQty" label="裁剪后订单量" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column prop="deductionAmount" label="扣款金额" min-width="120" align="center" show-overflow-tooltip>
-                         <template slot-scope="scope">{{scope.row.deductionAmount|moneyFilters}}</template>
+                         <template slot-scope="scope"><div style="text-align:right">{{scope.row.deductionAmount|moneyFilters}}</div></template>
                     </el-table-column>
                     <el-table-column prop="orderQty" label="订单数量" min-width="120" align="center" show-overflow-tooltip>
                         
                     </el-table-column>
                     <el-table-column prop="adjustAmount" label="调整金额" min-width="120" align="center" show-overflow-tooltip>
-                         <template slot-scope="scope">{{scope.row.adjustAmount|moneyFilters}}</template>
+                         <template slot-scope="scope"><div style="text-align:right">{{scope.row.adjustAmount|moneyFilters}}</div></template>
                     </el-table-column>
                     <el-table-column prop="discountStr" label="折扣" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
@@ -1141,6 +1148,7 @@ export default {
                             field: 'deductionAmount',
                             caption: '最终扣款',
                             size: '100px',
+                            render:'money',
                             sortable: true
                         },
                         {
@@ -1317,6 +1325,7 @@ export default {
             data.targetPurchaseOrderNo = this.formSearch.settlementsNo //结算制单号
             data.status = this.formSearch.status //单据状态
             data.companyId = this.formSearch.name //公司ID
+            this.formSearch.deduction ? data.deduction=Number(this.formSearch.deduction):delete data.deduction
             this.formSearch.documentDate ? data.startDate = this.formSearch.documentDate[0] : delete data.startDate //开始时间
             this.formSearch.documentDate ? data.endDate = this.formSearch.documentDate[1] : delete data.endDate //结束时间
             this.request('deductionAdvice_page', data, true).then(res => {
@@ -1450,6 +1459,7 @@ export default {
                         data.targetPurchaseOrderNo = this.formSearch.settlementsNo //结算制单号
                         data.status = this.formSearch.status //单据状态
                         data.companyId = this.formSearch.name //公司ID
+                        this.formSearch.deduction ? data.deduction=Number(this.formSearch.deduction):delete data.deduction // 是否生成扣款单
                         this.formSearch.documentDate ? data.startDate = this.formSearch.documentDate[0] : delete data.startDate //开始时间
                         this.formSearch.documentDate ? data.endDate = this.formSearch.documentDate[1] : delete data.endDate //结束时间
                         w2ui.deductionAdvice.getSelection().length>0?data.ids= w2ui.deductionAdvice.getSelection():delete data.ids
@@ -1480,6 +1490,7 @@ export default {
                         data.targetPurchaseOrderNo = this.formSearch.settlementsNo //结算制单号
                         data.status = this.formSearch.status //单据状态
                         data.companyId = this.formSearch.name //公司ID
+                        this.formSearch.deduction ? data.deduction=Number(this.formSearch.deduction):delete data.deduction // 是否生成扣款单
                         this.formSearch.documentDate ? data.startDate = this.formSearch.documentDate[0] : delete data.startDate //开始时间
                         this.formSearch.documentDate ? data.endDate = this.formSearch.documentDate[1] : delete data.endDate //结束时间
                         w2ui.deductionAdvice.getSelection().length>0?data.ids= w2ui.deductionAdvice.getSelection():delete data.ids

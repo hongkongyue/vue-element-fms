@@ -29,18 +29,24 @@
                 </el-table-column>
                 <el-table-column prop="styleImg" label="样品图1" min-width="80" align="center" show-overflow-tooltip>
                     <template slot-scope="scope">
-                        <div @click="imgClick(scope.row.styleImg)">
-                            <el-image style="width: 40px; height: 40px" :src="scope.row.styleImg" :preview-src-list="[scope.row.styleImg]">
-                            </el-image>
-                        </div>
+                        <div v-if="scope.row.styleImg" @click="imgClick(scope.row.styleImg)">
+                        <el-image style="width: 40px; height: 40px" :src="scope.row.styleImg" :preview-src-list="[scope.row.styleImg]">
+                        </el-image>
+                    </div>
+                    <div v-if="!scope.row.styleImg" >
+                        <el-image style="width: 40px; height: 40px" :src = noneUrl></el-image>
+                    </div>
                     </template>
                 </el-table-column>
                 <el-table-column prop="styleImg2" label="样图2" min-width="80" align="center" show-overflow-tooltip>
                     <template slot-scope="scope">
-                        <div @click="imgClick(scope.row.styleImg2)">
-                            <el-image style="width: 40px; height: 40px" :src="scope.row.styleImg2" :preview-src-list="[scope.row.styleImg2]">
-                            </el-image>
-                        </div>
+                        <div v-if="scope.row.styleImg2" @click="imgClick(scope.row.styleImg2)">
+                        <el-image style="width: 40px; height: 40px" :src="scope.row.styleImg2" :preview-src-list="[scope.row.styleImg2]">
+                        </el-image>
+                    </div>
+                    <div v-if="!scope.row.styleImg2" >
+                       <el-image style="width: 40px; height: 40px" :src = noneUrl></el-image>
+                    </div>
                     </template>
                 </el-table-column>
                 <el-table-column prop="realMaterial" label="是否有实物" min-width="90" align="center" show-overflow-tooltip>
@@ -142,6 +148,7 @@ export default {
     name: 'personConduct',
     data() {
         return {
+            noneUrl:'https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1562574299&di=846b4c904bd54d3c3821fa5938888c69&src=http://hbimg.b0.upaiyun.com/bdaca9a07e1a8947c00c2f826ebf848750927aa24963-cATwbg_fw658',
             testList:[{name:'合格',id:'1'},{name:'不合格',id:'0'}],
             basicUserName: '',
             addformdata: {},
@@ -169,7 +176,7 @@ export default {
         getData() {
             let data = {}
             data.taskNo = this.$route.query.taskDetailId
-            this.request('queryPricingDetail', data, false).then((res) => {
+            this.request('specialPricingDetail', data, false).then((res) => {
                 if (res.code == 1) {
                     this.tableData = [res.data]
                 }
@@ -187,6 +194,7 @@ export default {
         },
         //确认
         submit() { //
+        let getId = this.$route.query.taskDetailId
         console.log(this.$route.query.obj)
             const {tag}=this.$route.query
             let data = Util.deepClone(this.$route.query.obj);
@@ -194,11 +202,14 @@ export default {
             this.request('pricing_conform', data, true).then((res) => {
                 if (res.code == 1) {
                     this.$message.success(res.msg);
-                    this.$root.eventHub.$emit('closePageFromOtherPage', 'personConduct'); //关闭新增页面
+                    // this.$root.eventHub.$emit('closePageFromOtherPage', 'personConduct'); //关闭新增页面
+                    // setTimeout(()=>{ 
+                        this.$root.eventHub.$emit('closePageFromOtherPage', 'personConduct')
+                        //   },200); //关闭新增页面
                                     this.$router.push({
                                         name: 'personComplete',
                                         query: {
-                                            taskDetailId: this.$route.query.taskDetailId,
+                                            taskDetailId: getId,
                                         }
                                     });
                 }else{
@@ -213,5 +224,13 @@ export default {
 <style>
 .el-icon-circle-close:before {
  color:white
+}
+</style>
+<style>
+ .el-image-viewer__close{
+        color:#fff!important;
+    }
+.el-image-viewer__prev,.el-image-viewer__next{
+     display: none;
 }
 </style>

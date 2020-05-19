@@ -73,10 +73,8 @@
         <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[1000, 5000, 10000, 20000]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
 
-        <div id="main" style="width: 100%; height: 400px;"></div>
-    </section>
+        <div id="main" style="width: 100%; height: 400px;margin-bottom:20px"></div>
 
-    <section class="footer" style="margin-bottom:0px">
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
             <el-tab-pane label="订单明细" name="first">
                 <el-table :data="goodsListOne" style="width: 100%" border tooltip-effect="dark" max-height="250" size="mini">
@@ -104,32 +102,65 @@
                     <el-table-column prop="sectionNo" label="货品编码" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column prop="salePrice" label="标价" min-width="120" align="center" show-overflow-tooltip>
+                        <template slot-scope="scope">
+                                 <div style="text-align:right">{{scope.row.salePrice|moneyFilters}}</div>
+                                 </template>
                     </el-table-column>
                     <el-table-column prop="detailDiscount" label="优惠" min-width="120" align="center" show-overflow-tooltip>
+                        <template slot-scope="scope">
+                                 <div style="text-align:right">{{scope.row.detailDiscount|moneyFilters}}</div>
+                                 </template>
                     </el-table-column>
                     <el-table-column prop="discountTaxEx" label="优惠（不含税）" min-width="120" align="center" show-overflow-tooltip>
+                        <template slot-scope="scope">
+                                 <div style="text-align:right">{{scope.row.discountTaxEx|moneyFilters}}</div>
+                                 </template>
                     </el-table-column>
                     <el-table-column prop="dealAmount" label="成交价" min-width="120" align="center" show-overflow-tooltip>
+                        <template slot-scope="scope">
+                                 <div style="text-align:right">{{scope.row.dealAmount|moneyFilters}}</div>
+                                 </template>
                     </el-table-column>
                     <el-table-column prop="actualNum" label="实发数量" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column prop="canPaySchedule" label="可付进度" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column prop="sharePost" label="分摊邮费" min-width="120" align="center" show-overflow-tooltip>
+                        <template slot-scope="scope">
+                                 <div style="text-align:right">{{scope.row.sharePost|moneyFilters}}</div>
+                                 </template>
                     </el-table-column>
                     <el-table-column prop="adjustAmount" label="调整金额" min-width="120" align="center" show-overflow-tooltip>
+                        <template slot-scope="scope">
+                                 <div style="text-align:right">{{scope.row.adjustAmount|moneyFilters}}</div>
+                                 </template>
                     </el-table-column>
                     <el-table-column prop="commission" label="唯品会佣金" min-width="120" align="center" show-overflow-tooltip>
+                        <template slot-scope="scope">
+                                 <div style="text-align:right">{{scope.row.commission|moneyFilters}}</div>
+                                 </template>
                     </el-table-column>
                     <el-table-column prop="paid" label="已付" min-width="120" align="center" show-overflow-tooltip>
+                        <template slot-scope="scope">
+                                 <div style="text-align:right">{{scope.row.paid|moneyFilters}}</div>
+                                 </template>
                     </el-table-column>
                     <el-table-column prop="paidTaxIn" label="已付（含税）" min-width="120" align="center" show-overflow-tooltip>
+                        <template slot-scope="scope">
+                                 <div style="text-align:right">{{scope.row.paidTaxIn|moneyFilters}}</div>
+                                 </template>
                     </el-table-column>
                     <el-table-column prop="taxRate" label="税率" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column prop="contNotTrialFeeCost" label="不含试制费成本" min-width="120" align="center" show-overflow-tooltip>
+                        <template slot-scope="scope">
+                                 <div style="text-align:right">{{scope.row.contNotTrialFeeCost|moneyFilters}}</div>
+                                 </template>
                     </el-table-column>
                     <el-table-column prop="contTrialFeeCost" label="含试制费成本" min-width="120" align="center" show-overflow-tooltip>
+                        <template slot-scope="scope">
+                                 <div style="text-align:right">{{scope.row.contTrialFeeCost|moneyFilters}}</div>
+                                 </template>
                     </el-table-column>
                     <el-table-column prop="remark" label="备注" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
@@ -152,10 +183,15 @@
             </el-tab-pane>
         </el-tabs>
     </section>
+
+    <!-- <section class="footer" style="margin-bottom:0px">
+        
+    </section> -->
 </div>
 </template>
 
 <script>
+import filters from '../../../filter/'
 export default {
 
     data() {
@@ -377,12 +413,14 @@ export default {
                             field: 'orderSendAmount',
                             caption: '发货金额',
                             size: '100px',
+                            render:'money',
                             sortable: true
                         },
                         {
                             field: 'billAmount',
                             caption: '金额',
                             size: '100px',
+                            render:'money',
                             sortable: true
                         },
                         {
@@ -424,12 +462,14 @@ export default {
                         {
                             field: 'contNotTrialFeeCost',
                             caption: '不含试制费成本',
+                            render:'money',
                             size: '100px',
                             sortable: true
                         },
                         {
                             field: 'contNotTrialFeeCostTotal',
                             caption: '不含试制费成本总额',
+                            render:'money',
                             size: '100px',
                             sortable: true
                         },
@@ -437,12 +477,14 @@ export default {
                             field: 'contTrialFeeCost',
                             caption: '含试制费成本',
                             size: '100px',
+                            render:'money',
                             sortable: true
                         },
                         {
                             field: 'contTrialFeeCostTotal',
                             caption: '含试制费成本总额',
                             size: '100px',
+                            render:'money',
                             sortable: true
                         },
                         {

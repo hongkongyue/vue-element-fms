@@ -37,10 +37,10 @@
             
         </el-form>
     </header>
-    <section class="middle">
+    <section class="middle" :style="{minHeight:showBink?'680px':'480px'}" style="padding-top:10px">
         <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[10, 20, 30, 40]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
-        <el-table ref="multipleTable" @row-click="showLog" :data="tableData" style="width: 100%" border tooltip-effect="dark" max-height="250" @selection-change="handleSelectionChange">
+        <el-table ref="multipleTable" @row-click="showLog" :data="tableData" style="width: 100%" border tooltip-effect="dark" :maxHeight="tableHieght" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55">
             </el-table-column>
             <el-table-column type="index" width="55" label="序号" align="center"></el-table-column>
@@ -62,25 +62,25 @@
             </el-table-column>
             <el-table-column prop="remark" label="备注" min-width="120" align="center" show-overflow-tooltip>
             </el-table-column>
+        </el-table>
+                 <section class="footer" style="margin-bottom:0px;margin-top:0px">
+                    <div style="width:100%;font-size:20px;">操作日志</div>
+                </section>
+                <section class="log">
+                    <el-table :data="logList" style="width: 100%" border tooltip-effect="dark" max-height="250">
+                        <el-table-column prop="operator" label="操作员" min-width="120" align="center">
+                        </el-table-column>
+                        <el-table-column prop="operateTime" label="操作时间" align="center" min-width="120">
+                            <template slot-scope="scope">{{scope.row.operateTime}}</template>
+                        </el-table-column>
+                        <el-table-column prop="logContent" label="操作记录" min-width="120" align="center" show-overflow-tooltip>
+                        </el-table-column>
+                    </el-table>
+                    <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div>
+                    <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>
+                </section>
+    </section>
 
-        </el-table>
-    </section>
-    <section class="footer" style="margin-bottom:0px">
-        <div style="width:100%;font-size:20px;">操作日志</div>
-    </section>
-    <section class="middle">
-        <el-table :data="logList" style="width: 100%" border tooltip-effect="dark" max-height="250">
-            <el-table-column prop="operator" label="操作员" min-width="120" align="center">
-            </el-table-column>
-            <el-table-column prop="operateTime" label="操作时间" align="center" min-width="120">
-                <template slot-scope="scope">{{scope.row.operateTime}}</template>
-            </el-table-column>
-            <el-table-column prop="logContent" label="操作记录" min-width="120" align="center" show-overflow-tooltip>
-            </el-table-column>
-        </el-table>
-        <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div>
-        <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>
-    </section>
     <!-- 新增弹框 -->
     <Modal v-model="dialogVisible" @on-cancel="addCancel" :styles="mystyle" title="新增" :width="900" class-name="customize-modal-center">
         <Row class="margin-bottom-10 background-color-white exhibition">
@@ -180,7 +180,10 @@
 </template>
 
 <script>
+import {debounce} from 'mixins/debounce'
+
 export default {
+    mixins:[debounce],
     data() {
         return {
             kcdtList:[{id:0,name:'出库'},{id:1,name:'入库'}],
@@ -405,7 +408,7 @@ export default {
                     data.bizType = this.ruleForm.name.name //单据类型name
                     this.request('businessType_add', data, true).then(res => {
                         if (res.code == '1') {
-                            this.$message.success(res.msg)
+                            this.$message.success('新增成功')
                             this.getData()
                             this.dialogVisible = false
                             this.ruleForm = {}
@@ -455,7 +458,7 @@ export default {
                 data.bizType = this.formChange.name //单据类型name
                 this.request('businessType_update', data, true).then(res => {
                     if (res.code == 1) {
-                        this.$message.success(res.msg)
+                        this.$message.success('编辑成功')
                         this.getData()
                         this.changeVisible = false
                     } else {
@@ -506,7 +509,13 @@ export default {
     padding: 20px 20px 10px 20px;
     margin-bottom: 10px;
 }
-
+.middle{
+      width: 99%;
+      margin: 0 auto;
+      background: #fff;
+      padding: 0px 10px 10px 10px;
+      margin-top: 0px;
+    }
 .getmore {
     padding-top: 6px;
     width: 100%;

@@ -311,92 +311,110 @@ export default {
                         {
                             field: 'ddjbAmount',
                             caption: '多多进宝',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'technicalServiceAmount',
                             caption: '技术服务费',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'transactionIncomeAmount',
                             caption: '交易收入',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'chargebackAmount',
                             caption: '扣款',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'elseAmount',
                             caption: '其他',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'salesDiscountAmount',
                             caption: '销售折扣',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'refundAmount',
                             caption: '退款',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'couponAmount',
                             caption: '优惠券结算',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'saleAmount',
                             caption: '销售金额',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'availableCashAmount',
                             caption: '可用现金账户',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'marginDepositAmount',
                             caption: '营销保证金账户',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'withdrawableAmount',
                             caption: '可提现金额',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'withdrawalAmount',
                             caption: '提现',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'noTrialProductionSumAmount',
                             caption: '不含试制费成本总额',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'trialProductionSumAmount',
                             caption: '含试制费成本总额',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'recognitionIncomeAmount',
                             caption: '确认收入金额',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'noTicketAmount',
                             caption: '无票费用（购买优惠券）',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'ticketAmount',
                             caption: '有票费用',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                     ],
                     onClick: function (event, obj) {
@@ -500,88 +518,105 @@ export default {
                             field: 'refundedPremiumPayment',
                             caption: '保险退保-退保保费支付',
                             size: '100px',
+                            render:'money',
                             resizable: true
                         },
                         {
                             field: 'sendBack',
                             caption: '菜鸟物流单-退回',
                             size: '100px',
+                            render:'money',
                             resizable: true
                         },
                         {
                             field: 'ctPlatformServiceFeeDeduction',
                             caption: '村淘平台服务费扣款',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'returnPoints',
                             caption: '代扣交易退回积分',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'jhsCommission',
                             caption: '代扣款（扣款用途：聚划算佣金）',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'tbkCommission',
                             caption: '代扣款（扣款用途：淘宝客佣金月度返还）',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'tqgFeesForTechnicalServices',
                             caption: '代扣款（扣款用途：淘抢购实时划扣技术服务费）',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'hbStaging',
                             caption: '花呗分期交易号',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'hbTransactionNo',
                             caption: '花呗交易号',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'tbCashRedCashWithdrawal',
                             caption: '企业红包-淘宝现金红包提现',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'tbkPromotionCommission',
                             caption: '淘宝客推广佣金月度返还',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'tbkCommissionRefund',
                             caption: '淘宝客佣金退款',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'depositOfUnfreeze',
                             caption: '天猫保证金-解冻',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'merchantMarginClaim',
                             caption: '天猫保证金-支付-商家保证金理赔',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'commissionCategory',
                             caption: '天猫佣金（类目）',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'sellCount',
                             caption: '销售',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'totalCount',
                             caption: '总计',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                     ],
                     onClick: function (event, obj) {
@@ -635,173 +670,207 @@ export default {
                             field: 'priceGIPremiumCollection',
                             caption: '保险承保-价格保障保险-保费收取',
                             size: '100px',
+                            render:'money',
                             resizable: true
                         },
                         {
                             field: 'jhsFreightInsurancePremium',
                             caption: '保险承保-聚划算运费险保费收取',
                             size: '100px',
+                            render:'money',
                             resizable: true
                         },
                         {
                             field: 'mjbFreightInsurancePremium',
                             caption: '保险承保-卖家版运费险保费收取',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'fidelityInsurancePremiumCollection',
                             caption: '保险承保-天猫材质保真险保费收',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'marginRefund',
                             caption: '保证金退款',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'ctPlatformServiceFeeDeduction',
                             caption: '村淘平台服务费扣款',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'rebatePoints',
                             caption: '代扣返点积分',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'firstSingleNewPlan',
                             caption: '代扣款（扣款用途：品牌新享-首单拉新计划）',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'everydaySale',
                             caption: '代扣款（扣款用途：天天特卖）',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'loveDecibelHearingAidForChildren',
                             caption: '公益宝贝捐赠=爱的分贝听障儿童救助=盛放旗舰店',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'earthSproutAction',
                             caption: '公益宝贝捐赠=大地新芽行动=盛放旗舰店',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'childAntiSexualInvasion',
                             caption: '公益宝贝捐赠=儿童防性侵=盛放旗舰店',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'refuelingMulanPoorWomenSSafeguardProject',
                             caption: '公益宝贝捐赠=加油木兰贫困女性保障项目=盛放旗舰店',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'protectingTheNationalHeroSOldAge',
                             caption: '公益宝贝捐赠=守护民族英雄的晚年=盛放旗舰店',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'hbMarginRefund',
                             caption: '花呗-保证金退款',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'hbfqAfterSaleRefund',
                             caption: '花呗分期-售后退款',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'hbAfterSaleRefund',
                             caption: '花呗-售后退款',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'hbPaymentServiceFee',
                             caption: '花呗支付服务费',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'collectingTreasure',
                             caption: '集分宝',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'jhsInsuranceDepositPayment',
                             caption: '聚划算保险保证金-支付',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'polyCostEffectiveServiceFee',
                             caption: '聚划算活动保证金-支付-聚划算参团服务费',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'hqgDeductionOfServiceFee',
                             caption: '聚划算活动保证金-支付-淘抢购参团服务费扣款',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'smartFlashDeduction',
                             caption: '聚划算活动保证金-支付-智慧快闪扣款',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'polyCostingCommission',
                             caption: '聚划算佣金',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'afterSaleRefund',
                             caption: '售后退款',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'tbKCommissionDeduction',
                             caption: '淘宝客佣金代扣款',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'tqgRealTimeDeductionOfTechnicalServiceFees',
                             caption: '淘抢购实时划扣技术服务费',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'merchantMarginFreeze',
                             caption: '天猫保证金-商家保证金冻结',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'merchantMarginClaim',
                             caption: '天猫保证金-支付-商家保证金理赔',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'commissionCategory',
                             caption: '天猫佣金（类目）',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'creditCardPaymentServiceFee',
                             caption: '信用卡支付服务费',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'amount',
                             caption: '合计',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'withdraw',
                             caption: '提现',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'totalCount',
                             caption: '总计',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                     ],
                     onClick: function (event, obj) {
@@ -872,92 +941,110 @@ export default {
                         {
                             field: 'merchantReceivableAmount',
                             caption: '商家应收金额',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'merchantPayableAmount',
                             caption: '应结算商家金额',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'platformChargeForUseAmount',
                             caption: '平台使用费金额',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'technicalServiceAmount',
                             caption: '技术服务费金额',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'goodAmount',
                             caption: '货品金额',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'refundAmount',
                             caption: '退款金额',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'transactionIncomeAmount',
                             caption: '收入',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'platformDiscountAmount',
                             caption: '平台承担折扣',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'returnFreightSubsidyAmount',
                             caption: '退货运费补贴',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'merchantDiscountAmount',
                             caption: '商家优惠金额',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'costAmount',
                             caption: '费用金额',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'freightChargeAmount',
                             caption: '运费',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'recognitionIncomeAmount',
                             caption: '确认收入金额',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'billReceivableAmount',
                             caption: '账单应收金额',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'noTicketAmount',
                             caption: '无票费用',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                          {
                             field: 'ticketAmount',
                             caption: '有票费用',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'noTrialProductionSumAmount',
                             caption: '不含试制费成本总额',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'trialProductionSumAmount',
                             caption: '含试制费成本总额',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                     ],
                     onClick: function (event, obj) {
@@ -1085,42 +1172,50 @@ export default {
                         {
                             field: 'salesInfoAmount',
                             caption: '销售明细',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'clientRefundInfoAmount',
                             caption: '客退明细',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'activityDiscountInfoAmount',
                             caption: '活动折扣明细',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'otherInfoAmount',
                             caption: '其他明细',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'distanceInfoAmount',
                             caption: '差异明细',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'adjustAmount',
                             caption: '调整金额',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'penaltyAmount',
                             caption: '罚款',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                         {
                             field: 'settlementAmount',
                             caption: '结算金额',
-                            size: '100px'
+                            size: '100px',
+                            render:'money',
                         },
                     ],
                     onClick: function (event, obj) {
@@ -1206,24 +1301,28 @@ export default {
                             field: 'merchantReceivableAmount',
                             caption: '商家应收金额',
                             size: '150px',
+                            render:'money',
                             resizable: true
                         },
                         {
                             field: 'preferentialInfoAmount',
                             caption: '唯品会优惠明细',
                             size: '150px',
+                            render:'money',
                             resizable: true
                         },
                         {
                             field: 'chargesAmount',
                             caption: '唯品会佣金',
                             size: '150px',
+                            render:'money',
                             resizable: true
                         },
                         {
                             field: 'settlementAmount',
                             caption: '结算金额',
                             size: '150px',
+                            render:'money',
                             resizable: true
                         },
                     ],
@@ -1322,22 +1421,26 @@ export default {
                         {
                             field: 'merchantSalesAmount',
                             caption: '商家销售额',
-                            size: '150px'
+                            size: '150px',
+                            render:'money',
                         },
                         {
                             field: 'preferentialAmount',
                             caption: '商家优惠',
-                            size: '150px'
+                            size: '150px',
+                            render:'money',
                         },
                         {
                             field: 'chargesAmount',
                             caption: '唯品会佣金',
-                            size: '150px'
+                            size: '150px',
+                            render:'money',
                         },
                         {
                             field: 'settlementAmount',
                             caption: '结算金额',
-                            size: '150px'
+                            size: '150px',
+                            render:'money',
                         },
                     ],
                     onClick: function (event, obj) {

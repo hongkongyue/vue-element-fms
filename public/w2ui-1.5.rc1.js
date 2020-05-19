@@ -1668,8 +1668,9 @@ w2utils.formatters = {
 
     'money': function (value, params) {
         if (value == null || value === '') return '';
-        var data = w2utils.formatNumber(Number(value), w2utils.settings.currencyPrecision || 2);
-        return (w2utils.settings.currencyPrefix || '') + data + (w2utils.settings.currencySuffix || '');
+        // var data = w2utils.formatNumber(Number(value), w2utils.settings.currencyPrecision || 2);
+        var data = w2utils.formatNumber(value, w2utils.settings.currencyPrecision || 2);
+        return  data + (w2utils.settings.currencySuffix || '');
     },
 
     'currency': function (value, params) {
@@ -3500,7 +3501,6 @@ w2utils.event = {
             this.refresh();
             return removed;
         },
-
         getColumn: function (field, returnIndex) {
             // no arguments - return fields of all columns
             if (arguments.length === 0) {
@@ -4785,7 +4785,7 @@ w2utils.event = {
                                         operator : (search.operator != null ? search.operator : 'between'),
                                         value    : [t[0], t[1]]
                                     };
-                                    searchData.push(tmp);
+                                    if ($.trim(value) != '')searchData.push(tmp);
                                 }
                                 // lists fiels
                                 if (['list', 'enum'].indexOf(search.type) != -1) {
@@ -4805,7 +4805,7 @@ w2utils.event = {
                                             operator : (search.operator != null ? search.operator : 'in'),
                                             value    : new_values
                                         };
-                                        searchData.push(tmp);
+                                        if ($.trim(value) != '')searchData.push(tmp);
                                     }
                                 }
                             }
@@ -4818,7 +4818,7 @@ w2utils.event = {
                                     operator : this.textSearch,
                                     value    : value
                                 };
-                                searchData.push(tmp);
+                                if ($.trim(value) != '')searchData.push(tmp);
                             }
                         }
                     } else {
@@ -4858,7 +4858,7 @@ w2utils.event = {
                                 operator : op,
                                 value    : val
                             };
-                            searchData.push(tmp);
+                            if ($.trim(value) != '')searchData.push(tmp);
                         }
                     }
                 }
@@ -4988,7 +4988,7 @@ w2utils.event = {
                     }
                 } else {
                     this.last.field   = 'all';
-                    this.last.caption = w2utils.lang('搜索');
+                    this.last.caption = w2utils.lang('all');
                 }
             }
             this.last.multi      = false;
@@ -5015,7 +5015,7 @@ w2utils.event = {
                 var search = this.searches[s];
                 if (s == -1) {
                     if (!this.multiSearch || !this.show.searchAll) continue;
-                    search = { field: 'all', caption: w2utils.lang('搜索') };
+                    search = { field: 'all', caption: w2utils.lang('all') };
                 } else {
                     if (this.searches[s].hidden === true || this.searches[s].simple === false) continue;
                 }
@@ -5037,7 +5037,7 @@ w2utils.event = {
         initAllField: function (field, value) {
             var el = $('#grid_'+ this.name +'_search_all');
             if (field == 'all') {
-                var search = { field: 'all', caption: w2utils.lang('搜索') };
+                var search = { field: 'all', caption: w2utils.lang('all') };
                 el.w2field('clear');
                 el.change();
             } else {
@@ -7373,7 +7373,7 @@ w2utils.event = {
                     }
                 } else {
                     this.last.field   = 'all';
-                    this.last.caption = w2utils.lang(' 搜索');
+                    this.last.caption = w2utils.lang('all');
                 }
             }
             // insert elements
@@ -9585,6 +9585,7 @@ w2utils.event = {
                     if (str.length > 0) $(obj.box).find('.w2ui-grid-data > div').w2marker(str);
                 }, 50);
             }
+          
         },
 
         getRecordHTML: function (ind, lineNum, summary) {
@@ -9839,6 +9840,10 @@ w2utils.event = {
                 infoBubble += '<span class="w2ui-info '+ col.info.icon +'" style="'+ (col.info.style || '') + '" '+
                     ' onclick="event.stopPropagation(); w2ui[\''+ this.name + '\'].showBubble('+ ind +', '+ col_ind +')"></span>';
             }
+             $(document).ready(function(){
+                $('div[title="当页小计"]').find('span').eq(0).css({opacity:0}).removeAttr('onclick')
+                $('div[title="合计"]').find('span').eq(0).css({opacity:0}).removeAttr('onclick')
+             })
             // various renderers
             if (col.render != null) {
                 if (typeof col.render == 'function') {
@@ -9963,6 +9968,8 @@ w2utils.event = {
                     html += '<tr><td>' + col.caption + '</td><td>' + ((val === 0 ? '0' : val) || '') + '</td></tr>';
                 }
                 html += '</table>';
+                // $('.w2ui-icon-info:last').hide()
+                // $(".w2ui-icon-info").eq(-2).hide()
             } else if ($.isPlainObject(fields)) {
                 // display some fields
                 html = '<table cellpadding="0" cellspacing="0">';
@@ -9995,11 +10002,15 @@ w2utils.event = {
             $(el).w2tag($.extend({
                 html        : html,
                 left        : -4,
-                position    : 'bottom|top',
+                position    : 'top',
                 className   : 'w2ui-info-bubble',
                 style       : '',
                 hideOnClick : true
             }, info.options || {}));
+            $(document).ready(function(){
+                $('div[title="当页小计"]').find('span').eq(0).css({opacity:0}).removeAttr('onclick')
+                $('div[title="合计"]').find('span').eq(0).css({opacity:0}).removeAttr('onclick')
+             })
         },
 
         // return null or the editable object if the given cell is editable
@@ -13734,6 +13745,7 @@ var w2prompt = function (label, title, callBack) {
             }
             // create or refresh only one item
             var it = this.get(id);
+            console.log(it,'9999')
             if (it == null) return false;
             if (typeof it.onRefresh == 'function') {
                 var edata2 = this.trigger({ phase: 'before', type: 'refresh', target: id, item: it, object: it });

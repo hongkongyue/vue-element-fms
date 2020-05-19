@@ -1,7 +1,7 @@
 <template>
      <div>
           <header class="headerstyle">
-                <el-form :inline="true" :model="formData" class="demo-form-inline ">
+                <el-form :inline="true" :model="formData" class="demo-form-inline">
                   <div>
                     <el-form-item    size="small">
                               <el-button v-if="judgeMenu.indexOf('查询') !== -1"  size="small" type="primary" @click="onSearch">查询</el-button>
@@ -51,7 +51,7 @@
                           
                 </el-form>
           </header>
-          <section class="middle">
+          <section class="middle" :style="{minHeight:showBink?'680px':'480px'}">
           <el-pagination  style="margin-bottom:10px;text-align:right"  
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
@@ -72,7 +72,7 @@
                  class="pointer"
                  border
                  tooltip-effect="dark"
-                 max-height="250"
+                 :maxHeight="tableHieght"
                  highlight-current-row 
                  @row-click="showLog"
                   >
@@ -159,47 +159,48 @@
                   min-width="120"
                   align="center"
                   show-overflow-tooltip>
-                   <template slot-scope="scope">{{ scope.row.dataFrom==1?'外部来源':'内部自增' }}</template>
+                   <template slot-scope="scope">{{scope.row.dataFrom==1?'外部来源':'内部自增' }}</template>
                 </el-table-column>
          </el-table>
+            <section class="footer" style="margin-top:10px">
+              <div style="width:100%;font-size:20px;">操作日志</div>
+            </section>
+            <section class="log">
+                    <el-table
+                    :data="logList"
+                      style="width: 100%"
+                      border
+                      tooltip-effect="dark"
+                      max-height="170"
+                    
+                    >
+                    <el-table-column
+                      prop="operator"
+                      label="操作员"
+                      min-width="120"
+                      align="center"
+                      >
+                    </el-table-column>
+                    <el-table-column
+                      prop="operateTime"
+                      label="操作时间"
+                      align="center"
+                      min-width="120">
+                        <template slot-scope="scope">{{scope.row.operateTime}}</template>
+                    </el-table-column>
+                    <el-table-column
+                      prop="logContent"
+                      label="操作记录"
+                      min-width="120"
+                      align="center"
+                      show-overflow-tooltip>
+                  </el-table-column>
+            </el-table>  
+            <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div> 
+            <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>  
+          </section>
         </section>
-        <section class="footer" style="margin-bottom:0px">
-           <div style="width:100%;font-size:20px;">操作日志</div>
-        </section>
-        <section class="middle">
-                 <el-table
-                 :data="logList"
-                  style="width: 100%"
-                  border
-                  tooltip-effect="dark"
-                  max-height="170"
-                
-                 >
-                <el-table-column
-                  prop="operator"
-                  label="操作员"
-                  min-width="120"
-                  align="center"
-                  >
-                </el-table-column>
-                <el-table-column
-                  prop="operateTime"
-                  label="操作时间"
-                  align="center"
-                  min-width="120">
-                    <template slot-scope="scope">{{scope.row.operateTime}}</template>
-                </el-table-column>
-                <el-table-column
-                  prop="logContent"
-                  label="操作记录"
-                  min-width="120"
-                  align="center"
-                  show-overflow-tooltip>
-              </el-table-column>
-         </el-table>  
-         <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div> 
-         <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>  
-       </section>
+      
           <!--新增弹框 -->
           <Modal v-model="dialogVisible" :styles="mystyle" :rules="rules" :title="dialogtitle"  @on-cancel='cancel' :width="810" @on-ok="editSubmit"
             class-name="customize-modal-center"> 
@@ -296,7 +297,7 @@
                                 <el-input v-model="editFormLine.wangdiantong"  maxlength="20" style="width:120px" ></el-input>
                             </el-form-item>
                             <el-form-item label="启用状态" size="small"  label-width="95px" prop="status">
-                                <el-select v-model="editFormLine.status" placeholder="请选择" style="width:120px" >
+                                <el-select v-model="editFormLine.status" placeholder="请选择" style="width:120px">
                                     <el-option label="启用" value="1"></el-option>
                                     <el-option label="停用" value="0"></el-option>
                                 </el-select>
@@ -323,8 +324,10 @@
 <script>
   import filters from '../../../filter/'
   import fetchparams from 'fetchparams'
- 
+  import {debounce} from 'mixins/debounce'
+  // import 
   export default {
+    mixins:[debounce],
     data() {
       return {
         userInfo     : {},             //用户信息
@@ -358,41 +361,38 @@
                 region: '',
              
         },
-        // 日志相关
         dataFlag:true,
         logList:[], //日志列表
         billNo:'',
         currentPage:1,
-        // 日志相关
         list   :[],
         rules  : {
           platform: [  
-            { required: true, message: '请选择平台',  trigger: 'change' },
-           
+                { required: true, message: '请选择平台',  trigger: 'change' },
           ],
           company: [
-            { required: true, message: '请选择公司',  trigger: 'change' }
+                { required: true, message: '请选择公司',  trigger: 'change' }
           ],
           brand: [
-            { required: true, message: '请选择品牌',  trigger: 'change' }
+                { required: true, message: '请选择品牌',  trigger: 'change' }
           ],
           shopname: [
-            { required: true, message: '请输入店铺名称',trigger: 'blur' },
+                { required: true, message: '请输入店铺名称',trigger: 'blur' },
           ],
           number: [
-            { required: true, message: '请选择店铺编号', trigger: 'blur' }
+                { required: true, message: '请选择店铺编号', trigger: 'blur' }
           ],
           account: [
-            {  required: true, message: '请输入平台账号', trigger: 'blur' }
+                {  required: true, message: '请输入平台账号', trigger: 'blur' }
           ],
           wangdiantong: [
-            {  required: true, message: '请输入旺店通编号',trigger: 'blur' }
+                {  required: true, message: '请输入旺店通编号',trigger: 'blur' }
           ],
           status: [
-             {  required: true, message: '请选择启用状态', trigger: 'change' }
+                {  required: true, message: '请选择启用状态', trigger: 'change' }
           ],
           freeze: [
-             {  required: true, message: '请选择解冻状态', trigger: 'change'}
+                {  required: true, message: '请选择解冻状态', trigger: 'change'}
           ]
         },
         judgeMenu:[],
@@ -692,10 +692,20 @@
   }
 </script>
 <style scoped="scoped" lang="less">
-    .headerstyle,.main,.middle,.footer{
+    .headerstyle,.main,.footer{
       width:99%;margin:0 auto;background:#fff;
       padding: 20px 20px 10px 20px;
       margin-bottom:10px;
+    }
+    .footer{
+       margin-bottom:0px;
+    }
+    .middle{
+     width: 99%;
+    margin: 0 auto;
+    background: #fff;
+    padding: 0px 10px 10px 10px;
+    margin-top: 0px;
     }
     .getmore{
           padding-top: 6px;

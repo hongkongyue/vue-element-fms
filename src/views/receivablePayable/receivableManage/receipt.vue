@@ -193,15 +193,15 @@
         </Row>
         <div slot="footer"></div>
     </Modal>
-    <section class="middle">
+    <section class="middle" :style="{minHeight:'690px'}">
         <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[1000, 5000, 10000, 20000]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
         <div id="main" style="width: 100%; height: 400px;"></div>
-    </section>
-    <section class="footer" style="margin-bottom:0px">
+
+
+        <section class="footer" style="margin-bottom:0px">
         <div style="width:100%;font-size:20px;">操作日志</div>
     </section>
-    <section class="middle">
         <el-table :data="goodsList" style="width: 100%" border tooltip-effect="dark" max-height="250">
             <el-table-column prop="operator" label="操作员" min-width="120" align="center">
             </el-table-column>
@@ -214,6 +214,10 @@
         <div class="getmore" v-if="goodsList.length>0&&dataFlag" @click="getMore">点击加载更多</div>
         <div class="getmore" v-if="goodsList.length>0&&!dataFlag">没有更多了…</div>
     </section>
+    
+    <!-- <section class="middle">
+        
+    </section> -->
 </div>
 </template>
 
@@ -519,7 +523,7 @@ export default {
                         data.remark =   this.editFormData.remark
                     this.request('received_accReceived_manual_update', data, true).then(res => {
                         if (res.code == 1) {
-                            this.$message.success(res.msg)
+                            this.$message.success('编辑成功')
                             this.editVisible = false
                             this.shopListTwo = []
                             this.$refs['ruleForms'].resetFields();
@@ -557,7 +561,7 @@ export default {
                     data.remark = this.ruleForm.remark //备注
                     this.request('accReceived_add', data, true).then(res => {
                         if (res.code == 1) {
-                            this.$message.success(res.msg)
+                            this.$message.success('保存成功')
                             this.dialogVisible = false
                             this.ruleForm = {}
                             this.shopListTwo = []
@@ -792,18 +796,21 @@ export default {
                             field: 'canPayAmount',
                             caption: '金额(不含税)',
                             size: '100px',
+                            render:'money',
                             sortable: true
                         },
                         {
                             field: 'billAmount',
                             caption: '金额',
                             size: '100px',
+                            render:'money',
                             sortable: true
                         },
                         {
                             field: 'commission',
                             caption: '唯品会佣金',
                             size: '100px',
+                            render:'money',
                             sortable: true
                         },
                         {

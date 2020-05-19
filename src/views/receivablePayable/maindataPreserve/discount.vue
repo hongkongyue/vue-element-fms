@@ -1,8 +1,8 @@
 <template>
 	     <div>
 	     	  <header class="headerstyle">
-        <el-form :inline="true" :model="formSearch" class="demo-form-inline ">
-            <Col style="margin-bottom:20px">
+        <el-form :inline="true" :model="formSearch" class="demo-form-inline">
+            <Col style="margin-bottom:0px">
                      <el-form-item size="small" class="marginT0">
                        <!--   -->
                         <el-button  v-if="judgeMenu.indexOf('查询') != -1" size="small" type="primary" @click="onSearch">查询</el-button>
@@ -50,10 +50,10 @@
             </el-form-item>
         </el-form>
     </header>
-    <section class="middle">
+    <section class="middle" :style="{minHeight:showBink?'680px':'480px'}">
         <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
-        <el-table @selection-change="selection"   @row-click="showLog" @select-all="selection" @select="selection" ref="multipleTable" :data="list" style="width: 100%" class="pointer" border tooltip-effect="dark" max-height="250" highlight-current-row>
+        <el-table @selection-change="selection"   @row-click="showLog" @select-all="selection" @select="selection" ref="multipleTable" :data="list" style="width: 100%" class="pointer" border tooltip-effect="dark" :maxHeight="tableHieght" highlight-current-row>
             <el-table-column type="selection" width="55">
             </el-table-column>
             <el-table-column type="index" width="55" label="序号" align="center">
@@ -78,11 +78,10 @@
             <el-table-column prop="lastUpdated" label="最后修改时间" min-width="120" align="center" show-overflow-tooltip>
             </el-table-column>
         </el-table>
-    </section>
-      <section class="footer" style="margin-bottom:0px">
+         <section class="footer" style="margin-bottom:0px;margin-top:10px">
            <div style="width:100%;font-size:20px;">操作日志</div>
         </section>
-        <section class="middle">
+        <section class="log">
                  <el-table
                  :data="logList"
                   style="width: 100%"
@@ -116,10 +115,12 @@
          <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div> 
          <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>  
          </section>
+    </section>
+     
       <!-- 编辑新增弹框 -->
     <Modal v-model="dialogVisible"   :styles="mystyle"  :title="dialogtitle"  :width="560" @on-cancel='cancel1' class-name="customize-modal-center">
         <Row class="margin-bottom-10 background-color-white exhibition">
-            <el-form :inline="true" ref="ruleForm" :model="formData"  label-width="80px"class="demo-form-inline demo-ruleForm " label-position="left" :rules="rules">
+            <el-form :inline="true" ref="ruleForm" :model="formData"  label-width="80px" class="demo-form-inline demo-ruleForm " label-position="left" :rules="rules">
                 <!-- <Col> -->
                     <el-form-item label="供应商全称" size="small" label-width="95px" prop="supplierId">
                       <!--   <el-input  v-model="formData.supplierName" maxlength="20" style="width:120px"></el-input> -->
@@ -225,7 +226,9 @@
 </template>
 <script>
 import filters from '../../../filter/'
+import {debounce} from 'mixins/debounce'
 export default {
+    mixins:[debounce],
     data() {
         return {
         	true:true,
@@ -350,7 +353,7 @@ export default {
             	       data.id=this.IDS[0].id
                    this.request('masterData_deductionDiscount_delete', data, false).then((res) => {
                 if (res.code == 1) {
-                	 this.$message.success(res.msg)
+                	 this.$message.success('删除成功')
                      this.getData()
                      this.cancelVisible=false;
                 }else{
@@ -728,7 +731,7 @@ export default {
 <style lang="less" scoped>
 .headerstyle,
 .main,
-.middle,
+
 .footer {
     width: 99%;
     margin: 0 auto;
@@ -736,7 +739,13 @@ export default {
     padding: 20px 20px 10px 20px;
     margin-bottom: 10px;
 }
-
+.middle{
+     width: 99%;
+    margin: 0 auto;
+    background: #fff;
+    padding: 0px 10px 10px 10px;
+    margin-bottom: 0px;
+}
 .getmore {
     padding-top: 6px;
     width: 100%;

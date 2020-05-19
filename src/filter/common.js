@@ -34,7 +34,7 @@ export const specialSymbol= (num) => {
            return num
    }
 }
-// 分转元
+// 格式化金额
 export const moneyFilters = (num) => {
     if(String(num).includes('.')){
         if(String(num).split('.')[1].length==1){

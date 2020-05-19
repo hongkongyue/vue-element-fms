@@ -34,10 +34,10 @@
                           </el-form-item> -->
         </el-form>
     </header>
-    <section class="middle">
+    <section class="middle" :style="{minHeight:showBink?'680px':'480px'}">
         <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
-        <el-table @selection-change="selection" @select-all="selection" @select="selection" ref="multipleTable" :data="list" style="width: 100%" class="pointer" border tooltip-effect="dark" max-height="250" @row-click="showLog" highlight-current-row>
+        <el-table @selection-change="selection" @select-all="selection" @select="selection" ref="multipleTable" :data="list" style="width: 100%" class="pointer" border tooltip-effect="dark" :maxHeight="tableHieght" @row-click="showLog" highlight-current-row>
             <el-table-column type="selection" width="55">
             </el-table-column>
             <el-table-column type="index" width="55" label="序号" align="center">
@@ -57,12 +57,11 @@
                 <template slot-scope="scope">{{ scope.row.enable==1?'启用':'禁用' }}</template>
             </el-table-column>
         </el-table>
-    </section>
-    <section class="footer" style="margin-bottom:0px">
+         <section class="footer" style="margin-bottom:0px;margin-top:10px">
         <!-- <span class="pl20"><i class="el-icon-arrow-up pointer "></i></span> -->
         <div style="width:100%;font-size:20px;">操作日志</div>
     </section>
-    <section class="middle">
+    <section class="log">
         <el-table :data="logList" style="width: 100%" border tooltip-effect="dark" max-height="250">
             <el-table-column prop="operator" label="操作员" min-width="120" align="center">
             </el-table-column>
@@ -75,6 +74,8 @@
         <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div>
         <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>
     </section>
+    </section>
+   
     <!-- 编辑新增弹框 -->
     <Modal v-model="dialogVisible" :styles="mystyle" :rules="rules" :title="dialogtitle" @on-cancel='cancel' :width="810" @on-ok="editSubmit" class-name="customize-modal-center">
         <Row class="margin-bottom-10 background-color-white exhibition">
@@ -118,7 +119,9 @@
 
 <script>
 import filters from '../../../filter/'
+import {debounce} from 'mixins/debounce'
 export default {
+    mixins:[debounce],
     data() {
         return {
             dialogVisible: false,
@@ -457,7 +460,13 @@ export default {
     padding: 20px 20px 10px 20px;
     margin-bottom: 10px;
 }
-
+.middle{
+     width: 99%;
+    margin: 0 auto;
+    background: #fff;
+    padding: 0px 10px 10px 10px;
+    margin-top: 0px;
+    }
 .getmore {
     padding-top: 6px;
     width: 100%;

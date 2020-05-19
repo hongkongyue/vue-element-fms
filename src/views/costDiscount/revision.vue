@@ -57,16 +57,16 @@
             </el-form-item>
         </el-form>
     </header>
-    <section class="middle">
+    <section class="middle" :style="{minHeight:showBink?'690px':'480px'}">
         <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[1000, 5000, 10000, 20000]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
         <div id="main" style="width: 100%; height: 400px;"></div>
-    </section>
-    <section class="footer" style="margin-bottom:0px">
+
+        <section class="footer" style="margin-bottom:0px">
         <!-- <span class="pl20"><i class="el-icon-arrow-up pointer "></i></span> -->
         <div style="width:100%;font-size:20px;">操作日志</div>
     </section>
-    <section class="middle">
+    <!-- <section class="middle"> -->
         <el-table :data="goodsList" style="width: 100%" border tooltip-effect="dark" max-height="250">
             <el-table-column prop="operator" label="操作员" min-width="120" align="center">
             </el-table-column>
@@ -78,7 +78,9 @@
         </el-table>
         <div class="getmore" v-if="goodsList.length>0&&dataFlag" @click="getMore">点击加载更多</div>
         <div class="getmore" v-if="goodsList.length>0&&!dataFlag">没有更多了…</div>
+    <!-- </section> -->
     </section>
+    
     <!-- 编辑新增弹框 -->
     <Modal v-model="dialogVisible" :styles="mystyle" :rules="rules" :title="dialogtitle" @on-cancel='cancel' :width="1110" @on-ok="editSubmit" class-name="customize-modal-center">
         <Row class="margin-bottom-10 background-color-white exhibition">
@@ -195,7 +197,9 @@
 var record
 import filters from '../../filter/'
 import Util from 'libs/util'
+import {debounce} from 'mixins/debounce'
 export default {
+    mixins:[debounce],
     data() {
         return {
           newId:null,
@@ -414,12 +418,14 @@ export default {
                             field: 'oldCost',
                             caption: '成本(老)',
                             size: '100px',
+                            render:'money',
                             sortable: true
                         },
                         {
                             field: 'newCost',
                             caption: '成本(新)',
                             size: '100px',
+                            render:'money',
                             sortable: true
                         },
                         {

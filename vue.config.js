@@ -31,6 +31,7 @@ module.exports = {
             .set('@', resolve('src')) // key,value自行定义，比如.set('@@', resolve('src/components'))
             .set('_c', resolve('src/components'))
             .set('libs', resolve('src/libs'))
+            .set('mixins', resolve('src/mixins'))
         config.externals({
             'vue': 'Vue',
             'vue-router': 'VueRouter',
@@ -52,15 +53,34 @@ module.exports = {
     lintOnSave: false,
     devServer: {
         disableHostCheck: true,
-        port: 8090, //端口号
+        port: 8070, //端口号
         https: false, // https:{type:Boolean}
         open: true, //配置自动启动浏览器
         proxy: {
+            // '/eop-boot': {
+            //     target: 'http://newweb.eptison.com/',
+            //     // target: 'http://localhost:8091/',
+
+            //     // target:'http://suppliertest.yptcgroup.com/',
+            //     changeOrigin: true,
+            //     secure: false
+            // },
             '/eop-boot': {
                 // target: 'http://eop.quanshangtech.com:888/',
-                target: 'http://localhost:8091/',
-                changeOrigin: true,
-                secure: false
+                // target: 'http://localhost:9080/',     
+                // target:'http://172.168.109.22:9080/',           //克胜
+                //  target : 'http://172.168.109.16:9080/',          //新星
+                //    target : 'http://172.168.108.64:9080/',        //明科
+                target : 'http://172.168.108.151:9080/',        //明杰
+                //  target: 'http://newweb.eptison.com/',
+                // target:'http://172.168.109.82:9080',              //孟洋
+                //  target:'http://172.168.110.253:9080/',        //高露
+                 pathRewrite: { '^/eop-boot': '/' },              //重写代理路径
+                 changeOrigin: true,
+                 secure: false,
+                // pathRewrite: {
+                //     '^/eop-boot': '/'
+                // }
             },
             '/eop-node': {
                 // target: 'http://eop.quanshangtech.com:888/',
@@ -72,7 +92,7 @@ module.exports = {
                 target: 'http://localhost:8091/',
                 //target:'http://172.168.108.66:8080',
                 //target: 'http://eopsit.eptison.com:8080',
-                // pathRewrite: { '^/api': '' },
+               
                 changeOrigin: true,
                 secure: false
             },

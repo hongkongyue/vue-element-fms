@@ -61,7 +61,7 @@
         </el-form>
     </header>
     <section class="middle">
-        <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[1000, 5000, 10000, 20000]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[1000, 5000, 10000, 20000]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
 
         <div id="main" style="width: 100%; height: 400px;"></div>
@@ -93,29 +93,29 @@
                     <el-table-column prop="photoSampleNum" label="拍照样数量" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column prop="taxIncludedTotalPurchaseUnitPrice" label="含税总采购单价" min-width="120" align="center" show-overflow-tooltip>
-                        <template slot-scope="scope">{{scope.row.taxIncludedTotalPurchaseUnitPrice|singlePrice}}</template>
+                        <template slot-scope="scope"><div style="text-align:right">{{scope.row.taxIncludedTotalPurchaseUnitPrice|singlePrice}}</div></template>
                     </el-table-column>
                     <el-table-column prop="taxIncludedPurchaseUnitPrice" label="含税采购单价" min-width="120" align="center" show-overflow-tooltip>
-                        <template slot-scope="scope">{{scope.row.taxIncludedPurchaseUnitPrice|singlePrice}}</template>
+                        <template slot-scope="scope"><div style="text-align:right">{{scope.row.taxIncludedPurchaseUnitPrice|singlePrice}}</div></template>
                     </el-table-column>
                     <el-table-column prop="taxIncludedTrialFee" label="含税试制费单价" min-width="120" align="center" show-overflow-tooltip>
-                         <template slot-scope="scope">{{scope.row.taxIncludedTrialFee|singlePrice}}</template>
+                         <template slot-scope="scope"><div style="text-align:right">{{scope.row.taxIncludedTrialFee|singlePrice}}</div></template>
                     </el-table-column>
                      <el-table-column prop="trialTaxRate" label="试制费税率" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
                      <el-table-column prop="goodsTaxRate" label="货物税率" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
                      <el-table-column prop="excludingTaxTrialFee" label="不含税试制费单价" min-width="120" align="center" show-overflow-tooltip>
-                        <template slot-scope="scope">{{scope.row.excludingTaxTrialFee|singlePrice}}</template>
+                        <template slot-scope="scope"><div style="text-align:right">{{scope.row.excludingTaxTrialFee|singlePrice}}</div></template>
                     </el-table-column>
                      <el-table-column prop="excludingTaxPurchaseUnitPrice" label="不含税采购单价" min-width="120" align="center" show-overflow-tooltip>
-                         <template slot-scope="scope">{{scope.row.excludingTaxPurchaseUnitPrice|singlePrice}}</template>
+                         <template slot-scope="scope"><div style="text-align:right">{{scope.row.excludingTaxPurchaseUnitPrice|singlePrice}}</div></template>
                     </el-table-column>
                      <el-table-column prop="excludingTaxTotalPurchaseUnitPrice" label="不含税总采购单价" min-width="120" align="center" show-overflow-tooltip>
-                          <template slot-scope="scope">{{scope.row.excludingTaxTotalPurchaseUnitPrice|singlePrice}}</template>
+                          <template slot-scope="scope"><div style="text-align:right">{{scope.row.excludingTaxTotalPurchaseUnitPrice|singlePrice}}</div></template>
                     </el-table-column>
                     <el-table-column prop="contractAmount" label="合约金额" min-width="120" align="center" show-overflow-tooltip>
-                           <template slot-scope="scope">{{scope.row.contractAmount|moneyFilters}}</template>
+                           <template slot-scope="scope"><div style="text-align:right">{{scope.row.contractAmount|moneyFilters}}</div></template>
                     </el-table-column>
                     <el-table-column prop="remark" label="备注" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
@@ -340,19 +340,22 @@ export default {
                             field: 'hazardAmount',
                             caption: '风控额度',
                             size: '100px',
-                            // sortable: true,
+                            sortable: true,
+                            render:'money',
                         },
                         {
                             field: 'materialAmount',
                             caption: '物料金额',
                             size: '100px',
-                            // sortable: true,
+                            sortable: true,
+                            render:'money',
                         },
                         {
                             field: 'remainingAmount',
                             caption: '剩余额度',
                             size: '100px',
                             sortable: true,
+                            render:'money',
                             // render: 'remainingAmount'
                         },
                         {

@@ -2,7 +2,7 @@
   <div>
     <header class="headerstyle">
       <el-form :inline="true" :model="formSearch" class="demo-form-inline">
-        <Col style="margin-bottom:20px">
+        <Col style="margin-bottom:0px">
           <el-form-item size="small" class="marginT0">
             <!--    -->
             <el-button v-if="judgeMenu.indexOf('查询') != -1" size="small" type="primary" @click="onSearch">查询</el-button>
@@ -32,9 +32,9 @@
          </el-form-item>
       </el-form>
     </header>
-    <section class="middle">
+    <section class="middle" style="padding-top:10px" :style="{minHeight:showBink?'680px':'480px'}">
       <el-pagination
-        style="margin-bottom:10px;text-align:right"
+        style="margin-bottom:0px;text-align:right;margin-top:10px"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="page"
@@ -54,7 +54,7 @@
         class="pointer"
         border
         tooltip-effect="dark"
-        max-height="250"
+        :maxHeight="tableHieght"
         highlight-current-row
       >
         <el-table-column type="selection" width="55"></el-table-column>
@@ -79,27 +79,28 @@
         <template slot-scope="scope">{{scope.row.status==1?'启用':'禁用'}}</template>
         </el-table-column>
       </el-table>
+           <section class="footer" style="margin-bottom:0px;margin-top:10px">
+              <div style="width:100%;font-size:20px;">操作日志</div>
+            </section>
+            <section class="log">
+              <el-table :data="logList" style="width: 100%" border tooltip-effect="dark" max-height="170">
+                <el-table-column prop="operator" label="操作员" min-width="120" align="center"></el-table-column>
+                <el-table-column prop="operateTime" label="操作时间" align="center" min-width="120">
+                  <template slot-scope="scope">{{scope.row.operateTime}}</template>
+                </el-table-column>
+                <el-table-column
+                  prop="logContent"
+                  label="操作记录"
+                  min-width="120"
+                  align="center"
+                  show-overflow-tooltip
+                ></el-table-column>
+              </el-table>
+              <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div>
+              <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>
+            </section>
     </section>
-    <section class="footer" style="margin-bottom:0px">
-      <div style="width:100%;font-size:20px;">操作日志</div>
-    </section>
-    <section class="middle">
-      <el-table :data="logList" style="width: 100%" border tooltip-effect="dark" max-height="170">
-        <el-table-column prop="operator" label="操作员" min-width="120" align="center"></el-table-column>
-        <el-table-column prop="operateTime" label="操作时间" align="center" min-width="120">
-          <template slot-scope="scope">{{scope.row.operateTime}}</template>
-        </el-table-column>
-        <el-table-column
-          prop="logContent"
-          label="操作记录"
-          min-width="120"
-          align="center"
-          show-overflow-tooltip
-        ></el-table-column>
-      </el-table>
-      <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div>
-      <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>
-    </section>
+
     <!-- 编辑新增弹框 -->
     <Modal
       v-model="dialogVisible"
@@ -157,7 +158,9 @@
 </template>
 <script>
 import filters from "../../../filter/";
+import{debounce} from 'mixins/debounce'
 export default {
+  mixins:[debounce],
   data() {
     return {
       true: true,
@@ -169,8 +172,8 @@ export default {
       brandList:[],   //品牌列表
       logList: [],
       formSearch: {
-        basicBrandId: "",
-        status:''
+            basicBrandId: "",
+            status:''
       },
       formData: {
             basicBrandId:'',
@@ -624,7 +627,13 @@ export default {
   padding: 20px 20px 10px 20px;
   margin-bottom: 10px;
 }
-
+.middle{
+      width: 99%;
+      margin: 0 auto;
+      background: #fff;
+      padding: 0px 10px 10px 10px;
+      margin-bottom: 0px;
+}
 .getmore {
   padding-top: 6px;
   width: 100%;

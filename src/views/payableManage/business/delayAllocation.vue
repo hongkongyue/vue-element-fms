@@ -10,8 +10,8 @@
             </el-form-item>
         </el-form>
     </header>
-    <section class="middle">
-        <el-table @selection-change="selection" @select-all="selection" @select="selection" ref="multipleTable" :data="list" style="width: 100%" class="pointer" border tooltip-effect="dark" max-height="250" highlight-current-row>
+    <section class="middle" :style="{minHeight:showBink?'740px':'520px'}">
+        <el-table @selection-change="selection" @select-all="selection" @select="selection" ref="multipleTable" :data="list" style="width: 100%" class="pointer" border tooltip-effect="dark" :maxHeight="400" highlight-current-row>
           <el-table-column
       type="selection"
       width="55">
@@ -72,8 +72,9 @@
 <script>
 import filters from '../../../filter/'
 import fetchparams from 'fetchparams'
-
+import {debounce} from 'mixins/debounce'
 export default {
+    mixins:[debounce],
     data() {
         return {
             userInfo: {}, //用户信息

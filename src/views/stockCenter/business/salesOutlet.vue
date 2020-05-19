@@ -64,9 +64,8 @@
     <section class="middle">
         <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[1000, 5000, 10000, 20000]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
-        <div id="salesOutlet" style="width: 100%; height: 400px;"></div>
-    </section>
-    <section class="footer" style="margin-bottom:0px">
+        <div id="salesOutlet" style="width: 100%; height: 400px;margin-bottom:20px"></div>
+
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
             <el-tab-pane label="货品明细" name="first">
                 <el-table :data="goodsList" style="width: 100%" border tooltip-effect="dark" max-height="250" size="mini">
@@ -125,6 +124,9 @@
             </el-tab-pane>
            </el-tabs>
     </section>
+    <!-- <section class="footer" style="margin-bottom:0px">
+        
+    </section> -->
 </div>
 </template>
 
@@ -316,42 +318,49 @@ export default {
                             field: 'taxAcceptedAmount',
                             caption: '已付总额',
                             size: '100px',
+                            render:'money',
                             sortable: true
                         },
                         {
                             field: 'acceptedAmount',
                             caption: '已付总额（不含税）',
                             size: '100px',
+                            render:'money',
                             sortable: true
                         },
                         {
                             field: 'taxSaleAmount',
                             caption: '销售总额',
                             size: '100px',
+                            render:'money',
                             sortable: true
                         },
                         {
                             field: 'saleAmount',
                             caption: '销售总额(不含税)',
                             size: '100px',
+                            render:'money',
                             sortable: true
                         },
                         {
                             field: 'postAmount',
                             caption: '邮资',
                             size: '100px',
+                            render:'money',
                             sortable: true
                         },
                         {
                             field: 'discountAmount',
                             caption: '优惠',
                             size: '100px',
+                            render:'money',
                             sortable: true
                         },
                         {
                             field: 'otherFeeAmount',
                             caption: '其它费用',
                             size: '100px',
+                            render:'money',
                             sortable: true
                         },
                         {

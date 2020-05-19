@@ -1,7 +1,7 @@
 <template>
 <Layout>
     <Content>
-        <Row class="background-color-white exhibition">
+        <Row class="background-color-white exhibition" :style="{minHeight:showBink?'830px':'620px'}">
             <div style="margin-bottom :20px; height:50px;background-color:#f5f7f9;text-align:left;line-height:50px;font-size:16px; font-weight: bold;padding-left: 20px;">
                 <Button type="primary" @click="submit">核价结果</Button>
             </div>
@@ -29,18 +29,24 @@
                 </el-table-column>
                 <el-table-column prop="styleImg" label="样品图1" min-width="80" align="center" show-overflow-tooltip>
                     <template slot-scope="scope">
-                        <div @click="imgClick(scope.row.styleImg)">
-                            <el-image style="width: 40px; height: 40px" :src="scope.row.styleImg" :preview-src-list="[scope.row.styleImg]">
-                            </el-image>
-                        </div>
+                        <div v-if="scope.row.styleImg" @click="imgClick(scope.row.styleImg)">
+                        <el-image style="width: 40px; height: 40px" :src="scope.row.styleImg" :preview-src-list="[scope.row.styleImg]">
+                        </el-image>
+                    </div>
+                    <div v-if="!scope.row.styleImg" >
+                        <el-image style="width: 40px; height: 40px" :src = noneUrl></el-image>
+                    </div>
                     </template>
                 </el-table-column>
                 <el-table-column prop="styleImg2" label="样图2" min-width="80" align="center" show-overflow-tooltip>
                     <template slot-scope="scope">
-                        <div @click="imgClick(scope.row.styleImg2)">
-                            <el-image style="width: 40px; height: 40px" :src="scope.row.styleImg2" :preview-src-list="[scope.row.styleImg2]">
-                            </el-image>
-                        </div>
+                        <div v-if="scope.row.styleImg2" @click="imgClick(scope.row.styleImg2)">
+                        <el-image style="width: 40px; height: 40px" :src="scope.row.styleImg2" :preview-src-list="[scope.row.styleImg2]">
+                        </el-image>
+                    </div>
+                    <div v-if="!scope.row.styleImg2" >
+                       <el-image style="width: 40px; height: 40px" :src = noneUrl></el-image>
+                    </div>
                     </template>
                 </el-table-column>
                 <el-table-column prop="realMaterial" label="是否有实物" min-width="90" align="center" show-overflow-tooltip>
@@ -102,10 +108,13 @@
 import Util from 'libs/util';
 import axios from 'axios';
 
+import {debounce} from 'mixins/debounce'
 export default {
+    mixins: [debounce],
     name: 'pricingConduct',
     data() {
         return {
+            noneUrl:'https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1562574299&di=846b4c904bd54d3c3821fa5938888c69&src=http://hbimg.b0.upaiyun.com/bdaca9a07e1a8947c00c2f826ebf848750927aa24963-cATwbg_fw658',
             addformdata: {},
             tableData: [],
             srcList: [],
@@ -141,6 +150,7 @@ export default {
             if(this.addformdata.money== undefined){
                 this.$message.error('请先填写价格')
             }else{
+                let getId = this.$route.query.taskDetailId
                 let data = Util.deepClone(this.tableData[0]);
             data.pricingUserId = this.userInfo.userId
             data.pricingUser = this.userInfo.userName
@@ -154,11 +164,14 @@ export default {
                     this.$message.success(res.msg)
                     this.visible = false
                     this.addformdata = {}
-                    this.$root.eventHub.$emit('closePageFromOtherPage', 'pricingConduct'); //关闭新增页面
+                    // this.$root.eventHub.$emit('closePageFromOtherPage', 'pricingConduct'); //关闭新增页面
+                    // setTimeout(()=>{ 
+                        this.$root.eventHub.$emit('closePageFromOtherPage', 'pricingConduct')
+                        //   },200); //关闭新增页面
                                     this.$router.push({
                                         name: 'pricingComplete',
                                         query: {
-                                            taskDetailId: this.$route.query.taskDetailId,
+                                            taskDetailId: getId,
                                         }
                                     });
                 }else{
@@ -179,5 +192,13 @@ export default {
 <style>
 .el-icon-circle-close:before {
  color:white
+}
+</style>
+<style>
+ .el-image-viewer__close{
+        color:#fff!important;
+    }
+.el-image-viewer__prev,.el-image-viewer__next{
+     display: none;
 }
 </style>

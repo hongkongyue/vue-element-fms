@@ -64,7 +64,7 @@
                         this.request('fabricDevelop_taskConfiguration_getTaskConfigurationList',data,false).then(res=>{
                                    if(res.code==1){
                                          this.task=res.data;
-                                   }      
+                                   }     
                         })
                     }, 
                   getID(){

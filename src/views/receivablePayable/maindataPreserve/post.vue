@@ -1,6 +1,6 @@
  <template>
      <div>
-          <header class="headerstyle">
+          <header class="headerstyle" >
                 <el-form :inline="true" :model="formSearch" class="demo-form-inline ">
                   <div>
                      <el-form-item   size="small">
@@ -34,7 +34,7 @@
                          
                 </el-form>
           </header>
-          <section class="middle">
+          <section class="middle" :style="{minHeight:showBink?'680px':'480px'}" style="padding-top:10px">
           <el-pagination  style="margin-bottom:10px;text-align:right"  
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
@@ -44,13 +44,13 @@
               layout="total, sizes, prev, pager, next, jumper"
               :total="total">
           </el-pagination>
-           <el-table ref="multipleTable" :data="tableData" style="width: 100%" @row-click="showLog" border tooltip-effect="dark" max-height="250" @selection-change="handleSelectionChange">
+           <el-table ref="multipleTable" :data="tableData" style="width: 100%" @row-click="showLog" border tooltip-effect="dark" :maxHeight="tableHieght" @selection-change="handleSelectionChange">
              <el-table-column
                 type="selection"
                 width="55">
             </el-table-column>
-                <el-table-column type="index"width="55"label="序号"align="center"></el-table-column>
-                <el-table-column prop="basicStationCode"label="岗位编码"min-width="120"align="center">
+                <el-table-column type="index" width="55" label="序号" align="center"></el-table-column>
+                <el-table-column prop="basicStationCode" label="岗位编码" min-width="120" align="center">
                 </el-table-column>
                 <el-table-column
                   prop="basicStationName"
@@ -74,43 +74,44 @@
                   <template slot-scope="scope">{{ scope.row.enable == 1 ? '启用' : '停用' }}</template>
                 </el-table-column>
          </el-table>
+                <section class="footer" style="margin-bottom:0px;margin-top:0px">
+                  <div style="width:100%;font-size:20px;">操作日志</div>
+                </section>
+                <section class="log">
+                        <el-table
+                        :data="logList"
+                        style="width: 100%"
+                        border
+                        tooltip-effect="dark"
+                        max-height="250"
+                        >
+                        <el-table-column
+                          prop="operator"
+                          label="操作员"
+                          min-width="120"
+                          align="center"
+                          >
+                        </el-table-column>
+                        <el-table-column
+                          prop="operateTime"
+                          label="操作时间"
+                          align="center"
+                          min-width="120">
+                            <template slot-scope="scope">{{scope.row.operateTime}}</template>
+                        </el-table-column>
+                        <el-table-column
+                          prop="logContent"
+                          label="操作记录"
+                          min-width="120"
+                          align="center"
+                          show-overflow-tooltip>
+                  </el-table-column>
+                </el-table>  
+                <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div> 
+                <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>   
+              </section>
         </section>
-        <section class="footer" style="margin-bottom:0px">
-           <div style="width:100%;font-size:20px;">操作日志</div>
-        </section>
-        <section class="middle">
-                <el-table
-                 :data="logList"
-                 style="width: 100%"
-                 border
-                 tooltip-effect="dark"
-                 max-height="250"
-                 >
-                <el-table-column
-                  prop="operator"
-                  label="操作员"
-                  min-width="120"
-                  align="center"
-                  >
-                </el-table-column>
-                <el-table-column
-                  prop="operateTime"
-                  label="操作时间"
-                  align="center"
-                  min-width="120">
-                    <template slot-scope="scope">{{scope.row.operateTime}}</template>
-                </el-table-column>
-                <el-table-column
-                  prop="logContent"
-                  label="操作记录"
-                  min-width="120"
-                  align="center"
-                  show-overflow-tooltip>
-          </el-table-column>
-         </el-table>  
-         <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div> 
-         <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>   
-       </section>
+       
        
           
 
@@ -163,7 +164,9 @@
 
 <script>
 import filters from '../../../filter/'
+import {debounce} from 'mixins/debounce'
   export default {
+    mixins:[debounce],
     data() {
       return {
         logList:[],//日志
@@ -457,6 +460,13 @@ import filters from '../../../filter/'
       width:99%;margin:0 auto;background:#fff;
       padding: 20px 20px 10px 20px;
       margin-bottom:10px;
+    }
+    .middle{
+     width: 99%;
+    margin: 0 auto;
+    background: #fff;
+    padding: 0px 10px 10px 10px;
+    margin-top: 0px;
     }
     .getmore{
           padding-top: 6px;

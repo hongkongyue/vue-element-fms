@@ -48,9 +48,26 @@
                             <el-option label="已审核" value="1"></el-option>
                         </el-select>
                     </el-form-item>
+                    
                     <el-form-item label="账单编号:" size="small" v-if="show == true">
                         <el-input v-model="formSearch.bizCode" placeholder="请输入" style="width:150px"></el-input>
                     </el-form-item>
+                    <el-form-item label="开票状态：" size="small" label-width="100px" v-if="show ==true">
+                        <el-select v-model="formSearch.invoiceStatus" filterable placeholder="请选择" style="width:120px">
+                            <el-option label="未完成" value="0"></el-option>
+                            <el-option label="已完成" value="1"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="供应商确认状态：" size="small" label-width="130px" v-if="show ==true">
+                        <el-select v-model="formSearch.confirmStatus" filterable placeholder="请选择" style="width:120px">
+                            <el-option label="未确认" value="100"></el-option>
+                            <el-option label="已驳回" value="500"></el-option>
+                            <el-option label="已确认" value="900"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <!-- <el-form-item label="开票建议号:" size="small" v-if="show == true">
+                        <el-input v-model="formSearch.payableInvoiceAdviceNo" placeholder="请输入" style="width:150px"></el-input>
+                    </el-form-item> -->
             <!-- </el-col> -->
             <el-form-item label="单据日期:" size="small" v-if="show == true">
                 <el-date-picker  style="width:357px"
@@ -84,7 +101,7 @@
     <section class="middle">
         <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[1000,5000,10000,20000]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
-        <div id="main" style="width: 100%; height: 350px;"></div>
+        <div id="main" style="width: 100%; height: 380px;"></div>
     </section>
     <section class="footer" style="margin-bottom:0px">
          <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
@@ -95,12 +112,13 @@
                             border
                             show-summary
                              :summary-method="getSummaries"
-                            style="width: 100%">
+                            style="width: 100%"  max-height="150">
                             <el-table-column
                             type="index"
                             label="序号"
                             align="center"
-                            width="50">
+                            width="50"
+                           >
                             </el-table-column>
                             <!-- <el-table-column
                             prop="companyName"
@@ -118,72 +136,139 @@
                             prop="purchaseOrderNo"
                             align="center"
                             min-width="120"
-                            label="制单号">
+                            label="制单号"
+                            show-overflow-tooltip>
                             </el-table-column>
                             <el-table-column
                             prop="goodsNo"
                             align="center"
                             min-width="120"
-                            label="大货款号">
+                            label="大货款号"
+                            show-overflow-tooltip>
                             </el-table-column>
                             <el-table-column
                             prop="batchNo"
                             align="center"
                             min-width="120"
-                            label="批次">
+                            label="批次"
+                            show-overflow-tooltip>
+                            </el-table-column>
+                            <el-table-column
+                            prop="settlementType"
+                            align="center"
+                            min-width="120"
+                            label="结算类型"
+                            show-overflow-tooltip>
                             </el-table-column>
                             <el-table-column
                             prop="stockInQty"
                             align="center"
                             min-width="120"
-                            label="入库总数">
+                            label="入库总数"
+                            show-overflow-tooltip>
                             </el-table-column>
                             <el-table-column
                             prop="goodsAmount"
                             align="center"
                             min-width="120"
-                            label="货款总额">
-                             <template slot-scope="scope">{{scope.row.goodsAmount|moneyFilters}}</template>
+                            label="货款总额"
+                            show-overflow-tooltip>
+                             <template slot-scope="scope">
+                                 <div style="text-align:right">{{scope.row.goodsAmount|moneyFilters}}</div>
+                                 </template>
                             </el-table-column>
                             <el-table-column
                             prop="taxTrialAmount"
                             align="center"
                             min-width="120"
-                            label="试制费总额">
-                             <template slot-scope="scope">{{scope.row.taxTrialAmount|moneyFilters}}</template>
+                            label="试制费总额"
+                            show-overflow-tooltip>
+                             <template slot-scope="scope">
+                                 <div style="text-align:right">{{scope.row.taxTrialAmount|moneyFilters}}</div>
+                                 </template>
                             </el-table-column>
 
                             <el-table-column
                             prop="deductionAmount"
                             align="center"
                             min-width="120"
-                            label="扣款总额">
-                             <template slot-scope="scope">{{scope.row.deductionAmount|moneyFilters}}</template>
+                            label="扣款总额"
+                            show-overflow-tooltip>
+                             <template slot-scope="scope">
+                                 <div style="text-align:right">{{scope.row.deductionAmount|moneyFilters}}</div>
+                                 </template>
                             </el-table-column>
                             <el-table-column
                             prop="settlementAmount"
                             align="center"
                             min-width="120"
-                            label="结算总额">
-                             <template slot-scope="scope">{{scope.row.settlementAmount|moneyFilters}}</template>
+                            label="结算总额"
+                            show-overflow-tooltip>
+                             <template slot-scope="scope">
+                                 <div style="text-align:right">{{scope.row.settlementAmount|moneyFilters}}</div>
+                                 </template>
                             </el-table-column>
+
                             <el-table-column
                             prop="settlementType"
                             align="center"
                             min-width="120"
-                            label="结算类型">
+                            label="结算类型"
+                            show-overflow-tooltip>
+                            </el-table-column>
+
+                            <el-table-column
+                            prop="ticketAmount"
+                            align="center"
+                            min-width="120"
+                            label="已到票金额"
+                            show-overflow-tooltip>
+                             <template slot-scope="scope">
+                                 <div style="text-align:right">{{scope.row.ticketAmount|moneyFilters}}</div>
+                                 </template>
+                            </el-table-column>
+
+                            <el-table-column
+                            prop="chargeAgainstAmount"
+                            align="center"
+                            min-width="120"
+                            label="已冲抵金额"
+                            show-overflow-tooltip>
+                             <template slot-scope="scope">
+                                 <div style="text-align:right">{{scope.row.chargeAgainstAmount|moneyFilters}}</div>
+                                 </template>
+                            </el-table-column>
+
+                            <el-table-column
+                            prop="unTicketAmount"
+                            align="center"
+                            min-width="120"
+                            label="未到票金额"
+                            show-overflow-tooltip>
+                             <template slot-scope="scope">
+                                 <div style="text-align:right">{{scope.row.unTicketAmount|moneyFilters}}</div>
+                                 </template>
+                            </el-table-column>
+                            <el-table-column
+                            prop="invoiceStatus"
+                            align="center"
+                            min-width="120"
+                            label="开票状态"
+                            show-overflow-tooltip>
                             </el-table-column>
                             <el-table-column
                             prop="closeTime"
                             align="center"
                             min-width="120"
-                            label="关单时间">
+                            label="关单时间"
+                            show-overflow-tooltip>
                             </el-table-column>
                             <el-table-column
                             prop="settlementOrderCode"
                             align="center"
                             min-width="120"
-                            label="结算明细编号">
+                            label="结算明细编号"
+                            show-overflow-tooltip>
                             </el-table-column>
                         </el-table>  
                 </section>
@@ -193,7 +278,7 @@
                         <el-table
                             :data="deductionList"
                             border
-                            style="width: 100%">
+                            style="width: 100%" max-height="150">
                             <el-table-column
                             type="index"
                             label="序号"
@@ -235,7 +320,9 @@
                             align="center"
                             min-width="120"
                             label="扣款金额">
-                            
+                            <template slot-scope="scope">
+                                 <div style="text-align:right">{{scope.row.deductionAmount|moneyFilters}}</div>
+                                 </template>
                             </el-table-column>
                             <el-table-column
                             prop="deductionType"
@@ -460,35 +547,42 @@ export default {
                             field: 'totalCurrentPeriodAmount',
                             caption: '本期总额',
                             size: '130px',
+                            render: 'money',
+                            resizable: true,
                         },
                         {
                             field: 'totalTaxTrialAmount',
                             caption: '试制费总额',
                             size: '130px',
+                            render: 'money',
                             sortable: true,
                         },
                         {
                             field: 'totalSaleAmount',
                             caption: '成衣销售总额',
                             size: '130px',
+                            render: 'money',
                             sortable: true,
                         },
                         {
                             field: 'totalProcessingAmount',
                             caption: '成衣加工总额',
                             size: '130px',
+                            render: 'money',
                             sortable: true
                         },
                         {
                             field: 'totalReturnRepairAmount',
                             caption: '退次返修总额',
                             size: '130px',
+                            render: 'money',
                             sortable: true
                         },
                         {
                             field: 'totalDeductionAmount',
                             caption: '扣款总额',
                             size: '130px',
+                            render: 'money',
                             sortable: true
                         },
                         {
@@ -500,6 +594,39 @@ export default {
                         {
                             field: 'statusStr',
                             caption: '单据状态',
+                            size: '130px',
+                            sortable: true
+                        },
+                        {
+                            field: 'invoiceStatus',
+                            caption: '开票状态',
+                            size: '130px',
+                            sortable: true
+                        },
+                        {
+                            field: 'confirmStatus',
+                            caption: '供应商确认状态',
+                            size: '130px',
+                            sortable: true
+                        },
+                        {
+                            field: 'totalTicketAmount',
+                            caption: '已到票金额',
+                            size: '130px',
+                            sortable: true,
+                            render: 'money',
+                        },
+                        {
+                            field: 'totalChargeAgainstAmount',
+                            caption: '已冲抵金额',
+                            size: '130px',
+                            render: 'money',
+                            sortable: true
+                        },
+                        {
+                            field: 'totalUnTicketAmount',
+                            caption: '未到票金额',
+                            render: 'money',
                             size: '130px',
                             sortable: true
                         },
@@ -543,11 +670,16 @@ export default {
                     },
                     index: '<span>当页小计</span>',
                     totalCurrentPeriodAmount: current.totalCurrentPeriodAmount,
-                    totalTaxTrialAmount:current.totalTaxTrialAmount,
+                    totalTaxTrialAmount:current.totalTaxTrialAmount, 
                     totalSaleAmount:current.totalSaleAmount,
                     totalProcessingAmount:current.totalProcessingAmount,
                     totalReturnRepairAmount:current.totalReturnRepairAmount,
                     totalDeductionAmount:current.totalDeductionAmount,
+                    goodsInvoiceAmount:current.goodsInvoiceAmount,
+                    tryFeeInvoiceAmount:current.tryFeeInvoiceAmount,
+                    totalTicketAmount:current.totalTicketAmount,
+                    totalChargeAgainstAmount:current.totalChargeAgainstAmount,
+                    totalUnTicketAmount:current.totalUnTicketAmount
                 }, {
                     w2ui: {
                         summary: true
@@ -559,9 +691,17 @@ export default {
                     totalProcessingAmount:total.totalProcessingAmount,
                     totalReturnRepairAmount:total.totalReturnRepairAmount,
                     totalDeductionAmount:total.totalDeductionAmount,
+                    goodsInvoiceAmount:total.goodsInvoiceAmount,
+                    tryFeeInvoiceAmount:total.tryFeeInvoiceAmount,
+                    totalTicketAmount:total.totalTicketAmount,
+                    totalChargeAgainstAmount:total.totalChargeAgainstAmount,
+                    totalUnTicketAmount:total.totalUnTicketAmount
                 })
                 $('#main').w2render('checkBill');
                 w2ui.checkBill.refresh();
+                //  $(document).ready(function(){
+                //     $('div[title="当页小计"]').find('span').eq(0).remove()
+                // })
             } else {
                 $(document).ready(function () {
                     w2ui.checkBill.clear(); //清空
@@ -617,6 +757,9 @@ export default {
                     data.endDate?  '': delete data.endDate
                     data.auditStartDate?'': delete  data.auditStartDate
                     data.auditEndDate?  '': delete data.auditEndDate
+                    data.invoiceStatus = this.formSearch.invoiceStatus
+                    data.confirmStatus = this.formSearch.confirmStatus
+                    data.payableInvoiceAdviceNo = this.formSearch.payableInvoiceAdviceNo
                 this.request('payable_reconciliationOrder_page', data, true).then(res => {
                     if (res.code == 1) {
                         this.total = res.data.count;
@@ -794,9 +937,9 @@ export default {
                 sums[index] = '合计';
                 return;
             }
-                 sums[4] = this.checkObj.stockInQty
-                 sums[5] = filters.moneyFilters(this.checkObj.goodsAmount)
-                 sums[7] = filters.moneyFilters(this.checkObj.deductionAmount)
+                 sums[5] = this.checkObj.stockInQty
+                 sums[6] = filters.moneyFilters(this.checkObj.goodsAmount)
+                 sums[8] = filters.moneyFilters(this.checkObj.deductionAmount)
             });
             return sums;
       },
@@ -985,9 +1128,11 @@ export default {
                         data.startDate         = this.formSearch.date?filters.get_year_month_day(this.formSearch.date[0]):''
                         data.endDate           = this.formSearch.date?filters.get_year_month_day(this.formSearch.date[1]):''
                         data.status            = this.formSearch.status!=''?Number(this.formSearch.status):''
+                        data.invoiceStatus     = this.formSearch.invoiceStatus!=''?Number(this.formSearch.invoiceStatus):''
                         data.auditStartDate    = this.formSearch.time?filters.get_year_month_day(this.formSearch.time[0]):''
                         data.auditEndDate      = this.formSearch.time?filters.get_year_month_day(this.formSearch.time[1]):''
                         data.status==0?'' : data.status==1?'' : delete  data.status
+                        data.invoiceStatus==0?'' : data.invoiceStatus==1?'' : delete  data.invoiceStatus
                         data.startDate?'': delete  data.startDate
                         data.endDate?  '': delete data.endDate
                         data.auditStartDate?'': delete  data.auditStartDate
@@ -1019,8 +1164,10 @@ export default {
                         data.startDate         = this.formSearch.date?filters.get_year_month_day(this.formSearch.date[0]):''
                         data.endDate           = this.formSearch.date?filters.get_year_month_day(this.formSearch.date[1]):''
                         data.status            = this.formSearch.status!=''?Number(this.formSearch.status):''
+                        data.invoiceStatus     = this.formSearch.invoiceStatus!=''?Number(this.formSearch.invoiceStatus):''
                         data.auditStartDate    = this.formSearch.time?filters.get_year_month_day(this.formSearch.time[0]):''
                         data.auditEndDate      = this.formSearch.time?filters.get_year_month_day(this.formSearch.time[1]):''
+                        data.invoiceStatus==0?'' : data.invoiceStatus==1?'' : delete  data.invoiceStatus
                         data.status==0?'' : data.status==1?'' : delete  data.status
                         data.startDate?'': delete  data.startDate
                         data.endDate?  '': delete data.endDate
@@ -1137,5 +1284,14 @@ export default {
 }
 .marginT0{
     margin-bottom:0px!important;
+}
+
+</style>
+<style scoped>
+>>>td:nth-child(7){
+    text-align: right!important;
+}
+>>>td:nth-child(9){
+    text-align: right!important;
 }
 </style>

@@ -33,7 +33,7 @@
                           </el-form-item>
                 </el-form>
           </header>
-          <section class="middle">
+          <section class="middle" :style="{minHeight:showBink?'680px':'480px'}">
           <el-pagination  style="margin-bottom:10px;text-align:right"  
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
@@ -43,7 +43,7 @@
               layout="total, sizes, prev, pager, next, jumper"
               :total="total">
           </el-pagination>
-           <el-table ref="multipleTable" :data="tableData" style="width: 100%" @row-click="showLog" border tooltip-effect="dark" max-height="250" @selection-change="handleSelectionChange">
+           <el-table ref="multipleTable" :data="tableData" style="width: 100%" @row-click="showLog" border tooltip-effect="dark"  :maxHeight="tableHieght" @selection-change="handleSelectionChange">
              <el-table-column
                 type="selection"
                 width="55">
@@ -55,6 +55,7 @@
                   prop="name"
                   label="公司名称"
                   align="center"
+                  show-overflow-tooltip
                   min-width="120">
                 </el-table-column>
                 <el-table-column
@@ -110,43 +111,44 @@
                   <template slot-scope="scope">{{ scope.row.status == 1 ? '冻结' : '解冻' }}</template>
                 </el-table-column>
          </el-table>
-        </section>
-        <section class="footer" style="margin-bottom:0px">
+          <section class="footer" style="margin-bottom:0px;margin-top:10px">
            <div style="width:100%;font-size:20px;">操作日志</div>
+            </section>
+            <section class="log">
+                    <el-table
+                    :data="logList"
+                    style="width: 100%"
+                    border
+                    tooltip-effect="dark"
+                    max-height="250"
+                    >
+                    <el-table-column
+                      prop="operator"
+                      label="操作员"
+                      min-width="120"
+                      align="center"
+                      >
+                    </el-table-column>
+                    <el-table-column
+                      prop="operateTime"
+                      label="操作时间"
+                      align="center"
+                      min-width="120">
+                        <template slot-scope="scope">{{scope.row.operateTime}}</template>
+                    </el-table-column>
+                    <el-table-column
+                      prop="logContent"
+                      label="操作记录"
+                      min-width="120"
+                      align="center"
+                      show-overflow-tooltip>
+              </el-table-column>
+            </el-table>  
+            <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div> 
+            <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>   
+          </section>
         </section>
-        <section class="middle">
-                <el-table
-                 :data="logList"
-                 style="width: 100%"
-                 border
-                 tooltip-effect="dark"
-                 max-height="250"
-                 >
-                <el-table-column
-                  prop="operator"
-                  label="操作员"
-                  min-width="120"
-                  align="center"
-                  >
-                </el-table-column>
-                <el-table-column
-                  prop="operateTime"
-                  label="操作时间"
-                  align="center"
-                  min-width="120">
-                    <template slot-scope="scope">{{scope.row.operateTime}}</template>
-                </el-table-column>
-                <el-table-column
-                  prop="logContent"
-                  label="操作记录"
-                  min-width="120"
-                  align="center"
-                  show-overflow-tooltip>
-          </el-table-column>
-         </el-table>  
-         <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div> 
-         <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>   
-       </section>
+        
        <!-- 新增弹框 -->
           
            <Modal v-model="dialogVisible" @on-cancel="addCancel" :styles="mystyle" title="新增"  :width="70" 
@@ -230,12 +232,12 @@
             <Row class="margin-bottom-10 background-color-white exhibition">   
               <el-form  ref="formChange" :model="formChange" class="demo-ruleForm " :label-position="left">
                 <Col span="8">
-                  <el-form-item label="公司编码："prop="code" label-width="120px" size="small">
+                  <el-form-item label="公司编码：" prop="code" label-width="120px" size="small">
                     <el-input v-model="formChange.code" :disabled="true" style="width:150px"></el-input>
                   </el-form-item>
                 </Col>
                 <Col span="8">
-                  <el-form-item label="公司名称："prop="name" label-width="120px" size="small"> 
+                  <el-form-item label="公司名称：" prop="name" label-width="120px" size="small"> 
                     <el-input v-model="formChange.name" :disabled="true" style="width:150px"></el-input>
                   </el-form-item>
                 </Col>
@@ -245,38 +247,38 @@
                   </el-form-item>
                 </Col>
                 <Col span="8">
-                   <el-form-item label="公司缩写："prop="abbrName" label-width="120px" size="small">
+                   <el-form-item label="公司缩写：" prop="abbrName" label-width="120px" size="small">
                     <el-input v-model="formChange.abbrName " :disabled="true" style="width:150px"></el-input>
                   </el-form-item>
                 </Col>
                 <Col span="8">
-                  <el-form-item label="公司地址："prop="address" label-width="120px" size="small">
+                  <el-form-item label="公司地址：" prop="address" label-width="120px" size="small">
                     <el-input v-model="formChange.address" style="width:150px"></el-input>
                   </el-form-item>
                 </Col>
                 <Col span="8">
-                    <el-form-item label="负责人："prop="officialLeader" label-width="120px" size="small">
+                    <el-form-item label="负责人：" prop="officialLeader" label-width="120px" size="small">
                     <el-select v-model="formChange.officialLeader" filterable placeholder="请选择" style="width:150px">
                         <el-option v-for="item in companyNameOptions" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                     </el-form-item>
                 </Col>
                 <Col span="8">
-                    <el-form-item label="是否法人组织："prop="orgLegal" label-width="120px" size="small">
+                    <el-form-item label="是否法人组织：" prop="orgLegal" label-width="120px" size="small">
                         <el-select v-model="formChange.orgLegal" filterable placeholder="请选择" style="width:150px">
                             <el-option v-for="item in statusQptions" :key="item.value" :label="item.name" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
                 </Col>
                 <Col span="8">
-                    <el-form-item label="启用状态："prop="enable" label-width="120px" size="small">
+                    <el-form-item label="启用状态：" prop="enable" label-width="120px" size="small">
                     <el-select v-model="formChange.enable" filterable placeholder="请选择" style="width:150px">
                             <el-option v-for="item in statusQptionsA" :key="item.value" :label="item.name" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
                 </Col>
                 <Col span="8">
-                    <el-form-item label="冻结状态："prop="status" label-width="120px" size="small">
+                    <el-form-item label="冻结状态：" prop="status" label-width="120px" size="small">
                     <el-select v-model="formChange.status" filterable placeholder="请选择" style="width:150px">
                             <el-option v-for="item in statusQptionsB" :key="item.value" :label="item.name" :value="item.value"></el-option>
                         </el-select>
@@ -289,9 +291,7 @@
                       <Button type="default" @click="changeCancel">取消</Button>
                     </el-form-item>
                 </Col>
-                
               </el-form>
-              
             </Row>
             <div slot="footer"></div>
           </Modal>
@@ -302,7 +302,9 @@
 
 <script>
 import filters from '../../../filter/'
+import {debounce} from 'mixins/debounce'
   export default {
+    mixins:[debounce],
     data() {
       return {
         logList:[],//日志
@@ -623,6 +625,13 @@ import filters from '../../../filter/'
       width:99%;margin:0 auto;background:#fff;
       padding: 20px 20px 10px 20px;
       margin-bottom:10px;
+    }
+    .middle{
+     width: 99%;
+    margin: 0 auto;
+    background: #fff;
+    padding: 0px 10px 10px 10px;
+    margin-top: 0px;
     }
     .getmore{
           padding-top: 6px;

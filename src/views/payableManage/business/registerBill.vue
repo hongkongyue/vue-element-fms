@@ -6,9 +6,6 @@
                 <el-form-item size="small">
                     <el-button  v-if="judgeMenu.indexOf('查询') !== -1" size="small" type="primary" @click="onSearch">查询</el-button>
                 </el-form-item>
-                <el-form-item size="small">
-                    <el-button size="small" type="default" @click="onReset">重置</el-button>
-                </el-form-item>
                 <!-- -->
                 <el-form-item size="small">
                     <el-button  v-if="judgeMenu.indexOf('新增') !== -1"  size="small" type="primary" @click="onAdd">新增</el-button>
@@ -28,7 +25,9 @@
                 <el-form-item size="small">
                     <el-button  v-if="judgeMenu.indexOf('导出') !== -1" size="small" type="primary" @click="onExport">导出</el-button>
                 </el-form-item>
-                
+                  <el-form-item size="small">
+                    <el-button size="small" type="default" @click="onReset">重置</el-button>
+                </el-form-item>
             </div>
             <el-form-item label="公司：" size="small">
                     <el-select v-model="formSearch.basicCompanyId"  filterable placeholder="请选择" style="width:150px">
@@ -58,7 +57,7 @@
             </el-form-item>
         </el-form>
     </header>
-    <section class="middle">
+    <section class="middle" :style="{minHeight:showBink?'680px':'480px'}">
         <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[1000, 5000, 10000, 20000]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
         <div id="main" style="width: 100%; height: 400px;"></div>
@@ -127,7 +126,9 @@
 var record
 import filters from '../../../filter/'
 import Util from 'libs/util'
+import{ debounce } from 'mixins/debounce'
 export default {
+    mixins:[debounce],
     data() {
         return {
             newId:null,
@@ -269,6 +270,7 @@ export default {
                             field: 'billArrivalAmount',
                             caption: '到票金额',
                             size: '250px',
+                            render: 'money',
                             sortable: true
                         },
                         {

@@ -83,7 +83,7 @@
 .w2ui-reset table tr th,
 .w2ui-reset table tr td {
   font-family: Verdana, Arial, sans-serif;
-  font-size: 14px;
+  font-size: 12px;
   text-align: center;
   color: #909399!important;
 
@@ -3255,3 +3255,6 @@ color: #909399
 .w2ui-listview > ul > li div.icon-none {
   border: 1px solid rgba(102, 102, 102, 0.35);
 }
+/* .w2ui-grid-summary>table>tbody>tr>td{
+ background: #ececec!important;
+} */

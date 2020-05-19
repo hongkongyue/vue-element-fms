@@ -5,6 +5,12 @@ import Vue from 'vue';
 
 const app = {
     state: {
+        printLogList:[],
+        printList:[],
+        oneList:[],
+        twoList:[],
+        threeList:[],
+        adviceLoglList:[],
         delayAllocationList:[],
         onedelayAllocationList:[],
         scmOrderList:[],
@@ -57,6 +63,21 @@ const app = {
         dontCache: ['text-editor', 'artical-publish'] // 在这里定义你不想要缓存的页面的name属性值(参见路由配置router.js)
     },
     mutations: {
+        //成本调整单
+        applyForPrintLog(state,list){
+            state.printLogList=[]
+            state.printLogList=list;
+        },
+
+        applyForPrint(state,list){
+            state.printList=[]
+            state.printList=list
+        },
+
+        clearapplyForPrint(state){
+            state.printList=[]
+            state.printLogList=[]
+        },
         getMode(state){
                 console.log('当前的浏览模式是:',state.mode)
                 return state.mode
@@ -67,11 +88,35 @@ const app = {
         increment(state,list){
             console.log('gagagg')
             state.shouldGetList=[]
-            state.shouldGetList=list;   
+            state.shouldGetList=list;
             console.log( state.shouldGetList,'90909')
         },
         clearShouldGetList(state){
             state.shouldGetList=[]
+        },
+        //开票建议
+        adviceBillList(state,list){
+            state.adviceLoglList = []
+            state.adviceLoglList = list
+        },
+        initOnelist(state,list){
+            state.oneList=[]
+            state.oneList=list; 
+        },
+        initTwolist(state,list){
+            state.twoList=[]
+            state.twoList=list; 
+        },
+        initThreelist(state,list){
+            state.threeList=[]
+            state.threeList=list; 
+        },
+       
+        clearadviceBill(state){
+            state.oneList=[]
+            state.twoList=[]
+            state.threeList=[]
+            state.adviceLoglList = []
         },
         //账单导入与查询
         billImport(state,list){

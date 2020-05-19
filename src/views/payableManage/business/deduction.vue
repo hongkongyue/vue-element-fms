@@ -116,12 +116,12 @@
                         <el-table-column prop="afterClippingOrderQty" align="center" min-width="120" label="裁剪后订单量">
                         </el-table-column>
                          <el-table-column prop="deductionAmount" align="center" min-width="120" label="扣款金额">
-                              <template slot-scope="scope">{{scope.row.deductionAmount|moneyFilters}}</template>
+                              <template slot-scope="scope"><div style="text-align:right">{{scope.row.deductionAmount|moneyFilters}}</div></template>
                         </el-table-column>
-                        <el-table-column prop="orderQty" label="订单数量" min-width="120" align="center" show-overflow-tooltip>
+                        <el-table-column prop="orderQty"     label="订单数量" min-width="120" align="center" show-overflow-tooltip>
                         </el-table-column>
                         <el-table-column prop="adjustAmount" align="center" min-width="120" label="调整金额">
-                             <template slot-scope="scope">{{scope.row.adjustAmount|moneyFilters}}</template>
+                             <template slot-scope="scope"><div style="text-align:right">{{scope.row.adjustAmount|moneyFilters}}</div></template>
                         </el-table-column>
                         <el-table-column prop="discountStr" align="center" min-width="120" label="折扣">
                         </el-table-column>
@@ -405,7 +405,8 @@ export default {
                             field: 'deductionAmount',
                             caption: '扣款金额',
                             size: '100px',
-                            sortable: true
+                            sortable: true,
+                            render:'money'
                         },
                         {
                             field: 'deductionType',

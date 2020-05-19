@@ -17,6 +17,7 @@
     "default-passive-events": "^1.0.10",
     "echarts": "^4.0.4",
     "el-tree-transfer": "^2.2.0",
+    "file-saver": "^2.0.2",
     "happypack": "^5.0.0-beta.4",
     "iview": "^3.4.2",
     "js-base64": "^2.5.1",
@@ -25,6 +26,7 @@
     "jsencrypt": "^3.0.0-beta.1",
     "less": "^3.0.1",
     "less-loader": "^4.1.0",
+    "mockjs": "^1.1.0",
     "simple-base64": "^1.0.1",
     "sortablejs": "^1.10.0-rc3",
     "viser-vue": "^2.3.2",
@@ -34,6 +36,7 @@
     "vue-svg-icon": "^1.2.9",
     "vuex": "^3.0.1",
     "wangeditor": "^3.1.1",
+    "xlsx": "^0.16.0",
     "xml-loader": "^1.2.1"
   },
   "devDependencies": {
@@ -46,8 +49,10 @@
     "iview": "^3.4.2",
     "jsonp": "^0.2.1",
     "less-loader": "^4.1.0",
+    "script-loader": "^0.7.2",
     "semver": "^6.3.0",
     "vue-template-compiler": "^2.5.16",
+    "vuedraggable": "^2.23.2",
     "yallist": "^3.0.3"
   },
   "eslintConfig": {},
