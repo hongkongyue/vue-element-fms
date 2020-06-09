@@ -1,11 +1,7 @@
 <template>
 <div>
-    <header id="header" class="headerstyle">
-        <div style="width:100%;text-align:center;">
-            <span @click="handleShowHidden('hidden')"><i v-if="showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-bottom"></i></span>
-            <span @click="handleShowHidden('show')"><i v-if="!showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-top"></i></span>
-        </div>
-        <el-form v-if="!showhidden" :inline="true" :model="formSearch" class="demo-form-inline ">
+    <header id="header" class="headerstyle" v-if="!showhidden">
+        <el-form  :inline="true" :model="formSearch" class="demo-form-inline " style="width:99%;maxHeight:102px;overflow-y:auto;overflow-x:hidden;">
             <div>
                 <el-form-item size="small">
                     <el-button v-if="judgeMenu.indexOf('查询') !== -1" size="small" type="primary" @click="onSearch">查询</el-button>
@@ -47,102 +43,102 @@
 
     </header>
     <section class="middle" :style="maxHeight">
+        <div style="float:right;position:absolute;top:10px;right:20px">
+            <span @click="handleShowHidden('hidden')"><i v-if="showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-bottom"></i></span>
+            <span @click="handleShowHidden('show')"><i v-if="!showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-top"></i></span>
+        </div>
         <el-row>
 
             <el-col :span="24">
-                <!-- <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
-                </el-pagination> -->
-                <plx-table-grid :data="tableData" border style="width: 100%" size='mini' :height="oneTableHeight" :pagination-show="false">
-                    <plx-table-column type="index" width="55" label="序号" fixed='left' resizable align="center" />
-                    <plx-table-column prop="basicBrandName" min-width="80" resizable fixed='left' label="品牌" align="center" />
-                    <plx-table-column prop="years" min-width="80" resizable fixed='left' label="年份" align="center" />
-                    <plx-table-column prop="season" min-width="80" resizable fixed='left' label="季节" align="center" />
-                    <plx-table-column prop="secondLevel" min-width="80" resizable fixed='left' label="二级品类" align="center" />
-                    <plx-table-column prop="thirdLevel" min-width="80" resizable fixed='left' label="三级品类" align="center" />
-                    <plx-table-column prop="" min-width="80" resizable label="原企划" align="center">
-                        <plx-table-column prop="originDevelopQty" min-width="80" resizable label="款数" align="center" />
-                        <plx-table-column prop="originStyleColor" min-width="80" resizable label="款色" align="center" />
-                        <plx-table-column prop="originDevelopPercent" min-width="80" resizable label="占比" align="center" />
-                    </plx-table-column>
-                    <plx-table-column prop="" min-width="80" resizable label="调整后企划" align="center">
-                        <plx-table-column prop="adjustDevelopQty" min-width="80" resizable label="款数" align="center">
+                <pl-table :data="tableData" border style="width: 100%" :max-height="oneTableHeight" size='mini' :pagination-show="false">
+                    <pl-table-column type="index" width="55" label="序号" fixed="left" resizable align="center" />
+                    <pl-table-column prop="basicBrandName" sortable min-width="90" fixed="left" resizable  label="品牌" align="center" show-overflow-tooltip />
+                    <pl-table-column prop="years" min-width="70" sortable resizable fixed="left" label="年份" align="center" show-overflow-tooltip />
+                    <pl-table-column prop="season" min-width="70" sortable resizable fixed="left" label="季节" align="center" show-overflow-tooltip />
+                    <pl-table-column prop="secondLevel" min-width="100" sortable resizable fixed="left" label="二级品类" align="center" show-overflow-tooltip />
+                    <pl-table-column prop="thirdLevel" min-width="100" sortable resizable fixed="left" label="三级品类" align="center" show-overflow-tooltip />
+                    <pl-table-column   resizable label="原企划" align="center">
+                        <pl-table-column prop="originDevelopQty"  sortablemin-width="80" resizable label="款数" align="center" />
+                        <pl-table-column prop="originStyleColor"  sortable min-width="80" resizable label="款色" align="center" />
+                        <pl-table-column prop="originDevelopPercent"  sortable min-width="80" resizable label="占比" align="center" />
+                    </pl-table-column>
+                    <pl-table-column   resizable label="调整后企划" align="center">
+                        <pl-table-column prop="adjustDevelopQty"  sortable    min-width="80"  resizable label="款数" align="center">
                             <template slot-scope="scope">
                                 {{scope.row | capitalize}}
                             </template>
-                        </plx-table-column>
-                        <plx-table-column prop="adjustStyleColor" min-width="80" resizable label="款色" align="center">
+                        </pl-table-column>
+                        <pl-table-column prop="adjustStyleColor" sortable     min-width="80"  resizable label="款色" align="center">
                             <template slot-scope="scope">
                                 {{scope.row | color}}
                             </template>
-                        </plx-table-column>
-                        <plx-table-column prop="adjustDevelopPercent" min-width="80" resizable label="占比" align="center">
+                        </pl-table-column>
+                        <pl-table-column prop="adjustDevelopPercent" sortable  min-width="80" resizable label="占比" align="center">
                             <template slot-scope="scope">
                                 {{scope.row | account(tableData)}}
                             </template>
-                        </plx-table-column>
-                    </plx-table-column>
-                    <plx-table-column prop="" min-width="95" resizable label="原企划已开发" align="center">
-                        <plx-table-column prop="originDevelopedQty" min-width="95" resizable label="款数" align="center" />
-                        <plx-table-column prop="originDevelopedStyleColor" min-width="95" resizable label="款色" align="center" />
-                        <plx-table-column prop="originDevelopedPercent" min-width="95" resizable label="占比" align="center" />
-                    </plx-table-column>
-                    <plx-table-column prop="" min-width="95" resizable label="原企划实际开发" align="center">
-                        <plx-table-column prop="actualDevelopedQty" min-width="95" resizable label="款数" align="center" />
-                        <plx-table-column prop="actualDevelopedStyleColor" min-width="95" resizable label="款色" align="center" />
-                        <plx-table-column prop="actualDevelopedPercent" min-width="95" resizable label="占比" align="center" />
-                    </plx-table-column>
+                        </pl-table-column>
+                    </pl-table-column>
+                    <!-- <pl-table-column  resizable label="原企划已开发" align="center">
+                        <pl-table-column prop="originDevelopedQty" width="95" resizable label="款数" align="center" />
+                        <pl-table-column prop="originDevelopedStyleColor" width="95" resizable label="款色" align="center" />
+                        <pl-table-column prop="originDevelopedPercent" width="95" resizable label="占比" align="center" />
+                    </pl-table-column> -->
+                    <pl-table-column  resizable label="实际已开发" align="center">
+                        <pl-table-column prop="actualDevelopedQty"  sortable width="95" resizable label="款数" align="center" />
+                        <pl-table-column prop="actualDevelopedStyleColor"  sortable width="95" resizable label="款色" align="center" />
+                        <pl-table-column prop="actualDevelopedPercent"  sortable width="95" resizable label="占比" align="center" />
+                    </pl-table-column>
 
-                    <plx-table-column v-for="v in columns" :key="v.label" :prop="v.prop" resizable width="180" :label="v.label" align="center">
-                        <plx-table-column v-for="i in v.arr" :key="i.prop" :prop="i.prop" width="90" resizable :label="i.label" align="center">
+                    <pl-table-column v-for="v in columns" :key="v.label"  resizable width="180" :label="v.label" align="center">
+                        <pl-table-column v-for="i in v.arr" :key="i.prop" :prop="i.prop" width="130" resizable :label="i.label" sortable align="center">
                             <template slot-scope="scope">
                                 <div v-if="i.label=='原开发款数'">{{scope.row[i.prop]}}</div>
                                 <!-- <el-input size="small" v-if="i.label=='调整后开发款数'" v-model="scope.row[i.prop]"></el-input> -->
-                                <el-input-number v-if="i.label=='调整后开发款数'&&scope.row[i.prop]!='--'" style="width:110px" v-model="scope.row[i.prop]" size="mini" controls-position="right" :precision="0" :min="0" :max="1000000"></el-input-number>
+                                <el-input-number v-if="i.label=='调整后开发款数'&&scope.row[i.prop]!='--'" style="width:80px" v-model="scope.row[i.prop]" size="mini" controls-position="right" :precision="0" :min="0" :max="1000000"></el-input-number>
                                 <span v-if="i.label=='调整后开发款数'&&scope.row[i.prop]=='--'">{{'--'}}</span>
                             </template>
-                        </plx-table-column>
-                    </plx-table-column>
+                        </pl-table-column>
+                    </pl-table-column>
 
-                    <!-- <plx-table-column  v-for="v in columns" v-if="v.label == '占比'" :key="v.label"  :prop="v.prop"  resizable  width="180"   :label="v.label"  align="center">
-                             <template slot-scope="scope">
-                                 {{scope.row | capitalize}}
-                             </template>
-                         </plx-table-column> -->
-                </plx-table-grid>
+                </pl-table>
             </el-col>
         </el-row>
 
     </section>
 
     <!--发起调整指令-->
-    <Modal v-model="startAdjustVisible" @on-cancel="cancelStartAdjust" title="发起调整指令" :width="840">
+    <Modal v-model="startAdjustVisible" @on-cancel="cancelStartAdjust" title="发起调整指令" :width="940">
         <el-form :rules="startAdjustRules" ref="startAdjustForm" label-width="120px" :model="startAdjustForm" class="demo-ruleForm " :label-position="right">
-            <Col span="12">
+            <el-row>
+            <el-col :span="8">
             <el-form-item label="品牌名称：" prop="brand" size="small">
-                <el-select v-model="startAdjustForm.brand" clearable filterable placeholder="请选择" style="width:200px">
+                <el-select v-model="startAdjustForm.brand" clearable filterable placeholder="请选择" style="width:140px">
                     <el-option v-for="item in brandList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
-            </Col>
-            <Col span="12">
+            </el-col>
+             <el-col :span="8">
             <el-form-item label="调整类型：" prop="changeType" size="small">
-                <el-select v-model="startAdjustForm.changeType" clearable filterable placeholder="请选择" style="width:200px">
+                <el-select v-model="startAdjustForm.changeType" multiple clearable filterable placeholder="请选择" style="width:140px">
                     <el-option v-for="item in adjustTypeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
-            </Col>
-            <Col span="24">
+            </el-col>
+            
+            <el-col :span="8">
             <el-form-item label="年份：" prop="year" size="small">
-                <el-select v-model="startAdjustForm.year" multiple clearable filterable placeholder="请选择" style="width:600px">
+                <el-select v-model="startAdjustForm.year" multiple clearable filterable placeholder="请选择" style="width:140px">
                     <el-option v-for="item in yearList" :key="item" :label="item" :value="item"></el-option>
                 </el-select>
             </el-form-item>
-            </Col>
-            <Col span="24">
+            </el-col>
+            <el-col :span="24">
             <el-form-item label="调整建议：" prop="remark" size="small">
-                <el-input type="textarea" maxlength="300" clearable :autosize="{ minRows: 4, maxRows: 5}" show-word-limit v-model="startAdjustForm.remark" placeholder="请输入" style="width:600px"></el-input>
+                <el-input type="textarea" maxlength="300" clearable  show-word-limit v-model="startAdjustForm.remark" placeholder="请输入" style="width:600px"></el-input>
             </el-form-item>
-            </Col>
+            </el-col>
+            </el-row>
 
         </el-form>
         <div slot="footer">
@@ -168,7 +164,7 @@ export default {
             startAdjustVisible: false,
             startAdjustForm: {
                 brand: '',
-                changeType: '',
+                changeType: [],
                 year: [],
                 remark: ''
             },
@@ -239,20 +235,27 @@ export default {
             tableData: [], //主table数据
             buttonList: [], //按钮权限
             judgeMenu: [],
-            yearList:[],
+            // yearList:[],
         }
     },
     mounted() {
+        this.getYearList()
         this.getBrandList()
         this.getAdjustType()
-        this.getPlanningStatus()
+        // this.getPlanningStatus()
+        this.request('goods_planning_manage_constant', { type: "planning_adjust_type" }, true).then(res => {
+                if (res.code == 1) {
+                    let list = []
+                    res.data.map((item)=>{
+                        if(item.code != '6'){
+                            list.push(item)
+                        }
+                    })
+                    this.adjustTypeList = list
+                    console.log(this.adjustTypeList,'09')
+                }
+            })
         this.formSearch.years = new Date().getFullYear().toString()
-        let year = 2000
-        let list = []
-        for (let i = 0; i < 200; i++) {
-            list.push(year + i)
-        }
-        this.yearList = list
         //计算款数总和
         Vue.filter('capitalize', function (row) {
             let obj = row
@@ -262,7 +265,6 @@ export default {
                     list.push(obj[i])
                 }
             }
-            console.log(list)
             let total = 0
             for (var i = 0; i < list.length; i++) {
                 if (list[i] != '--') {
@@ -282,6 +284,8 @@ export default {
                 if (i.indexOf('adjust_develop_style_qty_') > -1) {
                     if(obj[i] != '--'){
                         list.push(obj[i])
+                    }else{
+                        list.push(0)
                     }
                     
                 }
@@ -298,7 +302,6 @@ export default {
         })
         //计算占比
         Vue.filter('account', function (row, dataList) {
-            console.log(row, dataList, '00000000000000000')
             let totalList = []
             dataList.map((item) => {
                 if (item.basicBrandName == row.basicBrandName && item.years == row.years && item.season == row.season) {//获取同品牌，年份，季节的数据
@@ -341,13 +344,11 @@ export default {
             return proportion
         })
         if (document.body.offsetHeight > 800) {
-            this.heightTree = 'height:' + (document.body.offsetHeight - 290) + 'px;overflow-x:hidden;overflow-y:scroll'
-            this.oneTableHeight = (document.body.offsetHeight - 300) * 0.9
-            this.maxHeight = 'height:' + (document.body.offsetHeight - 270) + 'px'
+            this.oneTableHeight = (document.body.offsetHeight - 280) * 0.9
+            this.maxHeight = 'height:' + (document.body.offsetHeight - 250) + 'px'
         } else {
-            this.oneTableHeight = (document.body.offsetHeight - 300) * 0.9
-            this.maxHeight = 'height:' + (document.body.offsetHeight - 270) + 'px'
-            this.heightTree = 'height:' + (document.body.offsetHeight - 290) + 'px;overflow-x:hidden;overflow-y:scroll'
+            this.oneTableHeight = (document.body.offsetHeight - 280) * 0.9
+            this.maxHeight = 'height:' + (document.body.offsetHeight - 250) + 'px'
         }
         this.getButtonJurisdiction() //按钮权限
     },
@@ -399,12 +400,12 @@ clickTest(){
             this.$refs['startAdjustForm'].validate((valid) => {
                 if (valid) { //新增保存
                     let data = {}
-                    let obj = {}
-                    this.adjustTypeList.map((i) => {
-                        if (i.id == this.startAdjustForm.changeType) {
-                            obj = i
-                        }
-                    })
+                    // let obj = {}
+                    // this.adjustTypeList.map((i) => {
+                    //     if (i.id == this.startAdjustForm.changeType) {
+                    //         obj = i
+                    //     }
+                    // })
                     let brandObj = {}
                     this.brandList.map((v)=>{
                         if(v.id == this.startAdjustForm.brand){
@@ -416,16 +417,15 @@ clickTest(){
                     data.basicBrandId = this.startAdjustForm.brand
                     data.yearsList = this.startAdjustForm.year
                     data.adjustTypeId = this.startAdjustForm.changeType
-                    data.adjustTypeName = obj.name
-                    data.adjustTypeCode = obj.code
+                    // data.adjustTypeName = obj.name
+                    // data.adjustTypeCode = obj.code
                     data.asjustAdvise = this.startAdjustForm.remark
                     this.request('goods_planning_manage_createAdjust', data, true).then(res => {
                         if (res.code == 1) {
                             this.$message.success('保存调整指令成功')
-                            // this.onSearch()
                             this.startAdjustForm = {
                                 brand: '',
-                                changeType: '',
+                                changeType: [],
                                 year: [],
                                 remark: ''
                             }
@@ -445,32 +445,31 @@ clickTest(){
             this.startAdjustVisible = false
             this.startAdjustForm = {
                 brand: '',
-                changeType: '',
+                changeType: [],
                 year: [],
                 remark: ''
             }
             this.$refs['startAdjustForm'].resetFields();
         },
         handleShowHidden(name) {
-            console.log(name, '000')
             if (name == 'show') {
                 this.showhidden = true
                 if (document.body.offsetHeight > 800) {
-                    this.maxHeight = 'height:' + (document.body.offsetHeight - 170) + 'px'
-                    this.oneTableHeight = (document.body.offsetHeight - 170) * 0.9
+                    this.maxHeight = 'height:' + (document.body.offsetHeight - 110) + 'px'
+                    this.oneTableHeight = (document.body.offsetHeight - 110) * 0.9
                 } else {
-                    this.maxHeight = 'height:' + (document.body.offsetHeight - 170) + 'px'
-                    this.oneTableHeight = (document.body.offsetHeight - 220) * 0.9
+                    this.maxHeight = 'height:' + (document.body.offsetHeight - 110) + 'px'
+                    this.oneTableHeight = (document.body.offsetHeight - 110) * 0.9
                 }
 
             } else {
                 this.showhidden = false
                 if (document.body.offsetHeight > 800) {
-                    this.oneTableHeight = (document.body.offsetHeight - 300) * 0.9
-                    this.maxHeight = 'height:' + (document.body.offsetHeight - 270) + 'px'
+                    this.oneTableHeight = (document.body.offsetHeight - 280) * 0.9
+                    this.maxHeight = 'height:' + (document.body.offsetHeight - 250) + 'px'
                 } else {
-                    this.maxHeight = 'height:' + (document.body.offsetHeight - 270) + 'px'
-                    this.oneTableHeight = (document.body.offsetHeight - 300) * 0.9
+                    this.maxHeight = 'height:' + (document.body.offsetHeight - 250) + 'px'
+                    this.oneTableHeight = (document.body.offsetHeight - 280) * 0.9
                 }
             }
         },
@@ -489,11 +488,9 @@ clickTest(){
             })
         },
         handleSelectionChange(row) {
-            console.log(row)
             this.selection = row
             this.rowLenght = row.length
             this.rowObj = row[0]
-            console.log(this.rowObj)
         },
 
         getData() {
@@ -517,7 +514,6 @@ clickTest(){
                         }
                     }
                     this.tableData = list
-                    console.log(this.tableData,'-----------------')
                     }else{
                         this.columns = []
                         this.tableData = []
@@ -563,7 +559,6 @@ clickTest(){
 </script>
 
 <style lang="less" scoped>
-@import 'https://unpkg.com/pl-table/themes/index.css';
 
 .headerstyle,
 .main,

@@ -17,7 +17,7 @@
                   </el-form-item>
               </div>
                 <el-form-item label="平台名称："   size="small">
-                    <el-select v-model="formSearch.region" @change="searchCode(formSearch.region)" filterable placeholder="请选择" style="width:150px">
+                    <el-select v-model="formSearch.region" @change="searchCode(formSearch.region)" filterable placeholder="请选择" style="width:220px">
                         <el-option v-for="item in platformOptions" :key="item.name" :label="item.name" :value="item.name"></el-option>
                     </el-select>
                 </el-form-item>
@@ -108,14 +108,14 @@
               <el-form :rules="rules" ref="ruleForm" :model="ruleForm" class="demo-ruleForm " :label-position="left">
                 <Col span="24">
                   <el-form-item label="平台名称："  prop="code" size="small" label-width="120px">
-                        <el-select v-model="ruleForm.code" filterable @change="changeCode(ruleForm.code)" style="width:150px">
+                        <el-select v-model="ruleForm.code" filterable @change="changeCode(ruleForm.code)" style="width:300px">
                             <el-option v-for="item in platformOptions" :key="item.name" :label="item.name" :value="item.name"></el-option>
                         </el-select>
                   </el-form-item>
                 </Col>
                 <Col span="24">
                   <el-form-item label="类别名称：" prop="name" size="small" label-width="120px">
-                        <el-input v-model="ruleForm.name" style="width:150px"></el-input>
+                        <el-input v-model="ruleForm.name" style="width:300px"></el-input>
                   </el-form-item>
                 </Col>
                 <Col span="24">
@@ -144,12 +144,12 @@
             <el-form ref="formChange" :model="formChange" class="demo-ruleForm " :label-position="left">
                         <Col span="24">
                           <el-form-item label="平台名称：" label-width="120px"   size="small">
-                              <el-input v-model="formChange.code" :disabled="true" style="width:150px"></el-input>
+                              <el-input v-model="formChange.code" :disabled="true" style="width:300px"></el-input>
                           </el-form-item>
                           </Col>
                           <Col span="24">
-                          <el-form-item label="类别名称："label-width="120px" size="small"> 
-                              <el-input v-model="formChange.name" style="width:150px"></el-input>
+                          <el-form-item label="类别名称：" label-width="120px" size="small"> 
+                              <el-input v-model="formChange.name" style="width:300px"></el-input>
                           </el-form-item>
                           </Col>
                           <Col span="24">

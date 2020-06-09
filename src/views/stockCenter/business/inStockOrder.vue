@@ -14,12 +14,12 @@
                 </el-form-item>
             </div>
             <el-form-item label="调出仓库：" size="small">
-                <el-select v-model="formSearch.transferOutWarehouseId" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.transferOutWarehouseId" filterable placeholder="请选择" style="width:250px">
                     <el-option v-for="item in wareHouseList" :key="item.id" :label="item.warehouseName" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="调入仓库：" size="small">
-                <el-select v-model="formSearch.transferInWarehouseId" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.transferInWarehouseId" filterable placeholder="请选择" style="width:250px">
                     <el-option v-for="item in wareHouseList" :key="item.id" :label="item.warehouseName" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
@@ -32,14 +32,14 @@
                 <el-input style="width:180px" placeholder="请输入" v-model="formSearch.outOrderNo"></el-input>
             </el-form-item>
              <el-form-item label="调出状态：" size="small">
-                <el-select v-model="formSearch.transferOutStatus" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.transferOutStatus" filterable placeholder="请选择" style="width:110px">
                     <el-option label="待调出" value="待调出"></el-option>
                     <el-option label="部分调出" value="部分调出"></el-option>
                     <el-option label="全部调出" value="全部调出"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="调入状态：" size="small">
-                <el-select v-model="formSearch.transferInStatus" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.transferInStatus" filterable placeholder="请选择" style="width:110px">
                     <el-option label="待调入" value="待调入"></el-option>
                     <el-option label="部分调入" value="部分调入"></el-option>
                     <el-option label="全部调入" value="全部调入"></el-option>

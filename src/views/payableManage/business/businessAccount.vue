@@ -4,17 +4,17 @@
                 <el-form :inline="true" :model="formSearch" class="demo-form-inline ">
                           <el-form-item><span style="color:red">*</span></el-form-item>
                           <el-form-item label="公司" size="small">
-                                <el-select v-model="formSearch.basicCompanyId" placeholder="请选择公司" style="width:100px" filterable>
+                                <el-select v-model="formSearch.basicCompanyId" placeholder="请选择公司" style="width:220px" filterable>
                                     <el-option v-for="v in companyList" :key="v.id"  :label="v.name"  :value="v.id"></el-option>
                                </el-select>
                           </el-form-item>
-                           <el-form-item><span style="color:red">*</span></el-form-item>
+                           <!-- <el-form-item><span style="color:red">*</span></el-form-item>
                           <el-form-item label="账务类型" size="small">
                               <el-select v-model="formSearch.type" placeholder="请选择" style="width:100px" filterable>
                                   <!-- <el-option label="应收" value="0"></el-option> -->
-                                  <el-option label="对账" value="3"></el-option>
+                                  <!-- <el-option label="对账" value="3"></el-option>
                               </el-select>
-                          </el-form-item>
+                          </el-form-item> -->
                           <el-form-item   size="small">
                               <el-button v-if="judgeMenu.indexOf('查询') !== -1" size="small" type="primary" @click="onSearch">查询</el-button>
                           </el-form-item>
@@ -37,8 +37,9 @@
                 <div v-if="Alist.length>0" class="grid-content bg-purple" style="background:#fff;margin-left:3%;width:94%;padding:2% 2%;padding-left:1%;height:310px; overflow-y: scroll;">
                       <el-col style="padding-left:20%;padding-top:15%">
                           <Timeline>
-                            <TimelineItem   v-for="v in Alist" :key="v">
-                                <p class="time pointer" @click="selected(v)"  :class="{active: active == v}">{{v}}</p>
+                            <TimelineItem   v-for="(v,$index) in Alist" :key="v">
+                                <Icon type="ios-trophy" slot="dot" v-if="$index==0"></Icon>
+                                <p class="time pointer" @click="selected(v)"   :class="{active: active == v}">{{v}}</p>
                             </TimelineItem>
                           </Timeline>
                       </el-col>
@@ -51,37 +52,37 @@
                              <el-form :inline="true" :model="editformdata" class="demo-form-inline " v-if="!add">
                                  <el-row>
                                       <el-form-item label="公司" size="small" label-width="95px">
-                                          <el-select :disabled="!add" v-model="editformdata.company" placeholder="公司" style="width:140px" filterable	>
+                                          <el-select :disabled="!add" v-model="editformdata.company" placeholder="公司" style="width:220px" filterable	>
                                             <el-option label="区域一" value="shanghai"></el-option>
                                           </el-select>
                                       </el-form-item>
                                       <el-form-item label="账务类型" size="small" label-width="95px">
-                                          <el-select :disabled="!add" v-model="editformdata.type" placeholder="账务类型" style="width:140px" filterable>
+                                          <el-select :disabled="!add" v-model="editformdata.type" placeholder="账务类型" style="width:220px" filterable>
                                               <!-- <el-option label="应收" value="0"></el-option> -->
                                               <el-option label="对账" value="3"></el-option>
                                           </el-select>
                                       </el-form-item>
                                       <el-form-item label="账务年度" size="small" label-width="95px" >
-                                         <el-input :disabled="!add" style="width:140px" v-model="editformdata.selectedYears" placeholder="账务年度"></el-input>
+                                         <el-input :disabled="!add" style="width:220px" v-model="editformdata.selectedYears" placeholder="账务年度"></el-input>
                                       </el-form-item>
                                     </el-row>
                                     <el-row>
                                       <el-form-item label="起始日期" size="small" label-width="95px"> 
-                                           <el-date-picker :disabled="!add" style="width:140px" @change="compareTime('',1)"
+                                           <el-date-picker :disabled="!add" style="width:220px" @change="compareTime('',1)"
                                                 v-model="editformdata.startTime"
                                                 type="date"
                                                 placeholder="选择日期">
                                           </el-date-picker>
                                       </el-form-item>
                                       <el-form-item label="终止日期" size="small" label-width="95px">
-                                          <el-date-picker :disabled="!add" style="width:140px" @change="compareTime('', 1)"
+                                          <el-date-picker :disabled="!add" style="width:220px" @change="compareTime('', 1)"
                                                 v-model="editformdata.endTime"
                                                  type="date"
                                                 placeholder="选择日期">
                                           </el-date-picker>
                                       </el-form-item>
                                       <el-form-item label="期间个数" size="small" label-width="95px">
-                                          <el-select :disabled="!add" v-model="editformdata.number" placeholder="请选择" style="width:140px" @change="choiceMonth(formData.number)">
+                                          <el-select :disabled="!add" v-model="editformdata.number" placeholder="请选择" style="width:220px" @change="choiceMonth(formData.number)">
                                             <el-option v-for="v in monthList" :key="v" :label="v" :value="v"></el-option>
                                           </el-select>
                                       </el-form-item>
@@ -101,18 +102,18 @@
                                           <!-- <el-select :disabled="!add" v-model="formData.company" placeholder="请选择" style="width:140px" filterable	>
                                             <el-option label="区域一" value="shanghai"></el-option>
                                           </el-select> -->
-                                           <el-select v-model="formData.basicCompanyId" placeholder="请选择公司" style="width:100px" filterable>
+                                           <el-select v-model="formData.basicCompanyId" placeholder="请选择公司" style="width:220px" filterable>
                                                   <el-option v-for="v in companyList" :key="v.id"  :label="v.name"  :value="v.id"></el-option>
                                           </el-select>
                                       </el-form-item>
                                       <el-form-item label="账务类型" size="small" label-width="95px">
-                                          <el-select :disabled="!add" v-model="formData.type" placeholder="请选择" style="width:140px" filterable>
+                                          <el-select :disabled="!add" v-model="formData.type" placeholder="请选择" style="width:220px" filterable>
                                               <!-- <el-option label="应收" value="0"></el-option> -->
                                               <el-option label="对账" value="3"></el-option>
                                           </el-select>
                                       </el-form-item>
                                       <el-form-item label="账务年度" size="small" label-width="95px" >
-                                          <el-date-picker :disabled="!add"  style="width:140px"
+                                          <el-date-picker :disabled="!add"  style="width:220px"
                                                 v-model="selectedYears"
                                                 align="right"
                                                 type="year"
@@ -122,21 +123,21 @@
                                     </el-row>
                                     <el-row>
                                       <el-form-item label="起始日期" size="small" label-width="95px"> 
-                                           <el-date-picker :disabled="!add" style="width:140px" @change="compareTime('',1)"
+                                           <el-date-picker :disabled="!add" style="width:220px" @change="compareTime('',1)"
                                                 v-model="startTime"
                                                 type="date"
                                                 placeholder="选择日期">
                                           </el-date-picker>
                                       </el-form-item>
                                       <el-form-item label="终止日期" size="small" label-width="95px">
-                                          <el-date-picker :disabled="!add" style="width:140px" @change="compareTime('', 1)"
+                                          <el-date-picker :disabled="!add" style="width:220px" @change="compareTime('', 1)"
                                                 v-model="endTime"
                                                  type="date"
                                                 placeholder="选择日期">
                                           </el-date-picker>
                                       </el-form-item>
                                       <el-form-item label="期间个数" size="small" label-width="95px">
-                                          <el-select :disabled="!add" v-model="formData.number" placeholder="请选择" style="width:140px" @change="choiceMonth(formData.number)">
+                                          <el-select :disabled="!add" v-model="formData.number" placeholder="请选择" style="width:220px" @change="choiceMonth(formData.number)">
                                             <el-option v-for="v in monthList" :key="v" :label="v" :value="v"></el-option>
                                           </el-select>
                                           <!-- <span style="color:red">*期间个数请选择12</span> -->
@@ -321,7 +322,7 @@
             <el-form :inline="true" ref="ruleForm" :model="addformdata" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="rules" >
                          <Col>
                                 <el-form-item label="账期名称"   size="small" label-width="95px"  prop="platform">
-                                      <el-input v-model="addformdata.billName" maxlength="30" style="width:190px" ></el-input>
+                                      <el-input v-model="addformdata.billName" maxlength="30" style="width:220px" ></el-input>
                                 </el-form-item>
                           </Col>
                           <Col>
@@ -432,6 +433,7 @@
                
           },
           selected(name) {
+                    
                     this.formSearch.name=name
                     this.active= name;
                     console.log(this.active)
@@ -532,12 +534,21 @@
           getBillList(){
                         let data={}
                             if(!this.formSearch.basicCompanyId)return this.$message.error('公司不能为空!')
-                            if(!this.formSearch.type) return this.$message.error('账务类型不能为空!')
+                            // if(!this.formSearch.type) return this.$message.error('账务类型不能为空!')
                             data.basicCompanyId= this.formSearch.basicCompanyId
-                            data.type          = Number(this.formSearch.type)
+                            data.type          = 3
+                            data.period        = new Date().getMonth()+1<10? Number(new Date().getFullYear()+'0'+ (new Date().getMonth()+1)+'99'): Number(new Date().getFullYear()+String(new Date().getMonth()+1)+'99')
                        this.request('sys_accountPeriod_names',data,false).then(res=>{
                                     if(res.code==1){
+                                                  // for(let i=0,len=res.data.length;i<len;i++){
+                                                  //      if(i==0){
+                                                  //        res.data[i].index=true
+                                                  //      }else{
+                                                  //         res.data[i].index=false
+                                                  //      }
+                                                  // }
                                                   this.billList=res.data
+
                                                   this.Alist= this.billList
                                     }
                                     
@@ -594,7 +605,7 @@
                       // data.page=this.page
                       // data.pageSize=this.pageSize
                       data.basicCompanyId=this.formSearch.basicCompanyId
-                      data.type          =Number(this.formSearch.type)
+                      data.type          =3
                       data.name          =this.formSearch.name
                       data.pageSize = 30
                       data.currentPage = 1

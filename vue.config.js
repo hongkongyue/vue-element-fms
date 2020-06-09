@@ -66,18 +66,18 @@ module.exports = {
             //     secure: false
             // },
             '/eop-boot': {
-                // target: 'http://eop.quanshangtech.com:888/',
-                // target: 'http://localhost:9080/',     
-                // target:'http://172.168.109.22:9080/',           //克胜
-                //  target : 'http://172.168.109.16:9080/',          //新星
-                //    target : 'http://172.168.108.64:9080/',        //明科
-                target : 'http://172.168.108.151:9080/',        //明杰
-                //  target: 'http://newweb.eptison.com/',
-                // target:'http://172.168.109.82:9080',              //孟洋
-                //  target:'http://172.168.110.253:9080/',        //高露
-                 pathRewrite: { '^/eop-boot': '/' },              //重写代理路径
-                 changeOrigin: true,
-                 secure: false,
+                //    target: 'http://eop.quanshangtech.com:888/',
+                //    target: 'http://localhost:9080/',     
+                //    target:'http://172.168.109.22:9080/',               //许克胜
+                //    target : 'http://172.168.109.16:9080/',            //刘新星
+                //    target : 'http://172.168.108.64:9080/',             //石明科
+                //    target : 'http://172.168.108.151:9080/',         //张明杰
+                      target: 'http://newweb.eptison.com/',            
+                //    target:'http://172.168.109.82:9080',                //刘孟洋
+                //    target:'http://172.168.110.253:9080/',              //高露
+                //    pathRewrite: { '^/eop-boot': '/' },                 //重写代理路径
+                      changeOrigin: true,
+                      secure: false,
                 // pathRewrite: {
                 //     '^/eop-boot': '/'
                 // }

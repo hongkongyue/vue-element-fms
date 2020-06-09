@@ -14,15 +14,15 @@
                 </el-form-item>
             </div>
             <el-form-item label="年份" size="small">
-                <el-date-picker style="width:120px" v-model="formData.year" value-format="yyyy" type="year" placeholder="请选择"> </el-date-picker>
+                <el-date-picker style="width:100px" v-model="formData.year" value-format="yyyy" type="year" placeholder="请选择"> </el-date-picker>
             </el-form-item>
             <el-form-item label="公司" size="small">
-                <el-select v-model="formData.company" placeholder="公司" style="width:100px" filterable>
+                <el-select v-model="formData.company" placeholder="公司" style="width:220px" filterable>
                     <el-option v-for="v in companyList" :key="v.id" :label="v.name" :value="v.id"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="品牌" size="small">
-                <el-select v-model="formData.brandId" placeholder="请选择" style="width:100px" filterable>
+                <el-select v-model="formData.brandId" placeholder="请选择" style="width:140px" filterable>
                     <el-option v-for="v in brandList" :key="v.id" :label="v.name" :value="v.id"></el-option>
                 </el-select>
             </el-form-item>

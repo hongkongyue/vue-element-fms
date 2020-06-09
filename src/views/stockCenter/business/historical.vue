@@ -14,7 +14,7 @@
             </el-form-item>
             </div>
             <el-form-item label="仓库：" size="small">
-                <el-select v-model="formSearch.code" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.code" filterable placeholder="请选择" style="width:250px">
                     <el-option v-for="item in wareHouseList" :key="item.id" :label="item.warehouseName" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>

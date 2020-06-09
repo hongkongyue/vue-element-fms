@@ -20,7 +20,7 @@
                            </el-form-item>
                   </div>
                           <el-form-item label="主体"   size="small">
-                              <el-select v-model="formData.name" placeholder="请选择" style="width:100px" filterable>
+                              <el-select v-model="formData.name" placeholder="请选择" style="width:220px" filterable>
                                   <el-option v-for="v in mainList" :key="v.id"  :label="v.name"  :value="v.name"></el-option>
                               </el-select>
                           </el-form-item>

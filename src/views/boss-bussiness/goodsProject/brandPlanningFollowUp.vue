@@ -1,11 +1,11 @@
 <template>
 <div>
-    <header class="headerstyle">
-        <div style="width:100%;text-align:center;">
+    <header class="headerstyle" v-if="!showhidden">
+        <!-- <div style="width:100%;text-align:center;">
             <span @click="handleShowHidden('hidden')"><i v-if="showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-bottom"></i></span>
             <span @click="handleShowHidden('show')"><i v-if="!showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-top"></i></span>
-        </div>
-        <el-form v-if="!showhidden" :inline="true" :model="formSearch" class="demo-form-inline ">
+        </div> -->
+        <el-form  :inline="true" :model="formSearch" class="demo-form-inline " style="width:99%;maxHeight:102px;overflow-y:auto;overflow-x:hidden;">
             <div>
                 <el-form-item size="small">
                     <el-button v-if="judgeMenu.indexOf('查询') !== -1" size="small" type="primary" @click="onSearch">查询</el-button>
@@ -40,76 +40,83 @@
         </el-form>
     </header>
     <section class="middle" :style="maxHeight">
+        <div style="float:right;position:absolute;top:10px;right:20px">
+            <span @click="handleShowHidden('hidden')"><i v-if="showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-bottom"></i></span>
+            <span @click="handleShowHidden('show')"><i v-if="!showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-top"></i></span>
+        </div>
         <el-row>
             <el-col :span="24">
-                <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+                <el-pagination style="text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
                 </el-pagination>
                 <el-table :data="tableData" style="width: 100%" @row-click="clickRow" border tooltip-effect="dark" :height="oneTableHeight" size="mini">
-                            <el-table-column type="index" width="55" label="序号" align="center"></el-table-column>
-                            <el-table-column prop="basicBrandName" label="品牌名称" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column type="index" width="55" label="序号" fixed="left" align="center"></el-table-column>
+                            <el-table-column prop="basicBrandName" label="品牌名称" fixed="left" sortable min-width="120" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="season" label="季节" align="center" min-width="120" show-overflow-tooltip>
+                            <el-table-column prop="season" label="季节" sortable fixed="left" align="center" min-width="80" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="years" label="年份" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="years" label="年份" sortable fixed="left" min-width="80" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="waveBand" label="波段" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="waveBand" label="波段" sortable fixed="left" min-width="80" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="planningDevelopDate" label="规划开发日期" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="planningDevelopDate" label="规划开发日期" sortable min-width="120" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="planningDeliverDate" label="规划交接日期" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="planningDeliverDate" label="规划交接日期" sortable min-width="120" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="colorSimpleDate" label="齐色样日期" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="colorSimpleDate" label="齐色样日期" sortable min-width="120" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="planningArriveDate" label="规划到货日期" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="planningArriveDate" label="规划到货日期" sortable min-width="120" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="photoDate" label="拍照日期" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="photoDate" label="拍照日期" sortable min-width="120" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="planningLaunchDate" label="可上新日期" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="planningLaunchDate" label="可上新日期" sortable min-width="120" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="launchDate" label="上新日期" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="launchDate" label="上新日期" sortable min-width="110" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="developStyleQty" label="开发款数" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="developStyleQty" label="开发款数" sortable min-width="110" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="remark" label="备注" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="remark" label="备注" sortable min-width="120" align="center" show-overflow-tooltip>
                             </el-table-column>
                         </el-table>
-
+                        <div style="padding-top:10px;text-align:right;float:right;position:relative;z-index:1000" v-if="showhidden">
+                    <span @click="clickDetails('show')"><i v-if="detailsShow == true" style="font-size: 20px;cursor:pointer;float:right" class="el-icon-caret-bottom"></i></span>
+                    <span @click="clickDetails('hidden')"><i v-if="detailsShow == false" style="font-size: 20px;cursor:pointer;float:right" class="el-icon-caret-top"></i></span>
+                </div>
                 <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
                     <el-tab-pane label="开发明细" name="first">
-                        <el-table :data="oneLsit" style="width: 100%" border tooltip-effect="dark" :max-height="twoTableHeight" size="mini">
-                            <el-table-column prop="finishStyleQty" label="已开发款数" min-width="120" align="center" show-overflow-tooltip>
+                        <el-table :data="oneLsit" style="width: 100%" border tooltip-effect="dark" :height="twoTableHeight" size="mini">
+                            <el-table-column prop="finishStyleQty" label="已开发款数" sortable min-width="120" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="planningDevelopPostponeDate" label="设计稿延期天数" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="planningDevelopPostponeDate" sortable label="设计稿延期天数" min-width="140" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="fillingPostponeDay" label="建档延期天数" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="fillingPostponeDay" label="建档延期天数" sortable min-width="120" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="firstSimplePostponeDay" label="头版样衣指令延期天数" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="firstSimplePostponeDay" label="头版样衣指令延期天数" sortable min-width="170" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="designerPostponeDay" label="设计师下单延期天数" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="designerPostponeDay" label="设计师下单延期天数" sortable min-width="160" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="simpleCreatePostponeDay" label="拍摄样指令延期天数" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="simpleCreatePostponeDay" label="拍摄样指令延期天数" sortable min-width="160" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="unPricingStyleQty" label="大货未核价款数" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="unPricingStyleQty" label="大货未核价款数" sortable min-width="140" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="orderStyleQty" label="下单款数" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="orderStyleQty" label="下单款数" sortable min-width="120" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="firstColorQty" label="下单色数" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="firstColorQty" label="下单色数" sortable min-width="120" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="firstQty" label="下单数量" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="firstQty" label="下单数量" sortable min-width="120" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="firstAmount" label="下单金额" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="firstAmount" label="下单金额" sortable min-width="120" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="orderTotalAmount" label="规划开发金额" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="orderTotalAmount" label="规划开发金额" sortable min-width="120" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="diffAmount" label="金额差异" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="diffAmount" label="金额差异" sortable min-width="120" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="diffCostAmount" label="成本差异" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="diffCostAmount" label="成本差异" sortable min-width="120" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="purchasePostponeDay" label="入库延期天数" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="purchasePostponeDay" label="入库延期天数" sortable min-width="120" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="purchaseQty" label="入库数量" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="purchaseQty" label="入库数量" sortable min-width="120" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="purchaseAmount" label="入库金额" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="purchaseAmount" label="入库金额" sortable min-width="120" align="center" show-overflow-tooltip>
                             </el-table-column>
                         </el-table>
                     </el-tab-pane>
@@ -125,14 +132,15 @@
 import {
     commonMixins
 } from 'mixins/common';
-import {
-    debounce
-} from 'mixins/debounce'
+// import {
+//     debounce
+// } from 'mixins/debounce'
 import Util from 'libs/util'
 export default {
-    mixins: [commonMixins, debounce],
+    mixins: [commonMixins],
     data() {
         return {
+            detailsShow:false,
             activeName:'first',
             oneList:[],
             w2uiHeight: '',
@@ -152,17 +160,13 @@ export default {
     },
     created(){
         if (document.body.offsetHeight > 800) {
-
-            this.heightTree = 'height:' + (document.body.offsetHeight - 290) + 'px;overflow-x:hidden;overflow-y:scroll'
-            this.oneTableHeight = (document.body.offsetHeight - 300) * 0.6
-            this.twoTableHeight = (document.body.offsetHeight - 300) * 0.3
-            this.w2uiHeight = 'height:' + (document.body.offsetHeight - 300) * 0.6 + 'px;width:100%'
-            this.maxHeight = 'height:' + (document.body.offsetHeight - 270) + 'px'
+            this.oneTableHeight = (document.body.offsetHeight - 260) * 0.5
+            this.twoTableHeight = (document.body.offsetHeight - 260) * 0.37
+            this.maxHeight = 'height:' + (document.body.offsetHeight - 235) + 'px'
         } else {
-            this.w2uiHeight = 'height:' + (document.body.offsetHeight - 300) * 0.5 + 'px;width:100%'
-            this.twoTableHeight = (document.body.offsetHeight - 300) * 0.25
-            this.maxHeight = 'height:' + (document.body.offsetHeight - 270) + 'px'
-            this.heightTree = 'height:' + (document.body.offsetHeight - 290) + 'px;overflow-x:hidden;overflow-y:scroll'
+            this.twoTableHeight = (document.body.offsetHeight - 260) * 0.38
+            this.oneTableHeight = (document.body.offsetHeight - 260) * 0.45
+            this.maxHeight = 'height:' + (document.body.offsetHeight - 235) + 'px'
         }
     },
     mounted() {
@@ -172,31 +176,77 @@ export default {
     },
     methods: {
         handleShowHidden(name) {
-            console.log(name, '000')
+            this.detailsShow = false
             if (name == 'show') {
                 this.showhidden = true
                 if (document.body.offsetHeight > 800) {
-                    this.maxHeight = 'height:' + (document.body.offsetHeight - 170) + 'px'
-                    this.oneTableHeight = (document.body.offsetHeight - 170) * 0.6
-                    this.twoTableHeight = (document.body.offsetHeight - 170) * 0.25
+                    this.maxHeight = 'height:' + (document.body.offsetHeight - 100) + 'px'
+                    this.oneTableHeight = (document.body.offsetHeight - 100) * 0.5
+                    this.twoTableHeight = (document.body.offsetHeight - 100) * 0.37
                 } else {
-                    this.maxHeight = 'height:' + (document.body.offsetHeight - 170) + 'px'
-                    this.oneTableHeight = (document.body.offsetHeight - 220) * 0.6
-                    this.twoTableHeight = (document.body.offsetHeight - 220) * 0.25
+                    this.maxHeight = 'height:' + (document.body.offsetHeight - 100) + 'px'
+                    this.oneTableHeight = (document.body.offsetHeight - 100) * 0.5
+                    this.twoTableHeight = (document.body.offsetHeight - 100) * 0.35
                 }
 
             } else {
                 this.showhidden = false
                 if (document.body.offsetHeight > 800) {
-                    this.oneTableHeight = (document.body.offsetHeight - 300) * 0.6
-                    this.twoTableHeight = (document.body.offsetHeight - 300) * 0.25
-                    this.maxHeight = 'height:' + (document.body.offsetHeight - 270) + 'px'
+                    this.oneTableHeight = (document.body.offsetHeight - 260) * 0.5
+                    this.twoTableHeight = (document.body.offsetHeight - 260) * 0.37
+                    this.maxHeight = 'height:' + (document.body.offsetHeight - 235) + 'px'
                 } else {
-                    this.maxHeight = 'height:' + (document.body.offsetHeight - 270) + 'px'
-                    this.oneTableHeight = (document.body.offsetHeight - 300) * 0.5
-                    this.twoTableHeight = (document.body.offsetHeight - 300) * 0.25
+                    this.maxHeight = 'height:' + (document.body.offsetHeight - 235) + 'px'
+                    this.oneTableHeight = (document.body.offsetHeight - 260) * 0.45
+                    this.twoTableHeight = (document.body.offsetHeight - 260) * 0.38
                 }
             }
+        },
+        clickDetails(name){
+            if(!this.showhidden){
+                if (name == 'show') {
+                this.detailsShow = false
+                if (document.body.offsetHeight > 800) {
+                    this.oneTableHeight = (document.body.offsetHeight - 260) * 0.5
+                    this.twoTableHeight = (document.body.offsetHeight - 260) * 0.35
+                } else {
+                    this.oneTableHeight = (document.body.offsetHeight - 260) * 0.5
+                    this.twoTableHeight = (document.body.offsetHeight - 260) * 0.35
+                }
+
+            } else {
+                this.detailsShow = true
+                if (document.body.offsetHeight > 800) {
+                    this.oneTableHeight = (document.body.offsetHeight - 260) * 0.35
+                    this.twoTableHeight = (document.body.offsetHeight - 260) * 0.5
+                } else {
+                    this.oneTableHeight = (document.body.offsetHeight - 260) * 0.35
+                    this.twoTableHeight = (document.body.offsetHeight - 260) * 0.5
+                }
+            }
+            }else{
+                if (name == 'show') {
+                this.detailsShow = false
+                if (document.body.offsetHeight > 800) {
+                    this.oneTableHeight = (document.body.offsetHeight - 100) * 0.5
+                    this.twoTableHeight = (document.body.offsetHeight - 100) * 0.35
+                } else {
+                    this.oneTableHeight = (document.body.offsetHeight - 100) * 0.5
+                    this.twoTableHeight = (document.body.offsetHeight - 100) * 0.35
+                }
+
+            } else {
+                this.detailsShow = true
+                if (document.body.offsetHeight > 800) {
+                    this.oneTableHeight = (document.body.offsetHeight - 100) * 0.35
+                    this.twoTableHeight = (document.body.offsetHeight - 100) * 0.5
+                } else {
+                    this.oneTableHeight = (document.body.offsetHeight - 100) * 0.35
+                    this.twoTableHeight = (document.body.offsetHeight - 100) * 0.5
+                }
+            }
+            }
+            
         },
         getButtonJurisdiction() {
             let data = {}
@@ -280,7 +330,7 @@ export default {
     width: 99%;
     margin: 0 auto;
     background: #fff;
-    padding: 20px 20px 10px 20px;
+    padding: 10px 10px 10px 10px;
     margin-bottom: 10px;
 }
 

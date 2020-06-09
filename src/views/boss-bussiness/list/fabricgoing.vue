@@ -64,6 +64,12 @@
                         align: 'center',
                         minWidth: 120,
                     },
+                     {
+                        title: '调整类型',
+                        key: 'adjustTypeName',
+                        align: 'center',
+                        minWidth: 120,
+                    },
                     {
                         title: '发起人',
                         key: 'createUser',
@@ -84,7 +90,7 @@
                     },
                     {
                         title: '已用时间',
-                        key: 'sumTime',
+                        key: 'usedTime',
                         align: 'center',
                         minWidth: 140,
                         // render: (h, params) => {
@@ -115,12 +121,14 @@
                                     },
                                     on: {
                                         click: () => {
+                                            console.log(params.row,'//////')
                                                 this.$router.push({
                                                     name:'planningAdjustmentDetail',
                                                     query: {   
                                                             taskNo: params.row.taskNo,
                                                             id    :params.row.id,
-                                                            taskDetailId:params.row.taskDetailId
+                                                            taskDetailId:params.row.taskDetailId,
+                                                            adjustTypeCode:params.row.adjustTypeCode
                                                          }
                                                 })
                                         }

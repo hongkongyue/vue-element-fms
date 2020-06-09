@@ -22,7 +22,7 @@
                           </el-form-item> -->
                           <el-form-item label="状态：" size="small">
                               <el-select v-model="formSearch.status" placeholder="请选择" style="width:100px" filterable>
-                                  <el-option     label="锁定"  value="2"></el-option>
+                                  <el-option     label="冻结"  value="2"></el-option>
                                   <el-option     label="启用"  value="1"></el-option>
                                   <el-option     label="禁用"  value="0"></el-option>
                               </el-select>
@@ -34,7 +34,7 @@
                               <el-button   size="small" type="primary" @click="onReset">重置密码</el-button>
                           </el-form-item>
                           <el-form-item   size="small">
-                              <el-button   size="small" type="default" @click="unLock">解锁</el-button>
+                              <el-button   size="small" type="default" @click="unLock">解冻</el-button>
                           </el-form-item>
                            <el-form-item   size="small">
                               <el-button   size="small" type="primary" @click="weChat">微信解绑</el-button>
@@ -161,6 +161,28 @@
                             @removeBtn='removeStore' :mode='mode' height='540px' filter openAll>
                         </tree-transfer>
                     </el-tab-pane> -->
+                    <el-tab-pane label="分配供应商" name="six">
+                        <div style="text-align: center">
+                          <el-transfer
+                            style="text-align: left; display: inline-block"
+                            v-model="valueSupplier"
+                            :props="{
+                              key: 'id',
+                              label: 'name'
+                            }"
+                            filterable
+                            :render-content="renderFunc"
+                            :titles="['待分配供应商', '已分配供应商']"
+                            :button-texts="['撤销分配', '分配']"
+                            :format="{
+                              noChecked: '${total}',
+                              hasChecked: '${checked}/${total}'
+                            }"
+                            @change="handleChangeSupplier"
+                            :data="dataSupplier">
+                          </el-transfer>
+                        </div>
+                    </el-tab-pane>
                 </el-tabs>
             </section>
             <Modal v-model="visible" @on-cancel="cancelvisible" :width="250" class-name="customize-modal-center" title="新密码">
@@ -183,6 +205,8 @@ export default {
     mixins: [debounce],
     data() {
       return {
+        valueSupplier:[],
+        dataSupplier:[],
         idString:'',
         userList:[],
         userNameList:[],
@@ -206,7 +230,7 @@ export default {
           statusList:[
               {value:'0',name:'禁用'},
               {value:'1',name:'启用'},
-              {value:'2',name:'锁定'},
+              {value:'2',name:'冻结'},
           ],//用户名
           brandList:[],//部门
           shopList:[],//岗位
@@ -297,8 +321,9 @@ export default {
       }
     },
     mounted(){
-      this.getAllValueList()//获取所有分配权限
+     // this.getAllValueList()//获取所有分配权限
       
+      this.getSuppilerList() //供应商
       
       // this.getDataUser()//获取角色包含权限
       this.getUserName()//角色下拉列表
@@ -315,8 +340,48 @@ export default {
         this.getBrandList()//获取所有品牌
       }else if(a == 'five'){
         this.getGroupByPlatform()//获取所有店铺
+      }else if(a == 'six'){
+        this.getSupplier() //供应商
       }
     },
+     //获取供应商数据
+        getSupplier(){
+          let data={}
+                    this.request('supplier_allSelector', data, true).then((res) => {
+                            if (res.code == 1) {
+                                  this.dataSupplier=res.data
+                            }
+                        }) 
+    },
+    getSuppilerList(){
+      let data = {}
+      data.userId = this.$route.query.id
+      this.request('supplierUserMapping_getAllocation', data, true).then(res => { 
+                if (res.code==1) {
+                  let Supplier = []
+                  res.data.supplierList.map(function (item) {
+                      Supplier.push(item.id)
+                    })
+                    this.valueSupplier = Supplier
+                  }else{
+                    this.$message.warning(res.msg)
+                  }
+              })
+    },
+    //供应商分配权限
+      handleChangeSupplier(value, direction, movedKeys){
+        let data = {}
+        data.userId = this.$route.query.id
+        data.allocationType = 'supplier'
+        data.allocationIds = value
+        this.request('supplierUserMapping_allocation', data, true).then(res => { 
+                if (res.code==1) {
+                    this.$message.success(res.msg)
+                  }else{
+                    this.$message.warning(res.msg)
+                  }
+              })
+      },
     getGroupByPlatform(){
       let data = {}
       this.request('getGroupByPlatform', data, true).then(res => {
@@ -423,27 +488,28 @@ export default {
                             }
                         }) 
         },
-    getAllValueList(){
-      let data = {}
-      data.userId = this.$route.query.id
-      this.request('userMapping_getAllocation', data, true).then(res => { 
-                if (res.code==1) {
-                  let company = []
-                  let Brand = []
-                    res.data.companyList.map(function (item) {
-                      company.push(item.id)
-                    })
-                    res.data.brandList.map(function (item) {
-                      Brand.push(item.id)
-                    })
-                    this.valueCompany = company
-                    this.valueBrand = Brand
-                    this.toData = res.data.storeList
-                  }else{
-                    this.$message.warning(res.msg)
-                  }
-              })
-    },
+    // getAllValueList(){
+    //   let data = {}
+    //   data.userId = this.$route.query.id
+    //   this.request('userMapping_getAllocation', data, true).then(res => { 
+    //             if (res.code==1) {
+    //               let company = []
+    //               let Brand = []
+    //                 res.data.companyList.map(function (item) {
+    //                   company.push(item.id)
+    //                 })
+    //                 res.data.brandList.map(function (item) {
+    //                   Brand.push(item.id)
+    //                 })
+    //                 this.valueCompany = company
+    //                 this.valueBrand = Brand
+    //                 this.toData = res.data.storeList
+    //               }else{
+    //                 this.$message.warning(res.msg)
+    //               }
+    //           })
+    // },
+    
     //获取公司分配权限
       handleChangeCompany(value, direction, movedKeys){
         let data = {}

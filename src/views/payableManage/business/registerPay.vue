@@ -69,17 +69,17 @@
         <div id="main" style="width: 100%; height: 400px;"></div>
     </section>
     <!-- 编辑新增弹框 -->
-    <Modal v-model="dialogVisible" :styles="mystyle" :rules="rules" :title="dialogtitle" @on-cancel='cancel' :width="380" @on-ok="editSubmit" class-name="customize-modal-center">
+    <Modal v-model="dialogVisible" :styles="mystyle" :rules="rules" :title="dialogtitle" @on-cancel='cancel' :width="480" @on-ok="editSubmit" class-name="customize-modal-center">
         <Row class="margin-bottom-10 background-color-white exhibition">
             <el-form :inline="true" ref="ruleForm" :model="formData" class="demo-form-inline demo-ruleForm " :label-position="right" :rules="rules">
                 <Col>
                         <el-form-item label="公司：" size="small" label-width="100px" prop="basicCompanyId">
-                            <el-select v-model="formData.basicCompanyId"  filterable placeholder="请选择" style="width:150px">
+                            <el-select v-model="formData.basicCompanyId"  filterable placeholder="请选择" style="width:250px">
                                 <el-option v-for="item in companyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                             </el-select>
                          </el-form-item>
-                        <el-form-item label="供应商：" size="small" label-width="110px" prop="supplierId">
-                                <el-select v-model="formData.supplierId" placeholder="请选择" style="width:140px" filterable >
+                        <el-form-item label="供应商：" size="small" label-width="100px" prop="supplierId">
+                                <el-select v-model="formData.supplierId" placeholder="请选择" style="width:250px" filterable >
                                     <el-option v-for="v in suppyList" :key="v.id" :label="v.name" :value="v.id"></el-option>
                                 </el-select>
                         </el-form-item>
@@ -88,14 +88,14 @@
                                 v-model="formData.date"
                                 type="date"
                                 :format="yyyy-hh-mm"
-                                placeholder="付款日期" style="width:150px">
+                                placeholder="付款日期" style="width:250px">
                             </el-date-picker>
                         </el-form-item>
                         <el-form-item label="付款金额：" size="small" label-width="100px"  prop="money">
-                              <el-input v-model="formData.money"  placeholder="请输入付款金额" type="number" style="width:150px" :precision="2"></el-input>
+                              <el-input v-model="formData.money"  placeholder="请输入付款金额" type="number" style="width:250px" :precision="2"></el-input>
                         </el-form-item>
                         <el-form-item label="备注：" size="small" label-width="100px">
-                            <el-input v-model="formData.remark"  maxlength="1000" type="textarea" style="width:150px"></el-input>
+                            <el-input v-model="formData.remark"  maxlength="1000" type="textarea" style="width:250px"></el-input>
                         </el-form-item>
                 </Col>
                 <el-form-item style="padding-left:100px">

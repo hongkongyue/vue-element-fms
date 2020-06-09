@@ -4,17 +4,17 @@
                 <el-form :inline="true" :model="formData" class="demo-form-inline">
                         <Col>
                                 <el-form-item label="姓名"   size="small">
-                                    <el-select v-model="formData.name" placeholder="请选择" style="width:100px" filterable>
+                                    <el-select v-model="formData.name" placeholder="请选择" style="width:150px" filterable>
                                         <el-option  v-for="v in staffNameList " :key="v" :label="v" :value="v"></el-option>
                                     </el-select>
                                 </el-form-item>
                                 <el-form-item label="工号" size="small">
-                                    <el-select v-model="formData.code" placeholder="请选择" style="width:100px" filterable	>
+                                    <el-select v-model="formData.code" placeholder="请选择" style="width:150px" filterable	>
                                          <el-option  v-for="v in codeList " :key="v" :label="v" :value="v"></el-option>
                                     </el-select>
                                 </el-form-item>
                                 <el-form-item label="所属部门" size="small">
-                                    <el-select v-model="formData.basicDepartmentName" placeholder="请选择" style="width:180px" filterable	>
+                                    <el-select v-model="formData.basicDepartmentName" placeholder="请选择" style="width:220px" filterable	>
                                         <el-option  v-for="v in departmentList " :key="v" :label="v" :value="v"></el-option>
                                     </el-select>
                                 </el-form-item>

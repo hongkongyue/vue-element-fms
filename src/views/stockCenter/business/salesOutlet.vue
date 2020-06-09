@@ -14,7 +14,7 @@
             </el-form-item>
             </div>
             <el-form-item label="仓库：" size="small">
-                <el-select v-model="formSearch.warehouse" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.warehouse" filterable placeholder="请选择" style="width:250px">
                     <el-option v-for="item in warehouseList" :key="item.id" :label="item.warehouseName" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
@@ -33,12 +33,12 @@
                 <el-input style="width:180px" placeholder="请输入"  v-model="formSearch.platformNo"></el-input>
             </el-form-item>
             <el-form-item v-if="show == true" label="业务类型：" size="small">
-                <el-select v-model="formSearch.busType" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.busType" filterable placeholder="请选择" style="width:160px">
                     <el-option v-for="item in busTypeList" :key="item.name" :label="item.name" :value="item.name"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item v-if="show == true" label="公司：" size="small">
-                <el-select v-model="formSearch.basicCompanyName" filterable placeholder="请选择" style="width:200px">
+                <el-select v-model="formSearch.basicCompanyName" filterable placeholder="请选择" style="width:220px">
                     <el-option v-for="item in companyCodeOptions" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
@@ -48,7 +48,7 @@
                   type="daterange"
                   range-separator="~"
                   start-placeholder="开始日期"
-                  end-placeholder="结束日期"  style="width:290px" placeholer="请选择">
+                  end-placeholder="结束日期"  style="width:240px" placeholer="请选择">
                 </el-date-picker>
             </el-form-item>
             <el-form-item size="small">

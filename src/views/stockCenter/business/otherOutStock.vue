@@ -14,7 +14,7 @@
             </el-form-item>
             </div>
             <el-form-item label="仓库：" size="small">
-                <el-select v-model="formSearch.wareHouse" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.wareHouse" filterable placeholder="请选择" style="width:250px">
                     <el-option v-for="item in wareHouseList" :key="item.id" :label="item.warehouseName" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
@@ -33,7 +33,7 @@
                 <el-input style="width:180px" placeholder="请输入"  v-model="formSearch.platform"></el-input>
             </el-form-item> -->
             <el-form-item label="业务类型：" size="small">
-               <el-select v-model="formSearch.code" filterable placeholder="请选择" style="width:150px">
+               <el-select v-model="formSearch.code" filterable placeholder="请选择" style="width:110px">
                     <el-option v-for="item in busTypeList" :key="item.name" :label="item.name" :value="item.name"></el-option>
                 </el-select>
             </el-form-item>
@@ -43,7 +43,7 @@
                   type="daterange"
                   range-separator="~"
                   start-placeholder="开始日期"
-                  end-placeholder="结束日期"  style="width:290px" placeholer="请选择">
+                  end-placeholder="结束日期"  style="width:280px" placeholer="请选择">
                 </el-date-picker>
             </el-form-item>
         </el-form>

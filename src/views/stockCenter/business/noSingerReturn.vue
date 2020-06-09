@@ -14,7 +14,7 @@
             </el-form-item>
             </div>
             <el-form-item label="仓库：" size="small">
-                <el-select v-model="formSearch.basicWarehouseId" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.basicWarehouseId" filterable placeholder="请选择" style="width:250px">
                     <el-option v-for="item in wareHouseList" :key="item.id" :label="item.warehouseName" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
@@ -36,7 +36,7 @@
                   type="daterange"
                   range-separator="~"
                   start-placeholder="开始日期"
-                  end-placeholder="结束日期"  style="width:290px" placeholer="请选择">
+                  end-placeholder="结束日期"  style="width:280px" placeholer="请选择">
                 </el-date-picker>
             </el-form-item>
         </el-form>

@@ -22,12 +22,12 @@
                               </el-select>
                           </el-form-item> -->
                           <el-form-item label="岗位名称："   size="small">
-                              <el-select v-model="formSearch.basicStationName" filterable placeholder="请选择" style="width:150px">
+                              <el-select v-model="formSearch.basicStationName" filterable placeholder="请选择" style="width:220px">
                                   <el-option v-for="item in companyCodeOptions" :key="item.basicStationName" :label="item.basicStationName" :value="item.basicStationName"></el-option>
                               </el-select>
                           </el-form-item>
                           <el-form-item label="所属公司："   size="small">
-                              <el-select v-model="formSearch.person" @change="changeCode(formSearch.person)" filterable placeholder="请选择" style="width:150px">
+                              <el-select v-model="formSearch.person" @change="changeCode(formSearch.person)" filterable placeholder="请选择" style="width:220px">
                                   <el-option v-for="item in companyNameOptions" :key="item" :label="item.name" :value="item.name"></el-option>
                               </el-select>
                           </el-form-item>

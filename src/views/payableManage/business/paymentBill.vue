@@ -34,6 +34,11 @@
                     <el-option v-for="item in companyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
+            <el-form-item  label="所属对账人员：" size="small">
+                <el-select v-model="formSearch.payableUser" @change="changePayable(formSearch.payableUser)" filterable placeholder="请选择" style="width:120px">
+                    <el-option v-for="item in payableUserList" :key="item.payableUserId" :label="item.payableUser" :value="item.payableUserId"></el-option>
+                </el-select>
+            </el-form-item>
            <el-form-item label="供应商：" size="small">
                 <el-select v-model="formSearch.basicSupplierId" filterable clearable placeholder="请选择" style="width:220px">
                     <el-option v-for="item in supplyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
@@ -41,8 +46,6 @@
             </el-form-item>
              <el-form-item label="单据状态：" size="small">
                 <el-select v-model="formSearch.status" filterable clearable placeholder="请选择" style="width:155px">
-                     <!-- <el-option label="待审核" value="0"></el-option> -->
-                    <!-- <el-option label="编辑中" value="2"></el-option> -->
                     <el-option label="待审核" value="0"></el-option>
                     <el-option label="已审核" value="1"></el-option>
                 </el-select>
@@ -51,26 +54,6 @@
                  <el-date-picker v-model="formSearch.arriveTime" type="daterange" value-format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                  </el-date-picker>
             </el-form-item>
-           <!-- <el-form-item size="small" label-width="100px">
-                <el-button v-if="show == false" @click="changeShow" style="float:right" size="small"><i class="el-icon-bottom"></i></el-button>
-            </el-form-item>
-            <el-form-item size="small">
-                <el-button v-if="show == true" @click="changeHidden" style="float:right" size="small"><i class="el-icon-top"></i></el-button>
-            </el-form-item> -->
-           
-            <!-- <el-form-item v-if="show == true" label="开票日期：" size="small">
-                 <el-date-picker v-model="formSearch.invoiceTime" type="daterange" value-format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                 </el-date-picker>
-            </el-form-item> -->
-            <!-- <el-form-item label="发票编码：" size="small" v-if="show == true">
-                <el-input v-model.trim="formSearch.invoiceNo" clearable placeholder="请输入" style="width:150px"></el-input>
-            </el-form-item> -->
-            <!-- <el-form-item label="扣款状态：" size="small" v-if="show == true">
-                <el-select v-model="formSearch.dtStatus" filterable placeholder="请选择" style="width:150px">
-                    <el-option label="已扣款" value="1"></el-option>
-                    <el-option label="未扣款" value="0"></el-option>
-                </el-select>
-            </el-form-item> -->
              
         </el-form>
     </header>
@@ -81,48 +64,6 @@
     </section>
     <section class="footer" style="margin-bottom:0px">
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-            <!-- <el-tab-pane label="明细" name="first">
-                <section class="middle">
-                    <el-table :data="geNewData" border style="width: 100%">
-                        <el-table-column type="index" label="序号" align="center" width="50">
-                        </el-table-column>
-                        <!-- <el-table-column prop="name" align="center" label="公司" min-width="120">
-                        </el-table-column>
-                        <el-table-column prop="amount1" align="center" label="供应商" min-width="120">
-                        </el-table-column> -->
-                        <!-- <el-table-column prop="payableReconciliationOrderNo" align="center" min-width="120" label="对账单编号">
-                        </el-table-column>
-                        <el-table-column prop="poInNo" align="center" min-width="120" label="制单号">
-                        </el-table-column>
-                        <el-table-column prop="goodsNo" align="center" min-width="120" label="大货款号">
-                        </el-table-column>
-                        <el-table-column prop="batchNo" align="center" min-width="120" label="批次">
-                        </el-table-column>
-                        <el-table-column prop="invoiceQty" align="center" min-width="120" label="数量">
-                        </el-table-column>
-                        <el-table-column prop="taxExcludedAmount" align="center" min-width="120" label="不含税单价">
-                               <template slot-scope="scope">{{scope.row.taxExcludedAmount| singlePrice}}</template>
-                        </el-table-column>
-                        <el-table-column prop="taxExcludedPrice" align="center" min-width="120" label="不含税金额">
-                                 <template slot-scope="scope">{{scope.row.taxExcludedPrice| moneyFilters}}</template>
-                        </el-table-column>
-                         <el-table-column prop="tax" align="center" min-width="120" label="税率"> -->
-                              <!-- <template slot-scope="scope">{{scope.row.deductionAmount|moneyFilters}}</template> -->
-                        <!-- </el-table-column>
-                        <el-table-column prop="taxAmount" label="税额" min-width="120" align="center" show-overflow-tooltip>
-                                   <template slot-scope="scope">{{scope.row.taxAmount| moneyFilters}}</template>
-                        </el-table-column>
-                        <el-table-column prop="taxIncludedPrice" align="center" min-width="120" label="含税单价">
-                             <template slot-scope="scope">{{scope.row.taxIncludedPrice| singlePrice}}</template>
-                        </el-table-column>
-                        <el-table-column prop="taxIncludedAmount" align="center" min-width="120" label="含税金额">
-                               <template slot-scope="scope">{{scope.row.taxIncludedAmount| moneyFilters}}</template>
-                        </el-table-column> -->
-                        <!-- <el-table-column prop="remark" align="center" min-width="120" label="备注">
-                        </el-table-column> -->
-                    <!-- </el-table>
-                </section>
-            </el-tab-pane>  -->
             <el-tab-pane label="操作日志" name="first">
                 <section class="middle">
                     <el-table :data="logsList" style="width: 100%" border tooltip-effect="dark" max-height="250">
@@ -146,43 +87,32 @@
             <el-form :inline="true" ref="adjustForm" :model="adjustObj" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="rules">
                 <Col>
                         <el-form-item label="公司：" size="small" label-width="95px" prop="basicCompanyId">
-                            <el-select v-model="adjustObj.basicCompanyId" filterable clearable placeholder="请选择" style="width:200px">
+                            <el-select v-model="adjustObj.basicCompanyId" filterable clearable placeholder="请选择" style="width:220px">
                                   <el-option v-for="item in companyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="供应商：" size="small" label-width="95px" prop="basicSupplierId">
-                               <el-select v-model="adjustObj.basicSupplierId" filterable clearable placeholder="请选择" style="width:200px">
+                               <el-select v-model="adjustObj.basicSupplierId" filterable clearable placeholder="请选择" style="width:220px">
                                    <el-option v-for="item in supplyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                                </el-select>
                        </el-form-item>
                  </Col>
                  <Col>
                 <el-form-item label="付款日期：" size="small" label-width="95px" prop="payTime">
-                     <el-date-picker v-model="adjustObj.payTime"  type="date" value-format="yyyy-MM-dd" style="width:200px">
+                     <el-date-picker v-model="adjustObj.payTime"  type="date" value-format="yyyy-MM-dd" style="width:220px">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="付款金额：" size="small" label-width="95px" prop="amount">
-                         <el-input-number clearable v-model.trim="adjustObj.amount" :controls="false" :precision="2" :min="0.00" style="width:200px"></el-input-number>
+                         <el-input-number clearable v-model.trim="adjustObj.amount" :controls="false" :precision="2" :min="0.00" style="width:220px"></el-input-number>
                         <!-- <el-input v-model="adjustObj.kklx"  style="width:200px"></el-input> -->
                 </el-form-item>
                 </Col>
                 <Col>
                 <el-form-item label="付款方式：" size="small" label-width="95px" prop="payway">
-                      <el-select v-model="adjustObj.payway" filterable clearable placeholder="请选择" style="width:200px">
+                      <el-select v-model="adjustObj.payway" filterable clearable placeholder="请选择" style="width:220px">
                                    <el-option v-for="item in payList" :key="item.name" :label="item.name" :value="item.id"></el-option>
-                                   <!-- <el-option   label="电汇"     value="1"></el-option>
-                                   <el-option   label="现金"     value="2"></el-option>
-                                   <el-option   label="支票"     value="3"></el-option>
-                                   <el-option   label="商业汇票" value="4"></el-option> -->
                       </el-select>
-                    <!-- <el-input v-model="adjustObj.kkje"  clearable style="width:200px"></el-input> -->
                 </el-form-item>
-                <!-- <el-form-item label="品牌：" size="small" label-width="115px" prop="platform">
-                    <el-input v-model="adjustObj.brand" disabled style="width:200px"></el-input>
-                </el-form-item>
-                <el-form-item label="结算制单号：" size="small" label-width="115px" prop="platform">
-                    <el-input v-model="adjustObj.codeNo" style="width:200px"></el-input>
-                </el-form-item> -->
                 </Col>
                 <Col>
                    <el-form-item label="备注：" size="small" label-width="95px" prop="remark">
@@ -206,42 +136,34 @@
             <el-form :inline="true" ref="editForm" :model="editObj" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="rules">
                 <Col>
                          <el-form-item label="付款单号：" size="small" label-width="95px" prop="remark">
-                            <el-input disabled v-model="editObj.bizNo" clearable style="width:200px"></el-input>
+                            <el-input disabled v-model="editObj.bizNo" clearable style="width:220px"></el-input>
                          </el-form-item>
                         <el-form-item label="公司：" size="small" label-width="95px" prop="basicCompanyId">
-                            <el-select v-model="editObj.basicCompanyId" filterable clearable placeholder="请选择" style="width:200px">
+                            <el-select v-model="editObj.basicCompanyId" filterable clearable placeholder="请选择" style="width:220px">
                                   <el-option v-for="item in companyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
                  </Col>
                  <Col>
                     <el-form-item label="供应商：" size="small" label-width="95px" prop="basicSupplierId">
-                                <el-select v-model="editObj.basicSupplierId" filterable clearable placeholder="请选择" style="width:200px">
+                                <el-select v-model="editObj.basicSupplierId" filterable clearable placeholder="请选择" style="width:220px">
                                     <el-option v-for="item in supplyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                                 </el-select>
                     </el-form-item>
                     <el-form-item label="付款日期：" size="small" label-width="95px" prop="payTime2">
-                        <el-date-picker v-model="editObj.payTime2"  type="date" value-format="yyyy-MM-dd" style="width:200px">
+                        <el-date-picker v-model="editObj.payTime2"  type="date" value-format="yyyy-MM-dd" style="width:220px">
                     </el-date-picker>
                     </el-form-item>
                 </Col>
                 <Col>
                 <el-form-item label="付款方式：" size="small" label-width="95px" prop="payway">
-                      <el-select v-model="editObj.payway" filterable clearable placeholder="请选择" style="width:200px">
+                      <el-select v-model="editObj.payway" filterable clearable placeholder="请选择" style="width:220px">
                                   <el-option v-for="item in payList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                       </el-select>
-                    <!-- <el-input v-model="adjustObj.kkje"  clearable style="width:200px"></el-input> -->
                 </el-form-item>
                  <el-form-item label="付款金额：" size="small" label-width="95px" prop="amount">
-                            <el-input-number clearable v-model.trim="editObj.amount" :controls="false" :precision="2" :min="0.00" style="width:200px"></el-input-number>
-                            <!-- <el-input v-model="adjustObj.kklx"  style="width:200px"></el-input> -->
+                            <el-input-number clearable v-model.trim="editObj.amount" :controls="false" :precision="2" :min="0.00" style="width:220px"></el-input-number>
                 </el-form-item>
-                <!-- <el-form-item label="品牌：" size="small" label-width="115px" prop="platform">
-                    <el-input v-model="adjustObj.brand" disabled style="width:200px"></el-input>
-                </el-form-item>
-                <el-form-item label="结算制单号：" size="small" label-width="115px" prop="platform">
-                    <el-input v-model="adjustObj.codeNo" style="width:200px"></el-input>
-                </el-form-item> -->
                 </Col>
                 <Col>
                    <el-form-item label="备注：" size="small" label-width="95px" prop="remark">
@@ -287,7 +209,6 @@
             <Button type="primary" @click="upload">确定</Button>
         </div>
     </Modal>
-    <!-- <import-component ref="importComp" :companyList="companyList"></import-component> -->
 </div>
 </template>
 
@@ -305,6 +226,7 @@ export default {
     // },
     data() {
         return {
+            payableUserList:[],
             basicCompanyId:'',
             exportObj:{
                        selected:''
@@ -405,6 +327,7 @@ export default {
     created() {
         this.getCompany()
         this.getSupply()
+        this.getPayableUser()
     },
     destroyed() {
         this.resetCommit()
@@ -419,6 +342,27 @@ export default {
         this.initTable([])
     },
     methods: {
+        //重新获取供应商下拉
+        changePayable(name){
+            this.formSearch.basicSupplierId = ''
+            console.log(name)
+            let vars = {}
+            vars.payableUserId = name
+             this.requestWithUriVars('selectorPayableSupplier', vars, null, true).then(res => {
+          if (res.code==1) {
+              this.supplyList = res.data
+            }else{
+                this.supplyList = []
+            }
+          })
+        },
+        getPayableUser(){
+            this.request('supplier_selectorPayable', {}, true).then(res => {
+                if (res.code == 1) {
+                    this.payableUserList = res.data
+                }
+            })
+        },
         getPaywayList(){
               this.request('masterdata_basicpayablepayway_selector',{},false).then(res=>{
                   if(res.code==1){
@@ -658,12 +602,7 @@ export default {
             for (let i in this.formSearch) {
                 this.formSearch[i] = ''
             }
-            // this.resetCommit()
-            // this.formSearch = {
-            //     year:new Date()
-            // }
-            // this.formSearch.year = new Date()
-            // this.initTable([])
+            this.getSupply()
         },
         //公司下拉列表
         getCompany() {
@@ -693,6 +632,7 @@ export default {
                 data.currentPage     = this.currentPage
                 data.basicCompanyId  = this.formSearch.basicCompanyId  //
                 data.basicSupplierId = this.formSearch.basicSupplierId //供应商id
+                data.payableUserId = this.formSearch.payableUser//所属人员
                 this.formSearch.arriveTime?data.bizStartDate=this.formSearch.arriveTime[0]:delete data.bizStartDate;
                 this.formSearch.arriveTime?data.bizEndDate=this.formSearch.arriveTime[1]:delete data.bizEndDate;
                 data.status=this.formSearch.status!=''?Number(this.formSearch.status):'';       

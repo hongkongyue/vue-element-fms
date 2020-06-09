@@ -63,16 +63,16 @@ export const debounce={
              methods:{
                 initHeight(){
                     if (document.body.offsetHeight > 800) {
-                        this.heightTree = 'height:' + (document.body.offsetHeight - 290) + 'px;overflow-x:hidden;overflow-y:scroll'
-                        this.oneTableHeight = (document.body.offsetHeight - 300) * 0.6
-                        this.twoTableHeight = (document.body.offsetHeight - 300) * 0.3
-                        this.w2uiHeight = 'height:' + (document.body.offsetHeight - 300) * 0.6 + 'px;width:100%'
-                        this.maxHeight = 'height:' + (document.body.offsetHeight - 270) + 'px'
+                        this.heightTree = 'height:' + (document.body.offsetHeight - 270) + 'px;overflow-x:hidden;overflow-y:scroll'
+                        this.oneTableHeight = (document.body.offsetHeight - 280) * 0.6
+                        this.twoTableHeight = (document.body.offsetHeight - 280) * 0.3
+                        this.w2uiHeight = 'height:' + (document.body.offsetHeight - 280) * 0.6 + 'px;width:100%'
+                        this.maxHeight = 'height:' + (document.body.offsetHeight - 250) + 'px'
                     } else {
-                        this.w2uiHeight = 'height:' + (document.body.offsetHeight - 300) * 0.5 + 'px;width:100%'
-                        this.twoTableHeight = (document.body.offsetHeight - 300) * 0.25
-                        this.maxHeight = 'height:' + (document.body.offsetHeight - 270) + 'px'
-                        this.heightTree = 'height:' + (document.body.offsetHeight - 290) + 'px;overflow-x:hidden;overflow-y:scroll'
+                        this.w2uiHeight = 'height:' + (document.body.offsetHeight - 280) * 0.5 + 'px;width:100%'
+                        this.twoTableHeight = (document.body.offsetHeight - 280) * 0.25
+                        this.maxHeight = 'height:' + (document.body.offsetHeight - 250) + 'px'
+                        this.heightTree = 'height:' + (document.body.offsetHeight - 270) + 'px;overflow-x:hidden;overflow-y:scroll'
                     }
                 },
                 handleShowHidden(name) {
@@ -80,25 +80,25 @@ export const debounce={
                         if (name == 'show') {
                             this.showhidden = true
                             if (document.body.offsetHeight > 800) {
-                                this.maxHeight = 'height:' + (document.body.offsetHeight - 170) + 'px'
-                                this.oneTableHeight = (document.body.offsetHeight - 170) * 0.6
-                                this.twoTableHeight = (document.body.offsetHeight - 170) * 0.25
+                                this.maxHeight = 'height:' + (document.body.offsetHeight - 110) + 'px'
+                                this.oneTableHeight = (document.body.offsetHeight - 110) * 0.6
+                                this.twoTableHeight = (document.body.offsetHeight - 110) * 0.25
                             } else {
-                                this.maxHeight = 'height:' + (document.body.offsetHeight - 170) + 'px'
-                                this.oneTableHeight = (document.body.offsetHeight - 220) * 0.6
-                                this.twoTableHeight = (document.body.offsetHeight - 220) * 0.25
+                                this.maxHeight = 'height:' + (document.body.offsetHeight - 110) + 'px'
+                                this.oneTableHeight = (document.body.offsetHeight - 110) * 0.6
+                                this.twoTableHeight = (document.body.offsetHeight - 110) * 0.25
                             }
             
                         } else {
                             this.showhidden = false
                             if (document.body.offsetHeight > 800) {
-                                this.oneTableHeight = (document.body.offsetHeight - 300) * 0.6
-                                this.twoTableHeight = (document.body.offsetHeight - 300) * 0.25
-                                this.maxHeight = 'height:' + (document.body.offsetHeight - 270) + 'px'
+                                this.oneTableHeight = (document.body.offsetHeight - 280) * 0.6
+                                this.twoTableHeight = (document.body.offsetHeight - 280) * 0.25
+                                this.maxHeight = 'height:' + (document.body.offsetHeight - 250) + 'px'
                             } else {
-                                this.maxHeight = 'height:' + (document.body.offsetHeight - 270) + 'px'
-                                this.oneTableHeight = (document.body.offsetHeight - 300) * 0.5
-                                this.twoTableHeight = (document.body.offsetHeight - 300) * 0.25
+                                this.maxHeight = 'height:' + (document.body.offsetHeight - 250) + 'px'
+                                this.oneTableHeight = (document.body.offsetHeight - 280) * 0.5
+                                this.twoTableHeight = (document.body.offsetHeight - 280) * 0.25
                             }
                         }
                     },
@@ -129,9 +129,10 @@ export const debounce={
                     },
                     selfAdjust(){
                         if(document.body.clientWidth<1600){
-                                this.$refs.mainTable.maxHeight=250
+                                this.$refs.mainTable.maxHeight=250+'px'
                         }else{
-                                this.$refs.mainTable.maxHeight=450
+                                this.$refs.mainTable.maxHeight=450+'px' 
+                                this.$refs.mainTable.maxHeight=250
                         }
                     },
              }

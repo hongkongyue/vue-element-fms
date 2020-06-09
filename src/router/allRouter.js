@@ -9,6 +9,18 @@ const appRouter = [
         component: Main,
         children: [
             {
+                path: 'fabricQuality',
+                title: '面料质检项',
+                name: 'fabricQuality',
+                meta: {
+                    title: '/主数据/面料质检项',
+                    path: '/receivablePayable/fabricQuality',
+                    label: '面料质检项'
+                },
+                component: () => import('@/views/receivablePayable/maindataPreserve/fabricQuality.vue'),
+                hidden: false
+            },
+            {
                 path: 'developType',
                 title: '开发类型',
                 name: 'developType',
@@ -822,6 +834,19 @@ const appRouter = [
                 hidden: false
             },
             {
+                path: 'static',
+                title: '供应商对账进度报表',
+                name: 'static',
+                meta: {
+                    title: '/应付管理/供应商对账进度报表',
+                    path: '/payableManage/static',
+                    label: '供应商对账进度报表'
+                },
+                component: () =>
+                    import('@/views/payableManage/business/static.vue'),
+                hidden: false
+            },
+            {
                 path: 'settlementDetail',
                 title: '结算明细',
                 name: 'settlementDetail',
@@ -1184,7 +1209,7 @@ const appRouter = [
                 meta: {
                     title: '/供应商平台权限配置/资源管理',
                     path: '/supplier_privilege/resource_list',
-                    label: '人员'
+                    label: '资源管理'
                 },
                 component: () => import('@/views/supplierPrivilege/menu/resource_list.vue'),
                 hidden: false
@@ -1483,6 +1508,42 @@ const appRouter = [
                     import ('@/views/fabricManagement/testingComplete.vue'),
                 hidden: false
             },
+            // { path: '/fabricManagement/qualityList',
+            //     title: '质检任务列表',
+            //     name: 'qualityList',
+            //     meta:{
+            //         title:'/面料开发管理/质检任务列表',
+            //         path:'/fabricManagement/qualityList',
+            //         label:'质检任务列表'
+            //     },
+            //     component: () =>
+            //         import ('@/views/fabricManagement/qualityList.vue'),
+            //     hidden: false
+            // },
+            // { path: '/fabricManagement/qualityConduct',
+            //     title: '质检详情',
+            //     name: 'qualityConduct',
+            //     meta:{
+            //         title:'/面料开发管理/质检详情',
+            //         path:'/fabricManagement/qualityConduct',
+            //         label:'质检详情'
+            //     },
+            //     component: () =>
+            //         import ('@/views/fabricManagement/qualityConduct.vue'),
+            //     hidden: false
+            // },
+            // { path: '/fabricManagement/qualityComplete',
+            //     title: '质检完成页',
+            //     name: 'qualityComplete',
+            //     meta:{
+            //         title:'/面料开发管理/质检完成页',
+            //         path:'/fabricManagement/qualityComplete',
+            //         label:'质检完成页'
+            //     },
+            //     component: () =>
+            //         import ('@/views/fabricManagement/qualityComplete.vue'),
+            //     hidden: false
+            // },
             { path: '/fabricManagement/pricingList',
                 title: '核价任务列表',
                 name: 'pricingList',
@@ -1846,6 +1907,252 @@ const appRouter = [
                 component: () =>
                     import ('@/views/boss-bussiness/goodsProject/planningDelayBilling.vue'),
                 hidden: true
+            },
+            //categoryDevelopmentprogressAnalysis
+             {//planningDelayBilling
+                path: 'categoryDevelopmentprogressAnalysis',
+                title: '正常波段开发进度分析',
+                name: 'categoryDevelopmentprogressAnalysis',
+                meta:{
+                    title:'/大商品/正常波段开发进度分析',
+                    path:'/boss-bussiness/categoryDevelopmentprogressAnalysis',
+                    label:'正常波段开发进度分析'
+                },
+                component: () =>
+                    import ('@/views/boss-bussiness/goodsProject/categoryDevelopmentprogressAnalysis.vue'),
+                hidden: false
+            },
+            {//planningDelayBilling
+                path: 'hotAnalysis',
+                title: '爆款开发进度分析',
+                name: 'hotAnalysis',
+                meta:{
+                    title:'/大商品/爆款开发进度分析',
+                    path:'/boss-bussiness/hotAnalysis',
+                    label:'爆款开发进度分析'
+                },
+                component: () =>
+                    import ('@/views/boss-bussiness/goodsProject/hotAnalysis.vue'),
+                hidden: false
+            },
+             {//planningDelayBilling
+                path: 'costDevelopmentProgressAnalysis',
+                title: '成本开发进度分析',
+                name: 'costDevelopmentProgressAnalysis',
+                meta:{
+                    title:'/大商品/成本开发进度分析',
+                    path:'/boss-bussiness/costDevelopmentProgressAnalysis',
+                    label:'成本开发进度分析'
+                },
+                component: () =>
+                    import ('@/views/boss-bussiness/goodsProject/costDevelopmentProgressAnalysis.vue'),
+                    hidden: false
+                },
+               {
+                path: 'photoTimeAnalysis',
+                title: '拍照时间分析',
+                name: 'photoTimeAnalysis',
+                meta:{
+                    title:'/大商品/拍照时间分析',
+                    path:'/boss-bussiness/photoTimeAnalysis',
+                    label:'拍照时间分析'
+                },
+                component: () =>
+                    import ('@/views/boss-bussiness/goodsProject/photoTimeAnalysis.vue'),
+                hidden: false
+            },
+            {
+                path: 'delayDayAnalysis',
+                title: '延期天数分析',
+                name: 'delayDayAnalysis',
+                meta:{
+                    title:'/大商品/延期天数分析',
+                    path:'/boss-bussiness/delayDayAnalysis',
+                    label:'延期天数分析'
+                },
+                component: () =>
+                    import ('@/views/boss-bussiness/goodsProject/delayDayAnalysis.vue'),
+                hidden: false
+            },
+            {//categoryElementAdjustment
+                path: 'hotAdjust',
+                title: '爆款调整',
+                name: 'hotAdjust',
+                meta:{
+                    title:'/大商品/爆款调整',
+                    path:'/boss-bussiness/hotAdjust',
+                    label:'爆款调整'
+                },
+                component: () =>
+                    import ('@/views/boss-bussiness/goodsProject/hotAdjust.vue'),
+                hidden: false
+            },
+            {//categoryElementAdjustment
+                path: 'categoryElementAdjustment',
+                title: '品类要素调整',
+                name: 'categoryElementAdjustment',
+                meta:{
+                    title:'/大商品/品类要素调整',
+                    path:'/boss-bussiness/categoryElementAdjustment',
+                    label:'品类要素调整'
+                },
+                component: () =>
+                    import ('@/views/boss-bussiness/goodsProject/categoryElementAdjustment.vue'),
+                hidden: false
+            },
+        ]
+    },
+
+    //吊牌洗唛打印
+    {
+        path:'/qualityManagement',
+        icon:'',
+        name:'qualityManagement',
+        title:'质检管理',
+        component:Main,
+        children:[
+            {
+                path: '/qualityManagement/toAcceptList',
+                title: '受理任务',
+                name: 'toAcceptList',
+                meta:{
+                    title:'/质检管理/受理任务',
+                    path:'/qualityManagement/toAcceptList',
+                    label:'受理任务'
+                },
+                component: () =>
+                    import ('@/views/qualityManagement/toAcceptList.vue'),
+                hidden: false
+            },
+            {
+                path: '/qualityManagement/toAcceptConduct',
+                title: '受理任务详情',
+                name: 'toAcceptConduct',
+                meta:{
+                    title:'/质检管理/受理任务详情',
+                    path:'/qualityManagement/toAcceptConduct',
+                    label:'受理任务详情'
+                },
+                component: () =>
+                    import ('@/views/qualityManagement/toAcceptConduct.vue'),
+                hidden: false
+            },
+            {
+                path: '/qualityManagement/toAcceptComplete',
+                title: '受理任务完成',
+                name: 'toAcceptComplete',
+                meta:{
+                    title:'/质检管理/受理任务完成',
+                    path:'/qualityManagement/toAcceptComplete',
+                    label:'受理任务完成'
+                },
+                component: () =>
+                    import ('@/views/qualityManagement/toAcceptComplete.vue'),
+                hidden: false
+            },
+            {
+                path: '/qualityManagement/detectionList',
+                title: '检测任务',
+                name: 'detectionList',
+                meta:{
+                    title:'/质检管理/检测任务',
+                    path:'/qualityManagement/detectionList',
+                    label:'检测任务'
+                },
+                component: () =>
+                    import ('@/views/qualityManagement/detectionList.vue'),
+                hidden: false
+            },
+            {
+                path: '/qualityManagement/detectionConduct',
+                title: '检测任务详情',
+                name: 'detectionConduct',
+                meta:{
+                    title:'/质检管理/检测任务详情',
+                    path:'/qualityManagement/detectionConduct',
+                    label:'检测任务详情'
+                },
+                component: () =>
+                    import ('@/views/qualityManagement/detectionConduct.vue'),
+                hidden: false
+            },
+            {
+                path: '/qualityManagement/detectionComplete',
+                title: '检测任务完成',
+                name: 'detectionComplete',
+                meta:{
+                    title:'/质检管理/检测任务完成',
+                    path:'/qualityManagement/detectionComplete',
+                    label:'检测任务完成'
+                },
+                component: () =>
+                    import ('@/views/qualityManagement/detectionComplete.vue'),
+                hidden: false
+            },
+            {
+                path: '/qualityManagement/reviewList',
+                title: '风评任务',
+                name: 'reviewList',
+                meta:{
+                    title:'/质检管理/风评任务',
+                    path:'/qualityManagement/reviewList',
+                    label:'风评任务'
+                },
+                component: () =>
+                    import ('@/views/qualityManagement/reviewList.vue'),
+                hidden: false
+            },
+            {
+                path: '/qualityManagement/reviewConduct',
+                title: '风评任务详情',
+                name: 'reviewConduct',
+                meta:{
+                    title:'/质检管理/风评任务详情',
+                    path:'/qualityManagement/reviewConduct',
+                    label:'风评任务详情'
+                },
+                component: () =>
+                    import ('@/views/qualityManagement/reviewConduct.vue'),
+                hidden: false
+            },
+            {
+                path: '/qualityManagement/reviewComplete',
+                title: '风评任务完成',
+                name: 'reviewComplete',
+                meta:{
+                    title:'/质检管理/风评任务完成',
+                    path:'/qualityManagement/reviewComplete',
+                    label:'风评任务完成'
+                },
+                component: () =>
+                    import ('@/views/qualityManagement/reviewComplete.vue'),
+                hidden: false
+            },
+            {
+                path: '/qualityManagement/bigGoods',
+                title: '检测申请',
+                name: 'bigGoods',
+                meta:{
+                    title:'/质检管理/检测申请',
+                    path:'/qualityManagement/bigGoods',
+                    label:'检测申请'
+                },
+                component: () =>
+                    import ('@/views/qualityManagement/bigGoods.vue'),
+                hidden: false
+            },
+            {
+                path: '/qualityManagement/checkTaskReport',
+                title: '检测任务报表',
+                name: 'checkTaskReport',
+                meta:{
+                    title:'/质检管理/检测任务报表',
+                    path:'/qualityManagement/checkTaskReport',
+                    label:'检测任务报表'
+                },
+                component: () =>
+                    import ('@/views/qualityManagement/checkTaskReport.vue'),
+                hidden: false
             },
         ]
     },

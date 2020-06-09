@@ -25,12 +25,12 @@
             </el-form-item>
             </div>
             <el-form-item label="平台：" size="small">
-                <el-select v-model="formSearch.code" @change="changePT(formSearch.code)" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.code" @change="changePT(formSearch.code)" filterable placeholder="请选择" style="width:170px">
                     <el-option v-for="item in platformOptions" :key="item.name" :label="item.name" :value="item.name"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="公司：" size="small">
-                <el-select v-model="formSearch.name" @change="changeCode(formSearch.name)" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.name" @change="changeCode(formSearch.name)" filterable placeholder="请选择" style="width:220px">
                     <el-option v-for="item in companyCodeOptions" :key="item.name" :label="item.name" :value="item.name"></el-option>
                 </el-select>
             </el-form-item>
@@ -54,7 +54,7 @@
             </el-form-item>
 
             <el-form-item v-if="show == true" label="期间：" size="small">
-                <el-select v-model="formSearch.time" filterable placeholder="请选择" style="width:170px">
+                <el-select v-model="formSearch.time" filterable placeholder="请选择" style="width:190px">
                     <el-option v-for="item in timeList" :key="item.period" :label="item.name" :value="item.period"></el-option>
                 </el-select>
             </el-form-item>
@@ -105,49 +105,49 @@
     </Modal>
 
     <!-- 手工录入 -->
-    <Modal v-model="dialogVisible" @on-cancel="addCancel" :styles="mystyle" title="手工录入" :width="1200" class-name="customize-modal-center">
+    <Modal v-model="dialogVisible" @on-cancel="addCancel" :styles="mystyle" title="手工录入" :width="1000" class-name="customize-modal-center">
         <Row class="margin-bottom-10 background-color-white exhibition">
             <el-form :inline="true" :rules="rules" ref="ruleForm" label-width="100px" :model="ruleForm" class="demo-form-inline " :label-position="left">
 
                 <el-form-item label="平台：" prop="code" size="small">
                     <!-- <el-input v-model="ruleForm.code" style="width:120px"></el-input> -->
-                    <el-select v-model="ruleForm.code" @change="changeBeyPT(ruleForm.code)" filterable placeholder="请选择" style="width:150px">
+                    <el-select v-model="ruleForm.code" @change="changeBeyPT(ruleForm.code)" filterable placeholder="请选择" style="width:200px">
                         <el-option v-for="item in platformOptions" :key="item.name" :label="item.name" :value="item.name"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="公司：" prop="name" size="small">
                     <!-- <el-input v-model="ruleForm.name" style="width:120px"></el-input> -->
 
-                    <el-select v-model="ruleForm.name" @change="changeByCode(ruleForm.name)" filterable placeholder="请选择" style="width:150px">
+                    <el-select v-model="ruleForm.name" @change="changeByCode(ruleForm.name)" filterable placeholder="请选择" style="width:200px">
                         <el-option v-for="item in companyCodeOptions" :key="item.name" :label="item.name" :value="item.name"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="店铺：" prop="subjectName" size="small">
-                    <el-select v-model="ruleForm.subjectName" @change="changeBysubjectName(ruleForm.subjectName)" filterable placeholder="请选择" style="width:150px">
+                    <el-select v-model="ruleForm.subjectName" @change="changeBysubjectName(ruleForm.subjectName)" filterable placeholder="请选择" style="width:200px">
                         <el-option v-for="item in shopListTwo" :key="item.name" :label="item.name" :value="item.name"></el-option>
                     </el-select>
                     <!-- <el-input v-model="ruleForm.subjectName" style="width:120px"></el-input> -->
                 </el-form-item>
                 <el-form-item label="期间：" prop="address" size="small">
                     <!-- <el-input v-model="ruleForm.address" style="width:120px"></el-input> -->
-                    <el-select v-model="ruleForm.address" @change="changeByAddress(ruleForm.address)" filterable placeholder="请选择" style="width:150px">
+                    <el-select v-model="ruleForm.address" @change="changeByAddress(ruleForm.address)" filterable placeholder="请选择" style="width:200px">
                         <el-option v-for="item in timeByList" :key="item.period" :label="item.name" :value="item.period"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="账单ID：" prop="themID" size="small">
-                    <el-input v-model="ruleForm.themID" style="width:150px"></el-input>
+                    <el-input v-model="ruleForm.themID" style="width:200px"></el-input>
                 </el-form-item>
                 <el-form-item label="财务类型：" prop="cwlx" size="small">
                     <!-- <el-input v-model="ruleForm.cwlx" style="width:120px"></el-input> -->
-                    <el-select v-model="ruleForm.cwlx" filterable placeholder="请选择" style="width:150px">
+                    <el-select v-model="ruleForm.cwlx" filterable placeholder="请选择" style="width:200px">
                         <el-option v-for="item in cwlxByList" :key="item.name" :label="item.name" :value="item.name"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="金额：" prop="money" size="small">
-                    <el-input type="number" v-model="ruleForm.money" style="width:150px"></el-input>
+                    <el-input type="number" v-model="ruleForm.money" style="width:200px"></el-input>
                 </el-form-item>
                 <el-form-item label="备注：" size="small">
-                    <el-input v-model="ruleForm.remark" style="width:150px"></el-input>
+                    <el-input v-model="ruleForm.remark" style="width:200px"></el-input>
                 </el-form-item>
 
             </el-form>
@@ -163,23 +163,23 @@
         <div slot="footer"></div>
     </Modal>
     <!-- 编辑弹框 -->
-    <Modal v-model="editVisible" @on-cancel="addCancel" :styles="mystyle" title="编辑" :width="1200" class-name="customize-modal-center">
+    <Modal v-model="editVisible" @on-cancel="addCancel" :styles="mystyle" title="编辑" :width="780" class-name="customize-modal-center">
         <Row class="margin-bottom-10 background-color-white exhibition">
             <el-form :inline="true" :rules="rules" ref="ruleForms" label-width="100px" :model="editFormData" class="demo-form-inline " :label-position="left">
                 <el-form-item label="账单ID：" prop="themID" size="small">
-                    <el-input v-model="editFormData.themID" style="width:150px"></el-input>
+                    <el-input v-model="editFormData.themID" style="width:220px"></el-input>
                 </el-form-item>
                 <el-form-item label="财务类型：" prop="cwlx" size="small">
                     <!-- <el-input v-model="ruleForm.cwlx" style="width:120px"></el-input> -->
-                    <el-select v-model="editFormData.cwlx" filterable placeholder="请选择" style="width:150px">
+                    <el-select v-model="editFormData.cwlx" filterable placeholder="请选择" style="width:220px">
                         <el-option v-for="item in cwlxByList" :key="item.name" :label="item.name" :value="item.name"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="金额：" prop="money" size="small">
-                    <el-input type="number" v-model="editFormData.money" style="width:150px"></el-input>
+                    <el-input type="number" v-model="editFormData.money" style="width:220px"></el-input>
                 </el-form-item>
                 <el-form-item label="备注：" size="small">
-                    <el-input v-model="editFormData.remark" style="width:150px"></el-input>
+                    <el-input v-model="editFormData.remark" style="width:220px"></el-input>
                 </el-form-item>
 
             </el-form>

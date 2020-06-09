@@ -119,24 +119,24 @@
         
 
         <!-- 新增弹框 -->
-        <Modal v-model="dialogVisible" @on-cancel="addCancel" :styles="mystyle" title="新增" :width="70"
+        <Modal v-model="dialogVisible" @on-cancel="addCancel" :styles="mystyle" title="新增" :width="1000"
                class-name="customize-modal-center">
             <Row class="margin-bottom-10 background-color-white exhibition">
                 <el-form :rules="rules" ref="ruleForm" :model="ruleForm" class="demo-ruleForm " :label-staff="left">
 
                     <Col span="12">
                         <el-form-item label="工号：" prop="staffCode" label-width="120px" size="small">
-                            <el-input v-model="ruleForm.staffCode" :disabled="true" style="width:200px" ></el-input>
+                            <el-input v-model="ruleForm.staffCode" :disabled="true" style="width:300px" ></el-input>
                         </el-form-item>
                     </Col>
                     <Col span="12">
                         <el-form-item label="姓名：" prop="fullName" label-width="120px" size="small">
-                            <el-input v-model="ruleForm.fullName" style="width:200px"></el-input>
+                            <el-input v-model="ruleForm.fullName" style="width:300px"></el-input>
                         </el-form-item>
                     </Col>
                     <Col span="12">
                         <el-form-item label="岗位："  prop="positionIds" label-width="120px" size="small">
-                            <el-select v-model="ruleForm.positionIds" multiple filterable placeholder="请选择" style="width:200px">
+                            <el-select v-model="ruleForm.positionIds" multiple filterable placeholder="请选择" style="width:300px">
                                 <el-option v-for="item in positionOptions" :key="item.name" :label="item.name"
                                            :value="item.id"></el-option>
                             </el-select>
@@ -144,25 +144,25 @@
                     </Col>
                     <Col span="12">
                         <el-form-item label="手机号：" prop="telephone" label-width="120px" size="small">
-                            <el-input v-model="ruleForm.telephone" style="width:200px"></el-input>
+                            <el-input v-model="ruleForm.telephone" style="width:300px"></el-input>
                         </el-form-item>
                     </Col>
                     <Col span="12">
                         <el-form-item label="邮箱：" prop="email" label-width="120px" size="small">
-                            <el-input v-model="ruleForm.email" style="width:200px"></el-input>
+                            <el-input v-model="ruleForm.email" style="width:300px"></el-input>
                         </el-form-item>
                     </Col>
                     <Col span="12">
                         <el-form-item label="所属供应商：" prop="supplierId" label-width="120px" size="small" >
-                            <el-select v-model="ruleForm.supplierId"  filterable  placeholder="请选择" style="width:200px">
-                                <el-option v-for="item in supplierOptions" v-show="item.shortName" :key="item.shortName" :label="item.shortName" :value="item.id"></el-option>
+                            <el-select v-model="ruleForm.supplierId"  filterable  placeholder="请选择" style="width:300px">
+                                <el-option v-for="item in supplierOptions" v-show="item.displaySupplier" :key="item.displaySupplier" :label="item.displaySupplier" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
                     </Col>
 
                     <Col span="12">
                         <el-form-item label="启用状态：" prop="enable" label-width="120px" size="small">
-                            <el-select v-model="ruleForm.enable" filterable placeholder="请选择" style="width:200px">
+                            <el-select v-model="ruleForm.enable" filterable placeholder="请选择" style="width:300px">
                                 <el-option label="启用" value=1></el-option>
                                 <el-option label="禁用" value=0></el-option>
                             </el-select>
@@ -184,24 +184,24 @@
 
 
         <!-- 编辑弹框 -->
-        <Modal v-model="changeVisible" @on-cancel="changeCancel" :styles="mystyle" title="修改" :width="70"
+        <Modal v-model="changeVisible" @on-cancel="changeCancel" :styles="mystyle" title="修改" :width="1000"
                class-name="customize-modal-center">
             <Row class="margin-bottom-10 background-color-white exhibition">
                 <el-form ref="formChange" :model="formChange" class="demo-ruleForm " :label-staff="left">
 
                     <Col span="12">
                         <el-form-item label="工号：" prop="staffCode" label-width="120px" size="small">
-                            <el-input v-model="formChange.staffCode" :disabled="true" style="width:200px" ></el-input>
+                            <el-input v-model="formChange.staffCode" :disabled="true" style="width:300px" ></el-input>
                         </el-form-item>
                     </Col>
                     <Col span="12">
                         <el-form-item label="姓名：" prop="fullName" label-width="120px" size="small">
-                            <el-input v-model="formChange.fullName" style="width:200px"></el-input>
+                            <el-input v-model="formChange.fullName" style="width:300px"></el-input>
                         </el-form-item>
                     </Col>
                     <Col span="12">
                         <el-form-item label="岗位："  prop="positionIds" label-width="120px" size="small">
-                            <el-select v-model="formChange.positionIds" multiple filterable placeholder="请选择" style="width:200px">
+                            <el-select v-model="formChange.positionIds" multiple filterable placeholder="请选择" style="width:300px">
                                 <el-option v-for="item in positionOptions" :key="item.name" :label="item.name"
                                            :value="item.id"></el-option>
                             </el-select>
@@ -209,18 +209,18 @@
                     </Col>
                     <Col span="12">
                         <el-form-item label="手机号：" prop="telephone" label-width="120px" size="small">
-                            <el-input v-model="formChange.telephone" style="width:200px"></el-input>
+                            <el-input v-model="formChange.telephone" style="width:300px"></el-input>
                         </el-form-item>
                     </Col>
                     <Col span="12">
                         <el-form-item label="邮箱：" prop="email" label-width="120px" size="small">
-                            <el-input v-model="formChange.email" style="width:200px"></el-input>
+                            <el-input v-model="formChange.email" style="width:300px"></el-input>
                         </el-form-item>
                     </Col>
                     <Col span="12">
                         <el-form-item label="所属供应商：" prop="supplierId" label-width="120px" size="small">
-                            <el-select v-model="formChange.supplierId" :value-key="id" filterable placeholder="请选择" style="width:200px">
-                                <el-option v-for="item in supplierOptions" v-show="item.shortName" :key="item.shortName" :label="item.shortName"
+                            <el-select v-model="formChange.supplierId" :value-key="id" filterable placeholder="请选择" style="width:300px">
+                                <el-option v-for="item in supplierOptions" v-show="item.displaySupplier" :key="item.displaySupplier" :label="item.displaySupplier"
                                            :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
@@ -228,7 +228,7 @@
 
                     <Col span="12">
                         <el-form-item label="启用状态：" prop="enable" label-width="120px" size="small">
-                            <el-select v-model="formChange.enable" filterable placeholder="请选择" style="width:200px">
+                            <el-select v-model="formChange.enable" filterable placeholder="请选择" style="width:300px">
                                 <el-option label="启用" value='1'></el-option>
                                 <el-option label="禁用" value='0'></el-option>
                             </el-select>

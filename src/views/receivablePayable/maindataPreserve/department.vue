@@ -14,17 +14,17 @@
             </el-form-item>
             </div>
             <el-form-item label="部门名称" size="small">
-                <el-select v-model="formData.department" placeholder="部门名称" style="width:100px" filterable>
+                <el-select v-model="formData.department" placeholder="部门名称" style="width:220px" filterable>
                     <el-option v-for="v in departmentList" :key="v.id" :label="v.name" :value="v.name"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="负责人" size="small">
-                <el-select v-model="formData.response" placeholder="负责人" style="width:100px" filterable>
+                <el-select v-model="formData.response" placeholder="负责人" style="width:220px" filterable>
                     <el-option v-for="v in responseList" :key="v.id" :label="v.name" :value="v.name"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="所属公司" size="small">
-                <el-select v-model="formData.company" placeholder="所属公司" style="width:100px" filterable>
+                <el-select v-model="formData.company" placeholder="所属公司" style="width:220px" filterable>
                     <el-option v-for="v in companyList" :key="v.id" :label="v.name" :value="v.name"></el-option>
                 </el-select>
             </el-form-item>

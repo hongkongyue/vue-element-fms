@@ -1,11 +1,7 @@
 <template>
 <div>
-    <header class="headerstyle">
-        <div style="width:100%;text-align:center;">
-            <span @click="handleShowHidden('hidden')"><i v-if="showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-bottom"></i></span>
-            <span @click="handleShowHidden('show')"><i v-if="!showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-top"></i></span>
-        </div>
-        <el-form v-if="!showhidden" :inline="true" :model="formSearch" class="demo-form-inline ">
+    <header class="headerstyle" v-if="!showhidden">
+        <el-form  :inline="true" :model="formSearch" class="demo-form-inline " style="width:99%;maxHeight:102px;overflow-y:auto;overflow-x:hidden;">
             <div>
                 <el-form-item size="small">
                     <el-button v-if="judgeMenu.indexOf('查询') !== -1" size="small" type="primary" @click="onSearch">查询</el-button>
@@ -86,89 +82,105 @@
         </el-form>
     </header>
     <section class="middle" :style="maxHeight">
-        <el-row>
-            <el-col :span="4">
+        <div style="float:right;position:absolute;top:10px;right:20px">
+            <span @click="handleShowHidden('hidden')"><i v-if="showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-bottom"></i></span>
+            <span @click="handleShowHidden('show')"><i v-if="!showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-top"></i></span>
+        </div>
+        
+        <el-row style="overflow: hidden;">
+             
+            <el-col v-show="leftOrRight" style="float:left;width:200px;">
                 <div :style="heightTree">
-                    <el-tree :data="data" :props="defaultProps" :default-expand-all='true' :expand-on-click-node='false' @node-click="handleNodeClick"></el-tree>
+                    <el-tree :data="data" :props="defaultProps" :default-expand-all='true' :expand-on-click-node='false' highlight-current @node-click="handleNodeClick"></el-tree>
                 </div>
             </el-col>
-            <el-col :span="20">
-                <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+            <el-col  :style="styleRight">
+                <span v-show="leftOrRight" style="float: left;" @click="handleLeftOrRight()"><i  style="font-size: 20px;cursor:pointer" class="el-icon-caret-left"></i></span>
+                <span v-show="!leftOrRight" style="float: left;" @click="handleLeftOrRight()"><i  style="font-size: 20px;cursor:pointer" class="el-icon-caret-right"></i></span>
+                <el-pagination style="text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
                 </el-pagination>
-                <el-table :data="tableData" style="width: 100%" border tooltip-effect="dark" @row-click="handleClickRow" @selection-change="handleSelectionMainChange" :height="oneTableHeight" size="mini">
+                <el-table :data="tableData" style="width: 100%" border highlight-current-row tooltip-effect="dark" @row-click="handleClickRow" @selection-change="handleSelectionMainChange" :height="oneTableHeight" size="mini">
                     <el-table-column type="selection" width="50"></el-table-column>
                     <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
-                    <el-table-column prop="bizNo" label="企划单号" min-width="120" align="center" show-overflow-tooltip>
+                    <el-table-column prop="bizNo" label="企划单号" sortable min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column prop="versionNumber" label="版本号" align="center" min-width="70" show-overflow-tooltip>
                     </el-table-column>
-                    <el-table-column prop="planningStatus" label="企划状态" min-width="80" align="center" show-overflow-tooltip>
+                    <el-table-column prop="planningStatus" label="企划状态" sortable min-width="100" align="center" show-overflow-tooltip>
                     </el-table-column>
-                    <el-table-column prop="basicBrandName" label="品牌" min-width="80" align="center" show-overflow-tooltip>
+                    <el-table-column prop="basicBrandName" label="品牌" sortable min-width="80" align="center" show-overflow-tooltip>
                     </el-table-column>
-                    <el-table-column prop="years" label="年份" min-width="60" align="center" show-overflow-tooltip>
+                    <el-table-column prop="years" label="年份" sortable min-width="80" align="center" show-overflow-tooltip>
                     </el-table-column>
-                    <el-table-column prop="season" label="季节" min-width="60" align="center" show-overflow-tooltip>
+                    <el-table-column prop="season" label="季节" sortable min-width="80" align="center" show-overflow-tooltip>
                         <!-- <template slot-scope="scope">{{scope.row.planningType == "10" ? "规划型首单" : "非规划型首单" }}</template> -->
                     </el-table-column>
-                    <el-table-column prop="waveBand" label="波段" min-width="60" align="center" show-overflow-tooltip>
+                    <el-table-column prop="waveBand" label="波段" sortable min-width="80" align="center" show-overflow-tooltip>
                     </el-table-column>
-                    <el-table-column prop="planningDevelopDate" label="规划开发日期" min-width="110" align="center" show-overflow-tooltip>
+                    <el-table-column prop="planningDevelopDate" sortable label="规划开发日期" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
-                    <el-table-column prop="planningDeliverDate" label="规划交接日期" min-width="110" align="center" show-overflow-tooltip>
+                    <el-table-column prop="planningDeliverDate" sortable label="规划交接日期" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
-                    <el-table-column prop="colorSimpleDate" label="齐色样日期" min-width="110" align="center" show-overflow-tooltip>
+                    <el-table-column prop="colorSimpleDate" sortable label="齐色样日期" min-width="110" align="center" show-overflow-tooltip>
                     </el-table-column>
-                    <el-table-column prop="planningArriveDate" label="规划到货日期" min-width="110" align="center" show-overflow-tooltip>
+                    <el-table-column prop="planningArriveDate" sortable label="规划到货日期" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
-                    <el-table-column prop="photoDate" label="拍照日期" min-width="110" align="center" show-overflow-tooltip>
+                    <el-table-column prop="photoDate" label="拍照日期" sortable min-width="110" align="center" show-overflow-tooltip>
                     </el-table-column>
-                    <el-table-column prop="planningLaunchDate" label="可上新日期" min-width="110" align="center" show-overflow-tooltip>
+                    <el-table-column prop="planningLaunchDate" sortable label="可上新日期" min-width="110" align="center" show-overflow-tooltip>
                     </el-table-column>
-                    <el-table-column prop="launchDate" label="上新日期" min-width="110" align="center" show-overflow-tooltip>
+                    <el-table-column prop="launchDate" sortable label="上新日期" min-width="110" align="center" show-overflow-tooltip>
                     </el-table-column>
                 </el-table>
-
+                <!-- <div style="text-align:right;margin-top:20px">
+                    <el-button style="text-align:right" size="mini" type="primary" @click="onDelete">删除</el-button>
+                </div> -->
+                 
+                <div style="padding-top:10px;text-align:right;float:right;position:relative;z-index:1000" v-if="showhidden">
+                    <span @click="clickDetails('show')"><i v-if="detailsShow == true" style="font-size: 20px;cursor:pointer;float:right" class="el-icon-caret-bottom"></i></span>
+                    <span @click="clickDetails('hidden')"><i v-if="detailsShow == false" style="font-size: 20px;cursor:pointer;float:right" class="el-icon-caret-top"></i></span>
+                </div>
+                
                 <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
                     <el-tab-pane label="明细" name="first">
-                        <el-table :data="detailsData" style="width: 100%" border tooltip-effect="dark" :max-height="twoTableHeight" size="mini">
-                            <el-table-column type="index" width="55" label="序号" align="center"></el-table-column>
-                            <el-table-column prop="firstLevel" label="一级品类" min-width="80" align="center" show-overflow-tooltip>
+                        <el-table :data="detailsData" style="width: 100%" border highlight-current-row tooltip-effect="dark" :summary-method="getSummaries"  show-summary :height="twoTableHeight" size="mini">
+                            <el-table-column type="index" width="55" label="序号" fixed="left" align="center"></el-table-column>
+                            <el-table-column prop="firstLevel" label="一级品类" fixed="left" sortable min-width="100" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="secondLevel" label="二级品类" align="center" min-width="80" show-overflow-tooltip>
+                            <el-table-column prop="secondLevel" label="二级品类" fixed="left" sortable align="center" min-width="100" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="thirdLevel" label="三级品类" min-width="80" align="center" show-overflow-tooltip>
+                            <el-table-column prop="thirdLevel" label="三级品类" fixed="left" sortable min-width="100" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="series" label="系列" min-width="60" align="center" show-overflow-tooltip>
+                            <el-table-column prop="series" label="系列" fixed="left" sortable min-width="70" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="developStyleQty" label="开发款数" min-width="80" align="center" show-overflow-tooltip>
+                            <el-table-column prop="developStyleQty" sortable label="开发款数" min-width="100" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="adjustStyleQty" label="调整后开发款数" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="adjustStyleQty" sortable label="调整后开发款数" min-width="130" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="costLowerLimit" label="成本下限" min-width="80" align="center" show-overflow-tooltip>
+                            <el-table-column prop="costLowerLimit" sortable label="成本下限" min-width="100" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="costUpperLimit" label="成本上限" min-width="80" align="center" show-overflow-tooltip>
+                            <el-table-column prop="costUpperLimit" sortable label="成本上限" min-width="100" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="developCostPrice" label="开发成本" min-width="80" align="center" show-overflow-tooltip>
+                            <el-table-column prop="developCostPrice" sortable label="开发成本" min-width="100" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="colorRate" label="色比" min-width="80" align="center" show-overflow-tooltip>
+                            <el-table-column prop="colorRate" sortable label="色比" min-width="80" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="mainColorQty" label="主色" min-width="80" align="center" show-overflow-tooltip>
+                            <el-table-column prop="mainColorQty" sortable label="主色" min-width="80" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="subColorQty" label="辅色" min-width="80" align="center" show-overflow-tooltip>
+                            <el-table-column prop="subColorQty" sortable label="辅色" min-width="80" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="orderStyleQty" label="下单款量" min-width="80" align="center" show-overflow-tooltip>
+                            <el-table-column prop="orderStyleQty" sortable label="下单款数" min-width="100" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="orderTotalQty" label="下单数量" min-width="80" align="center" show-overflow-tooltip>
+                            <el-table-column prop="orderTotalQty" sortable label="下单数量" min-width="100" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="orderTotalAmount" label="下单金额" min-width="80" align="center" show-overflow-tooltip>
+                            <el-table-column prop="orderTotalAmount" sortable label="下单金额" min-width="100" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="remark" label="明细备注" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="remark" sortable label="明细备注" min-width="120" align="center" show-overflow-tooltip>
                             </el-table-column>
                         </el-table>
                     </el-tab-pane>
                     <el-tab-pane label="操作日志" name="second">
-                        <el-table :data="logList" style="width: 100%" border :max-height="twoTableHeight" tooltip-effect="dark">
+                        <el-table :data="logList" style="width: 100%" border :height="twoTableHeight" tooltip-effect="dark">
                             <el-table-column prop="operator" label="操作员" min-width="120" align="center">
                             </el-table-column>
                             <el-table-column prop="operateTime" label="操作时间" align="center" min-width="120">
@@ -181,13 +193,15 @@
                         <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>
                     </el-tab-pane>
                 </el-tabs>
+                
+                
             </el-col>
         </el-row>
 
     </section>
 
     <!-- 新增弹框 -->
-    <Modal v-model="dialogVisible" @on-cancel="addCancel" :styles="mystyle" :title="addtitle" :width="1440" class-name="customize-modal-center">
+    <Modal v-model="dialogVisible" @on-cancel="addCancel" :styles="mystyle" :title="addtitle" :width="1240" class-name="customize-modal-center">
         <Row class="margin-bottom-10 background-color-white exhibition">
             <el-form :rules="rules" ref="ruleForm" label-width="120px" :model="ruleForm" class="demo-ruleForm " :label-position="right">
                 <Col span="6">
@@ -257,9 +271,14 @@
                     <el-date-picker style="width:140px" v-model="ruleForm.upnewDate" type="date" :picker-options="pickerOptions"  placeholder="请选择"> </el-date-picker>
                 </el-form-item>
                 </Col>
-                <Col span="24">
+                <Col span="6">
+                <el-form-item label="比率：" prop="bilv" size="small">
+                    <el-input-number style="width:110px" v-model="ruleForm.bilv" size="mini" controls-position="right" :precision="2" :min="0.1" :max="1000000"></el-input-number>
+                </el-form-item>
+                </Col>
+                <Col span="18">
                 <el-form-item label="备注：" size="small">
-                    <el-input v-model="ruleForm.remark" placeholder="请输入" style="width:1030px"></el-input>
+                    <el-input v-model="ruleForm.remark" placeholder="请输入" style="width:730px"></el-input>
                 </el-form-item>
                 </Col>
             </el-form>
@@ -324,20 +343,21 @@
                     <span style="color:red" v-if="scope.row.fs==undefined||scope.row.fs==''">*</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="xdkl" label="下单款量" min-width="140" align="center" show-overflow-tooltip>
+            <el-table-column prop="xdkl" label="下单款数"  fixed="right" min-width="110" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
-                    <el-input-number style="width:110px" v-model="scope.row.xdkl" size="mini" controls-position="right" :precision="2" :min="0" :max="1000000"></el-input-number>
-                    <span style="color:red" v-if="scope.row.xdkl==undefined||scope.row.xdkl==''">*</span>
+                    {{(scope.row.kfks==undefined||ruleForm.bilv==undefined||ruleForm.bilv=='')?0: (scope.row.kfks*ruleForm.bilv).toFixed(2)}}
+                    <!-- <el-input-number style="width:110px" v-model="scope.row.xdkl" size="mini" controls-position="right" :precision="2" :min="0" :max="1000000"></el-input-number>
+                    <span style="color:red" v-if="scope.row.xdkl==undefined||scope.row.xdkl==''">*</span> -->
                 </template>
             </el-table-column>
-            <el-table-column prop="xdsl" label="下单数量" fixed="right" min-width="140" align="center" show-overflow-tooltip>
+            <el-table-column prop="xdsl" label="下单数量" fixed="right" min-width="110" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
-                    {{(scope.row.sb==undefined||scope.row.xdkl==undefined||scope.row.zs==undefined||scope.row.fs==undefined)? 0 : Math.floor((scope.row.xdkl*scope.row.zs)+(scope.row.xdkl*scope.row.fs*(scope.row.sb - 1)))}}
+                    {{(scope.row.sb==undefined||scope.row.kfks==undefined||scope.row.zs==undefined||scope.row.fs==undefined||ruleForm.bilv==undefined||ruleForm.bilv=='')? 0 : Math.floor((scope.row.kfks*ruleForm.bilv*scope.row.zs)+(scope.row.kfks*ruleForm.bilv*scope.row.fs*(scope.row.sb - 1)))}}
                 </template>
             </el-table-column>
-            <el-table-column prop="xdje" label="下单金额" fixed="right" min-width="140" align="center" show-overflow-tooltip>
+            <el-table-column prop="xdje" label="下单金额" fixed="right" min-width="110" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
-                    {{(scope.row.sb==undefined||scope.row.kfcb==undefined||scope.row.xdkl==undefined||scope.row.zs==undefined||scope.row.fs==undefined)?0:(scope.row.kfcb * Math.floor((scope.row.xdkl*scope.row.zs)+(scope.row.xdkl*scope.row.fs*(scope.row.sb - 1)))).toFixed(2)}}
+                    {{(scope.row.sb==undefined||scope.row.kfcb==undefined||scope.row.kfks==undefined||scope.row.zs==undefined||scope.row.fs==undefined||ruleForm.bilv==undefined||ruleForm.bilv=='')?0:(scope.row.kfcb * Math.floor((scope.row.kfks*ruleForm.bilv*scope.row.zs)+(scope.row.kfks*ruleForm.bilv*scope.row.fs*(scope.row.sb - 1)))).toFixed(2)}}
                 </template>
             </el-table-column>
             <el-table-column prop="remark" label="备注" min-width="140" align="center" show-overflow-tooltip>
@@ -372,35 +392,38 @@
         </div>
     </Modal>
 
-    <!--发起调整指令-->
-    <Modal v-model="startAdjustVisible" @on-cancel="cancelStartAdjust" title="发起调整指令" :width="840">
+     <!--发起调整指令-->
+    <Modal v-model="startAdjustVisible" @on-cancel="cancelStartAdjust" title="发起调整指令" :width="940">
         <el-form :rules="startAdjustRules" ref="startAdjustForm" label-width="120px" :model="startAdjustForm" class="demo-ruleForm " :label-position="right">
-            <Col span="12">
+            <el-row>
+            <el-col :span="8">
             <el-form-item label="品牌名称：" prop="brand" size="small">
-                <el-select v-model="startAdjustForm.brand" clearable filterable placeholder="请选择" style="width:200px">
+                <el-select v-model="startAdjustForm.brand" clearable filterable placeholder="请选择" style="width:140px">
                     <el-option v-for="item in brandList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
-            </Col>
-            <Col span="12">
+            </el-col>
+             <el-col :span="8">
             <el-form-item label="调整类型：" prop="changeType" size="small">
-                <el-select v-model="startAdjustForm.changeType" clearable filterable placeholder="请选择" style="width:200px">
+                <el-select v-model="startAdjustForm.changeType" multiple clearable filterable placeholder="请选择" style="width:140px">
                     <el-option v-for="item in adjustTypeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
-            </Col>
-            <Col span="24">
+            </el-col>
+            
+            <el-col :span="8">
             <el-form-item label="年份：" prop="year" size="small">
-                <el-select v-model="startAdjustForm.year" multiple clearable filterable placeholder="请选择" style="width:600px">
+                <el-select v-model="startAdjustForm.year" multiple clearable filterable placeholder="请选择" style="width:140px">
                     <el-option v-for="item in yearList" :key="item" :label="item" :value="item"></el-option>
                 </el-select>
             </el-form-item>
-            </Col>
-            <Col span="24">
+            </el-col>
+            <el-col :span="24">
             <el-form-item label="调整建议：" prop="remark" size="small">
-                <el-input type="textarea" maxlength="300" clearable :autosize="{ minRows: 4, maxRows: 5}" show-word-limit v-model="startAdjustForm.remark" placeholder="请输入" style="width:600px"></el-input>
+                <el-input type="textarea" maxlength="300" clearable  show-word-limit v-model="startAdjustForm.remark" placeholder="请输入" style="width:600px"></el-input>
             </el-form-item>
-            </Col>
+            </el-col>
+            </el-row>
 
         </el-form>
         <div slot="footer">
@@ -410,7 +433,7 @@
     </Modal>
 
     <!--查看历史-->
-    <Modal v-model="historyVisible" @on-cancel="cancelHistory" title="查看历史" :width="1340">
+    <Modal v-model="historyVisible" @on-cancel="cancelHistory" title="查看历史" :width="1240">
         <el-row>
             <div style="margin-bottom:20px">
                 <span style="margin-left:20px;font-size:14px">选择版本：</span>
@@ -514,7 +537,7 @@
                 </el-table-column>
                 <el-table-column prop="subColorQty" label="辅色" min-width="120" align="center" show-overflow-tooltip>
                 </el-table-column>
-                <el-table-column prop="orderStyleQty" label="下单款量" min-width="120" align="center" show-overflow-tooltip>
+                <el-table-column prop="orderStyleQty" label="下单款数" min-width="120" align="center" show-overflow-tooltip>
                 </el-table-column>
                 <el-table-column prop="orderTotalQty" label="下单数量" min-width="120" align="center" show-overflow-tooltip>
                 </el-table-column>
@@ -545,14 +568,16 @@
 import {
     commonMixins
 } from 'mixins/common';
-import {
-    debounce
-} from 'mixins/debounce'
+// import {
+//     debounce
+// } from 'mixins/debounce'
 import Util from 'libs/util'
 export default {
-    mixins: [commonMixins, debounce],
+    mixins: [commonMixins],
     data() {
         return {
+            leftOrRight:true,
+            detailsShow:false,
             pickerOptions: {
          disabledDate(time) {
             return time.getTime() < Date.now() - 8.64e7;
@@ -566,7 +591,7 @@ export default {
             startAdjustVisible: false,
             startAdjustForm: {
                 brand: '',
-                changeType: '',
+                changeType: [],
                 year: [],
                 remark: ''
             },
@@ -617,9 +642,15 @@ export default {
                 photoDate: '',
                 canUpnewDate: '',
                 upnewDate: '',
-                remark: ''
+                remark: '',
+                bilv:0.8
             },
             rules: {
+                 bilv: [{
+                    required: true,
+                    message: '请输入',
+                    trigger: 'blur'
+                }],
                 purchaseOrderNo: [{
                     required: true,
                     message: '请输入企划单号',
@@ -723,63 +754,131 @@ export default {
             selectMain: [],
             exportVisible: false,
             visibleStatus:null,
+            styleRight:'float:left;width:calc(100% - 200px);'
         }
     },
     created(){
         
         if (document.body.offsetHeight > 800) {
-            this.heightTree = 'height:' + (document.body.offsetHeight - 290) + 'px;overflow-x:hidden;overflow-y:scroll'
-            this.oneTableHeight = (document.body.offsetHeight - 300) * 0.6
-            this.twoTableHeight = (document.body.offsetHeight - 300) * 0.3
-            this.maxHeight = 'height:' + (document.body.offsetHeight - 270) + 'px'
+            this.heightTree = 'height:' + (document.body.offsetHeight - 250) + 'px;overflow-x:hidden;overflow-y:scroll'
+            this.oneTableHeight = (document.body.offsetHeight - 260) * 0.5
+            this.twoTableHeight = (document.body.offsetHeight - 260) * 0.37
+            this.maxHeight = 'height:' + (document.body.offsetHeight - 235) + 'px'
         } else {
-            this.twoTableHeight = (document.body.offsetHeight - 300) * 0.25
-            this.oneTableHeight = (document.body.offsetHeight - 300) * 0.5
-            this.maxHeight = 'height:' + (document.body.offsetHeight - 270) + 'px'
-            this.heightTree = 'height:' + (document.body.offsetHeight - 290) + 'px;overflow-x:hidden;overflow-y:scroll'
+            this.twoTableHeight = (document.body.offsetHeight - 260) * 0.38
+            this.oneTableHeight = (document.body.offsetHeight - 260) * 0.45
+            this.maxHeight = 'height:' + (document.body.offsetHeight - 235) + 'px'
+            this.heightTree = 'height:' + (document.body.offsetHeight - 250) + 'px;overflow-x:hidden;overflow-y:scroll'
         }
     },
     mounted() {
+        this.getYearList()
         this.getBrandList()
         this.getwaveList()
         this.getAdjustType()
-        this.getPlanningStatus()
+        // this.getPlanningStatus()
+        this.request('goods_planning_manage_constant', { type: "planning_adjust_type" }, true).then(res => {
+                if (res.code == 1) {
+                    let list = []
+                    res.data.map((item)=>{
+                        if(item.code != '6'){
+                            list.push(item)
+                        }
+                    })
+                    this.adjustTypeList = list
+                    console.log(this.adjustTypeList,'09')
+                }
+            })
         this.formSearch.years = new Date().getFullYear().toString()
-        let year = 2000
-        let list = []
-        for (let i = 0; i < 200; i++) {
-            list.push(year + i)
-        }
-        this.yearList = list
         this.getTreeData()
         this.getButtonJurisdiction() //按钮权限
     },
     methods: {
+        handleLeftOrRight(){
+            if(this.leftOrRight){
+                this.leftOrRight = false
+                this.styleRight = 'float:left;;'
+            }else{
+                this.leftOrRight = true
+                this.styleRight = 'float:left;width:calc(100% - 200px);'
+            }
+        },
         handleShowHidden(name) {
+            this.detailsShow = false
             if (name == 'show') {
                 this.showhidden = true
                 if (document.body.offsetHeight > 800) {
-                    this.maxHeight = 'height:' + (document.body.offsetHeight - 170) + 'px'
-                    this.oneTableHeight = (document.body.offsetHeight - 170) * 0.6
-                    this.twoTableHeight = (document.body.offsetHeight - 170) * 0.25
+                    this.maxHeight = 'height:' + (document.body.offsetHeight - 100) + 'px'
+                    this.oneTableHeight = (document.body.offsetHeight - 100) * 0.5
+                    this.twoTableHeight = (document.body.offsetHeight - 100) * 0.37
+                    this.heightTree = 'height:' + (document.body.offsetHeight - 100) + 'px;overflow-x:hidden;overflow-y:scroll'
                 } else {
-                    this.maxHeight = 'height:' + (document.body.offsetHeight - 170) + 'px'
-                    this.oneTableHeight = (document.body.offsetHeight - 220) * 0.6
-                    this.twoTableHeight = (document.body.offsetHeight - 220) * 0.25
+                    this.maxHeight = 'height:' + (document.body.offsetHeight - 100) + 'px'
+                    this.oneTableHeight = (document.body.offsetHeight - 100) * 0.5
+                    this.twoTableHeight = (document.body.offsetHeight - 100) * 0.35
+                    this.heightTree = 'height:' + (document.body.offsetHeight - 100) + 'px;overflow-x:hidden;overflow-y:scroll'
                 }
 
             } else {
                 this.showhidden = false
                 if (document.body.offsetHeight > 800) {
-                    this.oneTableHeight = (document.body.offsetHeight - 300) * 0.6
-                    this.twoTableHeight = (document.body.offsetHeight - 300) * 0.25
-                    this.maxHeight = 'height:' + (document.body.offsetHeight - 270) + 'px'
+                    this.oneTableHeight = (document.body.offsetHeight - 260) * 0.5
+                    this.twoTableHeight = (document.body.offsetHeight - 260) * 0.37
+                    this.maxHeight = 'height:' + (document.body.offsetHeight - 235) + 'px'
+                    this.heightTree = 'height:' + (document.body.offsetHeight - 250) + 'px;overflow-x:hidden;overflow-y:scroll'
                 } else {
-                    this.maxHeight = 'height:' + (document.body.offsetHeight - 270) + 'px'
-                    this.oneTableHeight = (document.body.offsetHeight - 300) * 0.5
-                    this.twoTableHeight = (document.body.offsetHeight - 300) * 0.25
+                    this.maxHeight = 'height:' + (document.body.offsetHeight - 235) + 'px'
+                    this.heightTree = 'height:' + (document.body.offsetHeight - 250) + 'px;overflow-x:hidden;overflow-y:scroll'
+                    this.oneTableHeight = (document.body.offsetHeight - 260) * 0.45
+                    this.twoTableHeight = (document.body.offsetHeight - 260) * 0.38
                 }
             }
+        },
+        clickDetails(name){
+            if(!this.showhidden){
+                if (name == 'show') {
+                this.detailsShow = false
+                if (document.body.offsetHeight > 800) {
+                    this.oneTableHeight = (document.body.offsetHeight - 260) * 0.5
+                    this.twoTableHeight = (document.body.offsetHeight - 260) * 0.35
+                } else {
+                    this.oneTableHeight = (document.body.offsetHeight - 260) * 0.5
+                    this.twoTableHeight = (document.body.offsetHeight - 260) * 0.35
+                }
+
+            } else {
+                this.detailsShow = true
+                if (document.body.offsetHeight > 800) {
+                    this.oneTableHeight = (document.body.offsetHeight - 260) * 0.37
+                    this.twoTableHeight = (document.body.offsetHeight - 260) * 0.5
+                } else {
+                    this.oneTableHeight = (document.body.offsetHeight - 260) * 0.35
+                    this.twoTableHeight = (document.body.offsetHeight - 260) * 0.5
+                }
+            }
+            }else{
+                if (name == 'show') {
+                this.detailsShow = false
+                if (document.body.offsetHeight > 800) {
+                    this.oneTableHeight = (document.body.offsetHeight - 100) * 0.5
+                    this.twoTableHeight = (document.body.offsetHeight - 100) * 0.35
+                } else {
+                    this.oneTableHeight = (document.body.offsetHeight - 100) * 0.5
+                    this.twoTableHeight = (document.body.offsetHeight - 100) * 0.35
+                }
+
+            } else {
+                this.detailsShow = true
+                if (document.body.offsetHeight > 800) {
+                    this.oneTableHeight = (document.body.offsetHeight - 100) * 0.35
+                    this.twoTableHeight = (document.body.offsetHeight - 100) * 0.5
+                } else {
+                    this.oneTableHeight = (document.body.offsetHeight - 100) * 0.35
+                    this.twoTableHeight = (document.body.offsetHeight - 100) * 0.5
+                }
+            }
+            }
+            
         },
         getButtonJurisdiction() {
             let data = {}
@@ -882,9 +981,9 @@ export default {
             })
         },
         handleNodeClick(obj) {
+            console.log(obj,'////////////////')
             this.currentPage = 1
             this.visibleStatus = obj.planningStatus
-            console.log(this.visibleStatus,'----------')
             this.getTableData(obj.planningStatus)
         },
         getLoglist(billNo) {
@@ -976,17 +1075,19 @@ export default {
         //推送
         onSend() {
             let arr = this.selectMain
-            this.$confirm('推送选中的数据(若无选中数据，默认推送符合条件的全部数据), 是否继续?', '提示', {
+            this.$confirm('推送选中的数据, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
+                console.log(!!this.visibleStatus,'////////')
                 let data = {}
                 data.ids = arr
                 data.bizNo = this.formSearch.bizNo
                 data.brandIds = this.formSearch.brand
                 data.season = this.formSearch.season
                 this.formSearch.years ? data.years = Util.dateFormat(this.formSearch.years, 'yyyy') : delete data.years
+                !!this.visibleStatus ? data.planningStatuss = [this.visibleStatus] : data.planningStatuss = this.formSearch.planningStatus
                 data.waveBand = this.formSearch.waveBand
                 data.remark = this.formSearch.remark
                 this.request('goods_planning_manage_send', data, true).then(res => {
@@ -1093,7 +1194,7 @@ export default {
         },
         //下载模板
         downLoad() {
-            window.location = ('/excel/企划管理导入模板.xlsx')
+            window.location = ('https://eptison.oss-cn-hangzhou.aliyuncs.com/upload/prd/eop-fms/ BossGoodsPlanningManageController/uploadTemplate/企划管理导入模板.xlsx')
         },
         //导入
         onUpload() {
@@ -1209,12 +1310,12 @@ export default {
             this.$refs['startAdjustForm'].validate((valid) => {
                 if (valid) { //新增保存
                     let data = {}
-                    let obj = {}
-                    this.adjustTypeList.map((i) => {
-                        if (i.id == this.startAdjustForm.changeType) {
-                            obj = i
-                        }
-                    })
+                    // let obj = {}
+                    // this.adjustTypeList.map((i) => {
+                    //     if (i.id == this.startAdjustForm.changeType) {
+                    //         obj = i
+                    //     }
+                    // })
                     let brandObj = {}
                     this.brandList.map((v)=>{
                         if(v.id == this.startAdjustForm.brand){
@@ -1226,8 +1327,8 @@ export default {
                     data.basicBrandId = this.startAdjustForm.brand
                     data.yearsList = this.startAdjustForm.year
                     data.adjustTypeId = this.startAdjustForm.changeType
-                    data.adjustTypeName = obj.name
-                    data.adjustTypeCode = obj.code
+                    // data.adjustTypeName = obj.name
+                    // data.adjustTypeCode = obj.code
                     data.asjustAdvise = this.startAdjustForm.remark
                     this.request('goods_planning_manage_createAdjust', data, true).then(res => {
                         if (res.code == 1) {
@@ -1235,7 +1336,7 @@ export default {
                             this.getData()
                             this.startAdjustForm = {
                                 brand: '',
-                                changeType: '',
+                                changeType: [],
                                 year: [],
                                 remark: ''
                             }
@@ -1255,7 +1356,7 @@ export default {
             this.startAdjustVisible = false
             this.startAdjustForm = {
                 brand: '',
-                changeType: '',
+                changeType: [],
                 year: [],
                 remark: ''
             }
@@ -1405,6 +1506,7 @@ export default {
             if (name == 'add') {
                 this.dialogVisible = true
                 this.addtitle = '新增'
+                this.ruleForm.bilv = 0.8
                 this.getByPuniqueKey(1)
             } else if (name == 'edit') {
                 this.addtitle = '编辑'
@@ -1423,7 +1525,7 @@ export default {
                     this.ruleForm.season = this.selectObj.season //季节
                     this.ruleForm.year = this.selectObj.years.toString() //年份
                     this.ruleForm.waveBand = this.selectObj.waveBand //波段
-                    this.ruleForm.developDate = this.selectObj.planningDevelopDate //开发日期
+                    this.ruleForm.developDate = this.selectObj.planningDevelopDate //开发日期s
                     this.ruleForm.handoverDate = this.selectObj.planningDeliverDate //规划交接日期
                     this.ruleForm.colorDate = this.selectObj.colorSimpleDate //齐色样日期
                     this.ruleForm.arriveDate = this.selectObj.planningArriveDate //到货日期
@@ -1431,6 +1533,7 @@ export default {
                     this.ruleForm.canUpnewDate = this.selectObj.planningLaunchDate //可上新日期
                     this.ruleForm.upnewDate = this.selectObj.launchDate //上新日期
                     this.ruleForm.remark = this.selectObj.remark //备注
+                    this.ruleForm.bilv = this.selectObj.orderRatio//比率
                     let data = {}
                     data.mainId = this.selectObj.id
                     this.request('goods_planning_manage_detail', data, true).then(res => {
@@ -1446,7 +1549,7 @@ export default {
                                     sb: item.colorRate,
                                     zs: item.mainColorQty,
                                     fs: item.subColorQty,
-                                    xdkl: item.orderStyleQty,
+                                    // xdkl: item.orderStyleQty,
                                     remark: item.remark,
                                     mainId: item.mainId,
                                     id:item.id
@@ -1475,7 +1578,7 @@ export default {
                         this.$message.warning('请先添加明细再保存')
                     } else {
                         this.addTableList.map((item) => {
-                            if (item.one.length == 0 || !item.xl || !item.kfks || !item.cbxx || !item.cbsx || !item.kfcb || !item.sb || !item.zs || !item.fs || !item.xdkl) {
+                            if (item.one.length == 0 || !item.xl || !item.kfks || !item.cbxx || !item.cbsx || !item.kfcb || !item.sb || !item.zs || !item.fs) {
                                 return allFlag = true
                             }
                         })
@@ -1483,6 +1586,7 @@ export default {
                             this.$message.warning('数据不完整')
                         } else {
                             let list = []
+                            let bilv = this.ruleForm.bilv
                             this.addTableList.map((i) => {
                                 list.push({
                                     id:i.id,
@@ -1498,9 +1602,9 @@ export default {
                                     colorRate: i.sb,
                                     mainColorQty: i.zs,
                                     subColorQty: i.fs,
-                                    orderStyleQty: i.xdkl,
-                                    orderTotalQty: Math.floor((i.xdkl * i.zs) + (i.xdkl * i.fs * (i.sb - 1))),
-                                    orderTotalAmount: (i.kfcb * Math.floor((i.xdkl * i.zs) + (i.xdkl * i.fs * (i.sb - 1)))).toFixed(2),
+                                    orderStyleQty: (i.kfks*bilv).toFixed(2),
+                                    orderTotalQty: Math.floor((i.kfks*bilv * i.zs) + (i.kfks*bilv * i.fs * (i.sb - 1))),
+                                    orderTotalAmount: (i.kfcb * Math.floor((i.kfks*bilv * i.zs) + (i.kfks*bilv * i.fs * (i.sb - 1)))).toFixed(2),
                                     remark: i.remark
                                 })
                             })
@@ -1520,9 +1624,10 @@ export default {
                             data.years = Util.dateFormat(this.ruleForm.year, 'yyyy') //规划开发时间
                             data.season = this.ruleForm.season
                             data.waveBand = this.ruleForm.waveBand
+                            data.orderRatio = this.ruleForm.bilv
                             data.remark = this.ruleForm.remark
                             data.planningDevelopDate = Util.dateFormat(this.ruleForm.developDate, 'yyyy-MM-dd') //规划开发时间
-                            data.planningDeliverDate = Util.dateFormat(this.ruleForm.developDate, 'yyyy-MM-dd') //规划交接日期
+                            data.planningDeliverDate = Util.dateFormat(this.ruleForm.handoverDate, 'yyyy-MM-dd') //规划交接日期
                             data.colorSimpleDate = Util.dateFormat(this.ruleForm.colorDate, 'yyyy-MM-dd') //齐色样日期
                             data.planningArriveDate = Util.dateFormat(this.ruleForm.arriveDate, 'yyyy-MM-dd') //规划到货日期
                             data.photoDate = Util.dateFormat(this.ruleForm.photoDate, 'yyyy-MM-dd') //拍照日期
@@ -1549,7 +1654,8 @@ export default {
                                         photoDate: '',
                                         canUpnewDate: '',
                                         upnewDate: '',
-                                        remark: ''
+                                        remark: '',
+                                        bilv:0.8
                                     }
                                     this.dialogVisible = false
                                 } else {
@@ -1580,7 +1686,8 @@ export default {
                 photoDate: '',
                 canUpnewDate: '',
                 upnewDate: '',
-                remark: ''
+                remark: '',
+                bilv:0.8,
             }
             this.$refs['ruleForm'].resetFields();
 
@@ -1603,7 +1710,7 @@ export default {
             } else {
                 let allFlag = false
                 this.addTableList.map((item) => {
-                    if (item.one.length == 0 || !item.xl || !item.kfks || !item.cbxx || !item.cbsx || !item.kfcb || !item.sb || !item.zs || !item.fs || !item.xdkl) {
+                    if (item.one.length == 0 || !item.xl || !item.kfks || !item.cbxx || !item.cbsx || !item.kfcb || !item.sb || !item.zs || !item.fs) {
                         return allFlag = true
                     }
                 })
@@ -1631,6 +1738,23 @@ export default {
                 this.$message.success('删除成功')
             }
         },
+    //     getSummaries(param) {
+    //     const { columns, data } = param;
+    //         const sums = [];
+    //         columns.forEach((column, index) => {
+    //         if (index === 0) {
+    //             sums[index] = '合计';
+    //             return;
+    //         }
+    //              sums[5] = 11
+    //              sums[6] = 22
+    //              sums[7] = 22
+    //              sums[8] = 22
+    //              sums[14] = 22
+    //              sums[15] = 22
+    //         });
+    //         return sums;
+    //   },
         //查询
         onSearch() {
             this.visibleStatus = null
@@ -1662,7 +1786,7 @@ export default {
     width: 99%;
     margin: 0 auto;
     background: #fff;
-    padding: 20px 20px 10px 20px;
+    padding: 10px 10px 10px 10px;
     margin-bottom: 10px;
 }
 
@@ -1683,4 +1807,11 @@ export default {
 .pl20 {
     padding-left: 20px
 }
+</style>
+
+<style>
+.el-cascader-menu__wrap{
+    height: 204px !important;
+}
+
 </style>

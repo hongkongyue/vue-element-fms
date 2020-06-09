@@ -17,7 +17,7 @@
                            </el-form-item>
                   </div>
                           <el-form-item label="平台名称" size="small">
-                              <el-select v-model="formData.name" placeholder="平台名称" style="width:100px" filterable>
+                              <el-select v-model="formData.name" placeholder="平台名称" style="width:220px" filterable>
                                   <el-option v-for="v in platFormList" :key="v.id" :label="v.name" :value="v.name"></el-option>
                               </el-select>
                           </el-form-item>
@@ -143,12 +143,12 @@
             <!-- </el-col> -->
           </el-row>
           <!-- 新增 -->
-          <Modal v-model="dialogVisible" :styles="mystyle"  title="新增平台账单类型"  @on-cancel='cancel' :width="890"  class-name="customize-modal-center"> 
+          <Modal v-model="dialogVisible" :styles="mystyle"  title="新增平台账单类型"  @on-cancel='cancel' :width="990"  class-name="customize-modal-center"> 
             <Row class="margin-bottom-10 background-color-white exhibition">   
             <el-form :inline="true" ref="ruleForm" :model="addformdata" :rules="rules" class="demo-form-inline demo-ruleForm " :label-position="left"  >
                          <Col>
                                  <el-form-item label="平台名称" size="small" prop="companyName">
-                                    <el-select v-model="addformdata.companyName" placeholder="平台名称" style="width:100px" filterable>
+                                    <el-select v-model="addformdata.companyName" placeholder="平台名称" style="width:200px" filterable>
                                         <el-option v-for="v in platFormList" :key="v.id" :label="v.name" :value="v.name"></el-option>
                                     </el-select>
                                 </el-form-item>
@@ -228,7 +228,7 @@
                                       <span style="color:#999">提示：一个公司只能生成一条应收启用时间</span>
                                 </el-form-item>
                           </Col> -->
-                          <el-form-item style="padding-left:350px">
+                          <el-form-item style="padding-left:400px">
                                     <Button type="primary" @click="confirmSub">确认</Button>
                                     <Button type="default" @click="cancel">取消</Button>
                           </el-form-item>
@@ -237,13 +237,13 @@
             <div slot="footer"></div>
           </Modal>
             <!--编辑弹框-->
-          <Modal v-model="editVisible" :styles="mystyle" :rules="rules"  title="编辑"  @on-cancel='canceledit' :width="810"
+          <Modal v-model="editVisible" :styles="mystyle" :rules="rules"  title="编辑"  @on-cancel='canceledit' :width="990"
             class-name="customize-modal-center"> 
             <Row class="margin-bottom-10 background-color-white exhibition">
             <el-form :inline="true" ref="ruleForms" :model="editformdata" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="rules" >
                          <Col>
                                 <el-form-item label="平台名称"   size="small" label-width="95px"  prop="platform">
-                                     <el-input v-model="editformdata.name" maxlength="20" style="width:120px" :disabled="true"></el-input>
+                                     <el-input v-model="editformdata.name" maxlength="20" style="width:220px" :disabled="true"></el-input>
                                 </el-form-item>
                                 <el-form-item label="平台编码" size="small"   label-width="95px"   prop="company">
                                       <el-input v-model="editformdata.code" maxlength="20" style="width:120px" :disabled="true"></el-input>
@@ -263,7 +263,7 @@
                                      <el-input v-model="editformdata.shopname" maxlength="20" style="width:120px"></el-input>
                                 </el-form-item> -->
                           </Col>
-                          <el-form-item style="padding-left:330px">
+                          <el-form-item style="padding-left:400px">
                                   <Button type="primary" @click="submitForms('ruleForms')">确认</Button>
                                   <Button type="default" @click="canceledit">取消</Button>
                           </el-form-item>

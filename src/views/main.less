@@ -253,8 +253,9 @@
     line-height: 40px;
   }
   .el-table td, .el-table th{
-    padding-top:3px!important;
-    padding-bottom:3px!important;
+    padding-top:0px!important;
+    padding-bottom:0px!important;
+    padding: 0px 0 !important;
   }
   
 input[type=number] {
@@ -274,7 +275,8 @@ input[type=number]::-webkit-outer-spin-button {
 }
 .el-table thead {
     color: #909399;
-    font-size:12px;
+    font-size:11px;
+    height:20px;
     font-weight: normal;
     th{
         background:#ececec;
@@ -287,8 +289,9 @@ el-table th>.cell {
 }
 .plx-header--row {
     color: #909399;
-    font-size:12px;
+    font-size:11px;
     font-weight: normal;
+    height:20px;
     th{
         // background:#ececec;
         color: #909399!important;
@@ -297,4 +300,45 @@ el-table th>.cell {
 }
 pl-table th>.cell {
     font-weight:none;
+}
+.plx-table .plx-sort-wrapper {
+    width: 1.5em;
+    height: 1.35em;
+    vertical-align: middle;
+    text-align: center;
+    display: inline-block;
+    position: relative;
+}
+.el-table{
+    font-size:12px;
+}
+.plx-table{
+    font-size:12px;
+}
+.plx-footer--row{
+    height:20px!important;
+    line-height:20px;
+    padding-top: 0px!important;
+    padding-bottom: 0px!important;
+    font-size:12px;
+    background:#cff5e7;
+}
+.plx-table .plx-footer--column.col--ellipsis, .plx-table .plx-body--column.col--ellipsis{
+    height: 25px!important
+}
+.plx-body--row{
+    height: 32px!important
+}
+.warning-row {
+    background: oldlace;
+  }
+
+.success-row {
+    background: #f0f9eb;
+  }
+  .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
+    background-color:#f5eb32!important;
+}
+.el-table__body tr.current-row>td {
+    background-color: #f5eb32;
 }

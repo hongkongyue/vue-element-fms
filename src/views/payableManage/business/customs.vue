@@ -38,52 +38,63 @@
         </el-form>
         <el-form :inline="true" :model="formSearch" class="demo-form-inline ">
             <el-form-item label="年份：" size="small">
-                <el-date-picker style="width:150px" value-format="yyyy" v-model="formSearch.year" type="year" placeholder="选择年份">
+                <el-date-picker style="width:100px" value-format="yyyy" v-model="formSearch.year" type="year" placeholder="选择年份">
                 </el-date-picker>
             </el-form-item>
             <el-form-item label="大货款号：" size="small">
-                <el-input v-model="formSearch.goodsNo" style="width:150px"></el-input>
+                <el-input v-model="formSearch.goodsNo" style="width:150px" clearable></el-input>
             </el-form-item>
             <el-form-item label="制单号：" size="small">
-                <el-input v-model="formSearch.ordersNo" style="width:150px"></el-input>
+                <el-input v-model="formSearch.ordersNo" style="width:150px" clearable></el-input>
             </el-form-item>
             <el-form-item label=" 公 司 ：" size="small" >
-                        <el-select v-model="formSearch.companyId" filterable placeholder="请选择" style="width:150px">
+                        <el-select v-model="formSearch.companyId" filterable clearable placeholder="请选择" style="width:220px">
                     <el-option v-for="item in companyCodeOptions" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
-                    </el-form-item>
+            </el-form-item>
+            <el-form-item  label="所属对账人员：" size="small">
+                <el-select v-model="formSearch.payableUser" @change="changePayable(formSearch.payableUser)" filterable clearable placeholder="请选择" style="width:120px">
+                    <el-option v-for="item in payableUserList" :key="item.payableUserId" :label="item.payableUser" :value="item.payableUserId"></el-option>
+                </el-select>
+            </el-form-item>
             <el-form-item label="供应商：" size="small">
-                <el-select v-model="formSearch.supplier" value-key="id" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.supplier" value-key="id" filterable clearable placeholder="请选择" style="width:220px">
                     <el-option v-for="item in supplierList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="结算类型：" size="small">
-                <el-select v-model="formSearch.settlement" value-key="id" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.settlement" value-key="id" filterable clearable placeholder="请选择" style="width:100px">
                     <el-option v-for="item in settlementList" :key="item.name" :label="item.name" :value="item.value"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="是否结算：" size="small">
-                <el-select v-model="formSearch.settle" value-key="id" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.settle" value-key="id" filterable clearable placeholder="请选择" style="width:100px">
                     <el-option v-for="item in settleList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item v-if="show == true" label="允许结算：" size="small">
-                <el-select v-model="formSearch.agreeSettlement" value-key="id" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.agreeSettlement" value-key="id" filterable clearable placeholder="请选择" style="width:100px">
                     <el-option v-for="item in agreeSettlementList" :key="item.name" :label="item.name" :value="item.value"></el-option>
                 </el-select>
             </el-form-item>
 
             <el-form-item v-if="show == true" label="单据日期：" size="small">
-                <el-date-picker v-model="formSearch.documentDate" value-format="yyyy-MM-dd" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                </el-date-picker>
+                <!-- <el-date-picker v-model="formSearch.documentDate" value-format="yyyy-MM-dd" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                </el-date-picker> -->
+                <el-date-picker v-model="formSearch.documentDateStart" type="date" value-format="yyyy-MM-dd" style="width:150px" placeholder="开始日期"></el-date-picker>
+                <span>~</span>
+                <el-date-picker v-model="formSearch.documentDateEnd" type="date" value-format="yyyy-MM-dd" style="width:150px" placeholder="结束日期"></el-date-picker>
             </el-form-item>
 
             <el-form-item v-if="show == true" label="关单时间：" size="small">
-                <el-date-picker v-model="formSearch.orderDate" value-format="yyyy-MM-dd" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                </el-date-picker>
+                <el-date-picker v-model="formSearch.orderDateStart" type="date" value-format="yyyy-MM-dd" style="width:150px" placeholder="开始日期"></el-date-picker>
+                <span>~</span>
+                <el-date-picker v-model="formSearch.orderDateEnd" type="date" value-format="yyyy-MM-dd" style="width:150px" placeholder="结束日期"></el-date-picker>
+                <!-- <el-date-picker v-model="formSearch.orderDate" value-format="yyyy-MM-dd" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                </el-date-picker> -->
             </el-form-item>
             <el-form-item v-if="show == true" label="单据状态：" size="small">
-                <el-select v-model="formSearch.status" value-key="id" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.status" value-key="id" filterable clearable placeholder="请选择" style="width:100px">
                     <el-option v-for="item in statusList" :key="item.name" :label="item.name" :value="item.value"></el-option>
                 </el-select>
             </el-form-item>
@@ -160,6 +171,68 @@
             </el-tab-pane>
         </el-tabs>
     </section>
+       <!-- 代销转经销 -->
+       <Modal v-model="visible"  title="代销转经销" @on-cancel="cancelSales"  :width="610"  class-name="customize-modal-center">
+        <Row class="margin-bottom-10 background-color-white exhibition">
+            <el-form :inline="true" ref="ruleForm"  :model="addformdata" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="rules">
+               
+                <Col span="24">
+                <Col span="24">
+                <span style="color:red;position:relative;left:40px;top:10px">*</span>
+                <el-form-item label="调整原因 :"  size="small" label-width="120px">
+                    <el-select v-model="addformdata.reason" style="width:200px" filterable clearable>
+                        <el-option v-for="v in adjustReason" :key="v.id" :label="v.name" :value="v.name"></el-option>
+                    </el-select>
+                </el-form-item>
+                   </Col>
+                </Col>
+                <Col span='24'>
+                <Col span="24">
+                <el-form-item label="图片上传 ：" size="small" label-width="130px">
+                    <div style="width: 100px; height: 100px" @click="clickImg('1')">
+                        <el-image v-if="imgUrl1" style="width: 100px; height: 100px" :src="bowersPict">
+                        </el-image>
+                       <el-image v-if="!imgUrl1" style="width: 100px; height: 100px" :src="noneUrl"></el-image>
+                    </div>
+                </el-form-item>
+                </Col>
+                <!-- <Col span="8">
+                <div style="width: 100px; height: 100px" @click="clickImg('2')"> 
+                    <el-image v-if="imgUrl2.length>0" style="width: 100px; height: 100px" :src="imgUrl2"></el-image>
+                    <el-image v-if="imgUrl2.length == 0" style="width: 100px; height: 100px" :src = noneUrl></el-image>
+                </div>
+                
+                </Col> -->
+                </Col>
+                <Col span="24">
+                <el-form-item style="padding-left:230px">
+                    <Button type="primary" @click="submitForm('ruleForm')">确认</Button>
+                    <Button type="default" @click="cancelSales">取消</Button>
+                </el-form-item>
+                </Col>
+            </el-form>
+        </Row>
+        <div slot="footer"></div>
+    </Modal>
+      <!--导入账单选择文件-->
+    <Modal v-model="picVisible" @on-cancel='cancelGood' title="上传图片">
+        <div>
+            <Upload ref="upload" name="file" :show-upload-list="false" :before-upload="handleUpload" :on-success="uploadSuccess" :on-error="uploadError" type="drag" action="/eop-boot/masterData/ossFileAddress/upload" :data="{className:'面料开发'}">
+                <div style="padding: 20px 0">
+                    <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                    <p>点击或将图片拖拽到此处</p>
+                </div>
+            </Upload>
+            <div v-if="file !== null">{{ file.name }}
+                <!-- <Button type="text" :loading="loadingStatus">{{ loadingStatus ? '上传中...' : '' }}
+                </Button> -->
+            </div>
+        </div>
+        <div slot="footer">
+            <Button type="default" @click="cancelGood">取消</Button>
+            <Button type="primary" @click="upload">确定</Button>
+        </div>
+    </Modal>
      <!-- 导出 -->
     <Modal v-model="exportVisible" title="导出" @on-cancel='cancelExport' :width="430" class-name="customize-modal-center">
         <Row class="margin-bottom-10 background-color-white exhibition">
@@ -199,6 +272,8 @@ export default {
 // logList,
     data() {
         return {
+             noneUrl:'https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1562574299&di=846b4c904bd54d3c3821fa5938888c69&src=http://hbimg.b0.upaiyun.com/bdaca9a07e1a8947c00c2f826ebf848750927aa24963-cATwbg_fw658',
+            payableUserList:[],
             settleList:[{name:'是',id:1},{name:'否',id:0}],
             companyList:[],
              exportObj:{
@@ -274,6 +349,7 @@ export default {
                 code: '',
                 name: '',
                 person: '',
+                supplier:'',
             },
             formChange: {
                 code: '',
@@ -296,7 +372,21 @@ export default {
             judgeMenu: [],
             buttonList: [], //按钮权限
             ASDid: '',
-            list:[]
+            list:[],
+            addformdata:{
+                         reason:null
+            },
+            imgUrl1:'',
+            bowersPict:'',
+            adjustReason:[],
+            rules: {
+                 reason: [{
+                    required: true,
+                    message: '请选择',
+                    trigger: 'change'
+                }]
+            },
+            picVisible:false,
         }
     },
     // computed: {
@@ -317,6 +407,7 @@ export default {
        this.resetCommit()
     },
     mounted() {
+        this.getPayableUser()
         this.getplatformOptions()
         this.getCompany()
         this.getSupply()
@@ -324,10 +415,62 @@ export default {
         this.getBrandList()
         //this.getCompany()
         this.getButtonJurisdiction() //按钮权限
+        this.getAdjustReason()
         this.initTable([], '')
     },
     methods: {
-        
+       submitForm(formName) {
+         if(!this.addformdata.reason)return this.$message.error('调整原因不能为空')
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+              this.onConfirmRound()
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      cancelSales(){
+               this.visible=false;
+               this.imgUrl1=''
+               this.bowersPict=''
+               this.addformdata.reason=''
+      },
+      resetForm() {
+            this.visible=false
+            this.$refs['ruleForm'].resetFields();
+            this.addformdata.reason=''
+      },
+        getAdjustReason(){
+             this.request('payable_payable_closed_order_reasonSelector',{},false).then(res=>{
+                 if(res.code==1){
+                            this.adjustReason=res.data
+                 }else{
+
+                 }
+             })
+        },
+        //重新获取供应商下拉
+        changePayable(name){
+            this.formSearch.supplier = ''
+            console.log(name)
+            let vars = {}
+            vars.payableUserId = name
+             this.requestWithUriVars('selectorPayableSupplier', vars, null, true).then(res => {
+          if (res.code==1) {
+              this.supplierList = res.data
+            }else{
+                this.supplierList = []
+            }
+          })
+        },
+        getPayableUser(){
+            this.request('supplier_selectorPayable', {}, true).then(res => {
+                if (res.code == 1) {
+                    this.payableUserList = res.data
+                }
+            })
+        },
         handleClick(tab, event) {
             if(tab.name=='first'){
                
@@ -511,6 +654,7 @@ export default {
             if (this.checkSelection()) {
                 this.request('closed_check', data, false).then((res) => {
                     if (res.code == 1) {
+                        //    this.visible=true
                         this.$prompt('确定要经销转代销选中的数据吗', '操作确认', {
                             confirmButtonText: '确定',
                             cancelButtonText: '取消',
@@ -546,37 +690,59 @@ export default {
             let data = {};
             data.bizType = 4
             data.idList = arr
-            if (this.checkSelection()) {
+            if (arr.length == 1) {
                 this.request('closed_check', data, false).then((res) => {
                     if (res.code == 1) {
-                        this.$prompt('确定要代销转经销选中的数据吗', '操作确认', {
-                            confirmButtonText: '确定',
-                            cancelButtonText: '取消',
-                        }).then(({
-                            value
-                        }) => {
-                            data.remark = '代销转经销 备注:' +''+(value?value:'无')
-                            this.request('closed_doBizService', data, true).then((res) => {
-                                if (res.code == 1) {
-                                    this.$message.success('成功')
-                                    this.getData()
-                                } else {
-                                    this.$message.error(res.msg)
-                                }
-                            })
-                        }).catch(() => {
-                            this.$message({
-                                type: 'info',
-                                message: '已取消'
-                            });
-                        });
+                        this.visible=true
+                        // this.$prompt('确定要代销转经销选中的数据吗', '操作确认', {
+                        //     confirmButtonText: '确定',
+                        //     cancelButtonText: '取消',
+                        // }).then(({
+                        //     value
+                        // }) => {
+                        //     data.remark = '代销转经销 备注:' +''+(value?value:'无')
+                        //     this.request('closed_doBizService', data, true).then((res) => {
+                        //         if (res.code == 1) {
+                        //             this.$message.success('成功')
+                        //             this.getData()
+                        //         } else {
+                        //             this.$message.error(res.msg)
+                        //         }
+                        //     })
+                        // }).catch(() => {
+                        //     this.$message({
+                        //         type: 'info',
+                        //         message: '已取消'
+                        //     });
+                        // });
                     } else {
                         this.$message.error(res.msg)
                     }
                 })
             } else {
-                this.$message.error('请勾选代销转经销数据')
+                this.$message.error('请选择一条代销转经销的数据')
             }
+        },
+        //代销转经销确认
+        onConfirmRound(){
+                        let arr = w2ui.customs.getSelection()
+                        let data = {};
+                            data.bizType = 4
+                            data.idList = arr
+                            data.agencyTransferDistributionReason=this.addformdata.reason
+                            data.reasonImgUrl=this.imgUrl1;
+                      this.request('closed_doBizService', data, true).then((res) => {
+                                if (res.code == 1) {
+                                    this.$message.success('代销转经销成功')
+                                    this.visible=false;
+                                    this.imgUrl1=''
+                                    this.bowersPict=''
+                                    this.addformdata.reason=''
+                                    this.getData()
+                                } else {
+                                    this.$message.error(res.msg)
+                                }
+                            })
         },
         //删除
         onDelete(){
@@ -858,6 +1024,23 @@ export default {
                             size: '100px',
                             sortable: true
                         },
+                        
+                        {
+                            field: 'reasonImgUrl',
+                            caption: '代销转经销调整附件',
+                            size: '200px',
+                            sortable: true,
+                            render: function (record, index, col_index) {
+                                var html = '<a target="_blank" href="'+this.getCellValue(index,col_index)+'">'+this.getCellValue(index,col_index)+'</a>';
+                                return html;
+                            }
+                        },
+                         {
+                            field: 'agencyTransferDistributionReason',
+                            caption: '代销转经销调整原因',
+                            size: '100px',
+                            sortable: true
+                        },
                     ],
                     onClick: function (event) {
                         self.activeName='first'
@@ -1078,7 +1261,13 @@ export default {
             })
         },
         onReset() {
-            this.formSearch = {}
+            this.formSearch = {
+                code: '',
+                name: '',
+                person: '',
+                supplier:'',
+            }
+            this.getSupply()
             // this.initTable([], '')
             // this.resetCommit()
         },
@@ -1117,6 +1306,7 @@ export default {
             })
         },
         getData() {
+            this.resetCommit()
             logList = []
             delaiList = []
             let data = {}
@@ -1125,16 +1315,17 @@ export default {
             data.years = this.formSearch.year //年份
             data.goodsNo = this.formSearch.goodsNo //大货款号
             data.purchaseOrderNo = this.formSearch.ordersNo //采购单号
+            data.payableUserId = this.formSearch.payableUser//所属人员
             data.supplierId = this.formSearch.supplier //供应商
             data.companyId = this.formSearch.companyId
             data.settle = this.formSearch.settle
             data.billingType = this.formSearch.settlement //结算类型
             data.allowSettlement = this.formSearch.agreeSettlement //允许结算
             data.documentStatus = this.formSearch.status //单据状态
-            this.formSearch.documentDate ? data.createStart = this.formSearch.documentDate[0] : delete data.createStart //单据日期
-            this.formSearch.documentDate ? data.createEnd = this.formSearch.documentDate[1] : delete data.createEnd
-            this.formSearch.orderDate ? data.completeStartTime = this.formSearch.orderDate[0] : delete data.completeStartTime //关单起始时间
-            this.formSearch.orderDate ? data.completeEndTime = this.formSearch.orderDate[1] : delete data.completeEndTime
+            this.formSearch.documentDateStart ? data.createStart = this.formSearch.documentDateStart : delete data.createStart //单据日期
+            this.formSearch.documentDateEnd ? data.createEnd = this.formSearch.documentDateEnd : delete data.createEnd
+            this.formSearch.orderDateStart ? data.completeStartTime = this.formSearch.orderDateStart : delete data.completeStartTime //关单起始时间
+            this.formSearch.orderDateEnd? data.completeEndTime = this.formSearch.orderDateEnd : delete data.completeEndTime
             // data.createStart = //单据起始时间
             // data.createEnd = //单据结束时间
             // data.completeStartTime = //关单起始时间
@@ -1326,16 +1517,17 @@ export default {
                         data.years = this.formSearch.year //年份
                         data.goodsNo = this.formSearch.goodsNo //大货款号
                         data.purchaseOrderNo = this.formSearch.ordersNo //采购单号
+                        data.payableUserId = this.formSearch.payableUser//所属人员
                         data.supplierId = this.formSearch.supplier //供应商
                         data.companyId = this.formSearch.companyId
                         data.settle = this.formSearch.settle
                         data.billingType = this.formSearch.settlement //结算类型
                         data.allowSettlement = this.formSearch.agreeSettlement //允许结算
                         data.documentStatus = this.formSearch.status //单据状态
-                        this.formSearch.documentDate ? data.createStart = this.formSearch.documentDate[0] : delete data.createStart //单据日期
-                        this.formSearch.documentDate ? data.createEnd = this.formSearch.documentDate[1] : delete data.createEnd
-                        this.formSearch.orderDate ? data.completeStartTime = this.formSearch.orderDate[0] : delete data.completeStartTime //关单起始时间
-                        this.formSearch.orderDate ? data.completeEndTime = this.formSearch.orderDate[1] : delete data.completeEndTime
+                        this.formSearch.documentDateStart ? data.createStart = this.formSearch.documentDateStart : delete data.createStart //单据日期
+                        this.formSearch.documentDateEnd ? data.createEnd = this.formSearch.documentDateEnd : delete data.createEnd
+                        this.formSearch.orderDateStart ? data.completeStartTime = this.formSearch.orderDateStart : delete data.completeStartTime //关单起始时间
+                        this.formSearch.orderDateEnd? data.completeEndTime = this.formSearch.orderDateEnd : delete data.completeEndTime
                         w2ui.customs.getSelection().length>0?data.ids= w2ui.customs.getSelection():delete data.ids
                         this.exportObj.selected==1? data.containDetail=false:data.containDetail=true;
            this.request('payable_payableclosedorder_exportCount',data,false).then(res=>{
@@ -1359,16 +1551,17 @@ export default {
                         data.years = this.formSearch.year //年份
                         data.goodsNo = this.formSearch.goodsNo //大货款号
                         data.purchaseOrderNo = this.formSearch.ordersNo //采购单号
+                        data.payableUserId = this.formSearch.payableUser//所属人员
                         data.supplierId = this.formSearch.supplier //供应商
                         data.companyId = this.formSearch.companyId 
                         data.settle = this.formSearch.settle //是否结算
                         data.billingType = this.formSearch.settlement //结算类型
                         data.allowSettlement = this.formSearch.agreeSettlement //允许结算
                         data.documentStatus = this.formSearch.status //单据状态
-                        this.formSearch.documentDate ? data.createStart = this.formSearch.documentDate[0] : delete data.createStart //单据日期
-                        this.formSearch.documentDate ? data.createEnd = this.formSearch.documentDate[1] : delete data.createEnd
-                        this.formSearch.orderDate ? data.completeStartTime = this.formSearch.orderDate[0] : delete data.completeStartTime //关单起始时间
-                        this.formSearch.orderDate ? data.completeEndTime = this.formSearch.orderDate[1] : delete data.completeEndTime
+                        this.formSearch.documentDateStart ? data.createStart = this.formSearch.documentDateStart : delete data.createStart //单据日期
+                        this.formSearch.documentDateEnd ? data.createEnd = this.formSearch.documentDateEnd : delete data.createEnd
+                        this.formSearch.orderDateStart ? data.completeStartTime = this.formSearch.orderDateStart : delete data.completeStartTime //关单起始时间
+                        this.formSearch.orderDateEnd? data.completeEndTime = this.formSearch.orderDateEnd : delete data.completeEndTime
                         w2ui.customs.getSelection().length>0?data.ids= w2ui.customs.getSelection():delete data.ids
                         this.exportObj.selected==1? data.containDetail=false:data.containDetail=true;
                       this.request('payable_payableclosedorder_exportAsync', data, false).then(res => {
@@ -1440,6 +1633,73 @@ export default {
                     console.log('oooo')
                 }
             })
+        },
+         clickImg(type) {
+            this.imgType = type
+            console.log(this.imgType)
+            this.picVisible = true
+            console.log('00000000000')
+        },
+        cancelGood(){
+            this.file = null
+            this.picVisible = false
+        },
+        upload() {
+            if (this.file == null) {
+                this.$message.warning('请先选择文件再导入')
+            } else {
+                // this.visible = false
+                // 
+                let data = new FormData
+                data.append('file', this.file)
+                data.append('className', 'initiate')
+                this.request('uploadImg', data, true).then(res => {
+                    if (res.code == 1) {
+                        console.log(res.data)
+                        this.imgUrl1 = res.data.ossAddress
+                        this.bowersPict=res.data.htmlBreviaryOssAddress
+                        this.picVisible = false
+                        this.file = null
+                    } else {
+                        this.$message.error(res.msg);
+                    }
+                })
+            }
+        },
+        //上传之前img
+        handleUpload(file) {
+            if (!/\.jpg|.png|.jpeg|.JPG|.PNG|.JPEG/.test(file.name)) {
+                this.$message.warning('文件类型不符,请重新选择文件');
+                return false
+            } else {
+                this.file = file //需要传给后台的file文件
+                this.name = file.name
+
+            }
+            return false
+        },
+
+        //上传成功之后
+        uploadSuccess(res, file) {
+            Vue.prototype.$loading.close();
+            if (res.code == '1') {
+                console.log(this.imgType)
+
+                this.loadingStatus = false;
+                this.file = null;
+                this.$message.success(res.msg);
+                this.picterVisible = false;
+                this.imgUrlSave = res.data
+            } else {
+                this.loadingStatus = false;
+                this.$message.error({
+                    content: res.msg,
+                    duration: 3
+                });
+            }
+        },
+        uploadError(res, file) {
+            this.$message.error(res.msg);
         },
     }
 }

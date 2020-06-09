@@ -15,12 +15,17 @@
             </Col>
             <!-- <el-divider></el-divider> -->
               <el-form-item label=" 公 司 ：" size="small">
-                <el-select v-model="formSearch.basicCompanyId" filterable clearable placeholder="请选择" style="width:120px">
+                <el-select v-model="formSearch.basicCompanyId" filterable clearable placeholder="请选择" style="width:220px">
                     <el-option v-for="item in companyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
+             <el-form-item  label="所属对账人员：" size="small">
+                <el-select v-model="formSearch.payableUser" @change="changePayable(formSearch.payableUser)" filterable placeholder="请选择" style="width:120px">
+                    <el-option v-for="item in payableUserList" :key="item.payableUserId" :label="item.payableUser" :value="item.payableUserId"></el-option>
+                </el-select>
+            </el-form-item>
            <el-form-item label="供应商：" size="small">
-                <el-select v-model="formSearch.basicSupplierId" filterable clearable placeholder="请选择" style="width:120px">
+                <el-select v-model="formSearch.basicSupplierId" filterable clearable placeholder="请选择" style="width:230px">
                     <el-option v-for="item in supplyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
@@ -44,46 +49,6 @@
                 <el-button v-if="show == true" @click="changeHidden" style="float:right" size="small"><i class="el-icon-top"></i></el-button>
             </el-form-item>
             <br/>
-           
-            <!-- <el-form-item label="大货款号：" size="small">
-                <el-input v-model="formSearch.goodsNo" placeholder="请输入" style="width:150px"></el-input>
-            </el-form-item>
-            <el-form-item label="制单号：" size="small">
-                <el-input v-model="formSearch.purchaseOrderNo" placeholder="请输入" style="width:150px"></el-input>
-            </el-form-item> -->
-             <!-- <el-form-item label="单据状态：" size="small" v-if="show == true">
-                <el-select v-model="formSearch.status" filterable placeholder="请选择" style="width:155px"> -->
-                     <!-- <el-option label="待审核" value="0"></el-option> -->
-                    <!-- <el-option label="编辑中" value="2"></el-option>
-                    <el-option label="待审核" value="0"></el-option>
-                    <el-option label="审核通过" value="1"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="发票类型：" size="small" v-if="show == true">
-                <el-select v-model="formSearch.deductionType" filterable placeholder="请选择" style="width:150px">
-                    <el-option label="货款发票" value="货款发票"></el-option>
-                    <el-option label="试制费发票" value="试制费发票"></el-option>
-                    <el-option label="冲红发票" value="冲红发票"></el-option>
-                </el-select>
-            </el-form-item> -->
-          
-            <!-- <el-form-item v-if="show == true" label="到票日期：" size="small">
-                 <el-date-picker v-model="formSearch.date" type="daterange" value-format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                 </el-date-picker>
-            </el-form-item>
-            <el-form-item v-if="show == true" label="开票日期：" size="small">
-                 <el-date-picker v-model="formSearch.date" type="daterange" value-format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                 </el-date-picker>
-            </el-form-item>
-            <el-form-item label="发票编码：" size="small" v-if="show == true">
-                <el-input v-model="formSearch.targetPurchaseOrderNo" placeholder="请输入" style="width:150px"></el-input>
-            </el-form-item> -->
-            <!-- <el-form-item label="扣款状态：" size="small" v-if="show == true">
-                <el-select v-model="formSearch.dtStatus" filterable placeholder="请选择" style="width:150px">
-                    <el-option label="已扣款" value="1"></el-option>
-                    <el-option label="未扣款" value="0"></el-option>
-                </el-select>
-            </el-form-item> -->
           
         </el-form>
     </header>
@@ -94,44 +59,7 @@
     </section>
     <section class="footer" style="margin-bottom:0px" v-if="false">
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-            <!-- <el-tab-pane label="明细" name="first">
-                <section class="middle">
-                    <el-table :data="geNewData" border style="width: 100%">
-                        <el-table-column type="index" label="序号" align="center" width="50">
-                        </el-table-column>
-                        <!-- <el-table-column prop="name" align="center" label="公司" min-width="120">
-                        </el-table-column>
-                        <el-table-column prop="amount1" align="center" label="供应商" min-width="120">
-                        </el-table-column> -->
-                        <!-- <el-table-column prop="purchaseOrderNo" align="center" min-width="120" label="对账单编号">
-                        </el-table-column>
-                        <el-table-column prop="goodsNo" align="center" min-width="120" label="制单号">
-                        </el-table-column>
-                        <el-table-column prop="batchNo" align="center" min-width="120" label="大货款号">
-                        </el-table-column>
-                        <el-table-column prop="deductionType" align="center" min-width="120" label="批次">
-                        </el-table-column>
-                        <el-table-column prop="delayDays" align="center" min-width="120" label="数量">
-                        </el-table-column>
-                        <el-table-column prop="contractDate" align="center" min-width="120" label="不含税单价">
-                        </el-table-column>
-                        <el-table-column prop="afterClippingOrderQty" align="center" min-width="120" label="不含税金额">
-                        </el-table-column>
-                         <el-table-column prop="deductionAmount" align="center" min-width="120" label="税率">
-                              <template slot-scope="scope">{{scope.row.deductionAmount|moneyFilters}}</template>
-                        </el-table-column>
-                        <el-table-column prop="orderQty" label="税额" min-width="120" align="center" show-overflow-tooltip>
-                        </el-table-column>
-                        <el-table-column prop="adjustAmount" align="center" min-width="120" label="含税单价">
-                             <template slot-scope="scope">{{scope.row.adjustAmount|moneyFilters}}</template>
-                        </el-table-column>
-                        <el-table-column prop="discountStr" align="center" min-width="120" label="含税金额">
-                        </el-table-column> -->
-                        <!-- <el-table-column prop="remark" align="center" min-width="120" label="备注">
-                        </el-table-column> -->
-                    <!-- </el-table> -->
-                <!-- </section>
-            </el-tab-pane>  -->
+            
             <el-tab-pane label="操作日志" name="first">
                 <section class="middle">
                     <el-table :data="logsList" style="width: 100%" border tooltip-effect="dark" max-height="250">
@@ -225,6 +153,7 @@ export default {
     mixins:[debounce],
     data() {
         return {
+            payableUserList:[],
              exportObj:{
                        selected:''
             },
@@ -275,6 +204,7 @@ export default {
     created() {
         this.getCompany()
         this.getSupply()
+        this.getPayableUser()
     },
     destroyed() {
         this.resetCommit()
@@ -285,6 +215,27 @@ export default {
         this.initTable([])
     },
     methods: {
+        //重新获取供应商下拉
+        changePayable(name){
+            this.formSearch.basicSupplierId = ''
+            console.log(name)
+            let vars = {}
+            vars.payableUserId = name
+             this.requestWithUriVars('selectorPayableSupplier', vars, null, true).then(res => {
+          if (res.code==1) {
+              this.supplyList = res.data
+            }else{
+                this.supplyList = []
+            }
+          })
+        },
+        getPayableUser(){
+            this.request('supplier_selectorPayable', {}, true).then(res => {
+                if (res.code == 1) {
+                    this.payableUserList = res.data
+                }
+            })
+        },
         modify(){
                   let arr = w2ui.deduction.getSelection()
                 if(arr.length<1){
@@ -500,10 +451,10 @@ export default {
             }
             // this.resetCommit()
             this.formSearch = {
-                year:new Date()
+                year:new Date(),
+                basicSupplierId:'',
             }
-            // this.formSearch.year = new Date()
-            // this.initTable([])
+            this.getSupply()
         },
         //公司下拉列表
         getCompany() {
@@ -531,6 +482,7 @@ export default {
                 data.currentPage = this.currentPage
                 data.basicCompanyId = this.formSearch.basicCompanyId
                 data.basicSupplierId = this.formSearch.basicSupplierId
+                data.payableUserId = this.formSearch.payableUser//所属人员
                 data.accPayableNo = this.formSearch.accPayableNo
                 data.accPaymentNo=this.formSearch.accPaymentNo
                 data.invoiceNo=this.formSearch.invoiceNo
@@ -838,6 +790,7 @@ export default {
                         data.currentPage = this.currentPage
                         data.basicCompanyId = this.formSearch.basicCompanyId
                         data.basicSupplierId = this.formSearch.basicSupplierId
+                        data.payableUserId = this.formSearch.payableUser//所属人员
                         data.accPayableNo = this.formSearch.accPayableNo
                         data.accPaymentNo=this.formSearch.accPaymentNo
                         data.invoiceNo=this.formSearch.invoiceNo
@@ -864,6 +817,7 @@ export default {
                         data.currentPage = this.currentPage
                         data.basicCompanyId = this.formSearch.basicCompanyId
                         data.basicSupplierId = this.formSearch.basicSupplierId
+                        data.payableUserId = this.formSearch.payableUser//所属人员
                         data.accPayableNo = this.formSearch.accPayableNo
                         data.accPaymentNo=this.formSearch.accPaymentNo
                         data.invoiceNo=this.formSearch.invoiceNo

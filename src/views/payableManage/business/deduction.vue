@@ -27,7 +27,7 @@
             </Col>
             <!-- <el-divider></el-divider> -->
             <el-form-item label="年份：" size="small">
-                <el-date-picker style="width:120px" v-model="formSearch.year" type="year" placeholder="请选择"> </el-date-picker>
+                <el-date-picker style="width:100px" v-model="formSearch.year" type="year" placeholder="请选择"> </el-date-picker>
             </el-form-item>
             <el-form-item label="大货款号：" size="small">
                 <el-input v-model="formSearch.goodsNo" placeholder="请输入" style="width:150px"></el-input>
@@ -35,8 +35,13 @@
             <el-form-item label="制单号：" size="small">
                 <el-input v-model="formSearch.purchaseOrderNo" placeholder="请输入" style="width:150px"></el-input>
             </el-form-item>
+            <el-form-item  label="所属对账人员：" size="small">
+                <el-select v-model="formSearch.payableUser" @change="changePayable(formSearch.payableUser)" filterable placeholder="请选择" style="width:120px">
+                    <el-option v-for="item in payableUserList" :key="item.payableUserId" :label="item.payableUser" :value="item.payableUserId"></el-option>
+                </el-select>
+            </el-form-item>
             <el-form-item label="供应商：" size="small">
-                <el-select v-model="formSearch.supplierId" filterable placeholder="请选择" style="width:120px">
+                <el-select v-model="formSearch.supplierId" filterable placeholder="请选择" style="width:220px">
                     <el-option v-for="item in supplyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
@@ -53,13 +58,13 @@
                 <el-input v-model="formSearch.targetPurchaseOrderNo" placeholder="请输入" style="width:150px"></el-input>
             </el-form-item>
             <el-form-item label="单据状态：" size="small" v-if="show == true">
-                <el-select v-model="formSearch.status" filterable placeholder="请选择" style="width:155px">
+                <el-select v-model="formSearch.status" filterable placeholder="请选择" style="width:100px">
                     <el-option label="待审核" value="0"></el-option>
                     <el-option label="已审核" value="1"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label=" 公 司 ：" size="small" v-if="show == true">
-                <el-select v-model="formSearch.companyId" filterable placeholder="请选择" style="width:120px">
+                <el-select v-model="formSearch.companyId" filterable placeholder="请选择" style="width:220px">
                     <el-option v-for="item in companyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
@@ -72,7 +77,7 @@
                 </el-date-picker>
             </el-form-item>
             <el-form-item label="扣款状态：" size="small" v-if="show == true">
-                <el-select v-model="formSearch.dtStatus" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.dtStatus" filterable placeholder="请选择" style="width:100px">
                     <el-option label="已扣款" value="1"></el-option>
                     <el-option label="未扣款" value="0"></el-option>
                 </el-select>
@@ -165,13 +170,16 @@
                     <el-input v-model="adjustObj.kklx" disabled style="width:200px"></el-input>
                 </el-form-item>
                 <el-form-item label="扣款金额：" size="small" label-width="115px" prop="platform">
-                    <el-input v-model="adjustObj.kkje" disabled style="width:200px"></el-input>
+                    <el-input v-model="adjustObj.kkje" style="width:200px"></el-input>
                 </el-form-item>
                 <el-form-item label="品牌：" size="small" label-width="115px" prop="platform">
                     <el-input v-model="adjustObj.brand" disabled style="width:200px"></el-input>
                 </el-form-item>
                 <el-form-item label="结算制单号：" size="small" label-width="115px" prop="platform">
                     <el-input v-model="adjustObj.codeNo" style="width:200px"></el-input>
+                </el-form-item>
+                <el-form-item label="备注：" size="small" label-width="115px" prop="platform">
+                    <el-input v-model="adjustObj.remark" style="width:200px"></el-input>
                 </el-form-item>
                 </Col>
                 <Col>
@@ -221,6 +229,7 @@ import {
 export default {
     data() {
         return {
+            payableUserList:[],
              exportObj:{
                        selected:''
             },
@@ -240,12 +249,14 @@ export default {
                 kkje :'',//扣款金额
                 brand :'', //品牌
                 codeNo :'',//结算制单号
+                remark:'',
 
             }, // 扣款调整数据对象
             adjustList: [], //  调整扣款的列表 
             logList: [], // 日
             formSearch: {
-                year:new Date()
+                year:new Date(),
+                supplierId:'',
             },
             companyList: [], // 公司列表
             supplyList: [], //供应商列表
@@ -264,6 +275,7 @@ export default {
         deductionId: state => state.deduction.id,
     }),
     created() {
+        this.getPayableUser()
         this.getCompany()
         this.getSupply()
     },
@@ -276,6 +288,34 @@ export default {
         this.initTable([])
     },
     methods: {
+        //重新获取供应商下拉
+        changePayable(name){
+            this.formSearch.supplierId = ''
+            console.log(name)
+            let vars = {}
+            vars.payableUserId = name
+             this.requestWithUriVars('selectorPayableSupplier', vars, null, true).then(res => {
+          if (res.code==1) {
+              this.supplyList = res.data
+            }else{
+                this.supplyList = []
+            }
+          })
+        },
+        getPayableUser(){
+            this.request('supplier_selectorPayable', {}, true).then(res => {
+                if (res.code == 1) {
+                    this.payableUserList = res.data
+                }
+            })
+        },
+        getRowData(id){
+                 for(let i=0,len=this.list.length;i<len;i++){
+                      if(this.list[i].id==id){
+                          return this.list[i]
+                      }
+                 }
+        },
         modify(){
                   let arr = w2ui.deduction.getSelection()
                 if(arr.length<1){
@@ -285,13 +325,15 @@ export default {
                 }else if(arr.length==1){
                     console.log(record,'56789')
                     this.adjustVisible=true
-                    this.adjustObj.gys = record.supplierName //供应商
-                    this.adjustObj.company = record.companyName //公司
-                    this.adjustObj.goodsNo = record.goodsNo //大货款号
-                    this.adjustObj.kklx = record.deductionType//扣款类型
-                    this.adjustObj.kkje = record.deductionAmount//扣款金额
-                    this.adjustObj.brand = record.brandName //品牌
-                    this.adjustObj.codeNo = record.targetPurchaseOrderNo//结算制单号
+                    this.adjustObj.id=this.getRowData(arr[0]).id
+                    this.adjustObj.gys =this.getRowData(arr[0]).supplierName //供应商
+                    this.adjustObj.company = this.getRowData(arr[0]).companyName //公司
+                    this.adjustObj.goodsNo = this.getRowData(arr[0]).goodsNo //大货款号
+                    this.adjustObj.kklx = this.getRowData(arr[0]).deductionType//扣款类型
+                    this.adjustObj.kkje =this.getRowData(arr[0]).finalDeductionAmount//扣款金额
+                    this.adjustObj.brand = this.getRowData(arr[0]).brandName //品牌
+                    this.adjustObj.codeNo =this.getRowData(arr[0]).targetPurchaseOrderNo//结算制单号
+                    this.adjustObj.remark = this.getRowData(arr[0]).remark//备注
                 }
         },
         handleClick(tab, event) {
@@ -495,8 +537,10 @@ export default {
             }
             // this.resetCommit()
             this.formSearch = {
-                year:new Date()
+                year:new Date(),
+                supplierId:'',
             }
+            this.getSupply()
             // this.formSearch.year = new Date()
             // this.initTable([])
         },
@@ -530,6 +574,7 @@ export default {
             data.purchaseOrderNo = this.formSearch.purchaseOrderNo
             data.status = Number(this.formSearch.status)
             data.deductionType = this.formSearch.deductionType
+            data.payableUserId = this.formSearch.payableUser//所属人员
             this.formSearch.date ? data.startDate = this.formSearch.date[0] : delete data.startDate
             this.formSearch.date ? data.endDate = this.formSearch.date[1] : delete data.endDate
             data.targetPurchaseOrderNo = this.formSearch.targetPurchaseOrderNo
@@ -793,7 +838,9 @@ export default {
         saveAdjust(){
             let data = {}
             data.targetPurchaseOrderNo = this.adjustObj.codeNo//结算制单号
-            data.id = record.id
+            data.finalDeductionAmount = this.adjustObj.kkje //扣款金额
+            data.remark = this.adjustObj.remark //备注
+            data.id = this.adjustObj.id
             this.request('payable_deductionOrder_update', data, false).then(res => {
                 if (res.code == '1') {
                     this.getData()
@@ -840,6 +887,7 @@ export default {
                         data.purchaseOrderNo = this.formSearch.purchaseOrderNo
                         data.status = Number(this.formSearch.status)
                         data.deductionType = this.formSearch.deductionType
+                        data.payableUserId = this.formSearch.payableUser//所属人员
                         this.formSearch.date ? data.startDate = this.formSearch.date[0] : delete data.startDate
                         this.formSearch.date ? data.endDate = this.formSearch.date[1] : delete data.endDate
                         data.targetPurchaseOrderNo = this.formSearch.targetPurchaseOrderNo
@@ -871,6 +919,7 @@ export default {
                         data.purchaseOrderNo = this.formSearch.purchaseOrderNo
                         data.status = Number(this.formSearch.status)
                         data.deductionType = this.formSearch.deductionType
+                        data.payableUserId = this.formSearch.payableUser//所属人员
                         this.formSearch.date ? data.startDate = this.formSearch.date[0] : delete data.startDate
                         this.formSearch.date ? data.endDate = this.formSearch.date[1] : delete data.endDate
                         data.targetPurchaseOrderNo = this.formSearch.targetPurchaseOrderNo

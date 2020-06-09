@@ -23,12 +23,17 @@
             </Col>
             <!-- <el-divider></el-divider> -->
               <el-form-item label=" 公 司 ：" size="small">
-                <el-select v-model="formSearch.basicCompanyId" filterable clearable placeholder="请选择" style="width:120px">
+                <el-select v-model="formSearch.basicCompanyId" filterable clearable placeholder="请选择" style="width:220px">
                     <el-option v-for="item in companyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
+            <el-form-item  label="所属对账人员：" size="small">
+                <el-select v-model="formSearch.payableUser" @change="changePayable(formSearch.payableUser)" filterable placeholder="请选择" style="width:120px">
+                    <el-option v-for="item in payableUserList" :key="item.payableUserId" :label="item.payableUser" :value="item.payableUserId"></el-option>
+                </el-select>
+            </el-form-item>
            <el-form-item label="供应商：" size="small">
-                <el-select v-model="formSearch.basicSupplierId" filterable clearable placeholder="请选择" style="width:120px">
+                <el-select v-model="formSearch.basicSupplierId" filterable clearable placeholder="请选择" style="width:230px">
                     <el-option v-for="item in supplyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
@@ -46,45 +51,6 @@
             <el-form-item style="margin-left:20px" label="显示建议排款金额为0的数据：" size="small" :label-width="300">
                   <el-checkbox v-model="formSearch.hasAdviseAmount"></el-checkbox>
             </el-form-item>
-            <!-- <el-form-item label="大货款号：" size="small">
-                <el-input v-model="formSearch.goodsNo" placeholder="请输入" style="width:150px"></el-input>
-            </el-form-item>
-            <el-form-item label="制单号：" size="small">
-                <el-input v-model="formSearch.purchaseOrderNo" placeholder="请输入" style="width:150px"></el-input>
-            </el-form-item> -->
-             <!-- <el-form-item label="单据状态：" size="small" v-if="show == true">
-                <el-select v-model="formSearch.status" filterable placeholder="请选择" style="width:155px"> -->
-                     <!-- <el-option label="待审核" value="0"></el-option> -->
-                    <!-- <el-option label="编辑中" value="2"></el-option>
-                    <el-option label="待审核" value="0"></el-option>
-                    <el-option label="审核通过" value="1"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="发票类型：" size="small" v-if="show == true">
-                <el-select v-model="formSearch.deductionType" filterable placeholder="请选择" style="width:150px">
-                    <el-option label="货款发票" value="货款发票"></el-option>
-                    <el-option label="试制费发票" value="试制费发票"></el-option>
-                    <el-option label="冲红发票" value="冲红发票"></el-option>
-                </el-select>
-            </el-form-item> -->
-          
-            <!-- <el-form-item v-if="show == true" label="到票日期：" size="small">
-                 <el-date-picker v-model="formSearch.date" type="daterange" value-format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                 </el-date-picker>
-            </el-form-item>
-            <el-form-item v-if="show == true" label="开票日期：" size="small">
-                 <el-date-picker v-model="formSearch.date" type="daterange" value-format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                 </el-date-picker>
-            </el-form-item>
-            <el-form-item label="发票编码：" size="small" v-if="show == true">
-                <el-input v-model="formSearch.targetPurchaseOrderNo" placeholder="请输入" style="width:150px"></el-input>
-            </el-form-item> -->
-            <!-- <el-form-item label="扣款状态：" size="small" v-if="show == true">
-                <el-select v-model="formSearch.dtStatus" filterable placeholder="请选择" style="width:150px">
-                    <el-option label="已扣款" value="1"></el-option>
-                    <el-option label="未扣款" value="0"></el-option>
-                </el-select>
-            </el-form-item> -->
           
         </el-form>
     </header>
@@ -167,6 +133,7 @@ export default {
     mixins:[debounce],
     data() {
         return {
+            payableUserList:[],
             loading2:false,
             radioyes:'1',
             refreshVisible:false,
@@ -222,6 +189,7 @@ export default {
     created() {
         this.getCompany()
         this.getSupply()
+        this.getPayableUser()
     },
     destroyed() {
         this.resetCommit()
@@ -234,6 +202,27 @@ export default {
         this.initTable([])
     },
     methods: {
+        //重新获取供应商下拉
+        changePayable(name){
+            this.formSearch.basicSupplierId = ''
+            console.log(name)
+            let vars = {}
+            vars.payableUserId = name
+             this.requestWithUriVars('selectorPayableSupplier', vars, null, true).then(res => {
+          if (res.code==1) {
+              this.supplyList = res.data
+            }else{
+                this.supplyList = []
+            }
+          })
+        },
+        getPayableUser(){
+            this.request('supplier_selectorPayable', {}, true).then(res => {
+                if (res.code == 1) {
+                    this.payableUserList = res.data
+                }
+            })
+        },
         //重新计算
         onRefresh(){
             this.refreshVisible = true
@@ -562,6 +551,7 @@ export default {
                  hasAdviseAmount:false,
                  hasFabricAmount:false,
             }
+            this.getSupply()
             // this.formSearch.year = new Date()
             // this.initTable([])
         },
@@ -592,6 +582,7 @@ export default {
                 data.currentPage     = this.currentPage
                 data.basicCompanyId  = this.formSearch.basicCompanyId
                 data.basicSupplierId = this.formSearch.basicSupplierId
+                data.payableUserId = this.formSearch.payableUser//所属人员
                 data.hasAdviseAmount = this.formSearch.hasAdviseAmount?1:0
                 data.hasFabricAmount = this.formSearch.hasFabricAmount?1:0
             this.request('accPayable_dischargeAdvice_pageQuery', data, true).then(res => {
@@ -994,6 +985,7 @@ export default {
                             data.currentPage     = this.currentPage
                             data.basicCompanyId  = this.formSearch.basicCompanyId
                             data.basicSupplierId = this.formSearch.basicSupplierId
+                            data.payableUserId = this.formSearch.payableUser//所属人员
                             data.hasAdviseAmount = this.formSearch.hasAdviseAmount?1:0
                             data.hasFabricAmount = this.formSearch.hasFabricAmount?1:0
                         // w2ui.rankMoneySuggest.getSelection().length>0?data.ids= w2ui.rankMoneySuggest.getSelection():delete data.ids

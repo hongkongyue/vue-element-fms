@@ -55,6 +55,12 @@
                         align: 'center',
                         minWidth: 120,
                     },
+                     {
+                        title: '调整类型',
+                        key: 'adjustTypeName',
+                        align: 'center',
+                        minWidth: 120,
+                    },
                     {
                         title: '发起人',
                         key: 'createUser',
@@ -74,7 +80,7 @@
                         minWidth: 160,
                     },
                     {
-                        title: '已用时间',
+                        title: '共计时长',
                         key: 'sumTime',
                         align: 'center',
                         minWidth: 140,
@@ -111,7 +117,8 @@
                                                           query: { 
                                                                  taskNo: params.row.taskNo,
                                                                  id:params.row.id,
-                                                                 taskDetailId:params.row.taskDetailId
+                                                                 taskDetailId:params.row.taskDetailId,
+                                                                 adjustTypeCode:params.row.adjustTypeCode
                                                          }
                                                  })
                                         }

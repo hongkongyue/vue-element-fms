@@ -22,7 +22,7 @@
                               </el-select>
                           </el-form-item>
                           <el-form-item label="公司名称："   size="small">
-                              <el-select v-model="formSearch.name" value-key= "id" filterable placeholder="请选择" style="width:150px">
+                              <el-select v-model="formSearch.name" value-key= "id" filterable placeholder="请选择" style="width:220px">
                                   <el-option v-for="item in companyCodeOptions" :key="item.name" :label="item.name" :value="item"></el-option>
                               </el-select>
                           </el-form-item>
@@ -156,13 +156,13 @@
             <Row class="margin-bottom-10 background-color-white exhibition">   
               <el-form :rules="rules" ref="ruleForm" :model="ruleForm" class="demo-ruleForm " :label-position="left">
                 <Col span="8">
-                  <el-form-item label="公司编码："prop="code" label-width="120px" size="small">
+                  <el-form-item label="公司编码：" prop="code" label-width="120px" size="small">
                     <el-input v-model="ruleForm.code" style="width:150px"></el-input>
                   </el-form-item>
                 </Col>
                 <Col span="8">
-                  <el-form-item label="公司名称："prop="name" label-width="120px" size="small"> 
-                    <el-input v-model="ruleForm.name" style="width:150px"></el-input>
+                  <el-form-item label="公司名称：" prop="name" label-width="120px" size="small"> 
+                    <el-input v-model="ruleForm.name" style="width:220px"></el-input>
                   </el-form-item>
                 </Col>
                 <Col span="8">
@@ -177,7 +177,7 @@
                 </Col>
                 <Col span="8">
                   <el-form-item label="公司地址："prop="address" label-width="120px" size="small">
-                    <el-input v-model="ruleForm.address" style="width:150px"></el-input>
+                    <el-input v-model="ruleForm.address" style="width:220px"></el-input>
                   </el-form-item>
                 </Col>
                 <Col span="8">
@@ -197,7 +197,7 @@
                 </Col>
                 <Col span="8">
                     <el-form-item label="启用状态：" prop="enable" label-width="120px" size="small">
-                    <el-select v-model="ruleForm.enable" filterable placeholder="请选择" style="width:150px">
+                    <el-select v-model="ruleForm.enable" filterable placeholder="请选择" style="width:220px">
                         <el-option label="启用" value=1></el-option>
                         <el-option label="停用" value=0></el-option>
                     </el-select>
@@ -238,7 +238,7 @@
                 </Col>
                 <Col span="8">
                   <el-form-item label="公司名称：" prop="name" label-width="120px" size="small"> 
-                    <el-input v-model="formChange.name" :disabled="true" style="width:150px"></el-input>
+                    <el-input v-model="formChange.name" :disabled="true" style="width:220px"></el-input>
                   </el-form-item>
                 </Col>
                 <Col span="8">
@@ -253,7 +253,7 @@
                 </Col>
                 <Col span="8">
                   <el-form-item label="公司地址：" prop="address" label-width="120px" size="small">
-                    <el-input v-model="formChange.address" style="width:150px"></el-input>
+                    <el-input v-model="formChange.address" style="width:220px"></el-input>
                   </el-form-item>
                 </Col>
                 <Col span="8">
@@ -272,7 +272,7 @@
                 </Col>
                 <Col span="8">
                     <el-form-item label="启用状态：" prop="enable" label-width="120px" size="small">
-                    <el-select v-model="formChange.enable" filterable placeholder="请选择" style="width:150px">
+                    <el-select v-model="formChange.enable" filterable placeholder="请选择" style="width:220px">
                             <el-option v-for="item in statusQptionsA" :key="item.value" :label="item.name" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>

@@ -3,79 +3,75 @@
     <header class="headerstyle">
         <el-form :inline="true" :model="formSearch" class="demo-form-inline">
             <Col style="margin-bottom:20px">
-                <el-form-item size="small" class="marginT0">
-                        <el-button v-if="judgeMenu.indexOf('查询') != -1" size="small" type="primary" @click="onSearch">查询</el-button>
-                </el-form-item>
-                <el-form-item size="small" class="marginT0">
-                        <el-button v-if="judgeMenu.indexOf('审核') != -1" size="small" type="primary" @click="onExamine">审核</el-button>
-                </el-form-item>
-                <el-form-item size="small" class="marginT0">
-                        <el-button v-if="judgeMenu.indexOf('取消审核') != -1" size="small" type="primary" @click="onExamineCancel">取消审核</el-button>
-                    </el-form-item>
-                    <el-form-item size="small" class="marginT0">
-                        <el-button v-if="judgeMenu.indexOf('删除') != -1" size="small" type="primary" @click="onDel">删除</el-button>
-                    </el-form-item>
-                      <el-form-item size="small" class="marginT0">
-                        <el-button v-if="judgeMenu.indexOf('导出') != -1" size="small" type="primary" @click="checkExport">导出</el-button>
-                    </el-form-item>
-                     <el-form-item size="small" class="marginT0">
-                        <el-button size="small" type="default" @click="onReset">重置</el-button>
-                    </el-form-item>
+            <el-form-item size="small" class="marginT0">
+                <el-button v-if="judgeMenu.indexOf('查询') != -1" size="small" type="primary" @click="onSearch">查询</el-button>
+            </el-form-item>
+            <el-form-item size="small" class="marginT0">
+                <el-button v-if="judgeMenu.indexOf('审核') != -1" size="small" type="primary" @click="onExamine">审核</el-button>
+            </el-form-item>
+            <el-form-item size="small" class="marginT0">
+                <el-button v-if="judgeMenu.indexOf('取消审核') != -1" size="small" type="primary" @click="onExamineCancel">取消审核</el-button>
+            </el-form-item>
+            <el-form-item size="small" class="marginT0">
+                <el-button v-if="judgeMenu.indexOf('删除') != -1" size="small" type="primary" @click="onDel">删除</el-button>
+            </el-form-item>
+            <el-form-item size="small" class="marginT0">
+                <el-button v-if="judgeMenu.indexOf('导出') != -1" size="small" type="primary" @click="checkExport">导出</el-button>
+            </el-form-item>
+            <el-form-item size="small" class="marginT0">
+                <el-button size="small" type="default" @click="onReset">重置</el-button>
+            </el-form-item>
             </Col>
-                <!-- <el-divider></el-divider> -->
-                <!-- <el-col > -->
-                     <el-form-item label="年份：" size="small" >
-                        <el-date-picker style="width:120px" v-model="formSearch.year" type="year" placeholder="请选择"> </el-date-picker>
-                    </el-form-item>
-                    <el-form-item label=" 公 司 ：" size="small" >
-                        <el-select v-model="formSearch.companyId" @change="watchBill(formSearch.companyId)" filterable placeholder="请选择" style="width:120px">
-                            <el-option v-for="item in companyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="对账期间 ：" size="small">
-                        <el-select v-model="formSearch.periodId"  filterable placeholder="请选择" style="width:120px">
-                            <el-option v-for="item in SelectList" :key="item.name" :label="item.name" :value="item.period"></el-option>
-                        </el-select>
-                    </el-form-item>
-                     <el-form-item label="供应商：" size="small" >
-                        <el-select v-model="formSearch.supplierId" filterable placeholder="请选择" style="width:120px">
-                            <el-option v-for="item in supplyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="单据状态：" size="small" label-width="100px" v-if="show ==true">
-                        <el-select v-model="formSearch.status" filterable placeholder="请选择" style="width:120px">
-                            <el-option label="待审核" value="0"></el-option>
-                            <el-option label="已审核" value="1"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    
-                    <el-form-item label="账单编号:" size="small" v-if="show == true">
-                        <el-input v-model="formSearch.bizCode" placeholder="请输入" style="width:150px"></el-input>
-                    </el-form-item>
-                    <el-form-item label="开票状态：" size="small" label-width="100px" v-if="show ==true">
-                        <el-select v-model="formSearch.invoiceStatus" filterable placeholder="请选择" style="width:120px">
-                            <el-option label="未完成" value="0"></el-option>
-                            <el-option label="已完成" value="1"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="供应商确认状态：" size="small" label-width="130px" v-if="show ==true">
-                        <el-select v-model="formSearch.confirmStatus" filterable placeholder="请选择" style="width:120px">
-                            <el-option label="未确认" value="100"></el-option>
-                            <el-option label="已驳回" value="500"></el-option>
-                            <el-option label="已确认" value="900"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <!-- <el-form-item label="开票建议号:" size="small" v-if="show == true">
-                        <el-input v-model="formSearch.payableInvoiceAdviceNo" placeholder="请输入" style="width:150px"></el-input>
-                    </el-form-item> -->
-            <!-- </el-col> -->
+            <!-- <el-divider></el-divider> -->
+            <!-- <el-col > -->
+            <el-form-item label="年份：" size="small">
+                <el-date-picker style="width:120px" v-model="formSearch.year" type="year" placeholder="请选择"> </el-date-picker>
+            </el-form-item>
+            <el-form-item label=" 公 司 ：" size="small">
+                <el-select v-model="formSearch.companyId" @change="watchBill(formSearch.companyId)" filterable placeholder="请选择" style="width:220px">
+                    <el-option v-for="item in companyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="对账期间 ：" size="small">
+                <el-select v-model="formSearch.periodId" filterable placeholder="请选择" style="width:200px">
+                    <el-option v-for="item in SelectList" :key="item.name" :label="item.name" :value="item.period"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item  label="所属对账人员：" size="small">
+                <el-select v-model="formSearch.payableUser" @change="changePayable(formSearch.payableUser)" filterable placeholder="请选择" style="width:120px">
+                    <el-option v-for="item in payableUserList" :key="item.payableUserId" :label="item.payableUser" :value="item.payableUserId"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="供应商：" size="small">
+                <el-select v-model="formSearch.supplierId" filterable placeholder="请选择" style="width:220px">
+                    <el-option v-for="item in supplyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="单据状态：" size="small" label-width="100px" v-if="show ==true">
+                <el-select v-model="formSearch.status" filterable placeholder="请选择" style="width:100px">
+                    <el-option label="待审核" value="0"></el-option>
+                    <el-option label="已审核" value="1"></el-option>
+                </el-select>
+            </el-form-item>
+
+            <el-form-item label="账单编号:" size="small" v-if="show == true">
+                <el-input v-model="formSearch.bizCode" placeholder="请输入" style="width:180px"></el-input>
+            </el-form-item>
+            <el-form-item label="开票状态：" size="small" v-if="show ==true">
+                <el-select v-model="formSearch.invoiceStatus" filterable placeholder="请选择" style="width:100px">
+                    <el-option label="未完成" value="0"></el-option>
+                    <el-option label="已完成" value="1"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="供应商确认状态：" size="small" label-width="130px" v-if="show ==true">
+                <el-select v-model="formSearch.confirmStatus" filterable placeholder="请选择" style="width:100px">
+                    <el-option label="未确认" value="100"></el-option>
+                    <el-option label="已驳回" value="500"></el-option>
+                    <el-option label="已确认" value="900"></el-option>
+                </el-select>
+            </el-form-item>
             <el-form-item label="单据日期:" size="small" v-if="show == true">
-                <el-date-picker  style="width:357px"
-                        v-model="formSearch.date"
-                        type="daterange"
-                        range-separator="~"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
+                <el-date-picker style="width:290px" v-model="formSearch.date" type="daterange" range-separator="~" start-placeholder="开始日期" end-placeholder="结束日期">
                 </el-date-picker>
             </el-form-item>
             <!-- <el-form-item label="审核时间:" size="small" v-if="show == true">
@@ -88,14 +84,14 @@
                 </el-date-picker>
             </el-form-item> -->
             <el-form-item label="制单号:" size="small" v-if="show == true">
-                        <el-input v-model="formSearch.purchaseOrderNo" placeholder="请输入" style="width:150px"></el-input>
+                <el-input v-model="formSearch.purchaseOrderNo" placeholder="请输入" style="width:150px"></el-input>
             </el-form-item>
-             <el-form-item size="small" label-width="100px">
-                        <el-button v-if="show == false" @click="changeShow" style="float:right" size="small"><i class="el-icon-bottom"></i></el-button>
-                    </el-form-item>
-                    <el-form-item size="small">
-                        <el-button v-if="show == true" @click="changeHidden" style="float:right" size="small"><i class="el-icon-top"></i></el-button>
-                    </el-form-item>
+            <el-form-item size="small" label-width="100px">
+                <el-button v-if="show == false" @click="changeShow" style="float:right" size="small"><i class="el-icon-bottom"></i></el-button>
+            </el-form-item>
+            <el-form-item size="small">
+                <el-button v-if="show == true" @click="changeHidden" style="float:right" size="small"><i class="el-icon-top"></i></el-button>
+            </el-form-item>
         </el-form>
     </header>
     <section class="middle">
@@ -104,242 +100,95 @@
         <div id="main" style="width: 100%; height: 380px;"></div>
     </section>
     <section class="footer" style="margin-bottom:0px">
-         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-             <el-tab-pane label="货品明细" name="first" >
-                    <section class="middle">
-                        <el-table
-                            :data="goodsList"
-                            border
-                            show-summary
-                             :summary-method="getSummaries"
-                            style="width: 100%"  max-height="150">
-                            <el-table-column
-                            type="index"
-                            label="序号"
-                            align="center"
-                            width="50"
-                           >
-                            </el-table-column>
-                            <!-- <el-table-column
-                            prop="companyName"
-                            align="center"
-                            label="公司"
-                            min-width="120">
-                            </el-table-column>
-                            <el-table-column
-                            prop="supplierName"
-                            align="center"
-                            label="供应商"
-                            min-width="120">
-                            </el-table-column> -->
-                            <el-table-column
-                            prop="purchaseOrderNo"
-                            align="center"
-                            min-width="120"
-                            label="制单号"
-                            show-overflow-tooltip>
-                            </el-table-column>
-                            <el-table-column
-                            prop="goodsNo"
-                            align="center"
-                            min-width="120"
-                            label="大货款号"
-                            show-overflow-tooltip>
-                            </el-table-column>
-                            <el-table-column
-                            prop="batchNo"
-                            align="center"
-                            min-width="120"
-                            label="批次"
-                            show-overflow-tooltip>
-                            </el-table-column>
-                            <el-table-column
-                            prop="settlementType"
-                            align="center"
-                            min-width="120"
-                            label="结算类型"
-                            show-overflow-tooltip>
-                            </el-table-column>
-                            <el-table-column
-                            prop="stockInQty"
-                            align="center"
-                            min-width="120"
-                            label="入库总数"
-                            show-overflow-tooltip>
-                            </el-table-column>
-                            <el-table-column
-                            prop="goodsAmount"
-                            align="center"
-                            min-width="120"
-                            label="货款总额"
-                            show-overflow-tooltip>
-                             <template slot-scope="scope">
-                                 <div style="text-align:right">{{scope.row.goodsAmount|moneyFilters}}</div>
-                                 </template>
-                            </el-table-column>
-                            <el-table-column
-                            prop="taxTrialAmount"
-                            align="center"
-                            min-width="120"
-                            label="试制费总额"
-                            show-overflow-tooltip>
-                             <template slot-scope="scope">
-                                 <div style="text-align:right">{{scope.row.taxTrialAmount|moneyFilters}}</div>
-                                 </template>
-                            </el-table-column>
-
-                            <el-table-column
-                            prop="deductionAmount"
-                            align="center"
-                            min-width="120"
-                            label="扣款总额"
-                            show-overflow-tooltip>
-                             <template slot-scope="scope">
-                                 <div style="text-align:right">{{scope.row.deductionAmount|moneyFilters}}</div>
-                                 </template>
-                            </el-table-column>
-                            <el-table-column
-                            prop="settlementAmount"
-                            align="center"
-                            min-width="120"
-                            label="结算总额"
-                            show-overflow-tooltip>
-                             <template slot-scope="scope">
-                                 <div style="text-align:right">{{scope.row.settlementAmount|moneyFilters}}</div>
-                                 </template>
-                            </el-table-column>
-
-                            <el-table-column
-                            prop="settlementType"
-                            align="center"
-                            min-width="120"
-                            label="结算类型"
-                            show-overflow-tooltip>
-                            </el-table-column>
-
-                            <el-table-column
-                            prop="ticketAmount"
-                            align="center"
-                            min-width="120"
-                            label="已到票金额"
-                            show-overflow-tooltip>
-                             <template slot-scope="scope">
-                                 <div style="text-align:right">{{scope.row.ticketAmount|moneyFilters}}</div>
-                                 </template>
-                            </el-table-column>
-
-                            <el-table-column
-                            prop="chargeAgainstAmount"
-                            align="center"
-                            min-width="120"
-                            label="已冲抵金额"
-                            show-overflow-tooltip>
-                             <template slot-scope="scope">
-                                 <div style="text-align:right">{{scope.row.chargeAgainstAmount|moneyFilters}}</div>
-                                 </template>
-                            </el-table-column>
-
-                            <el-table-column
-                            prop="unTicketAmount"
-                            align="center"
-                            min-width="120"
-                            label="未到票金额"
-                            show-overflow-tooltip>
-                             <template slot-scope="scope">
-                                 <div style="text-align:right">{{scope.row.unTicketAmount|moneyFilters}}</div>
-                                 </template>
-                            </el-table-column>
-                            <el-table-column
-                            prop="invoiceStatus"
-                            align="center"
-                            min-width="120"
-                            label="开票状态"
-                            show-overflow-tooltip>
-                            </el-table-column>
-                            <el-table-column
-                            prop="closeTime"
-                            align="center"
-                            min-width="120"
-                            label="关单时间"
-                            show-overflow-tooltip>
-                            </el-table-column>
-                            <el-table-column
-                            prop="settlementOrderCode"
-                            align="center"
-                            min-width="120"
-                            label="结算明细编号"
-                            show-overflow-tooltip>
-                            </el-table-column>
-                        </el-table>  
-                </section>
-             </el-tab-pane>
-             <el-tab-pane label="扣款明细" name="second">
-                   <section class="middle">
-                        <el-table
-                            :data="deductionList"
-                            border
-                            style="width: 100%" max-height="150">
-                            <el-table-column
-                            type="index"
-                            label="序号"
-                            align="center"
-                            width="50">
-                            </el-table-column>
-                            <!-- <el-table-column
-                            prop="supplierName"
-                            align="center"
-                            label="供应商"
-                            min-width="120">
-                            </el-table-column>
-                            <el-table-column
-                            prop="companyName"
-                            align="center"
-                            label="公司"
-                            min-width="120">
-                            </el-table-column> -->
-                            <el-table-column
-                            prop="brandName"
-                            align="center"
-                            min-width="120"
-                            label="品牌">
-                            </el-table-column>
-                            <el-table-column
-                            prop="goodsNo"
-                            align="center"
-                            min-width="120"
-                            label="大货款号">
-                            </el-table-column>
-                            <!-- <el-table-column
-                            prop="amount2"
-                            align="center"
-                            min-width="120"
-                            label="款号">
-                            </el-table-column> -->
-                            <el-table-column
-                            prop="deductionAmount"
-                            align="center"
-                            min-width="120"
-                            label="扣款金额">
+        <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+            <el-tab-pane label="货品明细" name="first">
+                <section class="middle">
+                    <el-table :data="goodsList" border show-summary :summary-method="getSummaries" style="width: 100%" max-height="150">
+                        <el-table-column type="index" label="序号" align="center" width="50">
+                        </el-table-column>
+                        <el-table-column prop="purchaseOrderNo" align="center" min-width="120" label="制单号" show-overflow-tooltip>
+                        </el-table-column>
+                        <el-table-column prop="goodsNo" align="center" min-width="120" label="大货款号" show-overflow-tooltip>
+                        </el-table-column>
+                        <el-table-column prop="batchNo" align="center" min-width="120" label="批次" show-overflow-tooltip>
+                        </el-table-column>
+                        <el-table-column prop="settlementType" align="center" min-width="120" label="结算类型" show-overflow-tooltip>
+                        </el-table-column>
+                        <el-table-column prop="stockInQty" align="center" min-width="120" label="入库总数" show-overflow-tooltip>
+                        </el-table-column>
+                        <el-table-column prop="goodsAmount" align="center" min-width="120" label="货款总额" show-overflow-tooltip>
                             <template slot-scope="scope">
-                                 <div style="text-align:right">{{scope.row.deductionAmount|moneyFilters}}</div>
-                                 </template>
-                            </el-table-column>
-                            <el-table-column
-                            prop="deductionType"
-                            align="center"
-                            min-width="120"
-                            label="扣款类型">
-                            </el-table-column>
-                            <el-table-column
-                            prop="reconciliationOrderCode"
-                            align="center"
-                            min-width="120"
-                            label="账单编号">
-                            </el-table-column>
-                        </el-table>  
+                                <div style="text-align:right">{{scope.row.goodsAmount|moneyFilters}}</div>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="taxTrialAmount" align="center" min-width="120" label="试制费总额" show-overflow-tooltip>
+                            <template slot-scope="scope">
+                                <div style="text-align:right">{{scope.row.taxTrialAmount|moneyFilters}}</div>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column prop="deductionAmount" align="center" min-width="120" label="扣款总额" show-overflow-tooltip>
+                            <template slot-scope="scope">
+                                <div style="text-align:right">{{scope.row.deductionAmount|moneyFilters}}</div>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="settlementAmount" align="center" min-width="120" label="结算总额" show-overflow-tooltip>
+                            <template slot-scope="scope">
+                                <div style="text-align:right">{{scope.row.settlementAmount|moneyFilters}}</div>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column prop="settlementType" align="center" min-width="120" label="结算类型" show-overflow-tooltip>
+                        </el-table-column>
+
+                        <el-table-column prop="ticketAmount" align="center" min-width="120" label="已到票金额" show-overflow-tooltip>
+                            <template slot-scope="scope">
+                                <div style="text-align:right">{{scope.row.ticketAmount|moneyFilters}}</div>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column prop="chargeAgainstAmount" align="center" min-width="120" label="已冲抵金额" show-overflow-tooltip>
+                            <template slot-scope="scope">
+                                <div style="text-align:right">{{scope.row.chargeAgainstAmount|moneyFilters}}</div>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column prop="unTicketAmount" align="center" min-width="120" label="未到票金额" show-overflow-tooltip>
+                            <template slot-scope="scope">
+                                <div style="text-align:right">{{scope.row.unTicketAmount|moneyFilters}}</div>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="invoiceStatus" align="center" min-width="120" label="开票状态" show-overflow-tooltip>
+                        </el-table-column>
+                        <el-table-column prop="closeTime" align="center" min-width="120" label="关单时间" show-overflow-tooltip>
+                        </el-table-column>
+                        <el-table-column prop="settlementOrderCode" align="center" min-width="120" label="结算明细编号" show-overflow-tooltip>
+                        </el-table-column>
+                    </el-table>
                 </section>
             </el-tab-pane>
-            <el-tab-pane label="操作日志" name="third" >
+            <el-tab-pane label="扣款明细" name="second">
+                <section class="middle">
+                    <el-table :data="deductionList" border style="width: 100%" max-height="150">
+                        <el-table-column type="index" label="序号" align="center" width="50">
+                        </el-table-column>
+                        <el-table-column prop="brandName" align="center" min-width="120" label="品牌">
+                        </el-table-column>
+                        <el-table-column prop="goodsNo" align="center" min-width="120" label="大货款号">
+                        </el-table-column>
+                        <el-table-column prop="deductionAmount" align="center" min-width="120" label="扣款金额">
+                            <template slot-scope="scope">
+                                <div style="text-align:right">{{scope.row.deductionAmount|moneyFilters}}</div>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="deductionType" align="center" min-width="120" label="扣款类型">
+                        </el-table-column>
+                        <el-table-column prop="reconciliationOrderCode" align="center" min-width="120" label="账单编号">
+                        </el-table-column>
+                    </el-table>
+                </section>
+            </el-tab-pane>
+            <el-tab-pane label="操作日志" name="third">
                 <section class="middle">
                     <el-table :data="logsList" style="width: 100%" border tooltip-effect="dark" max-height="150">
                         <el-table-column prop="operator" label="操作员" min-width="120" align="center">
@@ -352,29 +201,29 @@
                     </el-table>
                     <div class="getmore" v-if="logsList.length>0&&dataFlag" @click="getMore">点击加载更多</div>
                     <div class="getmore" v-if="logsList.length>0&&!dataFlag">没有更多了…</div>
-               </section>
-        </el-tab-pane>
+                </section>
+            </el-tab-pane>
         </el-tabs>
     </section>
-     <!-- 导出 -->
+    <!-- 导出 -->
     <Modal v-model="exportVisible" title="导出" @on-cancel='cancelExport' :width="430" class-name="customize-modal-center">
         <Row class="margin-bottom-10 background-color-white exhibition">
             <el-form :inline="true" ref="ruleForm" :model="exportObj" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="rules">
                 <Col v-show="!moreLarge">
-                    <el-form-item label="导出类型" size="small" label-width="95px" prop="platform">
-                        <el-select  v-model="exportObj.selected" filterable placeholder="请选择" style="width:150px">
-                            <el-option label="导出主表" value="1"></el-option>
-                            <el-option label="导出主表+明细" value="2"></el-option>
-                        </el-select>
-                    </el-form-item>
+                <el-form-item label="导出类型" size="small" label-width="95px" prop="platform">
+                    <el-select v-model="exportObj.selected" filterable placeholder="请选择" style="width:150px">
+                        <el-option label="导出主表" value="1"></el-option>
+                        <el-option label="导出主表+明细" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
                 </Col>
                 <Col v-show="moreLarge" style="text-align:center">
-                       目前要导出的数据超过10万条，确定继续导出吗？
+                目前要导出的数据超过10万条，确定继续导出吗？
                 </Col>
                 <el-form-item style="padding-left:130px">
                     <Button type="primary" v-if="!moreLarge" @click="getExportTotal">确认</Button>
                     <!-- 二次确认 -->
-                    <Button type="primary" v-if="moreLarge" @click="onImport">确认</Button> 
+                    <Button type="primary" v-if="moreLarge" @click="onImport">确认</Button>
                     <Button type="default" @click="cancelExport">取消</Button>
                 </el-form-item>
             </el-form>
@@ -386,50 +235,54 @@
 
 <script>
 var record = {}
-let getStatic={}
+let getStatic = {}
 import filters from '../../../filter/'
-import { mapState } from 'vuex'
+import {
+    mapState
+} from 'vuex'
 export default {
     data() {
         return {
-            exportObj:{
-                       selected:''
+            payableUserList:[],
+            exportObj: {
+                selected: ''
             },
-            exportVisible:false,
-            moreLarge:false,
-            show:false,
+            exportVisible: false,
+            moreLarge: false,
+            show: false,
             loading: false,
-            activeName:'first',
-            examineVisible:false,    // 审核框
-            dialogVisible:false,     // 生成对账单框
-            adjustVisible:false,     // 扣款调整
-            companyList  : [],       // 公司列表
-            supplyList   : [],      //供应商列表
-            SelectList   : [],       //期间列表
-            adjustObj    : {},           // 扣款调整数据对象
-            adjustList   : [],          //  调整扣款的列表 
-            logList      : [],            // 日
-            formSearch   : {
-                         periodId:'',
-                         year:'',
+            activeName: 'first',
+            examineVisible: false, // 审核框
+            dialogVisible: false, // 生成对账单框
+            adjustVisible: false, // 扣款调整
+            companyList: [], // 公司列表
+            supplyList: [], //供应商列表
+            SelectList: [], //期间列表
+            adjustObj: {}, // 扣款调整数据对象
+            adjustList: [], //  调整扣款的列表 
+            logList: [], // 日
+            formSearch: {
+                periodId: '',
+                year: '',
+                supplierId:'',
             },
-            addBillObj:{},
+            addBillObj: {},
             total: 0,
             pagesize: 1000,
             currentPage: 1,
-            logPage:  1,
+            logPage: 1,
             judgeMenu: [],
             buttonList: [], //按钮权限
         }
     },
-     computed: mapState({
-                goodsList    : state => state.checkBill.goodsList,
-                logsList     :  state => state.checkBill.logList,
-                checkBillId  :  state => state.checkBill.checkBillId,
-                deductionList: state => state.checkBill.deductionList,
-                checkObj: state => state.checkBill.checkObj,
-                getCheckBillIdNoBizcode:state => state.checkBill.No,
-      }),
+    computed: mapState({
+        goodsList: state => state.checkBill.goodsList,
+        logsList: state => state.checkBill.logList,
+        checkBillId: state => state.checkBill.checkBillId,
+        deductionList: state => state.checkBill.deductionList,
+        checkObj: state => state.checkBill.checkObj,
+        getCheckBillIdNoBizcode: state => state.checkBill.No,
+    }),
     destroyed() {
         this.$store.commit('clearCheckBillGoodsList')
         this.$store.commit('clearcheckBilllogList')
@@ -437,38 +290,60 @@ export default {
         this.$store.commit('clearCheckBillId')
         this.$store.commit('clearCheckBillIdNo')
     },
-    created(){
-           this.getCompany()
-           this.getSupply()
+    created() {
+        this.getCompany()
+        this.getSupply()
+        this.getPayableUser()
     },
     mounted() {
-        this.formSearch.year=new Date()
+        this.formSearch.year = new Date()
         this.getButtonJurisdiction() //按钮权限
         this.initTable([], '', '')
     },
     methods: {
-          resetCommit(){
-                this.$store.commit('clearCheckBillGoodsList')
-                this.$store.commit('clearcheckBilllogList')
-                this.$store.commit('clearcheckBilldeductionList')
-                this.$store.commit('clearCheckBillId')   
-                 this.$store.commit('clearcheckObj')
-                 this.$store.commit('clearCheckBillIdNo')
-          },
-          handleClick(tab, event) {
-            if(tab.name=='second'){
-                this.getReduceDetail()
-            }else if(tab.name=='third'){
-              if(!this.checkBillId) return
-              this.getLoglist()  
+        //重新获取供应商下拉
+        changePayable(name){
+            this.formSearch.supplierId = ''
+            console.log(name)
+            let vars = {}
+            vars.payableUserId = name
+             this.requestWithUriVars('selectorPayableSupplier', vars, null, true).then(res => {
+          if (res.code==1) {
+              this.supplyList = res.data
+            }else{
+                this.supplyList = []
             }
-         },
-         changeShow() {
+          })
+        },
+        getPayableUser(){
+            this.request('supplier_selectorPayable', {}, true).then(res => {
+                if (res.code == 1) {
+                    this.payableUserList = res.data
+                }
+            })
+        },
+        resetCommit() {
+            this.$store.commit('clearCheckBillGoodsList')
+            this.$store.commit('clearcheckBilllogList')
+            this.$store.commit('clearcheckBilldeductionList')
+            this.$store.commit('clearCheckBillId')
+            this.$store.commit('clearcheckObj')
+            this.$store.commit('clearCheckBillIdNo')
+        },
+        handleClick(tab, event) {
+            if (tab.name == 'second') {
+                this.getReduceDetail()
+            } else if (tab.name == 'third') {
+                if (!this.checkBillId) return
+                this.getLoglist()
+            }
+        },
+        changeShow() {
             this.show = true
-         },
-         changeHidden() {
+        },
+        changeHidden() {
             this.show = false
-         },
+        },
         getObj(orignArr, props, params1) {
             if (orignArr instanceof Array) {
                 for (let i = 0, len = orignArr.length; i < len; i++) {
@@ -500,13 +375,12 @@ export default {
                 $('#main').w2grid({
                     name: 'checkBill',
                     show: {
-                         toolbar: true,
-                         selectColumn: true,
+                        toolbar: true,
+                        selectColumn: true,
                     },
                     reorderColumns: true,
                     reorderRows: true,
-                    columns: [
-                         {
+                    columns: [{
                             field: 'index',
                             caption: '序号',
                             size: '80px',
@@ -638,24 +512,24 @@ export default {
                         },
                     ],
                     onClick: function (event) {
-                        self.activeName='first'
+                        self.activeName = 'first'
                         record = this.get(event.recid)
-                      
+
                         // self.getLoglist(event.recid)
-                         setTimeout(function(){
-                            if(w2ui.checkBill.getSelection().length == 1){
+                        setTimeout(function () {
+                            if (w2ui.checkBill.getSelection().length == 1) {
                                 let arr = w2ui.checkBill.getSelection()
-                                if(arr[0] != record.id){
-                                       // console.log('--------------')
-                                }else{
+                                if (arr[0] != record.id) {
+                                    // console.log('--------------')
+                                } else {
                                     self.getGoodsList(event.recid)
                                     self.logPage = 1
-                                    self.$store.commit('getCheckBillId',event.recid)
-                                    self.$store.commit('getCheckBillIdNo',record.bizCode)
-                                    
-                                 }
-                            }else{
-                                 self.resetCommit()
+                                    self.$store.commit('getCheckBillId', event.recid)
+                                    self.$store.commit('getCheckBillIdNo', record.bizCode)
+
+                                }
+                            } else {
+                                self.resetCommit()
                             }
                         }, 200);
                     }
@@ -670,32 +544,32 @@ export default {
                     },
                     index: '<span>当页小计</span>',
                     totalCurrentPeriodAmount: current.totalCurrentPeriodAmount,
-                    totalTaxTrialAmount:current.totalTaxTrialAmount, 
-                    totalSaleAmount:current.totalSaleAmount,
-                    totalProcessingAmount:current.totalProcessingAmount,
-                    totalReturnRepairAmount:current.totalReturnRepairAmount,
-                    totalDeductionAmount:current.totalDeductionAmount,
-                    goodsInvoiceAmount:current.goodsInvoiceAmount,
-                    tryFeeInvoiceAmount:current.tryFeeInvoiceAmount,
-                    totalTicketAmount:current.totalTicketAmount,
-                    totalChargeAgainstAmount:current.totalChargeAgainstAmount,
-                    totalUnTicketAmount:current.totalUnTicketAmount
+                    totalTaxTrialAmount: current.totalTaxTrialAmount,
+                    totalSaleAmount: current.totalSaleAmount,
+                    totalProcessingAmount: current.totalProcessingAmount,
+                    totalReturnRepairAmount: current.totalReturnRepairAmount,
+                    totalDeductionAmount: current.totalDeductionAmount,
+                    goodsInvoiceAmount: current.goodsInvoiceAmount,
+                    tryFeeInvoiceAmount: current.tryFeeInvoiceAmount,
+                    totalTicketAmount: current.totalTicketAmount,
+                    totalChargeAgainstAmount: current.totalChargeAgainstAmount,
+                    totalUnTicketAmount: current.totalUnTicketAmount
                 }, {
                     w2ui: {
                         summary: true
                     },
                     index: '<span>合计</span>',
                     totalCurrentPeriodAmount: total.totalCurrentPeriodAmount,
-                    totalTaxTrialAmount:total.totalTaxTrialAmount,
-                    totalSaleAmount:total.totalSaleAmount,
-                    totalProcessingAmount:total.totalProcessingAmount,
-                    totalReturnRepairAmount:total.totalReturnRepairAmount,
-                    totalDeductionAmount:total.totalDeductionAmount,
-                    goodsInvoiceAmount:total.goodsInvoiceAmount,
-                    tryFeeInvoiceAmount:total.tryFeeInvoiceAmount,
-                    totalTicketAmount:total.totalTicketAmount,
-                    totalChargeAgainstAmount:total.totalChargeAgainstAmount,
-                    totalUnTicketAmount:total.totalUnTicketAmount
+                    totalTaxTrialAmount: total.totalTaxTrialAmount,
+                    totalSaleAmount: total.totalSaleAmount,
+                    totalProcessingAmount: total.totalProcessingAmount,
+                    totalReturnRepairAmount: total.totalReturnRepairAmount,
+                    totalDeductionAmount: total.totalDeductionAmount,
+                    goodsInvoiceAmount: total.goodsInvoiceAmount,
+                    tryFeeInvoiceAmount: total.tryFeeInvoiceAmount,
+                    totalTicketAmount: total.totalTicketAmount,
+                    totalChargeAgainstAmount: total.totalChargeAgainstAmount,
+                    totalUnTicketAmount: total.totalUnTicketAmount
                 })
                 $('#main').w2render('checkBill');
                 w2ui.checkBill.refresh();
@@ -714,16 +588,17 @@ export default {
 
         },
         onReset() {
-            for(let i in this.formSearch){
-                 this.formSearch[i]=''
+            for (let i in this.formSearch) {
+                this.formSearch[i] = ''
             }
             // this.resetCommit()
-            this.formSearch.year=new Date()
-            this.SelectList=[]
+            this.formSearch.year = new Date()
+            this.SelectList = []
             // this.initTable([])
-            record.bizCode=''
-            this.activeName="first"
-            
+            record.bizCode = ''
+            this.activeName = "first"
+            this.getSupply()
+
         },
         getCompany() {
             let data = {}
@@ -734,94 +609,95 @@ export default {
             })
         },
         getData() {
-                 record.bizCode=''
-                this.loading = true;
-                this.logList = []
-                this.logPage=1;
-                let data = {}
-                    data.pageSize          = this.pagesize
-                    data.currentPage       = this.currentPage
-                    data.companyId         = this.formSearch.companyId                    
-                    data.supplierId        = this.formSearch.supplierId                 
-                    data.periodId          = this.formSearch.periodId                     
-                    data.year              = filters.get_unix_only(this.formSearch.year) 
-                    data.bizCode           = this.formSearch.bizCode                     
-                    data.purchaseOrderNo   = this.formSearch.purchaseOrderNo
-                    data.startDate         = this.formSearch.date?filters.get_year_month_day(this.formSearch.date[0]):''
-                    data.endDate           = this.formSearch.date?filters.get_year_month_day(this.formSearch.date[1]):''
-                    data.status            = this.formSearch.status!=''?Number(this.formSearch.status):''
-                    data.auditStartDate    = this.formSearch.time?filters.get_year_month_day(this.formSearch.time[0]):''
-                    data.auditEndDate      = this.formSearch.time?filters.get_year_month_day(this.formSearch.time[1]):''
-                    data.status==0?'' : data.status==1?'' : delete  data.status
-                    data.startDate?'': delete  data.startDate
-                    data.endDate?  '': delete data.endDate
-                    data.auditStartDate?'': delete  data.auditStartDate
-                    data.auditEndDate?  '': delete data.auditEndDate
-                    data.invoiceStatus = this.formSearch.invoiceStatus
-                    data.confirmStatus = this.formSearch.confirmStatus
-                    data.payableInvoiceAdviceNo = this.formSearch.payableInvoiceAdviceNo
-                this.request('payable_reconciliationOrder_page', data, true).then(res => {
-                    if (res.code == 1) {
-                        this.total = res.data.count;
-                        if (res.data.records) {
-                            for (let i = 0, len = res.data.records.length; i < len; i++) {
-                                res.data.records[i].index =i+1
-                                res.data.records[i].recid = res.data.records[i].id
-                            }
-                            this.list = res.data.records;
-                            this.initTable(res.data.records, res.data.currentPageSum, res.data.totalPageSum)
-                        } else {
-                            this.initTable([])
+            record.bizCode = ''
+            this.loading = true;
+            this.logList = []
+            this.logPage = 1;
+            let data = {}
+            data.pageSize = this.pagesize
+            data.currentPage = this.currentPage
+            data.companyId = this.formSearch.companyId
+            data.payableUserId = this.formSearch.payableUser//所属人员
+            data.supplierId = this.formSearch.supplierId
+            data.periodId = this.formSearch.periodId
+            data.year = filters.get_unix_only(this.formSearch.year)
+            data.bizCode = this.formSearch.bizCode
+            data.purchaseOrderNo = this.formSearch.purchaseOrderNo
+            data.startDate = this.formSearch.date ? filters.get_year_month_day(this.formSearch.date[0]) : ''
+            data.endDate = this.formSearch.date ? filters.get_year_month_day(this.formSearch.date[1]) : ''
+            data.status = this.formSearch.status != '' ? Number(this.formSearch.status) : ''
+            data.auditStartDate = this.formSearch.time ? filters.get_year_month_day(this.formSearch.time[0]) : ''
+            data.auditEndDate = this.formSearch.time ? filters.get_year_month_day(this.formSearch.time[1]) : ''
+            data.status == 0 ? '' : data.status == 1 ? '' : delete data.status
+            data.startDate ? '' : delete data.startDate
+            data.endDate ? '' : delete data.endDate
+            data.auditStartDate ? '' : delete data.auditStartDate
+            data.auditEndDate ? '' : delete data.auditEndDate
+            data.invoiceStatus = this.formSearch.invoiceStatus
+            data.confirmStatus = this.formSearch.confirmStatus
+            data.payableInvoiceAdviceNo = this.formSearch.payableInvoiceAdviceNo
+            this.request('payable_reconciliationOrder_page', data, true).then(res => {
+                if (res.code == 1) {
+                    this.total = res.data.count;
+                    if (res.data.records) {
+                        for (let i = 0, len = res.data.records.length; i < len; i++) {
+                            res.data.records[i].index = i + 1
+                            res.data.records[i].recid = res.data.records[i].id
                         }
-                        this.loading = false
-                        this.$store.commit('clearCheckBillGoodsList')
-                        this.$store.commit('clearcheckBilllogList')
-                        this.$store.commit('clearcheckBilldeductionList')
-                                
+                        this.list = res.data.records;
+                        this.initTable(res.data.records, res.data.currentPageSum, res.data.totalPageSum)
                     } else {
                         this.initTable([])
-                        this.$message({
-                            message: res.msg,
-                            type: 'error'
-                        });
                     }
-                })
-        },
-        //获取货品明细
-         getGoodsList(id){
-            let data = {}
-                data.id =id
-            this.request('payable_reconciliationOrder_detail', data, false).then((res) => {
-                if (res.code == 1) {
-                    //   getStatic=res.data.currentPageSum
-                      this.$store.commit('checkBillGoodsList', res.data.records)
-                      this.$store.commit('getcheckObj',res.data.currentPageSum)
-                 }else{
-                     this.$store.commit('clearcheckObj')
-                      this.$store.commit('clearCheckBillGoodsList')
-                 }
-            })        
-        },
-        //获取扣款明细
-         getReduceDetail(id){//
-         if(!this.getCheckBillIdNoBizcode)return
-            let data = {}
-                data.reconciliationOrderCode=this.getCheckBillIdNoBizcode
-                data.pageSize=1000
-            this.request('payable_deductionOrder_page', data, false).then((res) => {
-                if (res.code == 1) {
-                      this.$store.commit('checkBilldeductionList',res.data.records)
-                }else{
-                      this.$store.commit('clearcheckBilldeductionList')
+                    this.loading = false
+                    this.$store.commit('clearCheckBillGoodsList')
+                    this.$store.commit('clearcheckBilllogList')
+                    this.$store.commit('clearcheckBilldeductionList')
+
+                } else {
+                    this.initTable([])
+                    this.$message({
+                        message: res.msg,
+                        type: 'error'
+                    });
                 }
             })
         },
-         //日志
+        //获取货品明细
+        getGoodsList(id) {
+            let data = {}
+            data.id = id
+            this.request('payable_reconciliationOrder_detail', data, false).then((res) => {
+                if (res.code == 1) {
+                    //   getStatic=res.data.currentPageSum
+                    this.$store.commit('checkBillGoodsList', res.data.records)
+                    this.$store.commit('getcheckObj', res.data.currentPageSum)
+                } else {
+                    this.$store.commit('clearcheckObj')
+                    this.$store.commit('clearCheckBillGoodsList')
+                }
+            })
+        },
+        //获取扣款明细
+        getReduceDetail(id) { //
+            if (!this.getCheckBillIdNoBizcode) return
+            let data = {}
+            data.reconciliationOrderCode = this.getCheckBillIdNoBizcode
+            data.pageSize = 1000
+            this.request('payable_deductionOrder_page', data, false).then((res) => {
+                if (res.code == 1) {
+                    this.$store.commit('checkBilldeductionList', res.data.records)
+                } else {
+                    this.$store.commit('clearcheckBilldeductionList')
+                }
+            })
+        },
+        //日志
         getLoglist() {
             let data = {}
-                data.billNo ='payable_reconciliation_order_'+this.checkBillId
-                data.pageSize = 3
-                data.currentPage = this.logPage
+            data.billNo = 'payable_reconciliation_order_' + this.checkBillId
+            data.pageSize = 3
+            data.currentPage = this.logPage
             this.request('billLog_getPagingByBillNo', data, false).then((res) => {
                 if (res.code == 1) {
                     if (res.data.length < data.pageSize) {
@@ -836,7 +712,7 @@ export default {
                         this.logList = this.logList.concat(res.data)
                         this.$store.commit('checkBilllogList', this.logList)
                     }
-                }else{
+                } else {
                     this.$message.error(res.msg)
                 }
             })
@@ -856,43 +732,47 @@ export default {
             this.currentPage = val
             this.getData()
         },
-        checkSelection(){
-                  let arr= w2ui.checkBill.getSelection()
-                      if(arr.length>0){ return  true} 
-                      return false
-                   
+        checkSelection() {
+            let arr = w2ui.checkBill.getSelection()
+            if (arr.length > 0) {
+                return true
+            }
+            return false
+
         },
-        operate(){
-                this.$prompt('确定要审核选中的数据吗', '操作确认', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    }).then(({ value }) => {
-                    this.$message({
-                        type: 'success',
-                        message: '你的邮箱是: ' + value?value:''
-                    });
-                    }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '取消输入'
-                    });       
+        operate() {
+            this.$prompt('确定要审核选中的数据吗', '操作确认', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+            }).then(({
+                value
+            }) => {
+                this.$message({
+                    type: 'success',
+                    message: '你的邮箱是: ' + value ? value : ''
                 });
-        }, 
-       resetForm(name){
-           this.$refs[name].resetFields();
-       },
-       cancelAdjust(){
-             this.adjustVisible=false;
-             this.resetForm('adjustForm')
-       },
-       //新增
-       adjustAdd(){
-                 //   adjustList
-       },
-       adjustRemove(){
-          
-       },
-         //公司下拉列表
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '取消输入'
+                });
+            });
+        },
+        resetForm(name) {
+            this.$refs[name].resetFields();
+        },
+        cancelAdjust() {
+            this.adjustVisible = false;
+            this.resetForm('adjustForm')
+        },
+        //新增
+        adjustAdd() {
+            //   adjustList
+        },
+        adjustRemove() {
+
+        },
+        //公司下拉列表
         getCompany() {
             //masterData_company_selector
             let data = {}
@@ -903,47 +783,50 @@ export default {
             })
         },
         //供应商列表
-         getSupply(){
+        getSupply() {
             this.request('masterData_supplier_selector', {}, false).then(res => {
                 if (res.code == 1) {
-                     this.supplyList = res.data
+                    this.supplyList = res.data
                 }
             })
         },
-        watchBill(id){
-          if(!id)return 
-          this.formSearch.periodId=''
-          this.SelectList=[]
-          this.getSelectList(id)  
+        watchBill(id) {
+            if (!id) return
+            this.formSearch.periodId = ''
+            this.SelectList = []
+            this.getSelectList(id)
         },
-         // 账期下拉列表
-        getSelectList(id){
-           let data = {}
-               data.basicCompanyId=id
-               data.type=3;
+        // 账期下拉列表
+        getSelectList(id) {
+            let data = {}
+            data.basicCompanyId = id
+            data.type = 3;
             this.request('accountPeriod_selector', data, true).then((res) => {
                 if (res.code == 1) {
-                     this.SelectList = res.data
-                }else{
-                     this.$message.error(res.msg)
+                    this.SelectList = res.data
+                } else {
+                    this.$message.error(res.msg)
                 }
             })
         },
-         getSummaries(param) {
-            const { columns, data } = param;
+        getSummaries(param) {
+            const {
+                columns,
+                data
+            } = param;
             const sums = [];
             columns.forEach((column, index) => {
-            if (index === 0) {
-                sums[index] = '合计';
-                return;
-            }
-                 sums[5] = this.checkObj.stockInQty
-                 sums[6] = filters.moneyFilters(this.checkObj.goodsAmount)
-                 sums[8] = filters.moneyFilters(this.checkObj.deductionAmount)
+                if (index === 0) {
+                    sums[index] = '合计';
+                    return;
+                }
+                sums[5] = this.checkObj.stockInQty
+                sums[6] = filters.moneyFilters(this.checkObj.goodsAmount)
+                sums[8] = filters.moneyFilters(this.checkObj.deductionAmount)
             });
             return sums;
-      },
-       checkSelection() {
+        },
+        checkSelection() {
             let arr = w2ui.checkBill.getSelection()
             if (arr.length > 0) {
                 return true
@@ -951,246 +834,248 @@ export default {
             return false
 
         },
-       //继续审核
-        continueExamine(){
-             let arr = w2ui.checkBill.getSelection()
-             let data={};
-                 data.command='audit'
-                 data.ids    = arr
-                 data.continueAudit=1;
-                 data.remark='审核'
-             this.request('payable_reconciliationOrder_command',data, false).then((res) => {
-                    if(res.code==1){
-                                         this.$message.success('审核成功')
-                                         this.getData()
-                                            }else{
-                                                    this.$message.error(res.msg)
-                                    }    
-             })
-                
-        },
-       //审核
-        onExamine() {
+        //继续审核
+        continueExamine() {
             let arr = w2ui.checkBill.getSelection()
-            let data={};
-                data.command='audit'
-                data.ids    = arr
-            if (this.checkSelection()) {
-                  this.request('payable_reconciliationOrder_check',data, false).then((res) => {
-                if (res.code == 1) {              
-                                this.$prompt('确定要审核选中的数据吗', '操作确认', {
-                                    confirmButtonText: '确定',
-                                    cancelButtonText: '取消',
-                                }).then(({
-                                      value
-                                }) => {
-                                         data.remark='审核 备注:'+(value?value:'无')
-                                         this.request('payable_reconciliationOrder_command',data, false).then((res) => {
-                                            if(res.code==1){
-                                                    this.$message.success('审核成功')
-                                                    this.getData()
-                                            }else{
-                                                    this.$message.error(res.msg)
-                                            }
-                                    })
-                                }).catch(() => {
-                                    this.$message({
-                                        type: 'info',
-                                        message: '已取消审核'
-                                    });
-                                });
-                }else{
-                      if(res.code=='FMS_704'){
-                                    this.$confirm(res.msg, '操作确认', {
-                                        confirmButtonText: '继续审核',
-                                        cancelButtonText: '暂不审核',
-                                        type: 'warning'
-                                        }).then(() => {
-                                              this.continueExamine()
-                                        }).catch(() => {
-                                        this.$message({
-                                            type: 'info',
-                                            message: '已取消继续审核'
-                                        });          
-                                        });
-                      }else{
-                        this.$message.error(res.msg)
-                      }
-                      
+            let data = {};
+            data.command = 'audit'
+            data.ids = arr
+            data.continueAudit = 1;
+            data.remark = '审核'
+            this.request('payable_reconciliationOrder_command', data, false).then((res) => {
+                if (res.code == 1) {
+                    this.$message.success('审核成功')
+                    this.getData()
+                } else {
+                    this.$message.error(res.msg)
                 }
             })
+
+        },
+        //审核
+        onExamine() {
+            let arr = w2ui.checkBill.getSelection()
+            let data = {};
+            data.command = 'audit'
+            data.ids = arr
+            if (this.checkSelection()) {
+                this.request('payable_reconciliationOrder_check', data, false).then((res) => {
+                    if (res.code == 1) {
+                        this.$prompt('确定要审核选中的数据吗', '操作确认', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                        }).then(({
+                            value
+                        }) => {
+                            data.remark = '审核 备注:' + (value ? value : '无')
+                            this.request('payable_reconciliationOrder_command', data, false).then((res) => {
+                                if (res.code == 1) {
+                                    this.$message.success('审核成功')
+                                    this.getData()
+                                } else {
+                                    this.$message.error(res.msg)
+                                }
+                            })
+                        }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消审核'
+                            });
+                        });
+                    } else {
+                        if (res.code == 'FMS_704') {
+                            this.$confirm(res.msg, '操作确认', {
+                                confirmButtonText: '继续审核',
+                                cancelButtonText: '暂不审核',
+                                type: 'warning'
+                            }).then(() => {
+                                this.continueExamine()
+                            }).catch(() => {
+                                this.$message({
+                                    type: 'info',
+                                    message: '已取消继续审核'
+                                });
+                            });
+                        } else {
+                            this.$message.error(res.msg)
+                        }
+
+                    }
+                })
             } else {
-                     this.$message.error('请勾选审核数据')
-                  
+                this.$message.error('请勾选审核数据')
+
             }
 
         },
         // 取消审核
         onExamineCancel() {
             let arr = w2ui.checkBill.getSelection()
-            let data={};
-                data.command='unAudit'
-                data.ids    = arr
+            let data = {};
+            data.command = 'unAudit'
+            data.ids = arr
             if (this.checkSelection()) {
-                  this.request('payable_reconciliationOrder_check',data, false).then((res) => {
-                if (res.code == 1) {              
-                                this.$prompt('确定要取消审核选中的数据吗', '操作确认', {
-                                    confirmButtonText: '确定',
-                                    cancelButtonText: '取消',
-                                }).then(({
-                                      value
-                                }) => {
-                                         data.remark='取消审核 备注:'+(value?value:'无')
-                                         this.request('payable_reconciliationOrder_command',data, false).then((res) => {
-                                            if(res.code==1){
-                                                    this.$message.success('取消审核成功')
-                                                    this.getData()
-                                            }else{
-                                                    this.$message.error(res.msg)
-                                            }
-                                    })
-                                }).catch(() => {
-                                     this.$message({
-                                        type: 'info',
-                                        message: '已取消'
-                                    });
-                                });
-                }else{
-                      this.$message.error(res.msg)
-                }
-            })
+                this.request('payable_reconciliationOrder_check', data, false).then((res) => {
+                    if (res.code == 1) {
+                        this.$prompt('确定要取消审核选中的数据吗', '操作确认', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                        }).then(({
+                            value
+                        }) => {
+                            data.remark = '取消审核 备注:' + (value ? value : '无')
+                            this.request('payable_reconciliationOrder_command', data, false).then((res) => {
+                                if (res.code == 1) {
+                                    this.$message.success('取消审核成功')
+                                    this.getData()
+                                } else {
+                                    this.$message.error(res.msg)
+                                }
+                            })
+                        }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消'
+                            });
+                        });
+                    } else {
+                        this.$message.error(res.msg)
+                    }
+                })
             } else {
-                     this.$message.error('请勾选取消审核数据')
+                this.$message.error('请勾选取消审核数据')
             }
 
         },
-                 //删除
+        //删除
         onDel() {
             let arr = w2ui.checkBill.getSelection()
-            let data={};
-                data.command='delete'
-                data.ids    = arr
+            let data = {};
+            data.command = 'delete'
+            data.ids = arr
             if (this.checkSelection()) {
-                  this.request('payable_reconciliationOrder_check',data, false).then((res) => {
-                if (res.code == 1) {              
-                                this.$prompt('确定要删除选中的数据吗', '操作确认', {
-                                    confirmButtonText: '确定',
-                                    cancelButtonText: '取消',
-                                }).then(({
-                                      value
-                                }) => {
-                                         data.remark='删除 备注:'+(value?value:'无')
-                                         this.request('payable_reconciliationOrder_command',data, false).then((res) => {
-                                            if(res.code==1){
-                                                    this.$message.success('删除成功')
-                                                    this.getData()
-                                            }else{
-                                                    this.$message.error(res.msg)
-                                            }
-                                    })
-                                }).catch(()=> {
-                                     this.$message({
-                                        type: 'info',
-                                        message: '已取消'
-                                    });
-                                });
-                }else{
-                      this.$message.error(res.msg)
-                }
-            })
+                this.request('payable_reconciliationOrder_check', data, false).then((res) => {
+                    if (res.code == 1) {
+                        this.$prompt('确定要删除选中的数据吗', '操作确认', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                        }).then(({
+                            value
+                        }) => {
+                            data.remark = '删除 备注:' + (value ? value : '无')
+                            this.request('payable_reconciliationOrder_command', data, false).then((res) => {
+                                if (res.code == 1) {
+                                    this.$message.success('删除成功')
+                                    this.getData()
+                                } else {
+                                    this.$message.error(res.msg)
+                                }
+                            })
+                        }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消'
+                            });
+                        });
+                    } else {
+                        this.$message.error(res.msg)
+                    }
+                })
             } else {
-                     this.$message.error('请勾选取消删除数据')
+                this.$message.error('请勾选取消删除数据')
             }
         },
         //导出相关
-        checkExport(){
-                 if(this.checkSelection()){
-                    // this.onImport()
-                    this.exportVisible=true
-                 }else{
-                     this.exportVisible=true
-                 }
+        checkExport() {
+            if (this.checkSelection()) {
+                // this.onImport()
+                this.exportVisible = true
+            } else {
+                this.exportVisible = true
+            }
         },
-        cancelExport(){
-                   this.exportVisible=false;
-                   this.moreLarge=false;
-                   this.exportObj.selected=''
+        cancelExport() {
+            this.exportVisible = false;
+            this.moreLarge = false;
+            this.exportObj.selected = ''
         },
-        getExportTotal(){
-           if(!this.exportObj.selected) return this.$message.error('请选择导出类型')
-                    let data={}
-                        data.companyId         = this.formSearch.companyId                    
-                        data.supplierId        = this.formSearch.supplierId                 
-                        data.periodId          = this.formSearch.periodId                     
-                        data.year              = filters.get_unix_only(this.formSearch.year) 
-                        data.bizCode           = this.formSearch.bizCode                     
-                        data.purchaseOrderNo   = this.formSearch.purchaseOrderNo
-                        data.startDate         = this.formSearch.date?filters.get_year_month_day(this.formSearch.date[0]):''
-                        data.endDate           = this.formSearch.date?filters.get_year_month_day(this.formSearch.date[1]):''
-                        data.status            = this.formSearch.status!=''?Number(this.formSearch.status):''
-                        data.invoiceStatus     = this.formSearch.invoiceStatus!=''?Number(this.formSearch.invoiceStatus):''
-                        data.auditStartDate    = this.formSearch.time?filters.get_year_month_day(this.formSearch.time[0]):''
-                        data.auditEndDate      = this.formSearch.time?filters.get_year_month_day(this.formSearch.time[1]):''
-                        data.status==0?'' : data.status==1?'' : delete  data.status
-                        data.invoiceStatus==0?'' : data.invoiceStatus==1?'' : delete  data.invoiceStatus
-                        data.startDate?'': delete  data.startDate
-                        data.endDate?  '': delete data.endDate
-                        data.auditStartDate?'': delete  data.auditStartDate
-                        data.auditEndDate?  '': delete data.auditEndDate
-                        w2ui.checkBill.getSelection().length>0?data.ids= w2ui.checkBill.getSelection():delete data.ids
-                        this.exportObj.selected==1? data.inclusionDetails=false:data.inclusionDetails=true;
-           this.request('payable_reconciliationOrder_exportCount',data,false).then(res=>{
-               if(res.code==1){
-                   if(res.data>100000){
-                       this.moreLarge=true
-                   }else{
-                       this.moreLarge=false
-                       this.onImport()
-                   }
-               }else{
-                   this.$message.error(res.msg)
-               }
-           })
+        getExportTotal() {
+            if (!this.exportObj.selected) return this.$message.error('请选择导出类型')
+            let data = {}
+            data.companyId = this.formSearch.companyId
+            data.payableUserId = this.formSearch.payableUser//所属人员
+            data.supplierId = this.formSearch.supplierId
+            data.periodId = this.formSearch.periodId
+            data.year = filters.get_unix_only(this.formSearch.year)
+            data.bizCode = this.formSearch.bizCode
+            data.purchaseOrderNo = this.formSearch.purchaseOrderNo
+            data.startDate = this.formSearch.date ? filters.get_year_month_day(this.formSearch.date[0]) : ''
+            data.endDate = this.formSearch.date ? filters.get_year_month_day(this.formSearch.date[1]) : ''
+            data.status = this.formSearch.status != '' ? Number(this.formSearch.status) : ''
+            data.invoiceStatus = this.formSearch.invoiceStatus != '' ? Number(this.formSearch.invoiceStatus) : ''
+            data.auditStartDate = this.formSearch.time ? filters.get_year_month_day(this.formSearch.time[0]) : ''
+            data.auditEndDate = this.formSearch.time ? filters.get_year_month_day(this.formSearch.time[1]) : ''
+            data.status == 0 ? '' : data.status == 1 ? '' : delete data.status
+            data.invoiceStatus == 0 ? '' : data.invoiceStatus == 1 ? '' : delete data.invoiceStatus
+            data.startDate ? '' : delete data.startDate
+            data.endDate ? '' : delete data.endDate
+            data.auditStartDate ? '' : delete data.auditStartDate
+            data.auditEndDate ? '' : delete data.auditEndDate
+            w2ui.checkBill.getSelection().length > 0 ? data.ids = w2ui.checkBill.getSelection() : delete data.ids
+            this.exportObj.selected == 1 ? data.inclusionDetails = false : data.inclusionDetails = true;
+            this.request('payable_reconciliationOrder_exportCount', data, false).then(res => {
+                if (res.code == 1) {
+                    if (res.data > 100000) {
+                        this.moreLarge = true
+                    } else {
+                        this.moreLarge = false
+                        this.onImport()
+                    }
+                } else {
+                    this.$message.error(res.msg)
+                }
+            })
         },
         //导出
-        onImport(){
-                    let data={}
-                        data.companyId         = this.formSearch.companyId                    
-                        data.supplierId        = this.formSearch.supplierId                 
-                        data.periodId          = this.formSearch.periodId                     
-                        data.year              = filters.get_unix_only(this.formSearch.year) 
-                        data.bizCode           = this.formSearch.bizCode                     
-                        data.purchaseOrderNo   = this.formSearch.purchaseOrderNo
-                        data.startDate         = this.formSearch.date?filters.get_year_month_day(this.formSearch.date[0]):''
-                        data.endDate           = this.formSearch.date?filters.get_year_month_day(this.formSearch.date[1]):''
-                        data.status            = this.formSearch.status!=''?Number(this.formSearch.status):''
-                        data.invoiceStatus     = this.formSearch.invoiceStatus!=''?Number(this.formSearch.invoiceStatus):''
-                        data.auditStartDate    = this.formSearch.time?filters.get_year_month_day(this.formSearch.time[0]):''
-                        data.auditEndDate      = this.formSearch.time?filters.get_year_month_day(this.formSearch.time[1]):''
-                        data.invoiceStatus==0?'' : data.invoiceStatus==1?'' : delete  data.invoiceStatus
-                        data.status==0?'' : data.status==1?'' : delete  data.status
-                        data.startDate?'': delete  data.startDate
-                        data.endDate?  '': delete data.endDate
-                        data.auditStartDate?'': delete  data.auditStartDate
-                        data.auditEndDate?  '': delete data.auditEndDate
-                        w2ui.checkBill.getSelection().length>0?data.ids= w2ui.checkBill.getSelection():delete data.ids
-                        this.exportObj.selected==1? data.inclusionDetails=false:data.inclusionDetails=true;
-                      this.request('payable_reconciliationOrder_export', data, false).then(res => {
-                        if (res.code == 1) {
-                            this.cancelExport()
-                            this.getKeyD(res.data)
-                        } else {
-                            this.$message({
-                                message: res.msg,
-                                type: 'error'
-                            });
-                        }
-                }) 
+        onImport() {
+            let data = {}
+            data.companyId = this.formSearch.companyId
+            data.supplierId = this.formSearch.supplierId
+            data.payableUserId = this.formSearch.payableUser//所属人员
+            data.periodId = this.formSearch.periodId
+            data.year = filters.get_unix_only(this.formSearch.year)
+            data.bizCode = this.formSearch.bizCode
+            data.purchaseOrderNo = this.formSearch.purchaseOrderNo
+            data.startDate = this.formSearch.date ? filters.get_year_month_day(this.formSearch.date[0]) : ''
+            data.endDate = this.formSearch.date ? filters.get_year_month_day(this.formSearch.date[1]) : ''
+            data.status = this.formSearch.status != '' ? Number(this.formSearch.status) : ''
+            data.invoiceStatus = this.formSearch.invoiceStatus != '' ? Number(this.formSearch.invoiceStatus) : ''
+            data.auditStartDate = this.formSearch.time ? filters.get_year_month_day(this.formSearch.time[0]) : ''
+            data.auditEndDate = this.formSearch.time ? filters.get_year_month_day(this.formSearch.time[1]) : ''
+            data.invoiceStatus == 0 ? '' : data.invoiceStatus == 1 ? '' : delete data.invoiceStatus
+            data.status == 0 ? '' : data.status == 1 ? '' : delete data.status
+            data.startDate ? '' : delete data.startDate
+            data.endDate ? '' : delete data.endDate
+            data.auditStartDate ? '' : delete data.auditStartDate
+            data.auditEndDate ? '' : delete data.auditEndDate
+            w2ui.checkBill.getSelection().length > 0 ? data.ids = w2ui.checkBill.getSelection() : delete data.ids
+            this.exportObj.selected == 1 ? data.inclusionDetails = false : data.inclusionDetails = true;
+            this.request('payable_reconciliationOrder_export', data, false).then(res => {
+                if (res.code == 1) {
+                    this.cancelExport()
+                    this.getKeyD(res.data)
+                } else {
+                    this.$message({
+                        message: res.msg,
+                        type: 'error'
+                    });
+                }
+            })
         },
-          getKeyD(key) {
+        getKeyD(key) {
             const h = this.$createElement;
             let data = {}
-                data.taskKey = key
+            data.taskKey = key
             this.timeBB = setTimeout(() => {
                 this.request('getProcessResultByTaskKey', data, false).then(res => {
                     if (res.code == 1) {
@@ -1207,6 +1092,7 @@ export default {
                                 duration: 0,
                             });
                             this.cleanKey(key)
+
                             function myStopFunction() {
                                 clearTimeout(this.timeBB);
                             }
@@ -1238,7 +1124,7 @@ export default {
         },
         cleanKey(key) {
             let data = {}
-                data.taskKey = key
+            data.taskKey = key
             this.request('delByTaskKey', data, false).then(res => {
                 if (res.code == 1) {
                     console.log('oooo')
@@ -1282,16 +1168,16 @@ export default {
 .pl20 {
     padding-left: 20px
 }
-.marginT0{
-    margin-bottom:0px!important;
+
+.marginT0 {
+    margin-bottom: 0px !important;
+}
+</style><style scoped>
+>>>td:nth-child(7) {
+    text-align: right !important;
 }
 
-</style>
-<style scoped>
->>>td:nth-child(7){
-    text-align: right!important;
-}
->>>td:nth-child(9){
-    text-align: right!important;
+>>>td:nth-child(9) {
+    text-align: right !important;
 }
 </style>

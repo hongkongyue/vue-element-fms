@@ -60,9 +60,28 @@ const app = {
         ],
         tagsList: [...otherRouter.children],
         messageCount: 0,
-        dontCache: ['text-editor', 'artical-publish'] // 在这里定义你不想要缓存的页面的name属性值(参见路由配置router.js)
+        dontCache: ['text-editor', 'artical-publish'], // 在这里定义你不想要缓存的页面的name属性值(参见路由配置router.js)
+        leftContainer:[],     //左侧容器
+        rightContainer:[],    //右侧侧容器
+        preLeftContainer:[],  //上一次左边的容器;
+        preRightContainer:[],  //上一次右边的容器;
     },
     mutations: {
+        givenLeftContainer(state,list){
+            state.leftContainer=[];
+            state.leftContainer=list     
+            console.log(state.leftContainer,'999')  
+        },
+        givenRightContainer(state,list){
+                state.rightContainer=[];
+                state.rightContainer=list  
+        },
+        clearLeftContainer(state){
+            state.leftContainer=[];
+        },
+        clearRightContainer(state){
+            state.rightContainer=[];
+        },
         //成本调整单
         applyForPrintLog(state,list){
             state.printLogList=[]

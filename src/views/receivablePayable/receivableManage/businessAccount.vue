@@ -4,7 +4,7 @@
                 <el-form :inline="true" :model="formSearch" class="demo-form-inline ">
                           <el-form-item><span style="color:red">*</span></el-form-item>
                           <el-form-item label="公司" size="small">
-                                <el-select v-model="formSearch.basicCompanyId" placeholder="请选择公司" style="width:100px" filterable>
+                                <el-select v-model="formSearch.basicCompanyId" placeholder="请选择公司" style="width:220px" filterable>
                                     <el-option v-for="v in companyList" :key="v.id"  :label="v.name"  :value="v.id"></el-option>
                                </el-select>
                           </el-form-item>
@@ -38,7 +38,8 @@
                 <div v-if="Alist.length>0" class="grid-content bg-purple" style="background:#fff;margin-left:3%;width:94%;padding:2% 2%;padding-left:1%;height:310px; overflow-y: scroll;">
                       <el-col style="padding-left:20%;padding-top:15%">
                           <Timeline>
-                            <TimelineItem   v-for="v in Alist" :key="v">
+                            <TimelineItem   v-for="(v,$index) in Alist" :key="v">
+                                <Icon type="ios-trophy" slot="dot" v-if="$index==0"></Icon>
                                 <p class="time pointer" @click="selected(v)"  :class="{active: active == v}">{{v}}</p>
                             </TimelineItem>
                           </Timeline>
@@ -537,6 +538,7 @@
                             if(!this.formSearch.type) return this.$message.error('账务类型不能为空!')
                             data.basicCompanyId= this.formSearch.basicCompanyId
                             data.type          = Number(this.formSearch.type)
+                            data.periodYear       =new Date().getFullYear()
                        this.request('sys_accountPeriod_names',data,false).then(res=>{
                                     if(res.code==1){
                                                   this.billList=res.data

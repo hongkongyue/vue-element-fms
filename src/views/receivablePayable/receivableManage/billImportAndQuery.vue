@@ -24,12 +24,12 @@
             </el-form-item>
          </div>
             <el-form-item label="平台：" size="small">
-                <el-select v-model="formSearch.basicPlatformName" @change="changePlatformName(formSearch.basicPlatformName)" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.basicPlatformName" @change="changePlatformName(formSearch.basicPlatformName)" filterable placeholder="请选择" style="width:170px">
                     <el-option v-for="item in platformOptionsT" :key="item.name" :label="item.name" :value="item.name"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="公司：" size="small">
-                <el-select v-model="formSearch.basicCompanyName" @change="changeCode(formSearch.basicCompanyName)" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.basicCompanyName" @change="changeCode(formSearch.basicCompanyName)" filterable placeholder="请选择" style="width:220px">
                     <el-option v-for="item in companyCodeOptions" :key="item.name" :label="item.name" :value="item.name"></el-option>
                 </el-select>
             </el-form-item>
@@ -50,7 +50,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item v-if="show == true" label="导入人：" size="small">
-                <el-select v-model="formSearch.person" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.person" filterable placeholder="请选择" style="width:100px">
                     <el-option v-for="item in staffNameList" :key="item" :label="item" :value="item"></el-option>
                 </el-select>
             </el-form-item>
@@ -106,52 +106,52 @@
                 </el-form-item>
                 </Col>
                 <Col span="12">
-                <el-form-item label="平台：" prop="code" label-width="120px" size="small">
-                    <el-select :disabled="disabledYun" v-model="ruleForm.code" @change="changePT(ruleForm.code)" filterable placeholder="请选择" style="width:170px">
+                <el-form-item label="平台：" prop="code" label-width="100px" size="small">
+                    <el-select :disabled="disabledYun" v-model="ruleForm.code" @change="changePT(ruleForm.code)" filterable placeholder="请选择" style="width:220px">
                         <el-option v-for="item in platformOptions" :key="item.name" :label="item.name" :value="item.name"></el-option>
                     </el-select>
                 </el-form-item>
                 </Col>
 
                 <Col v-if="ruleForm.resource == '特定格式'" span="12">
-                <el-form-item label="平台模式：" prop="ptms" label-width="120px" size="small">
-                    <el-select v-model="ruleForm.ptms" @change="changePtms(ruleForm.ptms)" filterable placeholder="请选择" style="width:170px">
+                <el-form-item label="平台模式：" prop="ptms" label-width="100px" size="small">
+                    <el-select v-model="ruleForm.ptms" @change="changePtms(ruleForm.ptms)" filterable placeholder="请选择" style="width:220px">
                         <el-option v-for="item in PTList" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
                 </Col>
                 <Col v-if="ruleForm.resource == '特定格式'" span="12">
-                <el-form-item label="账单模式：" prop="zdms" label-width="120px" size="small">
-                    <el-select v-model="ruleForm.zdms" @change="changeZdms(ruleForm.zdms)" filterable placeholder="请选择" style="width:170px">
+                <el-form-item label="账单模式：" prop="zdms" label-width="100px" size="small">
+                    <el-select v-model="ruleForm.zdms" @change="changeZdms(ruleForm.zdms)" filterable placeholder="请选择" style="width:220px">
                         <el-option v-for="item in ZDList" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
                 </Col>
                 <Col v-if="ruleForm.resource == '特定格式'" span="12">
-                <el-form-item label="账单类型：" prop="address" label-width="120px" size="small">
-                    <el-select v-model="ruleForm.address" filterable placeholder="请选择" style="width:170px">
+                <el-form-item label="账单类型：" prop="address" label-width="100px" size="small">
+                    <el-select v-model="ruleForm.address" filterable placeholder="请选择" style="width:220px">
                         <el-option v-for="item in zlList" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
                 </Col>
 
                 <Col span="12" v-if="ruleForm.resource">
-                <el-form-item label="公司：" prop="name" label-width="120px" size="small">
-                    <el-select v-model="ruleForm.name" @change="changeName(ruleForm.name)" filterable placeholder="请选择" style="width:170px">
+                <el-form-item label="公司：" prop="name" label-width="100px" size="small">
+                    <el-select v-model="ruleForm.name" @change="changeName(ruleForm.name)" filterable placeholder="请选择" style="width:220px">
                         <el-option v-for="item in companyCodeOptions" :key="item.name" :label="item.name" :value="item.name"></el-option>
                     </el-select>
                 </el-form-item>
                 </Col>
                 <Col span="12">
-                <el-form-item label="店铺：" prop="shortName" label-width="120px" size="small">
-                    <el-select v-model="ruleForm.shortName" @change="changeDP(ruleForm.shortName)" filterable placeholder="请选择" style="width:170px">
+                <el-form-item label="店铺：" prop="shortName" label-width="100px" size="small">
+                    <el-select v-model="ruleForm.shortName" @change="changeDP(ruleForm.shortName)" filterable placeholder="请选择" style="width:220px">
                         <el-option v-for="item in shopList" :key="item.name" :label="item.name" :value="item.name"></el-option>
                     </el-select>
                 </el-form-item>
                 </Col>
                 <Col span="12">
-                <el-form-item label="期间：" prop="abbrName" label-width="120px" size="small">
-                    <el-select v-model="ruleForm.abbrName" filterable placeholder="请选择" style="width:170px">
+                <el-form-item label="期间：" prop="abbrName" label-width="100px" size="small">
+                    <el-select v-model="ruleForm.abbrName" filterable placeholder="请选择" style="width:220px">
                         <el-option v-for="item in timeListT" :key="item.period" :label="item.name" :value="item.period"></el-option>
                     </el-select>
                 </el-form-item>
@@ -226,57 +226,57 @@
                 </el-form-item>
                 </Col> -->
                 <Col span="12">
-                <el-form-item label="平台：" prop="code" label-width="120px" size="small">
-                    <el-select v-model="ruleFormA.code" @change="changePT(ruleFormA.code)" filterable placeholder="请选择" style="width:170px">
+                <el-form-item label="平台：" prop="code" label-width="100px" size="small">
+                    <el-select v-model="ruleFormA.code" @change="changePT(ruleFormA.code)" filterable placeholder="请选择" style="width:220px">
                         <el-option v-for="item in platformOptions" :key="item.name" :label="item.name" :value="item.name"></el-option>
                     </el-select>
                 </el-form-item>
                 </Col>
 
                 <Col span="12">
-                <el-form-item label="平台模式：" prop="ptmsTwo" label-width="120px" size="small">
-                    <el-select v-model="ruleFormA.ptmsTwo" @change="changePtmsTwo(ruleFormA.ptmsTwo)" filterable placeholder="请选择" style="width:170px">
+                <el-form-item label="平台模式：" prop="ptmsTwo" label-width="100px" size="small">
+                    <el-select v-model="ruleFormA.ptmsTwo" @change="changePtmsTwo(ruleFormA.ptmsTwo)" filterable placeholder="请选择" style="width:220px">
                         <el-option v-for="item in PTList" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
                 </Col>
                 <Col span="12">
-                <el-form-item label="账单模式：" prop="zdmsTwo" label-width="120px" size="small">
-                    <el-select v-model="ruleFormA.zdmsTwo" @change="changeZdmsTwo(ruleFormA.zdmsTwo)" filterable placeholder="请选择" style="width:170px">
+                <el-form-item label="账单模式：" prop="zdmsTwo" label-width="100px" size="small">
+                    <el-select v-model="ruleFormA.zdmsTwo" @change="changeZdmsTwo(ruleFormA.zdmsTwo)" filterable placeholder="请选择" style="width:220px">
                         <el-option v-for="item in ZDList" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
                 </Col>
 
                 <Col span="12">
-                <el-form-item label="账单类型：" prop="address" label-width="120px" size="small">
-                    <el-select v-model="ruleFormA.address" filterable placeholder="请选择" style="width:170px">
+                <el-form-item label="账单类型：" prop="address" label-width="100px" size="small">
+                    <el-select v-model="ruleFormA.address" filterable placeholder="请选择" style="width:220px">
                         <el-option v-for="item in zlList" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
                 </Col>
 
                 <Col span="12">
-                <el-form-item label="公司：" prop="name" label-width="120px" size="small">
+                <el-form-item label="公司：" prop="name" label-width="100px" size="small">
                     <!-- <el-input v-model="ruleForm.name" style="width:150px"></el-input> -->
-                    <el-select v-model="ruleFormA.name" @change="changeName(ruleFormA.name)" filterable placeholder="请选择" style="width:170px">
+                    <el-select v-model="ruleFormA.name" @change="changeName(ruleFormA.name)" filterable placeholder="请选择" style="width:220px">
                         <el-option v-for="item in companyCodeOptions" :key="item.name" :label="item.name" :value="item.name"></el-option>
                     </el-select>
                 </el-form-item>
 
                 </Col>
                 <Col span="12">
-                <el-form-item label="店铺：" prop="shortName" label-width="120px" size="small">
+                <el-form-item label="店铺：" prop="shortName" label-width="100px" size="small">
                     <!-- <el-input v-model="ruleForm.shortName" style="width:150px"></el-input> -->
-                    <el-select v-model="ruleFormA.shortName" @change="changeDP(ruleFormA.shortName)" filterable placeholder="请选择" style="width:170px">
+                    <el-select v-model="ruleFormA.shortName" @change="changeDP(ruleFormA.shortName)" filterable placeholder="请选择" style="width:220px">
                         <el-option v-for="item in shopList" :key="item.name" :label="item.name" :value="item.name"></el-option>
                     </el-select>
                 </el-form-item>
                 </Col>
                 <Col span="12">
-                <el-form-item label="期间：" prop="abbrName" label-width="120px" size="small">
+                <el-form-item label="期间：" prop="abbrName" label-width="100px" size="small">
                     <!-- <el-input v-model="ruleForm.abbrName" style="width:150px"></el-input> -->
-                    <el-select v-model="ruleFormA.abbrName" filterable placeholder="请选择" style="width:170px">
+                    <el-select v-model="ruleFormA.abbrName" filterable placeholder="请选择" style="width:220px">
                         <el-option v-for="item in timeListT" :key="item.period" :label="item.name" :value="item.period"></el-option>
                     </el-select>
                 </el-form-item>

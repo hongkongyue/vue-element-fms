@@ -1,5 +1,17 @@
 <style lang="less" scoped>
- @import 'https://unpkg.com/pl-table/themes/index.css';
+  .plx-footer--row{
+    height:30px!important;
+    line-height:30px;
+    padding-top: 0px!important;
+    padding-bottom: 0px!important;
+    font-size:12px;
+}
+.plx-table .plx-footer--column.col--ellipsis, .plx-table .plx-body--column.col--ellipsis{
+    height: 25px!important
+}
+.plx-body--row{
+    height: 25px!important
+}
 .showdragmodal .ivu-modal{
      top:10px!important
 }
@@ -167,21 +179,27 @@
     </header>
     <section class="middle">
         <div  :style="{minHeight:showBink?'730px':'530px'}">
-             <plx-table-grid :data="upList"  border style="width: 100%"   :pagination-show="false">
-                        <plx-table-column   type="index" width="95" label="序号"  resizable   align="center"/>
-                        <plx-table-column   prop="taskNo"  min-width="95"  resizable  label="任务编号"  align="center"/>
-                        <plx-table-column   prop="adjustStatus" width="95" label="流程状态"  resizable   align="center">
-                        </plx-table-column>
-                        <plx-table-column   prop="createUser"  min-width="95"  resizable  label="发起人"  align="center"/>
-                        <plx-table-column   prop="createUserDepartmentName"  min-width="95"  resizable  label="发起部门"  align="center"/>
-                        <plx-table-column   prop="basicBrandName"  min-width="95"  resizable  label="品牌"  align="center"/>
-                        <plx-table-column   prop="years"  min-width="95"  resizable  label="年份"  align="center"/>
-                        <plx-table-column   prop="adjustTypeName"  min-width="95"  resizable  label="调整类型"  align="center"/>
-                        <plx-table-column   prop="asjustAdvise"  min-width="95"  resizable  label="调整建议"  align="center"/>
-                        <plx-table-column   prop="created"  min-width="95"  resizable  label="发起时间"  align="center"/>
-            </plx-table-grid>
+            <div style="display:flex">
+                <plx-table-grid :data="upList"  border style="width: 100%;flex:1"  :height="150"   :pagination-show="false">
+                            <plx-table-column   type="index" width="55" label="序号"  resizable   align="center"/>
+                            <plx-table-column   prop="taskNo"  min-width="95"  resizable  label="任务编号"  align="center"/>
+                            <plx-table-column   prop="adjustStatus" width="75" label="流程状态"  resizable   align="center">
+                            </plx-table-column>
+                            <plx-table-column   prop="createUser"  min-width="60"  resizable  label="发起人"  align="center"/>
+                            <plx-table-column   prop="createUserDepartmentName"  min-width="80"  resizable  label="发起部门"  align="center"/>
+                            <plx-table-column   prop="basicBrandName"  min-width="75"  resizable  label="品牌"  align="center"/>
+                            <plx-table-column   prop="years"  min-width="75"  resizable  label="年份"  align="center"/>
+                            <!-- <plx-table-column   prop="adjustTypeName"  min-width="75"  resizable  label="调整类型"  align="center"/> -->
+                            <plx-table-column   prop="asjustAdvise"  min-width="95"  resizable  label="调整建议"  align="center"/>
+                            <plx-table-column   prop="created"  min-width="95"  resizable  label="发起时间"  align="center"/>
+                </plx-table-grid>
+                <div v-if="this.$route.query.adjustTypeCode != '5'" style="flex:1;max-height:150px;overflow-y:auto;padding:0px 10px 10px 10px;border:1px solid #eee;border-left:0" title="修改日志">
+                      <h3>修改日志:</h3>
+                      <p v-for="v in log" :key="v">{{v}}</p>
+                </div>
+            </div>
             <div style="height:40px;line-height:40px;padding-left:20px">企划调整明细</div>
-            <plx-table-grid :data="list" border style="width: 100%"  :height="showBink?565:355" :pagination-show="false">
+            <plx-table-grid v-if="this.$route.query.adjustTypeCode != '5'" :data="list" border style="width: 100%"  :height="showBink?565:355" :pagination-show="false">
                        <plx-table-column fixed="left"  type="index" width="65" label="序号"  resizable   align="center"/>
                         <plx-table-column fixed="left"  prop="basicBrandName"  min-width="95"  resizable  label="品牌"  align="center"/>
                         <plx-table-column fixed="left"  prop="years" width="95" label="年份"  resizable   align="center"/>
@@ -204,15 +222,7 @@
                                    <plx-table-column   prop="adjustDevelopPercent"  min-width="90"  resizable  label="占比"  align="center">
                                    </plx-table-column>
                          </plx-table-column>
-                         <plx-table-column          width="180"  resizable  label="原企划已开发"  align="center">
-                                   <plx-table-column   prop="originDevelopedQty"       width="90"        resizable   label="款数"  align="center">
-                                   </plx-table-column>
-                                   <plx-table-column   prop="originDevelopedStyleColor"  width="90"  resizable   label="款色"  align="center">
-                                   </plx-table-column>
-                                   <plx-table-column   prop="originDevelopedPercent"     width="90"      resizable  label="占比"  align="center">
-                                   </plx-table-column>
-                         </plx-table-column>
-                         <plx-table-column    width="180"  resizable  label="原企划实际已开发"  align="center">
+                         <plx-table-column    width="180"  resizable  label="实际已开发"  align="center">
                                    <plx-table-column    prop="actualDevelopedQty"         width="90"  resizable  label="款数"  align="center">
                                    </plx-table-column>
                                    <plx-table-column    prop="actualDevelopedStyleColor"  width="90"  resizable  label="款色"  align="center">
@@ -223,12 +233,35 @@
                          <plx-table-column  v-for="v in columns" :key="v.label"  :prop="v.prop"  resizable  width="220"   :label="v.label"  align="center">
                                    <plx-table-column v-for="i in v.arr" :key="i.prop"   :prop="i.prop"  width="110"  resizable  :label="i.label"  align="center">
                                        <template slot-scope="scope">
+                                              <!-- scope.row['change_flag_'+i.prop.subString('adjust_develop_style_qty_'.length,i.prop.length)]== -->
                                             <div v-if="i.label=='原开发款数'"  class="active currentEle" style="position:relative;cursor:pointer;"   @click="getAlert(v.label,scope.row)">{{scope.row[i.prop]}}</div>
-                                             <div v-if="i.label=='调整后开发款数'"  style="position:relative;cursor:pointer;">{{scope.row[i.prop]}}</div>
+                                             <div v-if="i.label=='调整后开发款数'"  :style="(scope.row['adjust_develop_style_qty_'+v.label]!='--'&&scope.row['change_flag_'+v.label]==1)? 'position:relative;cursor:pointer;background-color:yellow;':'position:relative;cursor:pointer;'">
+                                                 {{scope.row[i.prop]}}</div>
+                                                 <!-- i.prop.indexOf('adjust_develop_style_qty_')>-1 && -->
                                             <!-- <el-input-number  :disabled="scope.row[i.prop]==0" style="width:80px" size="small" v-if="i.label=='调整后开发款数'" v-model="scope.row[i.prop]" :min="0" :controls="false"></el-input-number> -->
                                        </template>
                                    </plx-table-column>
                          </plx-table-column>
+            </plx-table-grid>
+
+            <!-- 品类要素调整 -->
+            <plx-table-grid v-if="this.$route.query.adjustTypeCode == '5'" :data="this.goodsList" border style="width: 100%"  :height="showBink?500:300" :pagination-show="false">
+                        <plx-table-column   type="index" width="65" label="序号"  resizable   align="center"/>
+                        <plx-table-column   prop="basicBrandName"  min-width="95"  resizable  label="品牌"  align="center"/>
+                        <plx-table-column   prop="years" width="95" label="年份"  resizable   align="center"/>
+                        <plx-table-column   prop="season"  min-width="95"  resizable  label="季节"  align="center"/>
+                        <plx-table-column   prop="secondLevel"  min-width="95"  resizable  label="二级品类"  align="center"/>
+                        <plx-table-column   prop="thirdLevel"  min-width="95"  resizable  label="三级品类"  align="center"/>
+                        <plx-table-column   prop="colorRateBefore"  min-width="95"  resizable  label="调整前色比"  align="center"/>
+                        <plx-table-column   prop="colorRate"  min-width="95"  resizable  label="调整后色比"  align="center">
+                            
+                        </plx-table-column>
+                        <plx-table-column   prop="developCostPriceBefore"  min-width="95"  resizable  label="调整前成本"  align="center"/>
+                        <plx-table-column   prop="developCostPrice"  min-width="95"  resizable  label="调整后成本"  align="center">
+                           
+                        </plx-table-column>
+                        <plx-table-column   prop="rateDevelopCostPrice"  min-width="95"  resizable  label="含税成本"  align="center"/>
+                        
             </plx-table-grid>
         </div>  
     </section>
@@ -281,23 +314,23 @@ import{debounce}  from 'mixins/debounce.js'
 export default {
     mixins:[debounce],
     components: {
-
         //    DragList
     },
     data() {
         return {
+            goodsList:[],
             list  : [],
             showEdit:false,
             formData:{},
             list1 : [
                     //  {label:'品牌'},
-                     {label:'二级分类',prop:'purchaseOrderNo'},
-                     {label:'品类开发成本',prop:'purchaseOrderNo'},
-                     {label:'计划开发款数',prop:'purchaseOrderNo'},
-                     {label:'已开发款数',prop:'purchaseOrderNo'},
-                     {label:'下单款数',prop:'purchaseOrderNo'},
-                     {label:'下单色数',prop:'purchaseOrderNo'},
-                     {label:'大货未核价款数',prop:'goodsNo'},
+                     {label:'二级分类',       prop:'purchaseOrderNo'},
+                     {label:'品类开发成本',   prop:'purchaseOrderNo'},
+                     {label:'计划开发款数',   prop:'purchaseOrderNo'},
+                     {label:'已开发款数',     prop:'purchaseOrderNo'},
+                     {label:'下单款数',       prop:'purchaseOrderNo'},
+                     {label:'下单色数',       prop:'purchaseOrderNo'},
+                     {label:'大货未核价款数', prop:'goodsNo'        },
                    
             ],
             list2 : [
@@ -329,6 +362,7 @@ export default {
 
             ],
             dialogVisible: false, //新增
+            log:[],//日志
             tableList:[
             ],
             upList:[],
@@ -346,8 +380,18 @@ export default {
                   $(this).css({'background':'#99ff99'}).parents('td').siblings().find('.currentEle').css({'background':''})
                   $(this).css({'background':'#99ff99'}).parents('tr').siblings().find('.currentEle').css({'background':''})
             })
+            this.getLogList()
     },
     methods: {
+       getLogList(){
+                  let   data={}
+                        data.adjustTaskNo=this.$route.query.taskNo
+                        this.request('boss_bossGoodsPlanningAdujust_queryAdhustDetailLog',data,false).then(res=>{
+                              if(res.code==1){
+                                       this.log=res.data
+                              }                
+                        })
+       },
        confirmAgain1(){
                    this.$confirm('该操作是将该任务进行审核，是否继续？', '审核确认', {
                     confirmButtonText: '确定',
@@ -429,7 +473,7 @@ export default {
                 })            
         },
         aduit(){
-               const{id,taskNo,taskDetailId}=this.$route.query
+               const{id,taskNo,taskDetailId,adjustTypeCode}=this.$route.query
                let data={}
                    data.id=id
                    data.taskType='企划调整审核'
@@ -443,7 +487,8 @@ export default {
                                                     query: {   
                                                             taskNo: taskNo,
                                                             id:id,
-                                                            taskDetailId:taskDetailId
+                                                            taskDetailId:taskDetailId,
+                                                            adjustTypeCode:adjustTypeCode
                                                          }
                              })
                             
@@ -469,16 +514,38 @@ export default {
                 })
         },
         getData() {
-            let data                 =  {}
+
+            if(this.$route.query.adjustTypeCode == '5'){
+                let data  = {}
+                data.mainId = this.$route.query.id
+                this.request('getCategoryElementsDetail', data, true).then(res => {
+                    if (res.code == 1) {
+                            this.goodsList=res.data
+                    } else {
+                        this.$message({
+                            message: res.msg,
+                            type: 'error'
+                        });
+                    }
+                })
+            }else{
+                let data                 =  {}
                 data.adjustTaskNo    =  this.$route.query.taskNo
                 $('.currentEle').css({'background':''})
                 this.request('boss_bossGoodsPlanningAdujust_queryAdhustDetail', data, true).then(res => {
                     if (res.code == 1) {
                          this.columns=res.data.columns
-                         this.list=res.data.rows
+                        //  this.list=res.data.rows
+                         res.data.rows.map(item=>{
+                              for(let i in item){
+                                  if(item[i]==-1){
+                                      item[i]='--'
+                                  }
+                              }
+                         })
                          setTimeout(()=>{
                                this.list=res.data.rows
-                            // console.log(this.list)
+                            console.log(this.list)
                         },1000)
                 } else {
                     this.$message({
@@ -487,6 +554,7 @@ export default {
                     });
                 }
             })
+            }
         },
         onSearch() {
             this.currentPage = 1
@@ -497,6 +565,19 @@ export default {
 }
 </script> 
 <style>
+  .plx-footer--row{
+    height:30px!important;
+    line-height:30px;
+    padding-top: 0px!important;
+    padding-bottom: 0px!important;
+    font-size:12px;
+}
+.plx-table .plx-footer--column.col--ellipsis, .plx-table .plx-body--column.col--ellipsis{
+    height: 32px!important
+}
+.plx-body--row{
+    height: 25px!important
+}
  .plx-table .plx-header--column.col--ellipsis{
         height: 20px;
 }

@@ -9843,6 +9843,7 @@ w2utils.event = {
              $(document).ready(function(){
                 $('div[title="当页小计"]').find('span').eq(0).css({opacity:0}).removeAttr('onclick')
                 $('div[title="合计"]').find('span').eq(0).css({opacity:0}).removeAttr('onclick')
+                $('.w2ui-grid-summary').find('a').css({opacity:0})
              })
             // various renderers
             if (col.render != null) {
@@ -10010,6 +10011,7 @@ w2utils.event = {
             $(document).ready(function(){
                 $('div[title="当页小计"]').find('span').eq(0).css({opacity:0}).removeAttr('onclick')
                 $('div[title="合计"]').find('span').eq(0).css({opacity:0}).removeAttr('onclick')
+                $('.w2ui-grid-summary').find('a').css({opacity:0})
              })
         },
 
@@ -13745,7 +13747,6 @@ var w2prompt = function (label, title, callBack) {
             }
             // create or refresh only one item
             var it = this.get(id);
-            console.log(it,'9999')
             if (it == null) return false;
             if (typeof it.onRefresh == 'function') {
                 var edata2 = this.trigger({ phase: 'before', type: 'refresh', target: id, item: it, object: it });

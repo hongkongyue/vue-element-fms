@@ -30,7 +30,7 @@
                 <el-date-picker style="width:120px" v-model="formData.year" value-format="yyyy" type="year" placeholder="请选择"> </el-date-picker>
             </el-form-item>
             <el-form-item label="品牌(老)" size="small">
-                <el-select v-model="formData.old_brandId" placeholder="请选择" style="width:120px" filterable>
+                <el-select v-model="formData.old_brandId" placeholder="请选择" style="width:140px" filterable>
                     <el-option v-for="v in brandList" :key="v.id" :label="v.name" :value="v.id"></el-option>
                 </el-select>
             </el-form-item>
@@ -38,7 +38,7 @@
                 <el-input v-model="formData.old_goodsNo" placeholder="请输入" style="width:150px"></el-input>
             </el-form-item>
             <el-form-item label="品牌(新)" size="small">
-                <el-select v-model="formData.new_brandId" placeholder="请选择" style="width:120px" filterable>
+                <el-select v-model="formData.new_brandId" placeholder="请选择" style="width:140px" filterable>
                     <el-option v-for="v in brandList" :key="v.id" :label="v.name" :value="v.id"></el-option>
                 </el-select>
             </el-form-item>
@@ -82,85 +82,85 @@
     </section>
     
     <!-- 编辑新增弹框 -->
-    <Modal v-model="dialogVisible" :styles="mystyle" :rules="rules" :title="dialogtitle" @on-cancel='cancel' :width="1110" @on-ok="editSubmit" class-name="customize-modal-center">
+    <Modal v-model="dialogVisible" :styles="mystyle" :rules="rules" :title="dialogtitle" @on-cancel='cancel' :width="1210" @on-ok="editSubmit" class-name="customize-modal-center">
         <Row class="margin-bottom-10 background-color-white exhibition">
             <el-form :inline="true" ref="ruleForm" :model="addformdata" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="rules">
                 <Col>
                 <el-form-item label="年份" size="small" label-width="150px">
-                    <el-input v-model="addformdata.year" maxlength="20" :disabled="dialogtitle=='编辑'" style="width:150px"></el-input>
+                    <el-input v-model="addformdata.year" maxlength="20" :disabled="dialogtitle=='编辑'" style="width:220px"></el-input>
                 </el-form-item>
                 <el-form-item label="公司(老)" size="small" label-width="150px">
-                    <el-input v-model="addformdata.oldcompany" maxlength="20" :disabled="dialogtitle=='编辑'" style="width:150px"></el-input>
+                    <el-input v-model="addformdata.oldcompany" maxlength="20" :disabled="dialogtitle=='编辑'" style="width:220px"></el-input>
                 </el-form-item>
                 <el-form-item label="品牌(老)" size="small" label-width="150px">
-                    <el-input v-model="addformdata.oldbrand" maxlength="20" :disabled="dialogtitle=='编辑'" style="width:150px"></el-input>
+                    <el-input v-model="addformdata.oldbrand" maxlength="20" :disabled="dialogtitle=='编辑'" style="width:220px"></el-input>
                 </el-form-item>
                 </Col>
                 <Col>
                 <el-form-item label="款号/货品编码(老)" size="small" label-width="150px">
-                    <el-input v-model="addformdata.oldgoodsNo" maxlength="20" :disabled="dialogtitle=='编辑'" style="width:150px"></el-input>
+                    <el-input v-model="addformdata.oldgoodsNo" maxlength="20" :disabled="dialogtitle=='编辑'" style="width:220px"></el-input>
                 </el-form-item>
                 <el-form-item label="条码/商家编码(老)" size="small" label-width="150px">
-                    <el-input v-model="addformdata.oldmerchCode" maxlength="20" :disabled="dialogtitle=='编辑'" style="width:150px"></el-input>
+                    <el-input v-model="addformdata.oldmerchCode" maxlength="20" :disabled="dialogtitle=='编辑'" style="width:220px"></el-input>
                 </el-form-item>
                 <el-form-item label="成本(老)" size="small" label-width="150px">
-                    <el-input v-model="addformdata.oldcost" maxlength="20" :disabled="dialogtitle=='编辑'" style="width:150px"></el-input>
+                    <el-input v-model="addformdata.oldcost" maxlength="20" :disabled="dialogtitle=='编辑'" style="width:220px"></el-input>
                 </el-form-item>
                 </Col>
                 <Col>
 
                 <el-form-item label="*公司(新)" size="small" label-width="150px">
-                    <el-select v-model="addformdata.newcompany" @change="changenewcompany(addformdata.newcompany)" filterable placeholder="请选择" style="width:150px">
+                    <el-select v-model="addformdata.newcompany" @change="changenewcompany(addformdata.newcompany)" filterable placeholder="请选择" style="width:220px">
                         <el-option v-for="item in companyList" :key="item.name" :label="item.name" :value="item.name"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="*品牌(新)" size="small" label-width="150px">
-                    <el-select v-model="addformdata.newbrand" @change="changenewbrand(addformdata.newbrand)" placeholder="请选择" style="width:150px" filterable>
+                    <el-select v-model="addformdata.newbrand" @change="changenewbrand(addformdata.newbrand)" placeholder="请选择" style="width:220px" filterable>
                         <el-option v-for="v in brandList" :key="v.id" :label="v.name" :value="v.name"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="*款号/货品编码(新)" size="small" label-width="150px">
-                    <el-input v-model="addformdata.newgoodsNo" maxlength="20" style="width:150px"></el-input>
+                    <el-input v-model="addformdata.newgoodsNo" maxlength="20" style="width:220px"></el-input>
                 </el-form-item>
                 </Col>
                 <Col>
                 <el-form-item label="*条码/商家编码(新)" size="small" label-width="150px">
-                    <el-input v-model="addformdata.newmerchCode" maxlength="20" style="width:150px"></el-input>
+                    <el-input v-model="addformdata.newmerchCode" maxlength="20" style="width:220px"></el-input>
                 </el-form-item>
                 <el-form-item label="成本(新)" size="small" label-width="150px">
-                    <el-input v-model="addformdata.newcost" maxlength="20" style="width:150px"></el-input>
+                    <el-input v-model="addformdata.newcost" maxlength="20" style="width:220px"></el-input>
                 </el-form-item>
                 <el-form-item label="加工数量" size="small" label-width="150px">
-                    <el-input v-model="addformdata.jgnum" maxlength="20" style="width:150px"></el-input>
+                    <el-input v-model="addformdata.jgnum" maxlength="20" style="width:220px"></el-input>
                 </el-form-item>
 
                 </Col>
                 <Col>
                 <el-form-item label="加工类型" size="small" label-width="150px">
-                    <el-select v-model="addformdata.jgtype" @change="changejgtype(addformdata.jgtype)" placeholder="请选择" style="width:150px" filterable>
+                    <el-select v-model="addformdata.jgtype" @change="changejgtype(addformdata.jgtype)" placeholder="请选择" style="width:220px" filterable>
                         <el-option v-for="v in typeList" :key="v.processType" :label="v.processType" :value="v.processType"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="加工项目" size="small" label-width="150px">
-                    <el-select v-model="addformdata.jgproject" placeholder="请选择" multiple style="width:150px" filterable>
+                    <el-select v-model="addformdata.jgproject" placeholder="请选择" multiple style="width:220px" filterable>
                         <el-option v-for="v in projectList" :key="v.processProject" :label="v.processProject" :value="v.processProject"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="改标发起时间" size="small" label-width="150px">
-                    <el-date-picker style="width:150px" v-model="addformdata.startTime" type="date" placeholder="选择日期">
+                    <el-date-picker style="width:220px" v-model="addformdata.startTime" type="date" placeholder="选择日期">
                     </el-date-picker>
                 </el-form-item>
                 </Col>
                 <Col>
                 <el-form-item label="改标完成时间" size="small" label-width="150px">
-                    <el-date-picker style="width:150px" v-model="addformdata.endTime" type="date" placeholder="选择日期">
+                    <el-date-picker style="width:220px" v-model="addformdata.endTime" type="date" placeholder="选择日期">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="费用承担人" size="small" label-width="150px">
-                    <el-input v-model="addformdata.people" maxlength="20" style="width:150px"></el-input>
+                    <el-input v-model="addformdata.people" maxlength="20" style="width:220px"></el-input>
                 </el-form-item>
                 <el-form-item label="业务单位" size="small" label-width="150px">
-                    <el-input v-model="addformdata.busines" maxlength="20" style="width:150px"></el-input>
+                    <el-input v-model="addformdata.busines" maxlength="20" style="width:220px"></el-input>
                 </el-form-item>
                 </Col>
                 <el-form-item style="padding-left:460px">

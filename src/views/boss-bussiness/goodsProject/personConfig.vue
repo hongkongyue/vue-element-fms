@@ -1,11 +1,7 @@
 <template>
 <div>
-    <header id="header" class="headerstyle">
-        <div style="width:100%;text-align:center;">
-            <span @click="handleShowHidden('hidden')"><i v-if="showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-bottom"></i></span>
-            <span @click="handleShowHidden('show')"><i v-if="!showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-top"></i></span>
-        </div>
-        <el-form v-if="!showhidden" :inline="true" :model="formSearch" class="demo-form-inline ">
+    <header id="header" class="headerstyle" v-if="!showhidden">
+        <el-form  :inline="true" :model="formSearch" class="demo-form-inline " style="width:99%;maxHeight:102px;overflow-y:auto;overflow-x:hidden;">
             <div>
                 <el-form-item size="small">
                     <el-button v-if="judgeMenu.indexOf('查询') !== -1" size="small" type="primary" @click="onSearch">查询</el-button>
@@ -24,7 +20,7 @@
                 </el-form-item>
             </div>
             <el-form-item label="部门：" size="small">
-                <el-select v-model="formSearch.department" clearable @change="searchCode(formSearch.department)" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.department" clearable @change="searchCode(formSearch.department)" filterable placeholder="请选择" style="width:200px">
                     <el-option v-for="item in departmentList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
@@ -38,42 +34,46 @@
                     <el-option v-for="item in personList" :key="item.username" :label="item.username" :value="item.userId"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="推送类型：" size="small">
+            <!-- <el-form-item label="推送类型：" size="small">
                 <el-select v-model="formSearch.sendType" clearable filterable placeholder="请选择" style="width:150px">
                     <el-option v-for="item in sendTypeList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
-            </el-form-item>
+            </el-form-item> -->
         </el-form>
         
     </header>
     <section class="middle" :style="maxHeight">
+        <div style="float:right;position:absolute;top:10px;right:20px">
+            <span @click="handleShowHidden('hidden')"><i v-if="showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-bottom"></i></span>
+            <span @click="handleShowHidden('show')"><i v-if="!showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-top"></i></span>
+        </div>
         <el-row>
 
             <el-col :span="24">
-                <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+                <el-pagination style="text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
                 </el-pagination>
                 <el-table ref="multipleTable" @row-click="showLog" :data="tableData" style="width: 100%" border tooltip-effect="dark" :height="oneTableHeight" @selection-change="handleSelectionChange">
                     <el-table-column type="selection" width="50">
                     </el-table-column>
                     <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
-                    <el-table-column prop="departmentName" label="部门" min-width="120" align="center" show-overflow-tooltip>
+                    <el-table-column prop="departmentName" label="部门" sortable min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
-                    <el-table-column prop="brandNames" label="对应品牌" min-width="120" align="center" show-overflow-tooltip>
+                    <el-table-column prop="brandNames" label="对应品牌" sortable min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
-                    <el-table-column prop="username" label="接收人" min-width="120" align="center" show-overflow-tooltip>
+                    <el-table-column prop="username" label="接收人" sortable min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
-                    <el-table-column prop="sendType" label="推送类型" min-width="120" align="center" show-overflow-tooltip>
+                    <el-table-column prop="sendType" label="推送类型" sortable min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
-                    <el-table-column prop="adjustTypeNames" label="任务类型" min-width="120" align="center" show-overflow-tooltip>
+                    <el-table-column prop="adjustTypeNames" label="任务类型" sortable min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
-                    <el-table-column prop="created" label="创建时间" min-width="120" align="center" show-overflow-tooltip>
+                    <el-table-column prop="created" label="创建时间" sortable min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
-                    <el-table-column prop="lastUpdated" label="修改时间" min-width="120" align="center" show-overflow-tooltip>
+                    <el-table-column prop="lastUpdated" label="修改时间" sortable min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
                 </el-table>
                 <p style="font-size:16px;margin-top:10px">操作日志</p>
                 <!-- <section class="middle"> -->
-                <el-table :data="logList" style="width: 100%" border :max-height="twoTableHeight" tooltip-effect="dark">
+                <el-table :data="logList" style="width: 100%" border :height="twoTableHeight" tooltip-effect="dark">
                     <el-table-column prop="operator" label="操作员" min-width="120" align="center">
                     </el-table-column>
                     <el-table-column prop="operateTime" label="操作时间" align="center" min-width="120">
@@ -96,7 +96,7 @@
                 <Col span="24">
                 <Col span="12">
                 <el-form-item label="部门：" prop="department" size="small">
-                    <el-select v-model="ruleForm.department" filterable placeholder="请选择" style="width:270px">
+                    <el-select v-model="ruleForm.department" @change="changeAddDepartmeng(ruleForm.department)" filterable placeholder="请选择" style="width:270px">
                         <el-option v-for="item in departmentList" :key="item.value" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
@@ -125,14 +125,14 @@
                 </el-form-item>
                 </Col>
                 </Col>
-                <Col span="12">
+                <!-- <Col span="12">
                 <el-form-item label="推送类型：" size="small">
                     <el-select v-model="ruleForm.sendType" disabled filterable placeholder="请选择" style="width:270px">
                         <el-option v-for="item in sendTypeList" :key="item.value" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 
-                </Col>
+                </Col> -->
             </el-form>
         </Row>
         <div slot="footer">
@@ -147,17 +147,18 @@
 import {
     commonMixins
 } from 'mixins/common';
-import {
-    debounce
-} from 'mixins/debounce'
+// import {
+//     debounce
+// } from 'mixins/debounce'
 export default {
-    mixins: [commonMixins, debounce],
+    mixins: [commonMixins],
     data() {
         return {
             addpersonList: [],
             personList: [],
             departmentList: [],
             brandList: [],
+            brandNewList:[],
             sendTypeList: [{
                 name: '全部推送',
                 id: 0
@@ -186,7 +187,6 @@ export default {
                     trigger: 'change'
                 }]
             },
-            heightTree: '',
             oneTableHeight: '',
             twoTableHeight: '',
             data: [],
@@ -216,18 +216,17 @@ export default {
     },
     created(){
         if (document.body.offsetHeight > 800) {
-            this.heightTree = 'height:' + (document.body.offsetHeight - 290) + 'px;overflow-x:hidden;overflow-y:scroll'
-            this.oneTableHeight = (document.body.offsetHeight - 300) * 0.6
-            this.twoTableHeight = (document.body.offsetHeight - 300) * 0.3
-            this.maxHeight = 'height:' + (document.body.offsetHeight - 270) + 'px'
+            this.oneTableHeight = (document.body.offsetHeight - 280) * 0.6
+            this.twoTableHeight = (document.body.offsetHeight - 280) * 0.3
+            this.maxHeight = 'height:' + (document.body.offsetHeight - 250) + 'px'
         } else {
-            this.oneTableHeight = (document.body.offsetHeight - 300) * 0.5
-            this.twoTableHeight = (document.body.offsetHeight - 300) * 0.25
-            this.maxHeight = 'height:' + (document.body.offsetHeight - 270) + 'px'
-            this.heightTree = 'height:' + (document.body.offsetHeight - 290) + 'px;overflow-x:hidden;overflow-y:scroll'
+            this.oneTableHeight = (document.body.offsetHeight - 280) * 0.5
+            this.twoTableHeight = (document.body.offsetHeight - 280) * 0.25
+            this.maxHeight = 'height:' + (document.body.offsetHeight - 250) + 'px'
         }
     },
     mounted() {
+        this.getPlanningStatus()
         this.getDepartmentList()
         this.getBrandList()
         this.getplatformOptions()
@@ -239,29 +238,29 @@ export default {
             if (name == 'show') {
                 this.showhidden = true
                 if (document.body.offsetHeight > 800) {
-                    this.maxHeight = 'height:' + (document.body.offsetHeight - 170) + 'px'
-                    this.oneTableHeight = (document.body.offsetHeight - 170) * 0.6
-                    this.twoTableHeight = (document.body.offsetHeight - 170) * 0.25
+                    this.maxHeight = 'height:' + (document.body.offsetHeight - 110) + 'px'
+                    this.oneTableHeight = (document.body.offsetHeight - 110) * 0.6
+                    this.twoTableHeight = (document.body.offsetHeight - 110) * 0.25
                 } else {
-                    this.maxHeight = 'height:' + (document.body.offsetHeight - 170) + 'px'
-                    this.oneTableHeight = (document.body.offsetHeight - 220) * 0.6
-                    this.twoTableHeight = (document.body.offsetHeight - 220) * 0.25
+                    this.maxHeight = 'height:' + (document.body.offsetHeight - 110) + 'px'
+                    this.oneTableHeight = (document.body.offsetHeight - 110) * 0.6
+                    this.twoTableHeight = (document.body.offsetHeight - 110) * 0.25
                 }
 
             } else {
                 this.showhidden = false
                 if (document.body.offsetHeight > 800) {
-                    this.oneTableHeight = (document.body.offsetHeight - 300) * 0.6
-                    this.twoTableHeight = (document.body.offsetHeight - 300) * 0.25
-                    this.maxHeight = 'height:' + (document.body.offsetHeight - 270) + 'px'
+                    this.oneTableHeight = (document.body.offsetHeight - 280) * 0.6
+                    this.twoTableHeight = (document.body.offsetHeight - 280) * 0.25
+                    this.maxHeight = 'height:' + (document.body.offsetHeight - 250) + 'px'
                 } else {
-                    this.maxHeight = 'height:' + (document.body.offsetHeight - 270) + 'px'
-                    this.oneTableHeight = (document.body.offsetHeight - 300) * 0.5
-                    this.twoTableHeight = (document.body.offsetHeight - 300) * 0.25
+                    this.maxHeight = 'height:' + (document.body.offsetHeight - 250) + 'px'
+                    this.oneTableHeight = (document.body.offsetHeight - 280) * 0.5
+                    this.twoTableHeight = (document.body.offsetHeight - 280) * 0.25
                 }
             }
         },
-        getButtonJurisdiction() {
+        getButtonJurisdiction() { 
             let data = {}
             data.parentResourceCode = this.$route.query.code
             this.request('masterData_resource_buttonResource', data, true).then(res => {
@@ -391,7 +390,9 @@ export default {
             let data = {}
             this.request('masterData_brand_selector', data, true).then((res) => {
                 if (res.code == 1) {
-                    this.brandList = res.data
+                    let obj = {name:'全部',id:-1}
+                    this.brandList = [obj,...res.data]
+                    this.brandNewList = res.data
                 }
             })
         },
@@ -411,16 +412,36 @@ export default {
             this.currentPage = val
             this.getData()
         },
-        onAdd(name) {
-            // 查询接收人
-            let data = {}
-            data.pagesize = 10000
-            data.onJob = 1
-            this.request('user_page', data, true).then(res => {
-                if (res.code == 1) {
-                    this.addpersonList = res.data.records
+        //人员部门联动
+        changeAddDepartmeng(id){
+            this.ruleForm.person = ""
+            let name 
+            this.departmentList.map((item)=>{
+                if(id == item.id){
+                    name = item.name
                 }
             })
+            let data = {}
+            data.departmentName = name
+            this.request('getByDepartment', data, true).then((res) => {
+                if (res.code == 1) {
+                    this.addpersonList = res.data
+                }else{
+                    this.$message.error(res.msg)
+                    this.addpersonList = []
+                }
+            })
+        },
+        onAdd(name) {
+            // // 查询接收人
+            // let data = {}
+            // data.pagesize = 10000
+            // data.onJob = 1
+            // this.request('user_page', data, true).then(res => {
+            //     if (res.code == 1) {
+            //         this.addpersonList = res.data.records
+            //     }
+            // })
             if (name == 'add') {
                 this.dialogVisible = true
                 this.addtitle = '新增'
@@ -437,6 +458,22 @@ export default {
                     this.ruleForm.brand = this.rowObj.brandIdList
                     this.ruleForm.sendType = this.rowObj.sendType == '按品牌推送' ? 1 : 0
                     this.ruleForm.workType = this.rowObj.adjustCodeList
+                    let name 
+            this.departmentList.map((item)=>{
+                if(this.ruleForm.department == item.id){
+                    name = item.name
+                }
+            })
+            let data = {}
+            data.departmentName = name
+            this.request('getByDepartment', data, true).then((res) => {
+                if (res.code == 1) {
+                    this.addpersonList = res.data
+                }else{
+                    this.$message.error(res.msg)
+                    this.addpersonList = []
+                }
+            }) //编辑获取接收人下拉
                     // this.changeDepartment(this.rowObj.departmentId,1)
                 }
             }

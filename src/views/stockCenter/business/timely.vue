@@ -14,7 +14,7 @@
             </el-form-item>
             </div>
             <el-form-item label="仓库：" size="small">
-                <el-select v-model="formSearch.basicWarehouseId" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.basicWarehouseId" filterable placeholder="请选择" style="width:250px">
                     <el-option v-for="item in wareHouseList" :key="item.id" :label="item.warehouseName" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
@@ -42,7 +42,7 @@
                 </el-input>
             </el-form-item> -->
              <el-form-item label="公司" size="small"   prop="company" >
-                                    <el-select v-model="formSearch.basicCompanyId" placeholder="请选择" style="width:150px" filterable>
+                                    <el-select v-model="formSearch.basicCompanyId" placeholder="请选择" style="width:220px" filterable>
                                         <el-option v-for="v in companyList" :key="v.id" :disabled="v.used==0"  :label="v.name"  :value="v.id"></el-option>
                                     </el-select>
             </el-form-item>

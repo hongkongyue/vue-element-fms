@@ -5,7 +5,7 @@
             <!-- <el-form-item size="small">
                 <el-button    size="small" type="primary" @click="onSearch">查询</el-button>
             </el-form-item> -->
-            <el-form-item size="small">
+            <el-form-item size="small" v-if="this.$route.query.adjustTypeCode != '5' && this.$route.query.adjustTypeCode != '6'">
                 <el-button    size="small" type="primary" @click="exportExcel">导出明细</el-button>
             </el-form-item>
         </el-form> 
@@ -24,12 +24,12 @@
                         <plx-table-column   prop="createUserDepartmentName"  min-width="95"  resizable  label="发起部门"  align="center"/>
                         <plx-table-column   prop="basicBrandName"  min-width="95"  resizable  label="品牌"  align="center"/>
                         <plx-table-column   prop="years"  min-width="95"  resizable  label="年份"  align="center"/>
-                        <plx-table-column   prop="adjustTypeName"  min-width="95"  resizable  label="调整类型"  align="center"/>
+                        <!-- <plx-table-column   prop="adjustTypeName"  min-width="95"  resizable  label="调整类型"  align="center"/> -->
                         <plx-table-column   prop="asjustAdvise"  min-width="95"  resizable  label="调整建议"  align="center"/>
                         <plx-table-column   prop="created"  min-width="95"  resizable  label="发起时间"  align="center"/>
             </plx-table-grid>
             <div style="height:40px;line-height:40px;padding-left:20px">企划调整明细</div>
-            <plx-table-grid :data="this.list" border style="width: 100%"  :height="showBink?500:300" :pagination-show="false">
+            <plx-table-grid v-if="this.$route.query.adjustTypeCode != '5' && this.$route.query.adjustTypeCode != '6'" :data="this.list" border style="width: 100%"  :height="showBink?500:300" :pagination-show="false">
                         <plx-table-column fixed="left"  type="index" width="65" label="序号"  resizable   align="center"/>
                         <plx-table-column fixed="left"  prop="basicBrandName"  min-width="95"  resizable  label="品牌"  align="center"/>
                         <plx-table-column fixed="left"  prop="years" width="95" label="年份"  resizable   align="center"/>
@@ -52,15 +52,15 @@
                                    <plx-table-column   prop="adjustDevelopPercent"  min-width="90"  resizable  label="占比"  align="center">
                                    </plx-table-column>
                          </plx-table-column>
-                         <plx-table-column          width="180"  resizable  label="原企划已开发"  align="center">
+                         <!-- <plx-table-column          width="180"  resizable  label="原企划已开发"  align="center">
                                    <plx-table-column   prop="originDevelopedQty"       width="90"        resizable   label="款数"  align="center">
                                    </plx-table-column>
                                    <plx-table-column   prop="originDevelopedStyleColor"  width="90"  resizable   label="款色"  align="center">
                                    </plx-table-column>
                                    <plx-table-column   prop="originDevelopedPercent"     width="90"      resizable  label="占比"  align="center">
                                    </plx-table-column>
-                         </plx-table-column>
-                         <plx-table-column    width="180"  resizable  label="原企划实际已开发"  align="center">
+                         </plx-table-column> -->
+                         <plx-table-column    width="180"  resizable  label="实际已开发"  align="center">
                                    <plx-table-column    prop="actualDevelopedQty"         width="90"  resizable  label="款数"  align="center">
                                    </plx-table-column>
                                    <plx-table-column    prop="actualDevelopedStyleColor"  width="90"  resizable  label="款色"  align="center">
@@ -73,13 +73,48 @@
                                        <template slot-scope="scope">
                                            <!-- <div v-if="i.label=='原开发款数'"   class="active currentEle" style="position:relative;cursor:pointer;"   @click="getAlert(v.label,scope.row)">{{scope.row[i.prop]}}</div>
                                            <el-input-number :disabled="true" style="width:80px" size="small" v-if="i.label=='调整后开发款数'" v-model="scope.row[i.prop]" :min="0" :controls="false"></el-input-number> -->
-                                           <div v-if="i.label=='原开发款数'"  class="active currentEle" style="position:relative;cursor:pointer;"   @click="getAlert(v.label,scope.row)">{{scope.row[i.prop]}}</div>
+                                            <div v-if="i.label=='原开发款数'"  class="active currentEle" style="position:relative;cursor:pointer;"   @click="getAlert(v.label,scope.row)">{{scope.row[i.prop]}}</div>
                                              <!-- <span v-else>{{'-'}}</span> -->
-                                            <el-input-number :disabled="true"  style="width:80px" size="small" v-if="i.label=='调整后开发款数'" v-model="scope.row[i.prop]"  :controls="false"></el-input-number>
+                                            <div   style="width:80px" size="small" v-if="i.label=='调整后开发款数'">{{scope.row[i.prop]}}</div>
                                             <!-- <span v-else>{{''}}</span> -->
                                        </template>
                                    </plx-table-column>
                          </plx-table-column>
+            </plx-table-grid>
+
+            <!-- 品类要素调整 -->
+            <plx-table-grid v-if="this.$route.query.adjustTypeCode == '5'" :data="this.goodsList" border style="width: 100%"  :height="showBink?500:300" :pagination-show="false">
+                        <plx-table-column   type="index" width="65" label="序号"  resizable   align="center"/>
+                        <plx-table-column   prop="basicBrandName"  min-width="95"  resizable  label="品牌"  align="center"/>
+                        <plx-table-column   prop="years" width="95" label="年份"  resizable   align="center"/>
+                        <plx-table-column   prop="season"  min-width="95"  resizable  label="季节"  align="center"/>
+                        <plx-table-column   prop="secondLevel"  min-width="95"  resizable  label="二级品类"  align="center"/>
+                        <plx-table-column   prop="thirdLevel"  min-width="95"  resizable  label="三级品类"  align="center"/>
+                        <plx-table-column   prop="colorRateBefore"  min-width="95"  resizable  label="调整前色比"  align="center"/>
+                        <plx-table-column   prop="colorRate"  min-width="95"  resizable  label="调整后色比"  align="center">
+                            
+                        </plx-table-column>
+                        <plx-table-column   prop="developCostPriceBefore"  min-width="95"  resizable  label="调整前成本"  align="center"/>
+                        <plx-table-column   prop="developCostPrice"  min-width="95"  resizable  label="调整后成本"  align="center">
+                           
+                        </plx-table-column>
+                        <plx-table-column   prop="rateDevelopCostPrice"  min-width="95"  resizable  label="含税成本"  align="center"/>
+                        
+            </plx-table-grid>
+            <!--爆款 -->
+            <plx-table-grid v-if="this.$route.query.adjustTypeCode == '6'" :data="this.hotList" border style="width: 100%"  :height="showBink?500:300" :pagination-show="false">
+                        <plx-table-column   type="index" width="65" label="序号"  resizable   align="center"/>
+                        <plx-table-column   prop="basicBrandName"  min-width="95"  resizable  label="品牌"  align="center"/>
+                        <plx-table-column   prop="years" width="95" label="年份"  resizable   align="center"/>
+                        <plx-table-column   prop="season"  min-width="95"  resizable  label="季节"  align="center"/>
+                        <plx-table-column   prop="hotGoodsPlanningAmount"  min-width="95"  resizable  label="爆款规划金额"  align="center"/>
+                        <plx-table-column   prop="firstOrderTotalAmount"  min-width="95"  resizable  label="首单下单总金额"  align="center"/>
+                        <plx-table-column   prop="adjustAmount"  min-width="95"  resizable  label="调整金额"  align="center">
+                            
+                        </plx-table-column>
+                        <plx-table-column   prop="afterAdjustAmount"  min-width="95"  resizable  label="调整后金额"  align="center"/>
+                        <plx-table-column   prop="remainingAmount"  min-width="95"  resizable  label="剩余金额"  align="center"/>
+                        
             </plx-table-grid>
         </div>  
     </section>
@@ -140,6 +175,8 @@ export default {
     },
     data() {
         return {
+            goodsList:[],
+            hotList:[],
             list    : [],
             showEdit:false,
             formData:{},
@@ -163,44 +200,10 @@ export default {
                      {label:'成本差额',prop:'purchaseOrderNo'},
             ],
             columns:[
-                    //  {label:'二级分类',    prop:'purchaseOrderNo',
-                    //  arr:[
-                    //      {label:'原开发款数',    prop:'one'},
-                    //      {label:'调整后开发款数',prop:'two'},
-                    //      ]
-                    //  },
-                    //  {label:'品类开发成本',      prop:'purchaseOrderNo',
-                    //    arr:[
-                    //      {label:'原开发款数',    prop:'three'},
-                    //      {label:'调整后开发款数',prop:'four'},
-                    //      ]
-                    //   },
-                    //  {label:'计划开发款数',prop:'purchaseOrderNo'},
-                    //  {label:'已开发款数',prop:'purchaseOrderNo'},
-                    //  {label:'下单款数',prop:'purchaseOrderNo'},
-                    //  {label:'下单色数',prop:'purchaseOrderNo'},
-                    //  {label:'大货未核价款数',prop:'goodsNo'},
 
             ],
             dialogVisible: false, //新增
             tableList:[
-            //     {
-            //     radio:'1',
-            //     status:'已下单'
-
-            // },{
-            //     radio:'2',
-            //     status:'已下单'
-
-            // },{
-            //     radio:'1',
-            //     status:'已下单'
-
-            // },{
-            //     radio:'1',
-            //     status:'已下单'
-
-            // }
             ],
             upList:[],//表格数据
         }
@@ -235,19 +238,6 @@ export default {
                 dynamicProps.push(secondHead.prop)
             })
         })
-        //  let list = this.list
-        //             console.log(this.list)
-
-
-        //             return 
-        //             //判断调整后开发款数如果为-1 即不存在该波段 显示 --
-        //             for(let i=0;i<list.length;i++){
-        //                 for(let v in list[i]){
-        //                     if(list[i][v] == -1){
-        //                         list[i][v] = ' '
-        //                     }
-        //                 }
-        //             }
         console.log(dynamicFirstHeadMerges,'000000000')
         let multiHeader = [['品牌', '年份','季节','二级品类','三级品类','原企划','','','调整后企划','','','原企划已开发','','','原企划实际开发','','', ...dynamicFirstHead]]
         let header = ['', '','','','','款数','款色','占比','款数','款色','占比','款数','款色','占比','款数','款色','占比',...dynamicSecondHead]
@@ -355,32 +345,49 @@ export default {
                 })
         },
         getData() {
-            let data                 =  {}
+            if(this.$route.query.adjustTypeCode == '5'){
+                let data  = {}
+                data.mainId = this.$route.query.id
+                this.request('getCategoryElementsDetail', data, true).then(res => {
+                    if (res.code == 1) {
+                            this.goodsList=res.data
+                    } else {
+                        this.$message({
+                            message: res.msg,
+                            type: 'error'
+                        });
+                    }
+                })
+            }else if(this.$route.query.adjustTypeCode == '6'){
+                let data = {}
+                data.taskNo = this.$route.query.taskNo
+                this.request('hotGoodsPlanning_getHotGoodsPlanning', data, true).then(res => {
+                    if (res.code == 1) {
+                            this.hotList=[res.data]
+                    } else {
+                        this.$message({
+                            message: res.msg,
+                            type: 'error'
+                        });
+                    }
+                })
+            }else{
+                let data                 =  {}
                 data.adjustTaskNo    =  this.$route.query.taskNo
                 $('.currentEle').css({'background':''})
                 this.request('boss_bossGoodsPlanningAdujust_queryAdhustDetail', data, true).then(res => {
                     if (res.code == 1) {
                          this.columns=res.data.columns
-                         this.list=res.data.rows
+                          res.data.rows.map(item=>{
+                              for(let i in item){
+                                  if(item[i]==-1){
+                                      item[i]='--'
+                                  }
+                              }
+                         })
                         setTimeout(()=>{
                             this.list=res.data.rows
-                            console.log(this.list)
                         },1000)
-                        // this.total = res.data.count;
-                        // if (res.data.records) {
-                        //     for (let i = 0, len = res.data.records.length; i < len; i++) {
-                        //         res.data.records[i].one =i+1
-                        //         res.data.records[i].two= res.data.records[i].id
-                        //         res.data.records[i].three =10
-                        //         res.data.records[i].four= 11
-                        //     }
-                        //     this.list=res.data.records
-                        //     console.log(this.list)
-                        //     // this.initTable(res.data.records,res.data.currentPageSum,res.data.totalPageSum)
-                        // } else {
-                        
-                        // }
-                        // this.loading = false
                     } else {
                         this.list=[]
                         this.$message({
@@ -389,6 +396,7 @@ export default {
                         });
                     }
                 })
+            }
         },
         onSearch() {
             this.currentPage = 1
@@ -401,7 +409,6 @@ export default {
 
 
 <style lang="less" scoped>
- @import 'https://unpkg.com/pl-table/themes/index.css';
 .showdragmodal .ivu-modal{
      top:10px!important
 }

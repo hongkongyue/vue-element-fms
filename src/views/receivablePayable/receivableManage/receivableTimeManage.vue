@@ -8,7 +8,7 @@
                               </el-select>
                           </el-form-item> -->
                           <el-form-item label="公司名称" size="small">
-                              <el-select v-model="formData.companyName" placeholder="请选择" style="width:100px" filterable>
+                              <el-select v-model="formData.companyName" placeholder="请选择" style="width:220px" filterable>
                                  <el-option v-for="v in companyList" :key="v.name" :label="v.name" :value="v.id"></el-option>
                               </el-select>
                           </el-form-item>
@@ -137,7 +137,7 @@
             <el-form :inline="true" ref="ruleForm" :model="addformdata" :rules="rules" class="demo-form-inline demo-ruleForm " :label-position="left"  >
                          <Col>
                                  <el-form-item label="公司名称" size="small"  prop="companyName">
-                                    <el-select v-model="addformdata.companyName" placeholder="请选择" style="width:100px" filterable>
+                                    <el-select v-model="addformdata.companyName" placeholder="请选择" style="width:220px" filterable>
                                                   <el-option v-for="item in companyList" :key="item.code" :label="item.name" :value="item.id"></el-option>
                                     </el-select>
                                 </el-form-item>

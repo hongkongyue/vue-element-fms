@@ -1,5 +1,4 @@
 <style lang="less" scoped>
-@import 'https://unpkg.com/pl-table/themes/index.css';
 
 .showdragmodal .ivu-modal {
     top: 10px !important
@@ -290,28 +289,28 @@ export default {
     },
     mounted() {
         this.getData()
-        $(document).on('click', '.active', function () {
-            $(this).css({
-                'background': '#99ff99'
-            }).parents('td').siblings().find('.active').css({
-                'background': ''
-            })
-            $(this).css({
-                'background': '#99ff99'
-            }).parents('tr').siblings().find('.active').css({
-                'background': ''
-            })
-        })
+        // $(document).on('click', '.active', function () {
+        //     $(this).css({
+        //         'background': '#99ff99'
+        //     }).parents('td').siblings().find('.active').css({
+        //         'background': ''
+        //     })
+        //     $(this).css({
+        //         'background': '#99ff99'
+        //     }).parents('tr').siblings().find('.active').css({
+        //         'background': ''
+        //     })
+        // })
     },
     methods: {
         getData() {
             let data = {}
             data.messageId = this.$route.query.id
             //  data.pageSize = this.pagesize
-            //  data.currentPage = this.currentPage
-            $('.active').css({
-                'background': ''
-            })
+            // //  data.currentPage = this.currentPage
+            // $('.active').css({
+            //     'background': ''
+            // })
             this.request('bossGoodsPlanningParameterSend_showMainOrder', data, true).then(res => {
                 if (res.code == 1) {
                     this.total = res.data.count;

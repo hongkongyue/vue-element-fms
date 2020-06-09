@@ -54,6 +54,12 @@
                         align: 'center',
                         minWidth: 120,
                     },
+                     {
+                        title: '调整类型',
+                        key: 'adjustTypeName',
+                        align: 'center',
+                        minWidth: 120,
+                    },
                     {
                         title: '发起人',
                         key: 'createUser',
@@ -73,7 +79,7 @@
                         minWidth: 160,
                     },
                     {
-                        title: '已用时间',
+                        title: '共计时长',
                         key: 'sumTime',
                         align: 'center',
                         minWidth: 140,
@@ -110,7 +116,8 @@
                                                           query: { 
                                                                  taskNo: params.row.taskNo,
                                                                  id:params.row.id,
-                                                                 taskDetailId:params.row.taskDetailId
+                                                                 taskDetailId:params.row.taskDetailId,
+                                                                 adjustTypeCode:params.row.adjustTypeCode
                                                          }
                                                  })
                                         }
@@ -123,7 +130,8 @@
                                     },
                                     style: {
                                         marginRight: '5px',
-                                        width:'50px'
+                                        width:'50px',
+                                        display:(params.row.adjustTypeCode=='6')?"none":"inline-block",
                                     },
                                     on: {
                                         click: () => {
@@ -138,15 +146,32 @@
                                                 this.$Message.info('取消撤回');
                                             }
                                             });
-                                            //  this.backTask(params.row.id, params.row.taskType,params.row.taskDetailId)
-                                            //    this.$router.push({
-                                            //               name:'planningAdjustmentComplated',
-                                            //               query: { 
-                                            //                      taskNo: params.row.taskNo,
-                                            //                      taskDetailId:params.row.id,
-                                            //                      taskConfigurationId:params.row.taskConfigurationId
-                                            //              }
-                                            //      })
+                                        }
+                                    }
+                                }, '撤回'),
+                                h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        marginRight: '5px',
+                                        width:'50px',
+                                        display:(params.row.adjustTypeCode!='6')?"none":"inline-block",
+                                    },
+                                    on: {
+                                        click: () => {
+                                         this.$Modal.confirm({
+                                            title: '撤回确认',
+                                            content: '该操作是将该任务进行撤回，是否继续？',
+                                            onOk: () => {
+                                                // this.$Message.info('Clicked ok');
+                                                this.backHotTask(params.row)
+                                            },
+                                            onCancel: () => {
+                                                this.$Message.info('取消撤回');
+                                            }
+                                            });
                                         }
                                     }
                                 }, '撤回'),
@@ -178,6 +203,20 @@
                                 data.taskType      =taskType
                                 data.taskDetailId  =taskDetailId
                             this.request('boss_boss_adjust_task_callBack', data, false).then((res) => {
+                                if(res.code==1){
+                                        this.$message.success('撤回成功')
+                                        this.initdata()
+                                    }else{
+                                        this.$message.error(res.msg)
+                                    }
+                        })
+                },
+                //撤回爆款
+                backHotTask(row){
+                    let data = {}
+                    data.taskId = row.id
+                    data.taskNo = row.taskNo
+                    this.request('hotGoodsPlanning_revoke', data, false).then((res) => {
                                 if(res.code==1){
                                         this.$message.success('撤回成功')
                                         this.initdata()

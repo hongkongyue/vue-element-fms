@@ -29,7 +29,7 @@
                              <el-input v-model.trim="formData.code" maxlength="20" placeholder="请输入" style="width:120px"></el-input>
                           </el-form-item>
                            <el-form-item label="是否参与成本运算" size="small">
-                            <el-select v-model="formData.isAttend" value-key="id" placeholder="请选择" style="width:120px" >
+                            <el-select v-model="formData.isAttend" value-key="id" placeholder="请选择" style="width:220px" >
                                    <el-option  label="仅成本运算"   value="3"></el-option>
                                    <el-option  label="仅库存运算"   value="2"></el-option>
                                    <el-option  label="成本库存都参与预算"   value="1"></el-option>

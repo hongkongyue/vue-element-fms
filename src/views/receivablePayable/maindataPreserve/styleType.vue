@@ -60,7 +60,7 @@
             <el-table-column type="index" width="55" label="序号" align="center"></el-table-column>
             <el-table-column prop="name" label="品类名称" min-width="120" align="center" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="code" label="款式代号" min-width="120" align="center" show-overflow-tooltip>
+            <el-table-column prop="code" label="品类代号" min-width="120" align="center" show-overflow-tooltip>
             </el-table-column>
             <el-table-column prop="suitType" label="上下装" min-width="120" align="center" show-overflow-tooltip>
             </el-table-column>

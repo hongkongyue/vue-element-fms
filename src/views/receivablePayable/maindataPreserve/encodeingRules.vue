@@ -4,12 +4,12 @@
         <el-form :inline="true" :model="formData" class="demo-form-inline ">
             <div>
                <el-form-item label="单据名称" size="small">
-                    <el-select v-model="formData.ruleName" placeholder="单据名称" style="width:100px" filterable>
+                    <el-select v-model="formData.ruleName" placeholder="单据名称" style="width:220px" filterable>
                         <el-option v-for="item in billList" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="公司名称" size="small">
-                    <el-select v-model="formData.basicCompanyId" placeholder="公司名称" style="width:100px" filterable>
+                    <el-select v-model="formData.basicCompanyId" placeholder="公司名称" style="width:220px" filterable>
                         <el-option v-for="item in companyList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
@@ -82,28 +82,28 @@
     </section>
    
     <!-- 新增弹框 -->
-    <Modal v-model="dialogVisible" :styles="mystyle" :rules="rules" :title="dialogtitle" @on-cancel='cancel' :width="300" class-name="customize-modal-center">
+    <Modal v-model="dialogVisible" :styles="mystyle" :rules="rules" :title="dialogtitle" @on-cancel='cancel' :width="400" class-name="customize-modal-center">
         <Row class="margin-bottom-10 background-color-white exhibition">
             <el-form :inline="true" ref="ruleForm" :model="editformdata" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="rules">
                 <Col>
                 <el-form-item label="单据类型" size="small" label-width="95px" prop="platform">
                     <!-- <el-input v-model="editformdata.platform" placeholder="单据名称" maxlength="20" style="width:120px"></el-input> -->
-                    <el-select v-model="editformdata.platform" value-key="id" placeholder="请选择" style="width:120px" @change="watchCode(editformdata.platform)">
+                    <el-select v-model="editformdata.platform" value-key="id" placeholder="请选择" style="width:220px" @change="watchCode(editformdata.platform)">
                         <el-option v-for="v in selectList" :key="v.id" :label="v.name" :value="v"></el-option>
                     </el-select>
                 </el-form-item>
                  <el-form-item label="业务类型" size="small" label-width="95px">
-                    <el-select v-model="editformdata.ywlx" value-key="id" placeholder="请选择" @change="changeYwlx" style="width:120px">
+                    <el-select v-model="editformdata.ywlx" value-key="id" placeholder="请选择" @change="changeYwlx" style="width:220px">
                         <el-option v-for="item in ywlxList" :key="item.id" :label="item.name" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="公司名称" size="small" label-width="95px" prop="basicCompanyIds">
-                    <el-select v-model="editformdata.basicCompanyIds" multiple placeholder="公司名称" style="width:120px" filterable>
+                    <el-select v-model="editformdata.basicCompanyIds" multiple placeholder="公司名称" style="width:220px" filterable>
                         <el-option v-for="item in companyList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="标识" size="small" label-width="95px">
-                    <el-input style="width:120px" disabled v-model="editformdata.code" placeholder="请输入"></el-input>
+                    <el-input style="width:220px" disabled v-model="editformdata.code" placeholder="请输入"></el-input>
                     <!-- <el-select v-model="editformdata.code" placeholder="请选择" style="width:120px" @change="watchCode2">
                         <el-option v-for="v in selectList" :key="v.id" :label="v.code" :value="v.code"></el-option>
                     </el-select> -->
@@ -111,7 +111,7 @@
                 <!-- </Col>
                           <Col> -->
                 <el-form-item label="时间信息" size="small" label-width="95px" prop="timeInfor">
-                    <el-select v-model="editformdata.timeInfor" placeholder="请选择" style="width:120px">
+                    <el-select v-model="editformdata.timeInfor" placeholder="请选择" style="width:220px">
                         <el-option label="年月" value="1"></el-option>
                         <el-option label="年月日" value="0"></el-option>
                     </el-select>
@@ -123,16 +123,16 @@
                                    <el-option label="5" value="5"></el-option>
                                    <el-option label="6" value="6"></el-option>
                                </el-select> -->
-                    <el-input-number v-model="editformdata.number" controls-position="right" style="width:120px" :min="1" :max="8"></el-input-number>
+                    <el-input-number v-model="editformdata.number" controls-position="right" style="width:220px" :min="1" :max="8"></el-input-number>
                 </el-form-item>
                 <el-form-item label="状态" size="small" label-width="95px" prop="status">
-                    <el-select v-model="editformdata.status" placeholder="请选择" style="width:120px">
+                    <el-select v-model="editformdata.status" placeholder="请选择" style="width:220px">
                         <el-option label="启用" value="1"></el-option>
                         <el-option label="停用" value="0"></el-option>
                     </el-select>
                 </el-form-item>
                 </Col>
-                <el-form-item style="padding-left:70px">
+                <el-form-item style="padding-left:130px">
                     <Button v-if="dialogtitle=='新增'" type="primary" @click="submitForm('ruleForm')">确认</Button>
                     <Button v-if="dialogtitle=='编辑'" type="primary" @click="submitsForm('ruleForm')">确认</Button>
                     <Button type="default" @click="cancel">取消</Button>
@@ -143,48 +143,48 @@
         <div slot="footer"></div>
     </Modal>
     <!--编辑弹框-->
-    <Modal v-model="editVisible" :styles="mystyle" :rules="rules" title="编辑" @on-cancel='cancels' :width="300" class-name="customize-modal-center">
+    <Modal v-model="editVisible" :styles="mystyle" :rules="rules" title="编辑" @on-cancel='cancels' :width="400" class-name="customize-modal-center">
         <Row class="margin-bottom-10 background-color-white exhibition">
             <el-form :inline="true" ref="ruleForms" :model="editData" class="demo-form-inline demo-ruleForm" :label-position="left" :rules="rules">
                 <Col>
                 <el-form-item label="单据类型" size="small" label-width="95px" prop="platform">
-                    <el-select v-model="editData.platform" disabled value-key="id" placeholder="请选择" style="width:120px" @change="watchCode3(editData.platform)">
+                    <el-select v-model="editData.platform" disabled value-key="id" placeholder="请选择" style="width:220px" @change="watchCode3(editData.platform)">
                         <el-option v-for="v in selectList" :key="v.id" :label="v.name" :value="v"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="业务类型" size="small" label-width="95px">
-                    <el-select v-model="editData.ywlx" disabled value-key="id" placeholder="请选择" @change="changeEditYwlx(editData.ywlx)" style="width:120px">
+                    <el-select v-model="editData.ywlx" disabled value-key="id" placeholder="请选择" @change="changeEditYwlx(editData.ywlx)" style="width:220px">
                         <el-option v-for="item in editywlxList" :key="item.id" :label="item.name" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="公司名称" size="small" label-width="95px" prop="basicCompanyIds">
-                    <el-select v-model="editData.basicCompanyIds" placeholder="公司名称" style="width:120px" filterable>
+                    <el-select v-model="editData.basicCompanyIds" placeholder="公司名称" style="width:220px" filterable>
                         <el-option v-for="item in companyList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="标识" size="small" label-width="95px" prop="code">
-                    <el-input style="width:120px" disabled v-model="editData.code" placeholder="请输入"></el-input>
+                    <el-input style="width:220px" disabled v-model="editData.code" placeholder="请输入"></el-input>
                     <!-- <el-select v-model="editData.code" placeholder="请选择" style="width:120px" @change="watchCode4">
                         <el-option v-for="v in selectList" :key="v.id" :label="v.code" :value="v.code"></el-option>
                     </el-select> -->
                 </el-form-item>
                 <el-form-item label="时间信息" size="small" label-width="95px" prop="timeInfor">
-                    <el-select v-model="editData.timeInfor" placeholder="请选择" style="width:120px">
+                    <el-select v-model="editData.timeInfor" placeholder="请选择" style="width:220px">
                         <el-option label="年月" value="1"></el-option>
                         <el-option label="年月日" value="0"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="流水号长度" size="small" label-width="95px" prop="number">
-                    <el-input-number v-model="editData.number" controls-position="right" style="width:120px" :min="1" :max="8"></el-input-number>
+                    <el-input-number v-model="editData.number" controls-position="right" style="width:220px" :min="1" :max="8"></el-input-number>
                 </el-form-item>
                 <el-form-item label="状态" size="small" label-width="95px" prop="status">
-                    <el-select v-model="editData.status" placeholder="请选择" style="width:120px">
+                    <el-select v-model="editData.status" placeholder="请选择" style="width:220px">
                         <el-option label="启用" value="1"></el-option>
                         <el-option label="停用" value="0"></el-option>
                     </el-select>
                 </el-form-item>
                 </Col>
-                <el-form-item style="padding-left:70px">
+                <el-form-item style="padding-left:130px">
                     <!-- <Button v-if="dialogtitle=='新增'" type="primary" @click="submitForm('ruleForm')">确认</Button> -->
                     <Button type="primary" @click="submitsForm('ruleForms')">确认</Button>
                     <Button type="default" @click="cancels">取消</Button>

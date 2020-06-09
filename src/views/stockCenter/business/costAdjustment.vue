@@ -30,7 +30,7 @@
                 </el-form-item>
             </div>
             <el-form-item label="仓库：" size="small">
-                <el-select v-model="formSearch.code" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.code" filterable placeholder="请选择" style="width:250px">
                     <el-option v-for="item in wareHouseList" :key="item.id" :label="item.warehouseName" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
@@ -46,12 +46,12 @@
                 </el-select>
             </el-form-item>
             <el-form-item v-if="show == true" label="状态：" size="small">
-                <el-select v-model="formSearch.status" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.status" filterable placeholder="请选择" style="width:100px">
                     <el-option v-for="item in statusList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item v-if="show == true" label="公司：" size="small">
-                <el-select v-model="formSearch.company" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.company" filterable placeholder="请选择" style="width:220px">
                     <el-option v-for="item in companyCodeOptions" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
@@ -67,26 +67,26 @@
         <Row class="margin-bottom-10 background-color-white exhibition">
             <el-form :inline="true" ref="ruleForm" :model="addObject" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="rules">
                 <Col>
-                <el-form-item label="公司" size="small" label-width="95px" prop="company">
-                    <el-select v-model="addObject.company" value-key="id" placeholder="请选择" style="width:120px" filterable>
+                <el-form-item label="公司" size="small" label-width="55px" prop="company">
+                    <el-select v-model="addObject.company" value-key="id" placeholder="请选择" style="width:220px" filterable>
                         <el-option v-for="v in companyCodeOptions" :key="v.id" :disabled="v.used==0" :label="v.name" :value="v"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="库存账期" size="small" label-width="95px">
+                <el-form-item label="库存账期" size="small" label-width="85px">
                     <el-select disabled v-model="addObject.basicData" placeholder="请选择" style="width:120px" filterable>
                         <el-option v-for="v in stockList" :key="v.id" :disabled="v.used==0" :label="v.name" :value="v.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="调整类型" size="small" label-width="95px" prop="enable">
+                <el-form-item label="调整类型" size="small" label-width="85px" prop="enable">
                     <el-select v-model="addObject.enable" placeholder="请选择" style="width:120px" filterable>
                         <el-option v-for="v in enableList" :key="v" :label="v" :value="v"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="业务日期" size="small" label-width="95px" prop="time">
-                    <el-date-picker disabled v-model="addObject.time" format="yyyy-MM-dd" type="date" placeholder="选择日期" style="width:150px">
+                <el-form-item label="业务日期" size="small" label-width="85px" prop="time">
+                    <el-date-picker disabled v-model="addObject.time" format="yyyy-MM-dd" type="date" placeholder="选择日期" style="width:130px">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="商家编码" size="small" label-width="95px" prop="sjcode">
+                <el-form-item label="商家编码" size="small" label-width="85px" prop="sjcode">
                     <el-input v-model="addObject.sjcode" placeholder="请输入" style="width:120px"></el-input>
                 </el-form-item>
                 </Col>

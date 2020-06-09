@@ -17,17 +17,17 @@
                 </el-form-item>
             </div>
             <el-form-item label="品牌编码" size="small">
-                <el-select v-model="formData.code" placeholder="请选择" style="width:100px" filterable>
+                <el-select v-model="formData.code" placeholder="请选择" style="width:150px" filterable>
                     <el-option v-for="v in brandList" :key="v.id" :label="v.code" :value="v.code"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="品牌名称" size="small">
-                <el-select v-model="formData.brandId" placeholder="请选择" style="width:100px" filterable>
+                <el-select v-model="formData.brandId" placeholder="请选择" style="width:150px" filterable>
                     <el-option v-for="v in brandList" :key="v.id" :label="v.name" :value="v.id"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="负责人" size="small">
-                <el-select v-model="formData.leader" placeholder="请选择" style="width:100px" filterable>
+                <el-select v-model="formData.leader" placeholder="请选择" style="width:150px" filterable>
                     <el-option v-for="v in responseList" :key="v" :label="v" :value="v"></el-option>
                 </el-select>
             </el-form-item>
@@ -108,24 +108,24 @@
         
    
     <!-- 编辑新增弹框 -->
-    <Modal v-model="dialogVisible" :styles="mystyle" :rules="rules" :title="dialogtitle" @on-cancel='cancel' :width="810" @on-ok="editSubmit" class-name="customize-modal-center">
+    <Modal v-model="dialogVisible" :styles="mystyle" :rules="rules" :title="dialogtitle" @on-cancel='cancel' :width="1010" @on-ok="editSubmit" class-name="customize-modal-center">
         <Row class="margin-bottom-10 background-color-white exhibition">
             <el-form :inline="true" ref="ruleForm" :model="addformdata" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="rules">
                 <Col>
                 <el-form-item label="品牌编码" size="small" label-width="110px" prop="brandNumber">
-                    <el-input v-model="addformdata.brandNumber" maxlength="20" style="width:120px"></el-input>
+                    <el-input v-model="addformdata.brandNumber" maxlength="20" style="width:220px"></el-input>
                 </el-form-item>
                 <el-form-item label="品牌名称" size="small" label-width="110px" prop="brandName">
                     <el-input v-model="addformdata.brandName" maxlength="20" style="width:120px"></el-input>
                 </el-form-item>
                 <el-form-item label="品牌缩写" size="small" label-width="110px" prop="brandsuo">
-                    <el-input v-model="addformdata.brandsuo" maxlength="20"  style="width:120px"></el-input>
+                    <el-input v-model="addformdata.brandsuo" maxlength="20"  style="width:220px"></el-input>
                 </el-form-item>
                 </Col>
                 <Col>
 
                 <el-form-item label="吊牌显示名称" size="small" label-width="110px" prop="diaopai">
-                    <el-input v-model="addformdata.diaopai" maxlength="20" style="width:120px"></el-input>
+                    <el-input v-model="addformdata.diaopai" maxlength="20" style="width:220px"></el-input>
                 </el-form-item>
                 <el-form-item label="类型" size="small" label-width="110px" prop="type">
                     <el-select v-model="addformdata.type" placeholder="请选择" style="width:120px">
@@ -138,7 +138,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="成品仓库" size="small" label-width="110px" prop="goodsStore">
-                    <el-select v-model="addformdata.goodsStore" placeholder="请选择" style="width:120px">
+                    <el-select v-model="addformdata.goodsStore" placeholder="请选择" style="width:220px">
                         <el-option label="萧山宇隆仓" value="萧山宇隆仓"></el-option>
                         <el-option label="萧山瓜沥仓" value="萧山瓜沥仓"></el-option>
                     </el-select>
@@ -146,13 +146,13 @@
                 </Col>
                 <Col>
                 <el-form-item label="成本倍率" size="small" label-width="110px" prop="costRate">
-                    <el-input v-model="addformdata.costRate" maxlength="20" style="width:120px"></el-input>
+                    <el-input v-model="addformdata.costRate" maxlength="20" style="width:220px"></el-input>
                 </el-form-item>
                 <el-form-item label="零售价尾数" size="small" label-width="110px" prop="tailMoney">
                     <el-input v-model="addformdata.tailMoney" maxlength="1" oninput="value=value.replace(/[^\d.]/g,'')" style="width:120px"></el-input>
                 </el-form-item>
                 <el-form-item label="公司名称" size="small" label-width="110px" prop="companyName">
-                    <el-select v-model="addformdata.companyName" placeholder="请选择" style="width:120px" filterable @change="choiced(addformdata.companyName)">
+                    <el-select v-model="addformdata.companyName" placeholder="请选择" style="width:220px" filterable @change="choiced(addformdata.companyName)">
                         <el-option :disabled="v.used==0" v-for="v in companyList" :key="v.id" :label="v.name" :value="v.id"></el-option>
                     </el-select>
                 </el-form-item>
@@ -160,13 +160,13 @@
                 </Col>
                 <Col>
                 <el-form-item label="公司地址" size="small" label-width="110px" prop="companyAddress">
-                    <el-input v-model="addformdata.companyAddress" maxlength="50" style="width:120px"></el-input>
+                    <el-input v-model="addformdata.companyAddress" maxlength="50" style="width:220px"></el-input>
                 </el-form-item>
                 <el-form-item label="公司电话" size="small" label-width="110px" prop="companyPhone">
                     <el-input v-model="addformdata.companyPhone" maxlength="20" style="width:120px"></el-input>
                 </el-form-item>
                 <el-form-item label="含试制费" size="small" label-width="110px" prop="includesMoney">
-                    <el-select v-model="addformdata.includesMoney" placeholder="请选择" style="width:120px">
+                    <el-select v-model="addformdata.includesMoney" placeholder="请选择" style="width:220px">
                         <el-option label="是" value="1"></el-option>
                         <el-option label="否" value="0"></el-option>
                     </el-select>
@@ -174,35 +174,35 @@
                 </Col>
                 <Col>
                 <el-form-item label="负责人" size="small" label-width="110px" prop="includesReponsor">
-                    <el-input v-model="addformdata.includesReponsor" maxlength="20" style="width:120px"></el-input>
+                    <el-input v-model="addformdata.includesReponsor" maxlength="20" style="width:220px"></el-input>
                 </el-form-item>
                 <el-form-item label="OMS品牌编码" size="small" label-width="110px">
                     <el-input v-model="addformdata.omsBrandCode" :disabled="dialogtitle=='编辑'" maxlength="20" style="width:120px"></el-input>
                 </el-form-item>
                 <el-form-item label="OMS品牌名称" size="small" label-width="110px" >
-                    <el-input v-model="addformdata.omsBrandName" :disabled="dialogtitle=='编辑'" maxlength="20" style="width:120px"></el-input>
+                    <el-input v-model="addformdata.omsBrandName" :disabled="dialogtitle=='编辑'" maxlength="20" style="width:220px"></el-input>
                 </el-form-item>
                 </Col>
                 <Col>
                 <el-form-item label="SCM_ID" size="small" label-width="110px" >
-                    <el-input v-model="addformdata.scmBrandId" maxlength="20" style="width:120px"></el-input>
+                    <el-input v-model="addformdata.scmBrandId" maxlength="20" style="width:220px"></el-input>
                 </el-form-item>
                 <el-form-item label="SCM品牌编码" size="small" label-width="110px">
                     <el-input v-model="addformdata.scmBrandCode" maxlength="20" style="width:120px"></el-input>
                 </el-form-item>
                 <el-form-item label="SCM品牌名称" size="small" label-width="110px" >
-                    <el-input v-model="addformdata.scmBrandName" maxlength="20" style="width:120px"></el-input>
+                    <el-input v-model="addformdata.scmBrandName" maxlength="20" style="width:220px"></el-input>
                 </el-form-item>
                 </Col>
                 <Col>
                 <el-form-item label="组别" size="small" label-width="110px">
-                    <el-select v-model="addformdata.groups" placeholder="请选择" style="width:120px">
+                    <el-select v-model="addformdata.groups" placeholder="请选择" style="width:220px">
                         <el-option label="01" value="01"></el-option>
                         <el-option label="02" value="02"></el-option>
                     </el-select>
                 </el-form-item>
                 </Col>
-                <el-form-item style="padding-left:330px">
+                <el-form-item style="padding-left:430px">
                     <Button type="primary" v-if="dialogtitle!='编辑'" @click="submitForm('ruleForm')">确认</Button>
                     <Button type="primary" v-if="dialogtitle=='编辑'" @click="submitFormEdit('ruleForm')">确认</Button>
                     <Button type="default" @click="cancel">取消</Button>

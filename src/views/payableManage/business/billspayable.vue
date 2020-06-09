@@ -31,6 +31,11 @@
                     <el-option v-for="item in companyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
+             <el-form-item  label="所属对账人员：" size="small">
+                <el-select v-model="formSearch.payableUser" @change="changePayable(formSearch.payableUser)" filterable placeholder="请选择" style="width:120px">
+                    <el-option v-for="item in payableUserList" :key="item.payableUserId" :label="item.payableUser" :value="item.payableUserId"></el-option>
+                </el-select>
+            </el-form-item>
            <el-form-item label="供应商：" size="small">
                 <el-select v-model="formSearch.supplierId" filterable clearable placeholder="请选择" style="width:220px">
                     <el-option v-for="item in supplyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
@@ -227,6 +232,7 @@ import {
 export default {
     data() {
         return {
+            payableUserList:[],
              exportObj:{
                        selected:''
             },
@@ -282,6 +288,7 @@ export default {
     created() {
         this.getCompany()
         this.getSupply()
+        this.getPayableUser()
     },
     destroyed() {
         this.resetCommit()
@@ -293,6 +300,27 @@ export default {
         this.initTable([])
     },
     methods: {
+        //重新获取供应商下拉
+        changePayable(name){
+            this.formSearch.supplierId = ''
+            console.log(name)
+            let vars = {}
+            vars.payableUserId = name
+             this.requestWithUriVars('selectorPayableSupplier', vars, null, true).then(res => {
+          if (res.code==1) {
+              this.supplyList = res.data
+            }else{
+                this.supplyList = []
+            }
+          })
+        },
+        getPayableUser(){
+            this.request('supplier_selectorPayable', {}, true).then(res => {
+                if (res.code == 1) {
+                    this.payableUserList = res.data
+                }
+            })
+        },
         modify(){
                   let arr = w2ui.billspayable.getSelection()
                 if(arr.length<1){
@@ -591,6 +619,7 @@ export default {
             for (let i in this.formSearch) {
                 this.formSearch[i] = ''
             }
+            this.getSupply()
             // this.resetCommit()
             // this.formSearch = {
             //     year:new Date()
@@ -627,6 +656,7 @@ export default {
             // data.year = filters.get_unix_only(this.formSearch.year)
             data.basicCompanyId  = this.formSearch.companyId  //
             data.basicSupplierId = this.formSearch.supplierId//供应商id
+            data.payableUserId = this.formSearch.payableUser//所属人员
             data.invoiceNo=   this.formSearch.invoiceNo;//发票号
             this.formSearch.createTime?data.createdStartTime=this.formSearch.createTime[0]:delete data.createdStartTime; //创建日期开始时间
             this.formSearch.createTime?data.createdEndTime=this.formSearch.createTime[1]:delete data.createdEndTime;      //创建日期结束时间
@@ -1038,6 +1068,7 @@ export default {
                             // data.year = filters.get_unix_only(this.formSearch.year)
                             data.basicCompanyId  = this.formSearch.companyId  //
                             data.basicSupplierId = this.formSearch.supplierId//供应商id
+                            data.payableUserId = this.formSearch.payableUser//所属人员
                             data.invoiceNo=   this.formSearch.invoiceNo;//发票号
                             this.formSearch.createTime?data.createdStartTime=this.formSearch.createTime[0]:delete data.createdStartTime; //创建日期开始时间
                             this.formSearch.createTime?data.createdEndTime=this.formSearch.createTime[1]:delete data.createdEndTime;      //创建日期结束时间
@@ -1070,6 +1101,7 @@ export default {
                             // data.year = filters.get_unix_only(this.formSearch.year)
                             data.basicCompanyId  = this.formSearch.companyId  //
                             data.basicSupplierId = this.formSearch.supplierId//供应商id
+                            data.payableUserId = this.formSearch.payableUser//所属人员
                             data.invoiceNo=   this.formSearch.invoiceNo;//发票号
                             this.formSearch.createTime?data.createdStartTime=this.formSearch.createTime[0]:delete data.createdStartTime; //创建日期开始时间
                             this.formSearch.createTime?data.createdEndTime=this.formSearch.createTime[1]:delete data.createdEndTime;      //创建日期结束时间

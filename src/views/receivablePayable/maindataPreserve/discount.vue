@@ -32,7 +32,7 @@
                      </el-form-item>
             </Col>
             <el-form-item label="供应商全称：" size="small">
-                <el-select v-model="formSearch.supplierId" placeholder="请选择" style="width:150px" filterable >
+                <el-select v-model="formSearch.supplierId" placeholder="请选择" style="width:260px" filterable >
                     <el-option v-for="v in suppyList" :key="v.id" :label="v.name" :value="v.id"></el-option>
                 </el-select>
             </el-form-item>

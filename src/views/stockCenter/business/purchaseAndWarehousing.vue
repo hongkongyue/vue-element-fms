@@ -17,7 +17,7 @@
                 </el-form-item>
             </div>
             <el-form-item label="仓库：" size="small">
-                <el-select v-model="formSearch.warehouse" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.warehouse" filterable placeholder="请选择" style="width:250px">
                     <el-option v-for="item in warehouseList" :key="item.id" :label="item.warehouseName" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
@@ -34,20 +34,20 @@
             </el-form-item>
 
             <el-form-item v-if="show == true" label="账单编号：" size="small">
-                <el-input v-model="formSearch.orderCode" style="width:150px"></el-input>
+                <el-input v-model="formSearch.orderCode" style="width:210px"></el-input>
             </el-form-item>
             <el-form-item v-if="show == true" label="允许结算：" size="small">
-                <el-select v-model="formSearch.allowed" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.allowed" filterable placeholder="请选择" style="width:80px">
                     <el-option v-for="item in allowedList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item v-if="show == true" label="关单后入库：" size="small">
-                <el-select v-model="formSearch.closed" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.closed" filterable placeholder="请选择" style="width:80px">
                     <el-option v-for="item in closedList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item v-if="show == true" label="结算类型：" size="small">
-                <el-select v-model="formSearch.setType" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.setType" filterable placeholder="请选择" style="width:100px">
                     <el-option v-for="item in setTypeList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
@@ -60,31 +60,42 @@
                     <el-option v-for="item in busTypeList" :key="item.name" :label="item.name" :value="item.name"></el-option>
                 </el-select>
             </el-form-item>
+             <el-form-item v-if="show == true" label="所属对账人员：" size="small">
+                <el-select v-model="formSearch.payableUser" @change="changePayable(formSearch.payableUser)" filterable placeholder="请选择" style="width:120px">
+                    <el-option v-for="item in payableUserList" :key="item.payableUserId" :label="item.payableUser" :value="item.payableUserId"></el-option>
+                </el-select>
+            </el-form-item>
             <el-form-item v-if="show == true" label="供应商：" size="small">
-                <el-select v-model="formSearch.supplierId" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.supplierId" filterable placeholder="请选择" style="width:250px">
                     <el-option v-for="item in supplyList" :key="item.name" :label="item.name" :value="item.code"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item v-if="show == true" label=" 公 司 ：" size="small">
-                <el-select v-model="formSearch.companyId" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.companyId" filterable placeholder="请选择" style="width:220px">
                     <el-option v-for="item in companyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item v-if="show == true" label="入库时间：" size="small">
-                <el-date-picker v-model="formSearch.date" type="daterange" value-format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                </el-date-picker>
+                <!-- <el-date-picker v-model="formSearch.date" style="width:260px" type="daterange" value-format="yyyy-MM-dd" range-separator="~" start-placeholder="开始日期" end-placeholder="结束日期">
+                </el-date-picker> -->
+                <el-date-picker v-model="formSearch.dateStart" type="date" value-format="yyyy-MM-dd" style="width:150px" placeholder="开始日期"></el-date-picker>
+                <span>~</span>
+                <el-date-picker v-model="formSearch.dateEnd" type="date" value-format="yyyy-MM-dd" style="width:150px" placeholder="结束日期"></el-date-picker>
             </el-form-item>
             <el-form-item v-if="show == true" label="结算明细编号：" size="small">
                 <el-input v-model="formSearch.setCode" style="width:150px"></el-input>
             </el-form-item>
             <el-form-item v-if="show == true" label="单据时间：" size="small">
-                <el-date-picker :clearable="false"
+                <!-- <el-date-picker :clearable="false"
                   v-model="dateRange"
                   type="daterange"
                   range-separator="~"
                   start-placeholder="开始日期"
-                  end-placeholder="结束日期"  style="width:290px" placeholer="请选择">
-                </el-date-picker>
+                  end-placeholder="结束日期"  style="width:280px" placeholer="请选择">
+                </el-date-picker> -->
+                <el-date-picker v-model="formSearch.orderdateStart" type="date" value-format="yyyy-MM-dd" style="width:150px" placeholder="开始日期"></el-date-picker>
+                <span>~</span>
+                <el-date-picker v-model="formSearch.orderdateEnd" type="date" value-format="yyyy-MM-dd" style="width:150px" placeholder="结束日期"></el-date-picker>
             </el-form-item>
             <el-form-item v-if="show==true" label="开票状态：" size="small" label-width="100px">
                 <el-select v-model="formSearch.invoiceStatus" filterable placeholder="请选择" style="width:120px">
@@ -93,7 +104,7 @@
                 </el-select>
             </el-form-item>
              <el-form-item v-if="show==true" label="是否生成结算明细：" size="small" label-width="140px">
-                <el-select v-model="formSearch.settle" filterable placeholder="请选择" style="width:120px">
+                <el-select v-model="formSearch.settle" filterable placeholder="请选择" style="width:80px">
                    <el-option label="是" value="1"></el-option>
                     <el-option label="否" value="0"></el-option>
                 </el-select>
@@ -110,7 +121,7 @@
     <el-dialog title="生成结算明细" :visible="dialogFormVisible" :modal-append-to-body="false" width="35%" :before-close="dialogFormCancel">
         <el-form :model="formdialog">
             <el-form-item label="对账账期：" size="small">
-                <el-select v-model="formdialog.period" value-key="id" filterable placeholder="请选择" style="width:200px">
+                <el-select v-model="formdialog.period" value-key="id" filterable placeholder="请选择" style="width:220px">
                     <el-option v-for="item in periodList" :key="item.name" :label="item.name" :value="item.period"></el-option>
                 </el-select>
             </el-form-item>
@@ -237,6 +248,7 @@ export default {
     name: 'timelyComponent',
     data() {
         return {
+            payableUserList:[],
              exportObj:{
                        selected:''
             },
@@ -290,6 +302,7 @@ export default {
                 name: '',
                 person: '',
                 invoiceStatus:'',
+                supplierId:''
             },
             logList: [],
             total: 0,
@@ -309,7 +322,8 @@ export default {
         this.$store.commit('clearpurchase')
     },
     mounted() {
-        this.setdateRange()
+        this.getPayableUser()
+        // this.setdateRange()
         this.getWarehouseList()
         this.getCompany()
         this.getSupply()
@@ -319,10 +333,31 @@ export default {
         this.initTable([])
     },
     methods: {
-         setdateRange(){
-                this.dateRange=[new Date((new Date().getTime()-30*24*60*60*1000)),new Date()]
-                console.log(this.dateRange,'09090')
+        //重新获取供应商下拉
+        changePayable(name){
+            this.formSearch.supplierId = ''
+            console.log(name)
+            let vars = {}
+            vars.payableUserId = name
+             this.requestWithUriVars('selectorPayableSupplier', vars, null, true).then(res => {
+          if (res.code==1) {
+              this.supplyList = res.data
+            }else{
+                this.supplyList = []
+            }
+          })
         },
+        getPayableUser(){
+            this.request('supplier_selectorPayable', {}, true).then(res => {
+                if (res.code == 1) {
+                    this.payableUserList = res.data
+                }
+            })
+        },
+        //  setdateRange(){
+        //         this.dateRange=[new Date((new Date().getTime()-30*24*60*60*1000)),new Date()]
+        //         console.log(this.dateRange,'09090')
+        // },
         //生成结算明细  //bizStockIn_add
         onGenerate() {
             let arr = w2ui.purchase.getSelection()
@@ -569,26 +604,6 @@ export default {
                             size: '100px',
                             sortable: true
                         },
-                        //  {
-                        //     field: 'tryFeeInvoiceAmount',
-                        //     caption: '试制费已开票金额',
-                        //     size: '100px',
-                        //     render:'money',
-                        //     sortable: true
-                        // },
-                        // {
-                        //     field: 'goodsInvoiceAmount',
-                        //     caption: '货款已开票金额',
-                        //     size: '100px',
-                        //     render:'money',
-                        //     sortable: true
-                        // },
-                        // {
-                        //     field: 'invoiceStatus',
-                        //     caption: '开票状态',
-                        //     size: '100px',
-                        //     sortable: true
-                        // },
                         {
                             field: 'created',
                             caption: '创建时间',
@@ -655,83 +670,17 @@ export default {
                 }
             })
         },
-        // //导出
-        // onImport() {
-        //     let data = {}
-        //     this.request('accverification_asyncExport', data, false).then(res => {
-        //         if (res.code == 1) {
-        //             this.getKey(res.data)
-        //         } else {
-        //             this.$message({
-        //                 message: res.msg,
-        //                 type: 'warning'
-        //             });
-        //         }
-        //     })
-        // },
-        // //循环key
-        // getKey(key) {
-        //     const h = this.$createElement;
-        //     let data = {}
-        //     data.taskKey = key
-        //     this.timeAA = setTimeout(() => {
-        //         this.request('getProcessResultByTaskKey', data, false).then(res => {
-        //             if (res.code == 1) {
-        //                 if (res.data.processStatus !== 0) {
-        //                     this.$notify.success({
-        //                         title: res.data.title,
-        //                         message: h('p', null, [
-        //                             h('a', {
-        //                                 on: {
-        //                                     click: this.clickA(res.data.subTitle)
-        //                                 }
-        //                             }, res.data.subTitle.indexOf('[') == -1 ? res.data.subTitle : "下载链接"),
-        //                         ]),
-        //                         duration: 0,
-        //                     });
-        //                     this.cleanKey(key)
-
-        //                     function myStopFunction() {
-        //                         clearTimeout(this.timeAA);
-        //                     }
-
-        //                 } else {
-        //                     this.$notify.success({
-        //                         title: res.data.title,
-        //                         message: res.data.subTitle,
-        //                         duration: 3000
-        //                     });
-        //                     this.getKey(key)
-        //                 }
-        //             } else {
-        //                 this.$message.warning(res.msg)
-        //             }
-        //         })
-        //     }, 5000)
-        // },
-        // clickA(url) {
-        //     if (url.indexOf('[') == -1) {
-        //         console.log('没有地址')
-        //     } else {
-        //         url.replace()
-        //         let aPos = url.indexOf('[');
-        //         let bPos = url.indexOf(']');
-        //         let r = url.substr(aPos + 1, bPos - aPos - 1);
-        //         window.location.href = r
-        //     }
-        // },
-        // cleanKey(key) {
-        //     let data = {}
-        //     data.taskKey = key
-        //     this.request('delByTaskKey', data, false).then(res => {
-        //         if (res.code == 1) {
-        //             console.log('oooo')
-        //         }
-        //     })
-        // },
+        
         onReset() {
-            this.formSearch = {}
-            this.setdateRange()
+            this.formSearch = {
+                code: '',
+                name: '',
+                person: '',
+                invoiceStatus:'',
+                supplierId:''
+            }
+            // this.setdateRange()
+            this.getSupply()
             // this.initTable([])
         },
         //公司
@@ -807,12 +756,15 @@ export default {
             data.merchantCode = this.formSearch.themCode //商家编码
             data.goodsNo = this.formSearch.themID //货品编码
             data.busType = this.formSearch.orderType //业务类型
+            data.payableUserId = this.formSearch.payableUser //所属人员
             data.basicCompanyId = this.formSearch.companyId //公司ID
             data.basicSupplierCode = this.formSearch.supplierId //供应商编码
-            this.formSearch.date ? data.omsStartDate = this.formSearch.date[0] : delete data.omsStartDate //开始时间
-            this.formSearch.date ? data.omsEndDate = this.formSearch.date[1] : delete data.omsEndDate //结束时间
-            data.startDate=filter.get_year_month_day(this.dateRange[0])
-            data.endDate  =filter.get_year_month_day(this.dateRange[1])
+            this.formSearch.dateStart ? data.omsStartDate = this.formSearch.dateStart : delete data.omsStartDate //开始时间
+            this.formSearch.dateEnd ? data.omsEndDate = this.formSearch.dateEnd : delete data.omsEndDate //结束时间
+            this.formSearch.orderdateStart ? data.startDate = this.formSearch.orderdateStart : delete data.startDate //开始时间
+            this.formSearch.orderdateEnd ? data.endDate = this.formSearch.orderdateEnd : delete data.endDate //结束时间
+            // data.startDate=filter.get_year_month_day(this.dateRange[0])
+            // data.endDate  =filter.get_year_month_day(this.dateRange[1])
             data.invoiceStatus=this.formSearch.invoiceStatus!=''?Number(this.formSearch.invoiceStatus):''
             this.formSearch.settle ? data.settle=Number(this.formSearch.settle):delete data.settle
             this.request('bizStockIn_page', data, true).then(res => {
@@ -904,12 +856,13 @@ export default {
                         data.merchantCode = this.formSearch.themCode //商家编码
                         data.goodsNo = this.formSearch.themID //货品编码
                         data.busType = this.formSearch.orderType //业务类型
+                        data.payableUserId = this.formSearch.payableUser //所属人员
                         data.basicCompanyId = this.formSearch.companyId //公司ID
                         data.basicSupplierCode = this.formSearch.supplierId //供应商编码
-                        this.formSearch.date ? data.omsStartDate = this.formSearch.date[0] : delete data.omsStartDate //开始时间
-                        this.formSearch.date ? data.omsEndDate = this.formSearch.date[1] : delete data.omsEndDate //结束时间
-                        data.startDate=filter.get_year_month_day(this.dateRange[0])
-                        data.endDate=filter.get_year_month_day(this.dateRange[1])
+                        this.formSearch.dateStart ? data.omsStartDate = this.formSearch.dateStart : delete data.omsStartDate //开始时间
+            this.formSearch.dateEnd ? data.omsEndDate = this.formSearch.dateEnd : delete data.omsEndDate //结束时间
+                       this.formSearch.orderdateStart ? data.startDate = this.formSearch.orderdateStart : delete data.startDate //开始时间
+            this.formSearch.orderdateEnd ? data.endDate = this.formSearch.orderdateEnd : delete data.endDate //结束时间
                         w2ui.purchase.getSelection().length>0?data.ids= w2ui.purchase.getSelection():delete data.ids
                         this.exportObj.selected==1? data.exportType=true:data.exportType=false;
             this.request('stocks_bizStockIn_getExportCount',data,false).then(res=>{
@@ -942,12 +895,13 @@ export default {
                         data.merchantCode = this.formSearch.themCode //商家编码
                         data.goodsNo = this.formSearch.themID //货品编码
                         data.busType = this.formSearch.orderType //业务类型
+                        data.payableUserId = this.formSearch.payableUser //所属人员
                         data.basicCompanyId = this.formSearch.companyId //公司ID
                         data.basicSupplierCode = this.formSearch.supplierId //供应商编码
-                        this.formSearch.date ? data.omsStartDate = this.formSearch.date[0] : delete data.omsStartDate //开始时间
-                        this.formSearch.date ? data.omsEndDate = this.formSearch.date[1] : delete data.omsEndDate //结束时间
-                        data.startDate=filter.get_year_month_day(this.dateRange[0])
-                        data.endDate=filter.get_year_month_day(this.dateRange[1])
+                        this.formSearch.dateStart ? data.omsStartDate = this.formSearch.dateStart : delete data.omsStartDate //开始时间
+            this.formSearch.dateEnd ? data.omsEndDate = this.formSearch.dateEnd : delete data.omsEndDate //结束时间
+                        this.formSearch.orderdateStart ? data.startDate = this.formSearch.orderdateStart : delete data.startDate //开始时间
+            this.formSearch.orderdateEnd ? data.endDate = this.formSearch.orderdateEnd : delete data.endDate //结束时间
                         w2ui.purchase.getSelection().length>0?data.ids= w2ui.purchase.getSelection():delete data.ids
                         this.exportObj.selected==1? data.exportType=true:data.exportType=false;
                       this.request('stocks_bizStockIn_exportAsync', data, false).then(res => {

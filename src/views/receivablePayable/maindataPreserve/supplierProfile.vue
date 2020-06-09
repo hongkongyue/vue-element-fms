@@ -34,6 +34,16 @@
             <el-form-item label="供应商简称：" size="small">
                 <el-input style="width:140px" v-model="formSearch.name" placeholder="请输入"></el-input>
             </el-form-item>
+            <el-form-item label="供应商全称：" size="small">
+                <el-select v-model="formSearch.allName" value-key="id" filterable placeholder="请选择" style="width:300px">
+                    <el-option v-for="item in allNameList" :key="item.id" :label="item.displaySupplier" :value="item.id"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="所属对账人员：" size="small">
+                <el-select v-model="formSearch.payableUser" value-key="id" filterable placeholder="请选择" style="width:150px">
+                    <el-option v-for="item in payableUserList" :key="item.payableUserId" :label="item.payableUser" :value="item.payableUserId"></el-option>
+                </el-select>
+            </el-form-item>
         </el-form>
     </header>
     <section class="middle" :style="{minHeight:showBink?'680px':'480px'}" style="padding-top:10px">
@@ -43,6 +53,20 @@
             <el-table-column type="selection" width="55">
             </el-table-column>
             <el-table-column type="index" width="55" label="序号" align="center"></el-table-column>
+            <el-table-column prop="name" label="供应商全称" min-width="120" align="center" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column prop="shortName" label="供应商简称" min-width="120" align="center" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column prop="code" label="供应商编号" min-width="120" align="center" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column prop="payableUser" label="所属对账人员" min-width="120" align="center" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column prop="pinyinCode" label="拼音代号" min-width="120" align="center" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column prop="type" label="供应商类型" min-width="120" align="center" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column prop="options" label="属性" min-width="120" align="center" show-overflow-tooltip>
+            </el-table-column>
             <el-table-column prop="enable" label="启用" min-width="120" align="center">
                 <template slot-scope="scope">{{scope.row.enable == 0 ? '停用' : '启用'}}</template>
             </el-table-column>
@@ -53,20 +77,10 @@
             </el-table-column>
             <el-table-column prop="openYear" label="开发年份" align="center" min-width="120">
             </el-table-column>
-            <el-table-column prop="type" label="供应商类型" min-width="120" align="center" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="options" label="属性" min-width="120" align="center" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="code" label="供应商编号" min-width="120" align="center" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="shortName" label="供应商简称" min-width="120" align="center" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="pinyinCode" label="拼音代号" min-width="120" align="center" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="name" label="供应商全称" min-width="120" align="center" show-overflow-tooltip>
-            </el-table-column>
+            
             <el-table-column prop="outDevelop" label="外部开发" min-width="120" align="center" show-overflow-tooltip>
             </el-table-column>
+            
             <el-table-column prop="mainProduct" label="主供产品" min-width="120" align="center" show-overflow-tooltip>
             </el-table-column>
             <el-table-column prop="contacts" label="联系人" min-width="120" align="center" show-overflow-tooltip>
@@ -355,6 +369,15 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
+                <el-row type="flex">
+                    <el-col :span="8">
+                        <el-form-item label="所属对账人员：" size="small">
+                            <el-select v-model="ruleForm.payableUser" value-key="id" filterable placeholder="请选择" style="width:150px">
+                                <el-option v-for="item in userList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
             </el-form>
             <Col span="24">
             <div style="text-align:center">
@@ -620,6 +643,15 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
+                <el-row type="flex">
+                    <el-col :span="8">
+                        <el-form-item label="所属对账人员：" size="small">
+                            <el-select v-model="formChange.payableUser" value-key="id" filterable placeholder="请选择" style="width:150px">
+                                <el-option v-for="item in userList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
             </el-form>
             <Col span="24">
             <div style="text-align:center">
@@ -666,6 +698,9 @@ export default {
     mixins:[debounce],
     data() {
         return {
+            userList:[],
+            allNameList:[],//供应商全称
+            payableUserList:[],//所属对账人员
             leaveList: [],
             cityList: [],
             cityListA: [],
@@ -736,6 +771,7 @@ export default {
                 discount: '',
                 dataSource: '', //数据来源
                 bankCode1:'', //开户行行号1
+                payableUser:'',//所属对账人员
             },
             ruleForm: {
                 checked: true, //启用
@@ -778,6 +814,7 @@ export default {
                 discount: '',
                 dataSource: '', //数据来源
                 bankCode1:'',//来源
+                payableUser:'',//所属对账人员
             },
             rules: {
                 omsID: [{
@@ -940,6 +977,8 @@ export default {
     },
     mounted() {
         this.getData()
+        this.getPayableUser()//
+        this.getAllNameList()
         this.getMethodList()
         this.getTypeList()
         this.getLeaveList()
@@ -950,8 +989,32 @@ export default {
         // this.getCitySelector()//城市
         this.getButtonJurisdiction() //按钮权限
         this.getStatus()
+        this.getSelectuser()
     },
     methods: {
+        getAllNameList(){
+            this.request('masterData_supplier_selector', {}, true).then(res => {
+                if (res.code == 1) {
+                    this.allNameList = res.data
+                }
+            })
+        },
+        getPayableUser(){
+            this.request('supplier_selectorPayable', {}, true).then(res => {
+                if (res.code == 1) {
+                    this.payableUserList = res.data
+                }
+            })
+        },
+        //用户下拉接口
+        getSelectuser(){
+               let data={}
+                    this.request('user_selector', data, true).then((res) => {
+                            if (res.code == 1) {
+                                  this.userList=res.data
+                            }
+                        })       
+        },
         //同步
         getNewData() {
             this.request('supplier_sync', {}, true).then(res => {
@@ -1069,6 +1132,8 @@ export default {
         getData() {
             this.logList = []
             let data = {}
+            data.payableUserId = this.formSearch.payableUser //所属对账人员
+            data.supplierId = this.formSearch.allName //全称
             data.openYear = this.formSearch.years
             data.code = this.formSearch.code
             data.shortName = this.formSearch.name
@@ -1183,6 +1248,8 @@ export default {
                     data.trialProductionFeeProportion = this.ruleForm.cost //试制费占比
                     data.chargeDiscount = this.ruleForm.discount //扣款折扣%
                     data.dataSource = '2' //数据来源
+                    // data.payableUser = this.ruleForm.payableUser.payableUser
+                    data.payableUserId = this.ruleForm.payableUser
                     data.bankCode1=this.ruleForm.bankCode1 
                     this.request('supplier_add', data, true).then(res => {
                         if (res.code == '1') {
@@ -1461,6 +1528,7 @@ export default {
                 this.formChange.cost = obj.trialProductionFeeProportion //试制费占比
                 this.formChange.discount = obj.chargeDiscount //扣款折扣%
                 this.formChange.bankCode1=obj.bankCode1
+                this.formChange.payableUser=obj.payableUserId,//所属对账人员
                 obj.dataSource == '1' ? this.formChange.dataSources = '同步' : this.formChange.dataSources = '手动创建' //数据来源
                 if (obj.dataSource !== '1') {
                     this.editDisabled = false
@@ -1522,6 +1590,7 @@ export default {
                 data.trialProductionFeeProportion = this.formChange.cost //试制费占比
                 data.chargeDiscount = this.formChange.discount //扣款折扣%
                 data.bankCode1=this.formChange.bankCode1//开户行行号1
+                data.payableUserId = this.formChange.payableUser //所属对账人员
                 // data.dataSource = this.formChange.dataSources  //数据来源
                 this.request('supplier_update', data, true).then(res => {
                     if (res.code == 1) {
@@ -1579,6 +1648,7 @@ export default {
                 discount: '',
                 dataSource: '', //数据来源
                 bankCode1:'', //开户行行号1
+                payableUser:'',//所属对账人员
             }
         },
         handleSizeChange(val) {

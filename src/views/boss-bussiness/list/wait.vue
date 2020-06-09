@@ -78,7 +78,7 @@
                             this.initdata()
                     },
                     changestatus(obj){//productlaunch_editDevelopTaskStatus
-                               let {id,taskType,taskNo,taskDetailId}=obj
+                               let {id,taskType,taskNo,taskDetailId,adjustTypeCode}=obj
                                 let data={};
                                     data.id=id
                                     data.taskType=taskType
@@ -90,7 +90,8 @@
                                                 query: {   
                                                          taskNo: taskNo,
                                                          id:id,
-                                                         taskDetailId:taskDetailId
+                                                         taskDetailId:taskDetailId,
+                                                         adjustTypeCode:adjustTypeCode
                                                  }
                                             }) 
                             }else{

@@ -15,13 +15,13 @@
                          </div>
                           <el-form-item><span style="color:red">*</span></el-form-item>
                           <el-form-item label="平台："   size="small">
-                              <el-select v-model="formSearch.plathFormId" @change="changebasicPlatformId(formSearch.plathFormId)" filterable placeholder="请选择" style="width:150px">
+                              <el-select v-model="formSearch.plathFormId" @change="changebasicPlatformId(formSearch.plathFormId)" filterable placeholder="请选择" style="width:170px">
                                   <el-option v-for="item in platformOptions" :key="item.name" :label="item.name"  :value="item.id"></el-option>
                               </el-select>
                           </el-form-item>
                            <el-form-item><span style="color:red">*</span></el-form-item>
                           <el-form-item label="公司："   size="small">
-                              <el-select v-model="formSearch.companyId" filterable placeholder="请选择" style="width:150px"  @change="changeCode(formSearch.companyId)">
+                              <el-select v-model="formSearch.companyId" filterable placeholder="请选择" style="width:220px"  @change="changeCode(formSearch.companyId)">
                                   <el-option v-for="item in companyCodeOptions" :key="item.name" :label="item.name" :value="item.id"></el-option>
                               </el-select>
                           </el-form-item>
@@ -33,13 +33,13 @@
                           </el-form-item>
                           <el-form-item v-if="show == true&&timeList.length>0"><span style="color:red">*</span></el-form-item>
                           <el-form-item v-if="show == true&&timeList.length>0" label="期间："   size="small">
-                              <el-select v-model="formSearch.period" filterable placeholder="请选择" style="width:150px">
+                              <el-select v-model="formSearch.period" filterable placeholder="请选择" style="width:200px">
                                   <el-option v-for="item in timeList" :key="item" :label="item.name" :value="item.period"></el-option>
                               </el-select>
                           </el-form-item>
                           <el-form-item v-if="show == true&&timeList.length==0"><span style="color:red">*</span></el-form-item>
                           <el-form-item v-if="show == true&&timeList.length==0" label="期间："   size="small">
-                              <el-select v-model="formSearch.periodss" filterable placeholder="请选择" style="width:150px">
+                              <el-select v-model="formSearch.periodss" filterable placeholder="请选择" style="width:200px">
                                   <el-option v-for="item in timeLists" :key="item" :label="item" :value="item"></el-option>
                               </el-select>
                           </el-form-item>

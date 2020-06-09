@@ -1,11 +1,11 @@
 <template>
   <div>
-    <header class="headerstyle">
-        <div style="width:100%;text-align:center;">
+    <header class="headerstyle" v-if="!showhidden">
+        <!-- <div style="width:100%;text-align:center;">
             <span @click="handleShowHidden('hidden')"><i v-if="showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-bottom"></i></span>
             <span @click="handleShowHidden('show')"><i v-if="!showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-top"></i></span>
-        </div>
-      <el-form  v-if="!showhidden" :inline="true" :model="formSearch" class="demo-form-inline" style="width:99%">
+        </div> -->
+      <el-form   :inline="true" :model="formSearch" @submit.native.prevent class="demo-form-inline" style="width:99%">
         <Col style="margin-bottom:0px">
           <el-form-item size="small" class="marginT0">
              <el-button v-if="judgeMenu.indexOf('查询') != -1" size="small" type="primary" @click="onSearch">查询</el-button>
@@ -31,7 +31,11 @@
         </Col>
       </el-form>
     </header>
-    <section class="middle" style="padding-top:10px" :style="{minHeight:showBink?'660px':'400px'}">
+    <section class="middle" style="padding-top:10px" :style="{minHeight:showBink&&showhidden?'830px':'690px'}">
+      <div style="float:right;position:absolute;top:10px;right:20px">
+            <span @click="handleShowHidden('hidden')"><i v-if="showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-bottom"></i></span>
+            <span @click="handleShowHidden('show')"><i v-if="!showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-top"></i></span>
+        </div>
                   <el-pagination
                     style="margin-bottom:0px;text-align:right;margin-top:5px"
                     @size-change="handleSizeChange"
@@ -55,13 +59,15 @@
                     tooltip-effect="dark"
                     :maxHeight="oneTableHeight"
                     highlight-current-row
+
                     >
                     <el-table-column type="selection" width="55"></el-table-column>
-                    <el-table-column type="index" width="55" label="序号" align="center"></el-table-column>
-                    <el-table-column prop="taskName" label="任务类型" min-width="120" align="center">
+                    <el-table-column type="index" width="55" label="序号" align="center" sortable></el-table-column>
+                    <el-table-column prop="taskName" label="任务类型" min-width="120" align="center" sortable>
                       <!-- <template slot-scope="scope">{{ scope.row.date }}</template> -->
                     </el-table-column>
                     <el-table-column
+                      sortable
                       prop="postponeDay1"
                       label="延期1天"
                       min-width="120"
@@ -69,6 +75,7 @@
                       show-overflow-tooltip
                     ></el-table-column>
                       <el-table-column
+                      sortable
                       prop="postponeDay2"
                       label="延期2天"
                       min-width="120"
@@ -76,6 +83,7 @@
                       show-overflow-tooltip
                     ></el-table-column>
                       <el-table-column
+                      sortable
                       prop="postponeDay3"
                       label="延期3天"
                       min-width="120"
@@ -83,6 +91,7 @@
                       show-overflow-tooltip
                     ></el-table-column>
                       <el-table-column
+                      sortable
                       prop="postponeDay4"
                       label="延期4天"
                       min-width="120"
@@ -90,6 +99,7 @@
                       show-overflow-tooltip
                     ></el-table-column>
                       <el-table-column
+                      sortable
                       prop="postponeDay5"
                       label="延期5天"
                       min-width="120"
@@ -97,6 +107,7 @@
                       show-overflow-tooltip
                     ></el-table-column>
                       <el-table-column
+                      sortable
                       prop="created"
                       label="创建时间"
                       min-width="120"
@@ -104,6 +115,7 @@
                       show-overflow-tooltip
                     ></el-table-column>
                     <el-table-column
+                      sortable
                       prop="lastUpdated"
                       label="修改时间"
                       min-width="120"

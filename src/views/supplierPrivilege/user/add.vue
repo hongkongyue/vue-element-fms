@@ -26,7 +26,7 @@
                 </el-form-item> -->
                 <el-form-item label="状态：" size="small">
                     <el-select v-model="formSearch.status" placeholder="请选择" style="width:100px" filterable>
-                        <el-option label="锁定" value="2"></el-option>
+                        <el-option label="冻结" value="2"></el-option>
                         <el-option label="启用" value="1"></el-option>
                         <el-option label="禁用" value="0"></el-option>
                     </el-select>

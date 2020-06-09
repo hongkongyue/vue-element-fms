@@ -15,12 +15,12 @@
                 </el-form-item>
             </div>
             <el-form-item label="公司：" size="small">
-                <el-select v-model="formSearch.company" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.company" filterable placeholder="请选择" style="width:220px">
                     <el-option v-for="item in companyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="供应商：" size="small">
-                <el-select v-model="formSearch.supply" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.supply" filterable placeholder="请选择" style="width:230px">
                     <el-option v-for="item in supplyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>

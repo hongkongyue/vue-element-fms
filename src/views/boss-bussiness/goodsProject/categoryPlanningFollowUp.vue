@@ -1,5 +1,14 @@
 <style lang="less" scoped>
- @import 'https://unpkg.com/pl-table/themes/index.css';
+.el-table thead {
+    color: #909399;
+    font-size:9px!important;
+    font-weight: normal;
+    th{
+        background:#ececec;
+        color: #909399!important;
+        font-weight:none!important;
+    }
+}
 .showdragmodal .ivu-modal{
      top:10px!important
 }
@@ -11,7 +20,6 @@
       overflow: scroll;
       min-height:600px ;
   }
-//   background: #eee;
   .drag-item{
     margin: 6px;
     border:1px solid #eee;
@@ -107,28 +115,6 @@
     }
     .sum_footer_unit{
         flex:1;
-        /* -webkit-flex-grow:1; */
-        text-indent:30px;
-        font-size:13px;
-        &:nth-child(1){
-           text-indent:25px;  
-           
-        };
-        &:nth-child(2){
-           text-indent:25px;  
-        };
-        &:nth-child(3){
-           text-indent:25px;  
-        };
-        &:nth-child(4){
-           text-indent:15px;  
-        };
-        &:nth-child(5){
-           text-indent:-15px;  
-        };
-        &:nth-child(7){
-           text-indent:90px;  
-        };
     }
     .sum_footer_unit.center{
         text-align:center;
@@ -147,12 +133,12 @@
 </style>
 <template>
 <div>
-    <header class="headerstyle">
-         <div style="width:100%;text-align:center;">
+    <header class="headerstyle" v-if="!showhidden">
+         <!-- <div style="width:100%;text-align:center;">
             <span @click="handleShowHidden('hidden')"><i v-if="showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-bottom"></i></span>
             <span @click="handleShowHidden('show')"><i v-if="!showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-top"></i></span>
-        </div>
-        <el-form  v-if="!showhidden" :inline="true" :model="formSearch" class="demo-form-inline" style="width:99%">
+        </div> -->
+        <el-form   :inline="true" :model="formSearch" class="demo-form-inline" style="width:99%;maxHeight:102px;overflow-y:auto;overflow-x:hidden;" >
         <!-- <el-form :inline="true" :model="formSearch" class="demo-form-inline "> -->
             <el-form-item size="small">
                 <el-button  v-if="judgeMenu.indexOf('查询') !== -1"   size="small" type="primary" @click="onSearch">查询</el-button>
@@ -195,8 +181,12 @@
             </Col>
         </el-form>
     </header>
-    <section class="middle" style="height:100%;padding-top:10px">
-        <div   :style="{minHeight:showBink&&showhidden?'740px':'450px'}">
+    <section class="middle" style="padding-top:10px" :style="maxHeight">
+        <div style="float:right;position:absolute;top:10px;right:20px">
+            <span @click="handleShowHidden('hidden')"><i v-if="showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-bottom"></i></span>
+            <span @click="handleShowHidden('show')"><i v-if="!showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-top"></i></span>
+        </div>
+        <!-- <div   :style="{minHeight:showBink&&showhidden?'800px':'670px'}"> -->
              <!-- <plx-table-grid :datas="list999"  border style="width: 100%"  :height="list.length>0?100:100" :pagination-show="false">
                         <plx-table-column   type="index" width="95" label="序号"  resizable   align="center"/>
                         <plx-table-column   prop="purchaseOrderNo"  min-width="95"  resizable  label="任务编号"  align="center"/>
@@ -210,77 +200,86 @@
             </plx-table-grid> -->
                <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
                </el-pagination>
-               <el-table :data="list" border style="width: 100%" highlight-current-row  :height="showBink?400:280" :pagination-show="false" @row-click="getRowData">
-                            <el-table-column   type="index" width="55" label="序号"    resizable   align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="basicBrandName"   min-width="95"  resizable  label="品牌"  align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="years" width="95" label="年份"    resizable  align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="season"  min-width="95"  resizable  label="季节"      align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="waveBand"  min-width="95"  resizable  label="波段"      align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="secondLevel"  min-width="95"  resizable  label="二级品类"  align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="planningDevelopDate"  min-width="95"  resizable  label="规划开发日期"  align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="planningDeliverDate"  min-width="95"  resizable  label="规划交接日期" align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="colorSimpleDate"  min-width="95"  resizable  label="齐色样日期"  align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="planningArriveDate"  min-width="95"  resizable  label="规划到货日期"  align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="photoDate"          min-width="95"  resizable  label="拍照日期"  align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="planningLaunchDate"  min-width="95"  resizable  label="可上新日期"  align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="launchDate"          min-width="95"  resizable  label="上新日期"  align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="developCostPrice"  min-width="95"  resizable  label="品类开发成本"  align="center" show-overflow-tooltip>
+               <el-table :data="list" border style="width: 100%" highlight-current-row  :max-height="oneTableHeight" :pagination-show="false" @row-click="getRowData">
+                            <el-table-column   type="index"     fixed="left"       width="55" label="序号"    resizable  sortable  align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="basicBrandName"  fixed="left"   min-width="95" sortable  resizable  label="品牌"  align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="years"        fixed="left"     min-width="75" label="年份"  sortable   resizable  align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="season"  min-width="95"   fixed="left" resizable sortable  label="季节"      align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="waveBand"  min-width="95"  fixed="left"  resizable sortable  label="波段"      align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="secondLevel"  min-width="95"   fixed="left" resizable sortable  label="二级品类"  align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="planningDevelopDate"  min-width="115"  sortable resizable  label="规划开发日期"  align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="planningDeliverDate"  min-width="115" sortable  resizable  label="规划交接日期" align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="colorSimpleDate"  min-width="105"  resizable sortable  label="齐色样日期"  align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="planningArriveDate"  min-width="115"  resizable  sortable label="规划到货日期"  align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="photoDate"          min-width="95"  resizable sortable  label="拍照日期"  align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="planningLaunchDate"  min-width="105"  resizable  sortable label="可上新日期"  align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="launchDate"          min-width="95"  resizable sortable  label="上新日期"  align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="developCostPrice"  min-width="115"  resizable sortable  label="品类开发成本"  align="center" show-overflow-tooltip>
                                 <template slot-scope="scope">
                                      <div style="text-align:right">{{scope.row.developCostPrice|moneyFilters}}</div> 
                                 </template>
                             </el-table-column>
-                            <el-table-column   prop="developStyleQty"  min-width="95"  resizable  label="计划开发款数"  align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="remark"           min-width="95"  resizable  label="备注"  align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="developStyleQty"  min-width="115"  resizable sortable  label="计划开发款数"  align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="remark"           min-width="95"  resizable  sortable  label="备注"  align="center" show-overflow-tooltip/>
                 </el-table>
-                <div style="height:40px;padding-top:20px;padding-left:10px">开发明细</div>
-                 <el-table :data="downList" border style="width: 100%" :height="showhidden?200:''">
-                            <el-table-column   prop="finishStyleQty"  min-width="95"  resizable  label="已开发款数"  align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="planningDevelopPostponeDate" width="95" label="设计稿延期天数"    resizable   align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="fillingPostponeDay"  min-width="95"  resizable  label="建档延期天数"  align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="firstSimplePostponeDay"  min-width="95"  resizable  label="头版样衣指令延期天数"  align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="firstSimpleFinishPostponeDay"  min-width="95"  resizable  label="头版样衣完成延期天数"  align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="orderStyleQty"  min-width="95"  resizable  label="下单款数"  align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="firstColorQty"          min-width="95" label="下单色数"    resizable   align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="firstQty"  min-width="95"  resizable  label="下单数量"  align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="firstAmount"  min-width="95"  resizable  label="下单金额"  align="center" show-overflow-tooltip>
+                 <div style="padding-top:10px;text-align:right;float:right;position:relative;z-index:1000" v-if="showhidden">
+                    <span @click="clickDetails('show')"><i v-if="detailsShow == true" style="font-size: 20px;cursor:pointer;float:right" class="el-icon-caret-bottom"></i></span>
+                    <span @click="clickDetails('hidden')"><i v-if="detailsShow == false" style="font-size: 20px;cursor:pointer;float:right" class="el-icon-caret-top"></i></span>
+                </div>
+                 <div style="height:40px;padding-top:20px;padding-left:10px">
+                      <span>开发明细</span>
+                      <!-- <span @click="handleShowHidden('hidden')"><i v-if="showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-bottom"></i></span>
+                      <span @click="handleShowHidden('show')"><i v-if="!showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-top"></i></span> -->
+                 </div>
+                 
+                 <el-table :data="downList" border style="width: 100%" :max-height="twoTableHeight" >
+                            <el-table-column   prop="finishStyleQty"  min-width="105"  resizable  label="已开发款数" sortable align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="planningDevelopPostponeDate" min-width="125" label="设计稿延期天数"  sortable   resizable   align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="fillingPostponeDay"  min-width="115"  resizable  label="建档延期天数" sortable  align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="firstSimplePostponeDay"  min-width="165"  resizable  label="头版样衣指令延期天数"  sortable align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="firstSimpleFinishPostponeDay"  min-width="165"  resizable  label="头版样衣完成延期天数" sortable  align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="orderStyleQty"  min-width="95"  resizable  sortable label="下单款数"  align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="firstColorQty"          min-width="95" label="下单色数"   sortable  resizable   align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="firstQty"  min-width="95"  resizable  label="下单数量" sortable  align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="firstAmount"  min-width="95"  resizable  label="下单金额" sortable  align="center" show-overflow-tooltip>
                                  <template slot-scope="scope">
                                    <div style="text-align:right">{{scope.row.firstAmount|moneyFilters}}</div>
                                 </template>
                             </el-table-column>
-                            <el-table-column   prop="designerPostponeDay"  min-width="95"  resizable  label="设计师下单延期天数"  align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="producePostponeDay"  min-width="95"  resizable  label="生产下单延期天数"  align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="simpleCreatePostponeDay"  min-width="95"  resizable  label="拍摄样指令创建延期天数"  align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="simpleFinishPostponeDay"  min-width="95"  resizable  label="拍摄样完成延期天数"  align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="unPricingStyleQty"  min-width="95"  resizable  label="大货未核价款数"  align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="orderTotalAmount"  min-width="95"  resizable  label="规划开发金额"  align="center" show-overflow-tooltip>
+                            <el-table-column   prop="designerPostponeDay"  min-width="145"  resizable sortable  label="设计师下单延期天数"  align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="producePostponeDay"  min-width="135"  resizable sortable  label="生产下单延期天数"  align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="simpleCreatePostponeDay"  min-width="175" sortable  resizable  label="拍摄样指令创建延期天数"  align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="simpleFinishPostponeDay"  min-width="145" sortable  resizable  label="拍摄样完成延期天数"  align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="unPricingStyleQty"  min-width="155"  sortable resizable  label="大货未核价款数"  align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="orderTotalAmount"  min-width="155"   sortable  resizable  label="规划开发金额"  align="center" show-overflow-tooltip>
                                 <template slot-scope="scope">
                                    <div style="text-align:right">{{scope.row.orderTotalAmount|moneyFilters}}</div> 
                                 </template>
                             </el-table-column>
-                            <el-table-column   prop="actualCostAmount"  min-width="95"  resizable  label="实际开发成本"  align="center" show-overflow-tooltip>
+                            <el-table-column   prop="actualCostAmount"  min-width="115" sortable  resizable  label="实际开发成本"  align="center" show-overflow-tooltip>
                                <template slot-scope="scope">
                                     <div style="text-align:right">{{scope.row.actualCostAmount|moneyFilters}}</div> 
                                 </template>
                             </el-table-column>
-                            <el-table-column   prop="diffAmount"  min-width="95"  resizable  label="金额差异"  align="center" show-overflow-tooltip>
+                            <el-table-column   prop="diffAmount"  min-width="95"  resizable sortable  label="金额差异"  align="center" show-overflow-tooltip>
                                 <template slot-scope="scope">
                                     <div style="text-align:right">{{scope.row.diffAmount|moneyFilters}}</div> 
                                 </template>
                             </el-table-column>
-                            <el-table-column   prop="diffCostAmount"  min-width="95"  resizable  label="成本差异"  align="center" show-overflow-tooltip>
+                            <el-table-column   prop="diffCostAmount"  min-width="95"  resizable  sortable label="成本差异"  align="center" show-overflow-tooltip>
                                 <template slot-scope="scope">
                                     <div style="text-align:right">{{scope.row.diffCostAmount|moneyFilters}}</div> 
                                 </template>
                             </el-table-column>
-                            <el-table-column   prop="purchasePostponeDay"  min-width="95"  resizable  label="入库延期天数"  align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="purchaseQty"  min-width="95"  resizable  label="入库数量"  align="center" show-overflow-tooltip/>
-                            <el-table-column   prop="purchaseAmount"  min-width="95"  resizable  label="入库金额"  align="center" show-overflow-tooltip>
+                            <el-table-column   prop="purchasePostponeDay"  min-width="115"  resizable sortable  label="入库延期天数"  align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="purchaseQty"  min-width="95"  resizable sortable  label="入库数量"  align="center" show-overflow-tooltip/>
+                            <el-table-column   prop="purchaseAmount"  min-width="95"  resizable  sortable label="入库金额"  align="center" show-overflow-tooltip>
                                 <template slot-scope="scope">
                                     <div style="text-align:right">{{scope.row.purchaseAmount|moneyFilters}}</div>
                                 </template>
                             </el-table-column>
                 </el-table>
-        </div>  
+        <!-- </div>   -->
     </section>
     <!--导出-->
     <!-- 编辑新增弹框 -->
@@ -338,6 +337,7 @@ export default {
         return {
             list  : [],
             downList:[],
+            detailsShow:false,
             showEdit:false,
             judgeMenu:[],
             departmentList:[],
@@ -482,6 +482,83 @@ export default {
                 }
                 }
             );
+        },
+          handleShowHidden(name) {
+            this.detailsShow = false
+            if (name == 'show') {
+                this.showhidden = true
+                if (document.body.offsetHeight > 800) {
+                    this.maxHeight = 'height:' + (document.body.offsetHeight - 100) + 'px'
+                    this.oneTableHeight = (document.body.offsetHeight - 100) * 0.5
+                    this.twoTableHeight = (document.body.offsetHeight - 100) * 0.37
+                    this.heightTree = 'height:' + (document.body.offsetHeight - 100) + 'px;overflow-x:hidden;overflow-y:scroll'
+                } else {
+                    this.maxHeight = 'height:' + (document.body.offsetHeight - 100) + 'px'
+                    this.oneTableHeight = (document.body.offsetHeight - 100) * 0.5
+                    this.twoTableHeight = (document.body.offsetHeight - 100) * 0.35
+                    this.heightTree = 'height:' + (document.body.offsetHeight - 100) + 'px;overflow-x:hidden;overflow-y:scroll'
+                }
+
+            } else {
+                this.showhidden = false
+                if (document.body.offsetHeight > 800) {
+                    this.oneTableHeight = (document.body.offsetHeight - 260) * 0.5
+                    this.twoTableHeight = (document.body.offsetHeight - 260) * 0.37
+                    this.maxHeight = 'height:' + (document.body.offsetHeight - 235) + 'px'
+                    this.heightTree = 'height:' + (document.body.offsetHeight - 250) + 'px;overflow-x:hidden;overflow-y:scroll'
+                } else {
+                    this.maxHeight = 'height:' + (document.body.offsetHeight - 235) + 'px'
+                    this.heightTree = 'height:' + (document.body.offsetHeight - 250) + 'px;overflow-x:hidden;overflow-y:scroll'
+                    this.oneTableHeight = (document.body.offsetHeight - 260) * 0.45
+                    this.twoTableHeight = (document.body.offsetHeight - 260) * 0.38
+                }
+            }
+        },
+        clickDetails(name){
+            if(!this.showhidden){
+                if (name == 'show') {
+                this.detailsShow = false
+                if (document.body.offsetHeight > 800) {
+                    this.oneTableHeight = (document.body.offsetHeight - 260) * 0.5
+                    this.twoTableHeight = (document.body.offsetHeight - 260) * 0.35
+                } else {
+                    this.oneTableHeight = (document.body.offsetHeight - 260) * 0.5
+                    this.twoTableHeight = (document.body.offsetHeight - 260) * 0.35
+                }
+
+            } else {
+                this.detailsShow = true
+                if (document.body.offsetHeight > 800) {
+                    this.oneTableHeight = (document.body.offsetHeight - 260) * 0.37
+                    this.twoTableHeight = (document.body.offsetHeight - 260) * 0.5
+                } else {
+                    this.oneTableHeight = (document.body.offsetHeight - 260) * 0.35
+                    this.twoTableHeight = (document.body.offsetHeight - 260) * 0.5
+                }
+            }
+            }else{
+                if (name == 'show') {
+                this.detailsShow = false
+                if (document.body.offsetHeight > 800) {
+                    this.oneTableHeight = (document.body.offsetHeight - 100) * 0.5
+                    this.twoTableHeight = (document.body.offsetHeight - 100) * 0.35
+                } else {
+                    this.oneTableHeight = (document.body.offsetHeight - 100) * 0.5
+                    this.twoTableHeight = (document.body.offsetHeight - 100) * 0.35
+                }
+
+            } else {
+                this.detailsShow = true
+                if (document.body.offsetHeight > 800) {
+                    this.oneTableHeight = (document.body.offsetHeight - 100) * 0.35
+                    this.twoTableHeight = (document.body.offsetHeight - 100) * 0.5
+                } else {
+                    this.oneTableHeight = (document.body.offsetHeight - 100) * 0.35
+                    this.twoTableHeight = (document.body.offsetHeight - 100) * 0.5
+                }
+            }
+            }
+            
         },
     }
 }

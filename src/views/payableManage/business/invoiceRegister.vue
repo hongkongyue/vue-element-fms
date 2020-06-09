@@ -32,17 +32,25 @@
                 <el-form-item size="small">
                     <el-button v-if="judgeMenu.indexOf('取消立账') !== -1" size="small" type="primary" @click="setAccountCancel">取消立账</el-button>
                 </el-form-item>
+                <el-form-item size="small" class="marginT0">
+                    <el-button  size="small" type="primary" @click="checkExport">导出</el-button>
+                </el-form-item>
                   <el-form-item size="small">
                     <el-button size="small" type="default" @click="onReset">重置</el-button>
                 </el-form-item>
             </div>
             <el-form-item label="公司：" size="small">
-                <el-select v-model="formSearch.basicCompanyId" filterable clearable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.basicCompanyId" filterable clearable placeholder="请选择" style="width:220px">
                    <el-option v-for="item in companyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
+            <el-form-item  label="所属对账人员：" size="small">
+                <el-select v-model="formSearch.payableUser" @change="changePayable(formSearch.payableUser)" filterable placeholder="请选择" style="width:120px">
+                    <el-option v-for="item in payableUserList" :key="item.payableUserId" :label="item.payableUser" :value="item.payableUserId"></el-option>
+                </el-select>
+            </el-form-item>
             <el-form-item label="供应商：" size="small">
-                <el-select v-model="formSearch.basicSupplierId" filterable clearable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.basicSupplierId" filterable clearable placeholder="请选择" style="width:230px">
                      <el-option v-for="item in supplyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
@@ -191,19 +199,51 @@
         </Row>
         <div slot="footer"></div>
     </Modal>
+    <!-- 导出 -->
+    <Modal v-model="exportVisible" title="导出" @on-cancel='cancelExport' :width="430" class-name="customize-modal-center">
+        <Row class="margin-bottom-10 background-color-white exhibition">
+            <el-form :inline="true" ref="ruleForm" :model="exportObj" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="rules">
+                <Col v-show="!moreLarge">
+                    <el-form-item label="导出类型" size="small" label-width="95px" prop="platform">
+                        <el-select  v-model="exportObj.selected" filterable placeholder="请选择" style="width:150px">
+                            <el-option label="导出主表" value="0"></el-option>
+                            <el-option label="导出主表+明细" value="1"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </Col>
+                <Col v-show="moreLarge" style="text-align:center">
+                       结算明细主单超过100000行, 确认导出？
+                </Col>
+                <el-form-item style="padding-left:130px">
+                    <!-- <Button type="primary" v-if="!moreLarge" @click="getExportTotal">确认</Button> -->
+                    <!-- 二次确认 -->
+                    <Button type="primary" @click="onImport">确认</Button> 
+                    <Button type="default" @click="cancelExport">取消</Button>
+                </el-form-item>
+            </el-form>
+        </Row>
+        <div slot="footer"></div>
+    </Modal>
 </div>
 </template>
 
 <script>
 var record={}
+import {
+    commonMixins
+} from 'mixins/common';
 import filters from '../../../filter/'
 import {
     mapState
 } from 'vuex'
 export default {
-
+ mixins: [commonMixins],
     data() {
         return {
+            exportObj:{},
+            exportVisible:false,
+            moreLarge:false,
+            payableUserList:[],
             newTime: null,
             merchantCodeList: [],
             orderNoList: [],
@@ -288,12 +328,34 @@ export default {
             this.initTable([])
             this.getCompany()
             this.getSupply()
+            this.getPayableUser()
 
     },
     destroyed() {
            this.resetCommit()
     },
     methods: {
+        //重新获取供应商下拉
+        changePayable(name){
+            this.formSearch.basicSupplierId = ''
+            console.log(name)
+            let vars = {}
+            vars.payableUserId = name
+             this.requestWithUriVars('selectorPayableSupplier', vars, null, true).then(res => {
+          if (res.code==1) {
+              this.supplyList = res.data
+            }else{
+                this.supplyList = []
+            }
+          })
+        },
+        getPayableUser(){
+            this.request('supplier_selectorPayable', {}, true).then(res => {
+                if (res.code == 1) {
+                    this.payableUserList = res.data
+                }
+            })
+        },
         goPageKeyUp(e){
             console.log(e,'--------')
         },
@@ -525,6 +587,68 @@ export default {
             }
 
         },
+               //导出相关
+        checkExport(){
+                 if(this.checkSelection()){
+                    // this.onImport()
+                     this.exportVisible=true
+                 }else{
+                     this.exportVisible=true
+                 }
+        },
+        checkSelection() {
+            let arr = w2ui.invoiceRegister.getSelection()
+            if (arr.length > 0) {
+                return true
+            }
+            return false
+        },
+        cancelExport(){
+                   this.exportVisible=false;
+                   this.moreLarge=false;
+                   this.exportObj.selected=''
+        },
+        
+         //导出
+        onImport(){
+            if(!this.exportObj.selected) return this.$message.error('请选择导出类型')
+                    let data={}
+                    let arr = w2ui.invoiceRegister.getSelection()
+                        data.basicCompanyId = this.formSearch.basicCompanyId 
+                data.basicSupplierId = this.formSearch.basicSupplierId
+                data.payableUserId = this.formSearch.payableUser//所属人员
+                data.invoiceNo = this.formSearch.invoiceNo
+                data.payableInvoiceNo = this.formSearch.payableInvoiceNo
+
+                this.formSearch.created?data.createdStartTime=this.formSearch.created[0]:delete data.createdStartTime;
+                this.formSearch.created?data.createdEndTime=this.formSearch.created[1]:delete data.createdEndTime;
+
+                this.formSearch.invoice?data.invoiceStartDate=this.formSearch.invoice[0]:delete data.invoiceStartDate;
+                this.formSearch.invoice?data.invoiceEndDate=this.formSearch.invoice[1]:delete data.invoiceEndDate;
+
+                this.formSearch.arriveInvoice?data.arriveInvoiceStartDate=this.formSearch.arriveInvoice[0]:delete data.arriveInvoiceStartDate;
+                this.formSearch.arriveInvoice?data.arriveInvoiceEndDate=this.formSearch.arriveInvoice[1]:delete data.arriveInvoiceEndDate;
+
+                this.formSearch.settleDate?data.settleStartDate=this.formSearch.settleDate[0]:delete data.settleStartDate;
+                this.formSearch.settleDate?data.settleEndDate=this.formSearch.settleDate[1]:delete data.settleEndDate;
+                data.invoiceType=this.formSearch.invoiceType
+                data.status=this.formSearch.status!=''?Number(this.formSearch.status):''
+                data.settleStatus=this.formSearch.settleStatus!=''?Number(this.formSearch.settleStatus):''
+                data.payableReconciliationOrderNo=this.formSearch.payableReconciliationOrderNo
+                data.withDetail = Number(this.exportObj.selected)
+                data.ids = arr
+                      this.request('accPayable_invoiceRegister_export', data, false).then(res => {
+                        if (res.code == 1) {
+                            this.cancelExport()
+                            this.getKey(res.data)
+                        } else {
+                            this.$message({
+                                message: res.msg,
+                                type: 'error'
+                            });
+                        }
+                }) 
+        },
         getData() {
             this.logList = []
             this.resetCommit()
@@ -534,6 +658,7 @@ export default {
                 data.currentPage = this.currentPage
                 data.basicCompanyId = this.formSearch.basicCompanyId 
                 data.basicSupplierId = this.formSearch.basicSupplierId
+                data.payableUserId = this.formSearch.payableUser//所属人员
                 data.invoiceNo = this.formSearch.invoiceNo
                 data.payableInvoiceNo = this.formSearch.payableInvoiceNo
 
@@ -648,6 +773,7 @@ export default {
                   for(let i in this.formSearch){
                       this.formSearch[i]=''
                   }
+                  this.getSupply()
         },
              //审核
         onExamine() {

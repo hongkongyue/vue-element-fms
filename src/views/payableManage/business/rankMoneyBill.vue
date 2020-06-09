@@ -35,37 +35,19 @@
                     <el-button size="small" type="default" @click="onReset">重置</el-button>
                 </el-form-item>
             </Col>
-
-            <!-- <el-divider></el-divider> -->
-            <!-- <el-form-item label="年份：" size="small">
-                <el-date-picker style="width:120px" v-model="formSearch.year" type="year" placeholder="请选择"> </el-date-picker>
+            <el-form-item  label="所属对账人员：" size="small">
+                <el-select v-model="formSearch.payableUser" @change="changePayable(formSearch.payableUser)" filterable placeholder="请选择" style="width:120px">
+                    <el-option v-for="item in payableUserList" :key="item.payableUserId" :label="item.payableUser" :value="item.payableUserId"></el-option>
+                </el-select>
             </el-form-item>
-            <el-form-item label="大货款号：" size="small">
-                <el-input v-model="formSearch.goodsNo" placeholder="请输入" style="width:150px"></el-input>
-            </el-form-item>
-            <el-form-item label="制单号：" size="small">
-                <el-input v-model="formSearch.purchaseOrderNo" placeholder="请输入" style="width:150px"></el-input>
-            </el-form-item> -->
             <el-form-item label="供应商：" size="small">
-                <el-select v-model="formSearch.supplierId" filterable placeholder="请选择" style="width:180px">
+                <el-select v-model="formSearch.supplierId" filterable placeholder="请选择" style="width:230px">
                     <el-option v-for="item in supplyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
-            <!-- <el-form-item label="扣款类型：" size="small" v-if="show == true">
-                <el-select v-model="formSearch.deductionType" filterable placeholder="请选择" style="width:150px">
-                    <el-option label="大货延期" value="大货延期"></el-option>
-                    <el-option label="拍照样延期" value="拍照样延期"></el-option>
-                    <el-option label="取消订单" value="取消订单"></el-option>
-                    <el-option label="质量问题" value="质量问题"></el-option>
-                    <el-option label="其他问题" value="其他问题"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="结算制单号：" size="small" v-if="show == true">
-                <el-input v-model="formSearch.targetPurchaseOrderNo" placeholder="请输入" style="width:150px"></el-input>
-            </el-form-item> -->
           
             <el-form-item label=" 公 司 ：" size="small" >
-                <el-select v-model="formSearch.basicCompanyId" filterable clearable placeholder="请选择" style="width:180px">
+                <el-select v-model="formSearch.basicCompanyId" filterable clearable placeholder="请选择" style="width:220px">
                     <el-option v-for="item in companyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
@@ -153,18 +135,6 @@
                         </el-table-column>
                          <el-table-column prop="remark" align="center" min-width="120" label="备注" show-overflow-tooltip>
                         </el-table-column>
-                         <!-- <el-table-column prop="deductionAmount" align="center" min-width="120" label="扣款金额">
-                              <template slot-scope="scope">{{scope.row.deductionAmount|moneyFilters}}</template>
-                        </el-table-column>
-                        <el-table-column prop="orderQty" label="订单数量" min-width="120" align="center" show-overflow-tooltip>
-                        </el-table-column>
-                        <el-table-column prop="adjustAmount" align="center" min-width="120" label="调整金额">
-                             <template slot-scope="scope">{{scope.row.adjustAmount|moneyFilters}}</template>
-                        </el-table-column>
-                        <el-table-column prop="discountStr" align="center" min-width="120" label="折扣">
-                        </el-table-column>
-                        <el-table-column prop="remark" align="center" min-width="120" label="备注">
-                        </el-table-column> -->
                     </el-table>
                 </section>
             </el-tab-pane>
@@ -260,6 +230,7 @@ import {
 export default {
     data() {
         return {
+            payableUserList:[],
              exportObj:{
                        selected:''
             },
@@ -288,6 +259,7 @@ export default {
                         date:'',
                         status:'',
                         closeStatus:'',
+                        supplierId:'',
             },
             companyList: [], // 公司列表
             supplyList: [], //供应商列表
@@ -307,7 +279,7 @@ export default {
         deductionId: state => state.deduction.id,
     }),
     created() {
-      
+      this.getPayableUser()
     },
     destroyed() {
         this.resetCommit()
@@ -321,6 +293,27 @@ export default {
         this.initTable([])
     },
     methods: {
+        //重新获取供应商下拉
+        changePayable(name){
+            this.formSearch.supplierId = ''
+            console.log(name)
+            let vars = {}
+            vars.payableUserId = name
+             this.requestWithUriVars('selectorPayableSupplier', vars, null, true).then(res => {
+          if (res.code==1) {
+              this.supplyList = res.data
+            }else{
+                this.supplyList = []
+            }
+          })
+        },
+        getPayableUser(){
+            this.request('supplier_selectorPayable', {}, true).then(res => {
+                if (res.code == 1) {
+                    this.payableUserList = res.data
+                }
+            })
+        },
         modify(){
                   const{code}=this.$route.query
                   let arr = w2ui.rankMoneyBil.getSelection()
@@ -571,8 +564,10 @@ export default {
             }
             // this.resetCommit()
             this.formSearch = {
-                year:new Date()
+                year:new Date(),
+                supplierId:'',
             }
+            this.getSupply()
             // this.formSearch.year = new Date()
             // this.initTable([])
         },
@@ -602,6 +597,7 @@ export default {
                 data.pageSize = this.pagesize
                 data.currentPage = this.currentPage
                 data.basicSupplierId = this.formSearch.supplierId
+                data.payableUserId = this.formSearch.payableUser//所属人员
                 data.basicCompanyId = this.formSearch.basicCompanyId
                 this.formSearch.paidStatus ? data.paidStatus=Number(this.formSearch.paidStatus):delete data.paidStatus
                 data.status =this.formSearch.status!=''?Number(this.formSearch.status):''
@@ -1039,6 +1035,7 @@ export default {
                         data.pageSize = this.pagesize
                         data.currentPage = this.currentPage
                         data.basicSupplierId = this.formSearch.supplierId
+                        data.payableUserId = this.formSearch.payableUser//所属人员
                         data.basicCompanyId = this.formSearch.basicCompanyId
                         this.formSearch.paidStatus ? data.paidStatus=Number(this.formSearch.paidStatus):delete data.paidStatus
                         data.status =this.formSearch.status!=''?Number(this.formSearch.status):''
@@ -1068,6 +1065,7 @@ export default {
                         data.pageSize = this.pagesize
                         data.currentPage = this.currentPage
                         data.basicSupplierId = this.formSearch.supplierId
+                        data.payableUserId = this.formSearch.payableUser//所属人员
                         data.basicCompanyId = this.formSearch.basicCompanyId
                         this.formSearch.paidStatus ? data.paidStatus=Number(this.formSearch.paidStatus):delete data.paidStatus
                         data.status =this.formSearch.status!=''?Number(this.formSearch.status):''

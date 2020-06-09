@@ -12,12 +12,12 @@
                 </el-form-item>
             </div>
             <el-form-item label="平台：" size="small">
-                <el-select v-model="formSearch.code" @change="changebasicPlatformId(formSearch.code)" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.code" @change="changebasicPlatformId(formSearch.code)" filterable placeholder="请选择" style="width:170px">
                     <el-option v-for="item in platformOptions" :key="item.name" :label="item.name" :value="item.name"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="公司：" size="small">
-                <el-select v-model="formSearch.name" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.name" filterable placeholder="请选择" style="width:220px">
                     <el-option v-for="item in companyCodeOptions" :key="item.name" :label="item.name" :value="item.name"></el-option>
                 </el-select>
             </el-form-item>
@@ -35,10 +35,10 @@
                 <el-date-picker type="date" placeholder="选择日期" @change="changeData" v-model="formSearch.date" style="width:150px;"></el-date-picker>
             </el-form-item>
             <el-form-item label="账单ID：" size="small">
-                <el-input v-model="formSearch.billNo" style="width:150px"></el-input>
+                <el-input v-model="formSearch.billNo" style="width:250px"></el-input>
             </el-form-item>
             <el-form-item v-if="show == true" label="单据类型：" size="small">
-                <el-select v-model="formSearch.status" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.status" filterable placeholder="请选择" style="width:200px">
                     <el-option v-for="item in statusList" :key="item" :label="item" :value="item"></el-option>
                 </el-select>
             </el-form-item>

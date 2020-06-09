@@ -229,7 +229,9 @@ const methodMap = {
       supplier_provinceSelector:{url:'/eop-boot/masterData/district/provinceSelector',method:'post'},//省份下拉（author:张明杰
       supplier_citySelector:{url:'/eop-boot/masterData/district/citySelector',method:'post'},//根据 省份查询城市（author:张明杰
       supplier_sync:{url:'/eop-boot//masterData/supplier/sync',method:'post'},//同步供应商数据（author:张明杰
-      supplier_selector:{url:'/eop-boot//masterData/supplier/selector',method:'post'},//供应商下拉接口（author:lxx
+      supplier_selector:{url:'/eop-boot/masterData/supplier/selector',method:'post'},//供应商下拉接口（author:lxx
+      supplier_selectorPayable:{url:'/eop-boot/masterData/supplier/selectorPayable',method:'post'},//供应商对账人员下拉
+      selectorPayableSupplier:{url:'/eop-boot/masterData/supplier/selectorPayableSupplier/${vars.payableUserId}',method:'post'},//供应商对账人员所拥有供应商下拉
 
       //scm采购单
       order_pageQuery:{url:'/eop-boot/payable/biz-purchase-order/pageQuery',method:'post'},//分页查询（author:lxx
@@ -633,10 +635,12 @@ const methodMap = {
       accPayable_invoiceRegister_deleted:{url:'/eop-boot/accPayable/invoiceRegister/deleted',method:'post'},//删除
       accPayable_invoiceRegister_settle:{url:'/eop-boot/accPayable/invoiceRegister/settle',method:'post'},//立账
       accPayable_invoiceRegister_cancelSettle:{url:'/eop-boot/accPayable/invoiceRegister/cancelSettle',method:'post'},//取消立账
+      accPayable_invoiceRegister_export:{url:'/eop-boot/accPayable/invoiceRegister/export',method:'post'},//发票登记导出
 
       supplier_allSelector:{url:'/eop-boot/masterData/supplier/allSelector',method:'post'},//供应商下拉接口
 
       //企划管理
+      year_list:{url:'/eop-boot/masterData/year/list',method:'post'},//年份下拉
       tree_statusCount:{url:'/eop-boot/boss/goods_planning_manage/statusCount',method:'post'},//企划管理查询树结构
       goods_planning_manage_query:{url:'/eop-boot/boss/goods_planning_manage/query',method:'post'},//分页查询企划管理
       goods_planning_manage_detail:{url:'/eop-boot/boss/goods_planning_manage/detail',method:'post'},//查询企划管理明细
@@ -656,7 +660,7 @@ const methodMap = {
       goods_planning_manage_queryHistory:{url:'/eop-boot/boss/goods_planning_manage/queryHistory',method:'post'},//查看历史-高璐
 
       //企划调整
-      queryForSimulation:{url:'/eop-bootboss/bossGoodsPlanningAdujust/queryForSimulation',method:'post'},//查询(zzx)
+      queryForSimulation:{url:'/eop-boot/boss/bossGoodsPlanningAdujust/queryForSimulation',method:'post'},//查询(zzx)
 
       //波段下拉
       waveBand_selector_masterData:{url:'/eop-boot/masterData/waveBand/selector',        method:'post'},//下拉框（默认不传参）
@@ -711,6 +715,76 @@ const methodMap = {
       boss_bossDelayCostDetail_pageQuery:{url:'/eop-boot/boss/bossDelayCostDetail/pageQuery',   method:'post'},//分页
       boss_bossDelayCostDetail_getDetails:{url:'/eop-boot/boss/bossDelayCostDetail/getDetails', method:'post'},//明细获取
       boss_bossDelayCostDetail_export:{url:'/eop-boot/boss/bossDelayCostDetail/export',method:'post'},//导出
+
+      //供应商权限
+      supplierUserMapping_allocation:{url:'/eop-boot/dataPermission/supplierUserMapping/allocation',method:'post'},//分配供应商
+      supplierUserMapping_getAllocation:{url:'/eop-boot/dataPermission/supplierUserMapping/getAllocation',method:'get'},//获取分配供应商列表
+
+      queryUserConfig:{url:'/eop-boot/boss/bossBiFieldUserMapping/queryUserConfig',method:'post'}, //查询用户表头配置
+      updateUserConfig:{url:'/eop-boot/boss/bossBiFieldUserMapping/saveUserConfig',method:'post'},//编辑用户表头配置
+
+     
+
+       //品类开发跟进分析
+        boss_business_queryFollowDetail:{url:'/eop-boot/boss/business/queryFollowDetail',method:'post'},//子表查询
+        boss_business_queryFollowByMdx:{url:'/eop-boot/boss/business/queryFollowByMdx',method:'post'},//主表查询
+        boss_business_queryFollowByExportMdx:{url:'/eop-boot/boss/business/queryFollowByExportMdx',method:'post'},
+
+      //拍照时间分析  
+       photoTimeAnalysis_page:{url:'/eop-boot/boss/photoTimeAnalysis/page',method:'post'},//查询主表
+       photoTimeAnalysis_getExportVos:{url:'/eop-boot/boss/photoTimeAnalysis/getExportVos',method:'post'},//导出主表
+       photoTimeAnalysis_getDetail:{url:'/eop-boot/boss/photoTimeAnalysis/getDetail',method:'post'},//查询子表
+
+      //延期天数分析
+       goodsFollow_delayAnalysis:{url:'/eop-boot/boss/delayAnalysis/page',         method:'post'},//查询主表
+       delayAnalysis_allPages:{url:'/eop-boot/boss/delayAnalysis/allPages',        method:'post'},//导出主表
+       goodsFollow_delayAnalysisDetail:{url:'/eop-boot/boss/delayAnalysis/detail', method:'post'},//查询子表
+       
+      //成本开发跟进
+       boss_business_page:{url:'/eop-boot/boss/business/page',method:'post'},//列表筛选
+       boss_business_getDetail:{url:'/eop-boot/boss/business/getDetail',method:'post'},//获取明细
+       boss_business_exportGetDetail:{url:'/eop-boot/boss/business/exportGetDetail',method:'post'},//导出-获取明细
+       boss_bossBiFieldUserMapping_saveTemplateConfig:{url:'/eop-boot/boss/bossBiFieldUserMapping/saveTemplateConfig',method:'post'},//保存模板表头配置
+       boss_bossGoodsPlanningAdujust_queryAdhustDetailLog:{url:'/eop-boot/boss/bossGoodsPlanningAdujust/queryAdhustDetailLog',method:'post'},//查询调整日志
+       
+       getByDepartment:{url:'/eop-boot/masterData/user/getByDepartment',method:'post'},//部门用户联动查询
+
+      getCategoryElementsDetail:{url:'/eop-boot/boss/category_elements/getCategoryElementsDetail',method:'post'},//品类要素查询
+      category_elements_commit:{url:'/eop-boot/boss/category_elements/commit',method:'post'},//品类要素提交
+
+      //爆款调整
+      hotGoodsPlanning_page:{url:'/eop-boot/boss/hotGoodsPlanning/page',method:'post'},//分页查询企划爆款调整
+      hotGoodsPlanning_add:{url:'/eop-boot/boss/hotGoodsPlanning/add',method:'post'},//新增企划爆款调整
+      hotGoodsPlanning_uploadAsync:{url:'/eop-boot/boss/hotGoodsPlanning/uploadAsync',method:'post'},//导入企划爆款调整
+      hotGoodsPlanning_getHotGoodsPlanning:{url:'/eop-boot/boss/hotGoodsPlanning/getHotGoodsPlanning',method:'post'},//根据任务号查询企划爆款调整信息
+      hotGoodsPlanning_commit:{url:'/eop-boot/boss/hotGoodsPlanning/commit',method:'post'},//提交
+      hotGoodsPlanning_getDetail:{url:'/eop-boot/boss/hotGoodsPlanning/getDetail',method:'post'},//查询企划爆款调整明细
+      createHotAdjust:{url:'/eop-boot/boss/goods_planning_manage/createHotAdjust',method:'post'},//调整指令
+      hotGoodsPlanning_revoke:{url:'/eop-boot/boss/hotGoodsPlanning/revoke',method:'post'},//撤回
+      
+      payable_payable_closed_order_reasonSelector:{url:'/eop-boot/payable/payable-closed-order/reasonSelector',method:'post'},//代销转经下拉
+                       
+
+      //面料质检项 主数据
+      basicFabricQcItem_page:{url:'/eop-boot/fabric/basicFabricQcItem/page',method:'post'},//查询
+      basicFabricQcItem_insertOrUpdate:{url:'/eop-boot/fabric/basicFabricQcItem/insertOrUpdate',method:'post'},//新增or编辑  
+
+      //质检管理
+      showTaskNodeList:{url:'/eop-boot/qcFlowTask/showTaskNodeList',method:'post'},//任务列表查询
+      showTaskNode:{url:'/eop-boot/qcFlowTask/showTaskNode',method:'post'},//进行中 详情查询     
+      getWeaveMethod:{url:'/eop-boot/qcFlowTask/getWeaveMethod',method:'post'},//获取织法
+      updateTaskNode:{url:'/eop-boot/qcFlowTask/updateTaskNode',method:'post'},//更改流程状态
+      fabricQcPrint:{url:'/eop-boot/fabric/fabricQcCheckList/print',method:'post'},//打印面料质检单
+
+      //大货检测任务
+      goodsCheck_goodsQuery:{url:'/eop-boot/fabric/goodsCheck/page',method:'post'},//查询
+      goodsCheck_selector:{url:'/eop-boot/fabric/goodsCheck/goods/selector',method:'post'},//查询批次
+      goodsCheck_materielDetail:{url:'/eop-boot/fabric/goodsCheck/goods/materielDetail',method:'post'},//查询明细
+      goodsCheck_batchAdd:{url:'/eop-boot/fabric/goodsCheck/batchAdd',method:'post'},//提交
+      goodsCheck_colorSelector:{url:'/eop-boot/fabric/goodsCheck/design/colorSelector',method:'post'},//查询颜色
+      goodsCheck_simpleCategorySelector:{url:'/eop-boot/fabric/goodsCheck/design/simpleCategorySelector',method:'post'},//查询类别
+      goodsCheck_design_materielDetail:{url:'/eop-boot/fabric/goodsCheck/design/materielDetail',method:'post'},//查询类别
+      goodsCheck_export:{url:'/eop-boot/fabric/goodsCheck/export',method:'post'},//导出
 
 };
 export default methodMap; 

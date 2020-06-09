@@ -17,7 +17,7 @@
         </el-form>
         <el-form :inline="true" :model="formSearch" class="demo-form-inline ">
             <el-form-item label="年份：" size="small">
-                <el-date-picker v-model="formSearch.years" value-format="yyyy" type="year" style="width:150px" placeholder="选择年">
+                <el-date-picker v-model="formSearch.years" value-format="yyyy" type="year" style="width:100px" placeholder="选择年">
                 </el-date-picker>
             </el-form-item>
             <el-form-item label="大货款号：" size="small">
@@ -31,8 +31,13 @@
             </el-form-item>
 
             <el-form-item v-if="show == true" label="公司：" size="small">
-                <el-select v-model="formSearch.company" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.company" filterable placeholder="请选择" style="width:220px">
                     <el-option v-for="item in companyCodeOptions" :key="item.name" :label="item.name" :value="item.id"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item v-if="show == true" label="所属对账人员：" size="small">
+                <el-select v-model="formSearch.payableUser" @change="changePayable(formSearch.payableUser)" filterable placeholder="请选择" style="width:120px">
+                    <el-option v-for="item in payableUserList" :key="item.payableUserId" :label="item.payableUser" :value="item.payableUserId"></el-option>
                 </el-select>
             </el-form-item>
 
@@ -43,13 +48,19 @@
             </el-form-item>
 
             <el-form-item v-if="show == true" label="单据日期：" size="small">
-                <el-date-picker v-model="formSearch.documentDate" value-format="yyyy-MM-dd" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                </el-date-picker>
+                <!-- <el-date-picker v-model="formSearch.documentDate" value-format="yyyy-MM-dd" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                </el-date-picker> -->
+                <el-date-picker v-model="formSearch.documentDateStart" type="date" value-format="yyyy-MM-dd" style="width:150px" placeholder="开始日期"></el-date-picker>
+                <span>~</span>
+                <el-date-picker v-model="formSearch.documentDateEnd" type="date" value-format="yyyy-MM-dd" style="width:150px" placeholder="结束日期"></el-date-picker>
             </el-form-item>
 
             <el-form-item v-if="show == true" label="下单日期：" size="small">
-                <el-date-picker v-model="formSearch.orderDate" value-format="yyyy-MM-dd" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                </el-date-picker>
+                <!-- <el-date-picker v-model="formSearch.orderDate" value-format="yyyy-MM-dd" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                </el-date-picker> -->
+                <el-date-picker v-model="formSearch.orderDateStart" type="date" value-format="yyyy-MM-dd" style="width:150px" placeholder="开始日期"></el-date-picker>
+                <span>~</span>
+                <el-date-picker v-model="formSearch.orderDateEnd" type="date" value-format="yyyy-MM-dd" style="width:150px" placeholder="结束日期"></el-date-picker>
             </el-form-item>
 
             <el-form-item size="small">
@@ -171,6 +182,8 @@ export default {
 
     data() {
         return {
+            typeList:[],
+            payableUserList:[],
              exportObj:{
                        selected:''
             },
@@ -192,6 +205,7 @@ export default {
                 code: '',
                 name: '',
                 person: '',
+                supplier:'',
             },
             total: 0,
             pagesize: 1000,
@@ -217,12 +231,34 @@ export default {
         this.$store.commit('clearscmOrder')
     },
     mounted() {
+        this.getPayableUser()
         this.getCompany()
         this.getTypeList()
         this.getButtonJurisdiction() //按钮权限
         this.initTable([], '')
     },
     methods: {
+        //重新获取供应商下拉
+        changePayable(name){
+            this.formSearch.supplier = ''
+            console.log(name)
+            let vars = {}
+            vars.payableUserId = name
+             this.requestWithUriVars('selectorPayableSupplier', vars, null, true).then(res => {
+          if (res.code==1) {
+              this.typeList = res.data
+            }else{
+                this.typeList = []
+            }
+          })
+        },
+        getPayableUser(){
+            this.request('supplier_selectorPayable', {}, true).then(res => {
+                if (res.code == 1) {
+                    this.payableUserList = res.data
+                }
+            })
+        },
         getSummaries(param) {
         const { columns, data } = param;
         const sums = [];
@@ -643,7 +679,13 @@ export default {
             })
         },
         onReset() {
-            this.formSearch = {}
+            this.formSearch = {
+                code: '',
+                name: '',
+                person: '',
+                supplier:'',
+            }
+            this.getTypeList()
         },
         getCompany() { //公司下拉
             let data = {}
@@ -671,13 +713,14 @@ export default {
             data.years = this.formSearch.years
             data.goodsNo = this.formSearch.goodsNo
             data.purchaseOrderNo = this.formSearch.ordersNo
+            data.payableUserId = this.formSearch.payableUser
             data.designNumber = this.formSearch.designsNo
             data.companyId = this.formSearch.company
             data.supplierId = this.formSearch.supplier
-            this.formSearch.documentDate ? data.createStart = this.formSearch.documentDate[0] : delete data.createStart //单据日期
-            this.formSearch.documentDate ? data.createEnd = this.formSearch.documentDate[1] : delete data.createEnd
-            this.formSearch.orderDate ? data.orderDateStart = this.formSearch.orderDate[0] : delete data.orderDateStart //下单日期
-            this.formSearch.orderDate ? data.orderDateEnd = this.formSearch.orderDate[1] : delete data.orderDateEnd
+            this.formSearch.documentDateStart ? data.createStart = this.formSearch.documentDateStart : delete data.createStart //单据日期
+            this.formSearch.documentDateEnd ? data.createEnd = this.formSearch.documentDateEnd : delete data.createEnd
+            this.formSearch.orderDateStart ? data.orderDateStart = this.formSearch.orderDateStart : delete data.orderDateStart //下单日期
+            this.formSearch.orderDateEnd ? data.orderDateEnd = this.formSearch.orderDateEnd : delete data.orderDateEnd
             this.request('order_pageQuery', data, true).then(res => {
                 if (res.code == 1) {
                     this.total = res.data.count;
@@ -765,7 +808,6 @@ export default {
         },
         onSearch() {
 
-            console.log(this.formSearch.documentDate)
             this.currentPage = 1
             this.getData()
 
@@ -813,14 +855,15 @@ export default {
                         data.years   = this.formSearch.years
                         data.goodsNo = this.formSearch.goodsNo
                         data.purchaseOrderNo = this.formSearch.ordersNo
+                        data.payableUserId = this.formSearch.payableUser
                         data.designNumber = this.formSearch.designsNo
                         data.companyId  = this.formSearch.company
                         data.supplierId = this.formSearch.supplier
                         this.exportObj.selected==1?    data.inclusionDetails=true:data.inclusionDetails=false;
-                        this.formSearch.documentDate ? data.createStart = this.formSearch.documentDate[0] : delete data.createStart //单据日期
-                        this.formSearch.documentDate ? data.createEnd = this.formSearch.documentDate[1] : delete data.createEnd
-                        this.formSearch.orderDate ?    data.orderDateStart = this.formSearch.orderDate[0] : delete data.orderDateStart //下单日期
-                        this.formSearch.orderDate ?    data.orderDateEnd = this.formSearch.orderDate[1] : delete data.orderDateEnd
+                        this.formSearch.documentDateStart ? data.createStart = this.formSearch.documentDateStart : delete data.createStart //单据日期
+                        this.formSearch.documentDateEnd ? data.createEnd = this.formSearch.documentDateEnd : delete data.createEnd
+                        this.formSearch.orderDateStart ? data.orderDateStart = this.formSearch.orderDateStart : delete data.orderDateStart //下单日期
+                        this.formSearch.orderDateEnd ? data.orderDateEnd = this.formSearch.orderDateEnd : delete data.orderDateEnd
                         w2ui.scmOrder.getSelection().length>0?data.ids= w2ui.scmOrder.getSelection():delete data.ids
                         this.exportObj.selected==1? data.inclusionDetails=false:data.inclusionDetails=true;
             this.request('payable_bizpurchaseorder_exportCount',data,false).then(res=>{
@@ -844,14 +887,15 @@ export default {
                         data.years   = this.formSearch.years
                         data.goodsNo = this.formSearch.goodsNo
                         data.purchaseOrderNo = this.formSearch.ordersNo
+                        data.payableUserId = this.formSearch.payableUser
                         data.designNumber = this.formSearch.designsNo
                         data.companyId  = this.formSearch.company
                         data.supplierId = this.formSearch.supplier
                         this.exportObj.selected==1?    data.inclusionDetails=true:data.inclusionDetails=false;
-                        this.formSearch.documentDate ? data.createStart = this.formSearch.documentDate[0] : delete data.createStart //单据日期
-                        this.formSearch.documentDate ? data.createEnd = this.formSearch.documentDate[1] : delete data.createEnd
-                        this.formSearch.orderDate ?    data.orderDateStart = this.formSearch.orderDate[0] : delete data.orderDateStart //下单日期
-                        this.formSearch.orderDate ?    data.orderDateEnd = this.formSearch.orderDate[1] : delete data.orderDateEnd
+                        this.formSearch.documentDateStart ? data.createStart = this.formSearch.documentDateStart : delete data.createStart //单据日期
+                        this.formSearch.documentDateEnd ? data.createEnd = this.formSearch.documentDateEnd : delete data.createEnd
+                        this.formSearch.orderDateStart ? data.orderDateStart = this.formSearch.orderDateStart : delete data.orderDateStart //下单日期
+                        this.formSearch.orderDateEnd ? data.orderDateEnd = this.formSearch.orderDateEnd : delete data.orderDateEnd
                         w2ui.scmOrder.getSelection().length>0?data.ids= w2ui.scmOrder.getSelection():delete data.ids
                         this.exportObj.selected==1? data.inclusionDetails=false:data.inclusionDetails=true;
                       this.request('payable_bizpurchaseorder_export', data, false).then(res => {
