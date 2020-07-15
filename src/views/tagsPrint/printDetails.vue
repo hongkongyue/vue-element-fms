@@ -129,8 +129,10 @@
 
 <script>
 let socket = null;
+import {burypoint} from 'mixins/burypoint'
 export default {
     name: 'printDetails',
+    mixins:[burypoint],
     data() {
         return {
             printerListVisible:false,
@@ -204,6 +206,7 @@ export default {
         },
         //查询
         onSearch() {
+            this.setBuryPoint('查询')
             let data = {}
             data.applyIds = [this.$route.query.id]
             data.neededPrintField = true
@@ -219,6 +222,7 @@ export default {
         },
         //保存 修改补打数量
         onSave(){
+            this.setBuryPoint('保存')
             let _root_ = []
             this.tableList.map((item)=>{
                 _root_.push({
@@ -237,6 +241,7 @@ export default {
         },
         //重新获取
         onResect(){
+            this.setBuryPoint('重新获取')
             let data = {}
             data.ids = this.selectionList
             data.applyId = this.$route.query.id
@@ -321,6 +326,7 @@ export default {
 
         //打印合格证
         onPrintone(name) {
+            this.setBuryPoint('合格证补打')
             this.chosePrint = name
             let arr = this.selectionList
             if (arr.length == 0) {
@@ -356,6 +362,7 @@ export default {
         },
         //洗水唛打印
         onPrinttwo(name) {
+            this.setBuryPoint('洗水唛补打')
             this.chosePrint = name
             let arr = this.selectionList
             if (arr.length == 0) {
@@ -647,10 +654,12 @@ export default {
         },
         //合格证预览PDF
         seePdfOne(id) {
+            this.setBuryPoint('合格证预览')
             this.sendPrinterDataOne(id)
         },
         //洗水唛预览
         seePdfTwo(id) {
+            this.setBuryPoint('洗水唛预览')
             this.sendPrinterDataTwo(id)
         },
         //申请数量格式校验

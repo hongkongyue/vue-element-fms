@@ -23,22 +23,25 @@
                 </el-form-item>
             </div>
             <el-form-item label="品牌：" size="small">
-                <el-select v-model="formSearch.brand" clearable filterable placeholder="请选择" style="width:150px">
-                    <el-option v-for="item in brandList" :key="item.name" :label="item.name" :value="item.name"></el-option>
+                <el-select v-model="formSearch.brand" multiple clearable filterable placeholder="请选择" style="width:150px">
+                    <el-option v-for="item in brandList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="年份：" size="small">
-                <el-date-picker v-model="formSearch.years" type="year" style="width:150px" placeholder="选择年">
-                </el-date-picker>
+                <!-- <el-date-picker v-model="formSearch.years" type="year" style="width:150px" placeholder="选择年">
+                </el-date-picker> -->
+                <el-select v-model="formSearch.years" multiple clearable filterable placeholder="请选择" style="width:170px">
+                    <el-option v-for="item in yearList" :key="item" :label="item" :value="item"></el-option>
+                </el-select>
             </el-form-item>
             <el-form-item label="季节：" size="small">
-                <el-select v-model="formSearch.season" clearable filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.season" multiple clearable filterable placeholder="请选择" style="width:150px">
                     <el-option v-for="item in seasonList" :key="item.name" :label="item.name" :value="item.name"></el-option>
                 </el-select>
             </el-form-item>
             
             <el-form-item label="波段：" size="small">
-                <el-select v-model="formSearch.waveBand" clearable filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.waveBand" multiple clearable filterable placeholder="请选择" style="width:150px">
                     <el-option v-for="item in waveList" :key="item.name" :label="item.name" :value="item.name"></el-option>
                 </el-select>
             </el-form-item>
@@ -55,7 +58,7 @@
             <el-col :span="24">
                 <el-pagination style="text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
                 </el-pagination>
-                <el-table ref="multipleTable" @row-click="showLog" :data="tableData" style="width: 100%" border tooltip-effect="dark" :height="oneTableHeight" @selection-change="handleSelectionChange">
+                <el-table ref="multipleTable" @row-click="showLog" highlight-current-row :data="tableData" style="width: 100%" border tooltip-effect="dark" :height="oneTableHeight" @selection-change="handleSelectionChange">
                     <!-- <el-table-column type="selection" width="50">
                     </el-table-column> -->
                     <el-table-column type="index" width="50" label="序号" fixed="left" align="center"></el-table-column>
@@ -97,7 +100,7 @@
                 </div>
                 <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
                     <el-tab-pane label="明细" name="first">
-                        <el-table :data="detailsData" style="width: 100%" border tooltip-effect="dark" :height="twoTableHeight" size="mini">
+                        <el-table :data="detailsData" style="width: 100%" highlight-current-row border tooltip-effect="dark" :height="twoTableHeight" size="mini">
                             <el-table-column type="index" width="55" label="序号" fixed="left" align="center"></el-table-column>
                             <el-table-column prop="secondLevel" label="二级品类" fixed="left" sortable align="center" min-width="100" show-overflow-tooltip>
                             </el-table-column>
@@ -256,8 +259,9 @@ import {
 //     debounce
 // } from 'mixins/debounce'
 import Util from 'libs/util'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins: [commonMixins],
+    mixins: [commonMixins,burypoint],
     data() {
         return {
             detailsShow:false,
@@ -339,7 +343,12 @@ export default {
                 label: 'nameWithCount'
             },
             showhidden: false,
-            formSearch: {},
+            formSearch: {
+                brand:[],
+                years:[],
+                season:[],
+                waveBand:[]
+            },
             maxHeight: '',
             logList: [], //日志
             billNo: '',
@@ -481,6 +490,7 @@ export default {
         },
         //发起调整指令
         startAdjust() {
+            this.setBuryPoint('发起调整指令')
             this.startAdjustVisible = true
         },
         //保存调整指令
@@ -536,10 +546,12 @@ export default {
         },
         //下载模板
         downLoad(){
+            this.setBuryPoint('下载模板')
             window.location = ('https://eptison.oss-cn-hangzhou.aliyuncs.com/upload/prd/eop-fms/BossHotGoodsPlanningController/uploadTemplate/企划爆款调整导入模板.xlsx')
         },
         //导入
         onUpload() {
+            this.setBuryPoint('导入')
             this.uploadVisible = true
         },
         //上传之前
@@ -598,10 +610,10 @@ export default {
             this.logList = []
             this.detailsData = []
             let data = {}
-            data.basicBrandName = this.formSearch.brand
-            data.season = this.formSearch.season
-            data.waveBand = this.formSearch.waveBand
-            this.formSearch.years ? data.years = Util.dateFormat(this.formSearch.years, 'yyyy') : delete data.years
+            data.brandIds = this.formSearch.brand
+            data.seasons = this.formSearch.season
+            data.waveBandList = this.formSearch.waveBand
+            data.yearsList = this.formSearch.years
             data.pageSize = this.pagesize
             data.currentPage = this.currentPage
             this.request('hotGoodsPlanning_page', data, true).then(res => {
@@ -684,6 +696,7 @@ export default {
         },
        
         onAdd(name) {
+            this.setBuryPoint('新增')
             if (name == 'add') {
                 this.dialogVisible = true
                 this.addtitle = '新增'
@@ -742,13 +755,19 @@ export default {
         },
         //查询
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 
         },
         //重置
         onReset() {
-            this.formSearch = {}
+            this.formSearch = {
+                brand:[],
+                years:[],
+                season:[],
+                waveBand:[]
+            }
         },
 
     }

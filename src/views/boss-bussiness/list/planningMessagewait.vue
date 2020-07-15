@@ -6,7 +6,7 @@
                     </Page>
                     <div style="margin-bottom:10px" v-for="v in list " :key="v.taskNo" @click="goDetail(v)">
                           <Layout>
-                                <Row style="height:80px;line-height:80px;margin-top:10px;">
+                                <Row style="height:40px;line-height:40px;margin-top:10px;">
                                     <Col span="2">
                                             <Icon type="md-notifications"  class="f16 pl20"/>
                                     </Col> 
@@ -131,7 +131,7 @@
        font-size:17px!important 
    }
     .f61{
-       font-size:16px!important
+       font-size:13px!important
    }
    .f14{
        font-size:14px!important
@@ -144,7 +144,7 @@
    }
    .absolute{
       position: absolute;
-      top:-30px;
+      top:-10px;
       right: 10px;
       font-size:16px;
    }

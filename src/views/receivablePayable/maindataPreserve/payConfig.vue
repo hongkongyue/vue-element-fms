@@ -139,7 +139,9 @@
 
 <script>
 import filters from '../../../filter/'
+import {burypoint} from 'mixins/burypoint'
 export default {
+    mixins:[burypoint],
     data() {
         return {
             addVisible:false,
@@ -231,6 +233,7 @@ export default {
     methods: {
         //删除
         onDelete(){
+             this.setBuryPoint('删除')
             if (this.rowLenght == 0) {
                 this.$message.error('请先选择删除的数据！')
             }else{
@@ -332,6 +335,7 @@ export default {
 
         },
         addSave() {
+             this.setBuryPoint('新增确认')
             this.$refs['ruleForm'].validate((valid) => {
                 console.log(valid)
                 if (valid) { //新增保存
@@ -363,6 +367,7 @@ export default {
         },
         //编辑
         clickTable(row) {
+             this.setBuryPoint('编辑')
             if (this.rowLenght == 0) {
                 this.$message.error('请先选择修改的数据！')
             } else if (this.rowLenght > 1) {
@@ -378,6 +383,7 @@ export default {
         },
         //编辑保存
         changeSave() {
+             this.setBuryPoint('编辑确认')
             this.$refs['formChange'].validate((valid) => {
                 console.log(valid)
                 if (valid) { //编辑
@@ -407,6 +413,7 @@ export default {
             this.$refs['formChange'].resetFields();
         },
         onAdd() {
+            this.setBuryPoint('新增')
             this.addVisible = true
         }
 

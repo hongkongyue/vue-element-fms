@@ -252,8 +252,9 @@ import downLoad from '../../../filter/downLoad'
 import {
     debounce
 } from 'mixins/debounce.js'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins: [debounce],
+    mixins: [debounce,burypoint],
     components: {
         //    DragList
     },
@@ -338,6 +339,7 @@ export default {
         },
         //导出
         onExport(){
+            this.setBuryPoint('导出')
             let data = {}
             data.messageId = this.$route.query.id
             downLoad.downLoad(data,'/eop-boot/boss/bossGoodsPlanningParameterSend/export')

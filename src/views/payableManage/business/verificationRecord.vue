@@ -146,11 +146,12 @@
 var record={}
 import filters from '../../../filter/'
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 import {
     mapState
 } from 'vuex'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
         return {
             payableUserList:[],
@@ -554,6 +555,7 @@ export default {
             this.getLoglist()
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.getData()
         },
         handleSizeChange(val) {
@@ -779,11 +781,13 @@ export default {
                  }
         },
         cancelExport(){
+            this.setBuryPoint('导出取消')
                    this.exportVisible=false;
                    this.moreLarge=false;
                    this.exportObj.selected=''
         },
         getExportTotal(){
+            this.setBuryPoint('导出')
         //    if(!this.exportObj.selected) return this.$message.error('请选择导出类型')
                     let data={}
                         data.pageSize = this.pagesize
@@ -812,6 +816,7 @@ export default {
         },
          //导出
         onImport(){
+            this.setBuryPoint('导出确认')
                     let data = {}
                         data.pageSize = this.pagesize
                         data.currentPage = this.currentPage

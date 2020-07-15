@@ -28,7 +28,9 @@
 </template>
 
 <script>
+import {burypoint} from 'mixins/burypoint'
     export default {
+        mixins: [burypoint],
         data() {
             return {
                 visible: false,
@@ -111,6 +113,7 @@
                                     },
                                     on: {
                                         click: () => {
+                                            this.setBuryPoint('查看已完成')
                                                this.$router.push({
                                                           name:'planningAdjustmentComplated',
                                                           query: { 
@@ -135,6 +138,7 @@
                                     },
                                     on: {
                                         click: () => {
+                                            this.setBuryPoint('撤回已完成')
                                          this.$Modal.confirm({
                                             title: '撤回确认',
                                             content: '该操作是将该任务进行撤回，是否继续？',
@@ -161,6 +165,7 @@
                                     },
                                     on: {
                                         click: () => {
+                                            this.setBuryPoint('撤回已完成')
                                          this.$Modal.confirm({
                                             title: '撤回确认',
                                             content: '该操作是将该任务进行撤回，是否继续？',

@@ -120,8 +120,9 @@
 <script>
 import filters from '../../../filter/'
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
         return {
             dialogVisible: false,
@@ -194,6 +195,7 @@ export default {
           })
       },
         onEdit() {
+                this.setBuryPoint('编辑')
             if (this.IDS.length == 1) {
                 this.dialogtitle = "编辑"
                 this.dialogVisible = true
@@ -293,6 +295,7 @@ export default {
             this.dialogVisible = true
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.page = 1;
             this.getData()
             
@@ -314,6 +317,7 @@ export default {
             });
         },
         submitFormEdit(formName) {
+            this.setBuryPoint('编辑确认')
             this.dialogVisible = true
             this.$refs[formName].validate((valid) => {
                 if (valid) {

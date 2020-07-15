@@ -1,7 +1,7 @@
 <template>
 <div>
     <header class="headerstyle" style="width:99%" v-if="!showhidden">
-        <el-form :inline="true" :model="formSearch" class="demo-form-inline">
+        <el-form :inline="true" :model="formSearch" class="demo-form-inline" style="width:99%;maxHeight:102px;overflow-y:auto;overflow-x:hidden;">
             <Col style="margin-bottom:0px">
             <el-form-item size="small" class="marginT0">
                 <el-button v-if="judgeMenu.indexOf('查询') != -1" size="small" type="primary" @click="onSearch">查询</el-button>
@@ -145,15 +145,13 @@
 
 <script>
 import filters from "../../../filter/";
-// import {
-//     debounce
-// } from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 import {
     commonMixins
 } from 'mixins/common'
 export default {
     name: 'planningDelayBilling',
-    mixins: [commonMixins],
+    mixins: [commonMixins,burypoint],
     data() {
         return {
             oneTableHeight: '',
@@ -348,6 +346,7 @@ export default {
             this.formSearch.planFinishDateEnd = filters.get_year_month_day(lastDay)
         },
         onExportExcel() {
+            this.setBuryPoint('导出')
             const {
                 planFinishDateStart,
                 planFinishDateEnd,
@@ -440,6 +439,7 @@ export default {
             this.dialogVisible = true;
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.page = 1;
             this.getData();
         },

@@ -29,7 +29,7 @@
         <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
               <el-tab-pane label="角色包含权限" name="first">
                        <section class="middle">
-                               <tree-transfer :defaultTransfer="true" :title="title" :defaultCheckedKeys='fromData' :button_text='["分配 ","撤销"]' :from_data='fromData' @addBtn='addsss' @removeBtn='remove' :to_data='toData' :defaultProps="{label:'label'}" :mode='mode' height='540px' placeholder="请输入权限名称" filter openAll>
+                               <tree-transfer :defaultTransfer="true" :title="title" :defaultCheckedKeys='fromData' :button_text='["分配 ","撤销"]' :from_data='fromData' @addBtn='addsss' @removeBtn='remove' :to_data='toData' :defaultProps="{label:'label'}" :mode='mode' height='540px' placeholder="请输入权限名称" filter :transferOpenNode="false">
                                </tree-transfer>
                        </section>
               </el-tab-pane>
@@ -172,7 +172,9 @@
 <script>
   import filters from '../../../filter/'
   import treeTransfer from 'el-tree-transfer' // 引入
+  import {burypoint} from 'mixins/burypoint'
   export default {
+    mixins:[burypoint],
     data() {
       return {
         activeName2  :'first',
@@ -256,6 +258,7 @@
                   console.log(index)
               },
               handleDelete(index){
+                this.setBuryPoint('编辑删除')
                 this.list.splice(index,1)
               },
              getRowDta($index,code){
@@ -267,6 +270,7 @@
                     this.list[$index].departmentName=''
              },
              confirmSave(){
+                    this.setBuryPoint('编辑保存')
                     let arr=[]
                     let userIds=[]
                     if(!this.formSearch.code)return this.$message.error('角色编码不能为空')
@@ -361,6 +365,7 @@
                           })
           },
            newAddSave(){
+                    this.setBuryPoint('编辑角色包含用户保存')
                     let arr=[]
                     let userIds=[]
                     if(!this.formSearch.code)return this.$message.error('角色编码不能为空')
@@ -405,8 +410,10 @@
                           })
           },
           directSave(){
+                    this.setBuryPoint('返回上一页')
                     this.$router.push({
                                              name:'new_role_list',
+                                             code:this.$route.query.code
                                         })  
           },
           watchName(type,v){
@@ -472,6 +479,7 @@
                           })       
           },
           onSearch(){
+                    this.setBuryPoint('编辑查询')
                     this.chaXun++;
                     this.getData()
           },
@@ -483,6 +491,7 @@
                     this.getUser()
           },
           onAdd(){
+                   this.setBuryPoint('编辑新增')
                    this.add=true
                    setTimeout(()=>{
                            this.list.unshift({ active:'',departmentName:'',id:'',phoneNo:'',registerSource:'',roleIds:'',
@@ -620,13 +629,14 @@
             if(this.h>1){
                 this.tranferSave()
             }
-            
+             this.setBuryPoint('编辑角色包含权限分配')
         },
       // 监听穿梭框组件移除
         remove(fromData,toData,obj){
              this.toData  =toData;
              this.fromData=this.storeFormData
               this.tranferSave()
+              this.setBuryPoint('编辑角色包含权限撤销')
         }
     // },
     // },

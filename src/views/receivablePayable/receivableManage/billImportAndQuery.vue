@@ -331,8 +331,9 @@ import {
 } from 'os'
 import { fstat } from 'fs'
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
         return {
             yunjiLogo:false,
@@ -1118,6 +1119,7 @@ export default {
             })
         },
         onSearch() {
+             this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 
@@ -1127,6 +1129,7 @@ export default {
         },
         changeRadio(i) {},
         importTwoSave() {
+            this.setBuryPoint('账单处理导入')
             this.$refs['ruleFormA'].validate((valid) => {
                 if (valid) { //新增保存
                     let data = {}
@@ -1205,7 +1208,9 @@ export default {
             this.disabledYun = false
             if (name == '生成收款单') {
                 this.billCodeType ='PTZD'
+                this.setBuryPoint('生成收款单')
             } else if (name == '生成应收单') {
+                // this.setBuryPoint('生成收款单')
                 this.billCodeType = 'PTZD'
             }
             this.$refs['ruleForm'].validate((valid) => {
@@ -1435,6 +1440,7 @@ export default {
         },
         //下载模板
         download() {
+            this.setBuryPoint('下载模板')
             window.location.href = 'http://eptison.oss-cn-hangzhou.aliyuncs.com/upload/test/eop-fms/AbstractAccReceivedAnalysisTemplate/uploadOssFile/0f957252-97f3-4d63-bf17-93451323325e.xlsx'
         },
         importCancel() {
@@ -1496,10 +1502,12 @@ export default {
             this.getData()
         },
         onImport() {
+            this.setBuryPoint('导入')
             this.dialogVisible = true
             this.importURL = '导入'
         },
         onImportYun(){
+            this.setBuryPoint('云集费用')
             this.yunjiLogo = true
             this.dialogVisible = true
             this.importURL = '导入'
@@ -1510,6 +1518,7 @@ export default {
         },
         //账单处理
         onBillProcessing() {
+            this.setBuryPoint('账单处理')
             this.dialogTwoVisible = true
             this.importURL = '账单处理'
         },

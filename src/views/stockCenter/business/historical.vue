@@ -57,8 +57,9 @@
 <script>
 import filters from '../../../filter/'
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
         return {
             wareHouseList:[],
@@ -408,6 +409,7 @@ export default {
             })
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 

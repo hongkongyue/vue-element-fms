@@ -9,17 +9,17 @@
             </Form>
             <el-table :data="list" size="mini" style="width: 100%"  border tooltip-effect="dark" max-height="350" @selection-change="handleSelectionChange">
             <el-table-column type="index" width="55" label="序号" align="center"></el-table-column>
-            <el-table-column prop="taskNo"            label="任务流编号" min-width="90" align="center" show-overflow-tooltip>
+            <el-table-column prop="taskNo"            label="开发任务编号" min-width="90" align="center" show-overflow-tooltip>
             </el-table-column>
             <el-table-column prop="processStatus"     label="流程状态" align="center" min-width="80" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="initiateUserName"   label="品牌发起人"     min-width="90" align="center" show-overflow-tooltip>
+            <el-table-column prop="initiateUserName"   label="发起人"     min-width="90" align="center" show-overflow-tooltip>
             </el-table-column>
             <el-table-column prop="initiateDepartmentName"      label="发起部门"       min-width="80" align="center" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="majorClasses" label="面/辅料"       min-width="120" align="center" show-overflow-tooltip>
+            <el-table-column prop="majorClasses" label="物料类型"       min-width="120" align="center" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="kinds"      label="面辅料品类分类" min-width="120" align="center" show-overflow-tooltip>
+            <el-table-column prop="kinds"      label="品类分类" min-width="120" align="center" show-overflow-tooltip>
             </el-table-column>
             <el-table-column prop="specialCategory"              label="是否特殊工艺"   min-width="120" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">{{scope.row.specialCategory == 1 ? '是' : '否'}}</template>
@@ -173,6 +173,158 @@
             <el-table-column  prop="materialEnterTime" label="面料录入时间" min-width="140" align="center" show-overflow-tooltip>
             </el-table-column>
         </el-table>
+        <!-- A类开发录入 -->
+        <Modal v-model="aVisible" :styles="mystyle"  title="录入" @on-cancel='cancelAforms' :width="1010"  class-name="customize-modal-center">
+        <Row class="margin-bottom-10 background-color-white exhibition">
+            <el-form :inline="true" ref="ruleFormA" :model="aformData" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="arules">
+                <Col>
+                    <el-form-item label="年份：" size="small" label-width="140px" >
+                        <el-input  v-model="aformData.year"  style="width:160px" readonly :disabled="true" ></el-input>
+                    </el-form-item>
+                    <el-form-item label="月份：" size="small" label-width="140px">
+                        <el-input v-model="aformData.month" maxlength="160" style="width:160px"  readonly   :disabled="true"></el-input>
+                    </el-form-item>
+                    <el-form-item label="样品来源" size="small" label-width="140px">
+                        <el-input v-model="aformData.yply" maxlength="160" style="width:160px"  readonly   :disabled="true"></el-input>
+                    </el-form-item>
+                     
+                </Col>
+                <Col>
+                <el-form-item label="供应商简称" size="small" label-width="140px" prop="basicSupplierShortName">
+                        <el-select v-model="aformData.basicSupplierShortName" placeholder="请选择" style="width:160px" filterable >
+                             <el-option v-for="v in basicSupplierShortNameList" :key="v.id" :label="v.shortName" :value="v.id"></el-option>
+                       </el-select>
+                    </el-form-item>
+                    <el-form-item label="供应商物料编号" size="small" label-width="140px" prop="supplierMaterialNo">
+                        <el-input v-model="aformData.supplierMaterialNo" maxlength="160" style="width:160px"   ></el-input>
+                    </el-form-item>
+                    <el-form-item label="供应商物料色号" size="small" label-width="140px" prop="supplierMaterialColorNo">
+                        <el-input v-model="aformData.supplierMaterialColorNo" maxlength="160" style="width:160px" ></el-input>
+                    </el-form-item>
+                </Col>
+                <Col>
+                <el-form-item label="颜色：" size="small" label-width="140px" prop="color">
+                         <el-select v-model="aformData.color" @change="changeColor(aformData.color)" placeholder="请选择" style="width:160px" filterable>
+                             <el-option v-for="v in colorList" :key="v.colorName" :label="v.colorName" :value="v.colorName"></el-option>
+                       </el-select>
+                    </el-form-item>
+                    <el-form-item label="物料名称：" size="small" label-width="140px" prop="name">
+                        <el-input v-model="aformData.name" maxlength="120" style="width:160px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="物料规格：" size="small" label-width="140px" prop="sku">
+                        <el-input  v-model="aformData.sku"   style="width:160px" ></el-input>
+                    </el-form-item>
+                </Col>
+                 <Col>
+                  <el-form-item label="一级分类/二级分类/三级分类：" size="small" label-width="240px" prop="one">
+                       <el-cascader v-model="aformData.one" ref="cascader" style="width:370px" size="small" filterable placeholder="一级分类/二级分类/三级分类" :options="oneList" :props="optionProps"></el-cascader>
+                    </el-form-item>
+                  <!-- <el-form-item label="一级分类：" size="small" label-width="140px" prop="first">
+                        <el-select v-model="aformData.first" placeholder="请选择" style="width:160px" filterable @change="getSelectMaterialType(2,aformData.first)">
+                             <el-option v-for="v in firstLevelList" :key="v.id" :label="v.name" :value="v.id"></el-option>
+                       </el-select>
+                    </el-form-item>
+                    <el-form-item label="二级分类:" size="small" label-width="140px" prop="second">
+                          <el-select v-model="aformData.second" placeholder="请选择" style="width:160px" filterable @change="getSelectMaterialType(3,aformData.second)">
+                             <el-option v-for="v in secondLevelList" :key="v.id" :label="v.name" :value="v.id"></el-option>
+                       </el-select>
+                    </el-select>
+                    </el-form-item>
+                    <el-form-item label="三级分类：" size="small" label-width="140px" prop="third">
+                       <el-select v-model="aformData.third" placeholder="请选择" style="width:160px" filterable>
+                           <el-option v-for="v in thirdLevelList" :key="v.id" :label="v.name" :value="v.id"></el-option>
+                       </el-select>
+                    </el-form-item> -->
+
+                    
+                </Col>
+                <Col>
+                <el-form-item label="门幅(cm)：" size="small" label-width="140px" prop="fabricWidth">
+                         <el-input  v-model="aformData.fabricWidth"   style="width:160px" ></el-input>
+                    </el-form-item>
+                    <el-form-item label="克重（g/m2)：" size="small" label-width="140px" prop="fabricWeight">
+                        <el-input v-model="aformData.fabricWeight" maxlength="120" style="width:160px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="单位：" size="small" label-width="140px" prop="unit">
+                        <el-select v-model="aformData.unit" placeholder="请选择" style="width:160px" filterable>
+                           <el-option v-for="v in unitList" :key="v" :label="v" :value="v"></el-option>
+                       </el-select>
+                    </el-form-item>
+                </Col>
+                <Col>
+                <el-form-item label="成分：" size="small" label-width="140px" prop="ingredient">
+                         <el-input  v-model="aformData.ingredient"   style="width:160px" ></el-input>
+                    </el-form-item>
+                    <el-form-item label="起订量：" size="small" label-width="140px" prop="moq">
+                        <el-input v-model="aformData.moq" maxlength="120" style="width:160px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="默认损耗（%）：" size="small" label-width="140px">
+                        <el-input v-model="aformData.loss" maxlength="120" style="width:160px"></el-input>
+                    </el-form-item>
+                </Col>
+                <Col>
+                <el-form-item label="纬缩(%)：" size="small" label-width="140px">
+                         <el-input  v-model="aformData.loopedWeft"   style="width:160px" ></el-input>
+                    </el-form-item>
+                    <el-form-item label="经缩(%)：" size="small" label-width="140px">
+                        <el-input v-model="aformData.knees" maxlength="120" style="width:160px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="生产周期：" size="small" label-width="140px">
+                        <el-input v-model="aformData.productCycle" maxlength="120" style="width:160px"></el-input>
+                    </el-form-item>
+                </Col>
+                <Col>
+                <el-form-item label="订货周期：" size="small" label-width="140px" >
+                         <el-input  v-model="aformData.orderCycle"   style="width:160px" ></el-input>
+                    </el-form-item>
+                    <el-form-item label="公斤米数：" size="small" label-width="140px" >
+                        <el-input v-model="aformData.kilogramsOfRice" maxlength="120" style="width:160px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="备注：" size="small" label-width="140px">
+                        <el-input v-model="aformData.remark" maxlength="120" style="width:160px"></el-input>
+                    </el-form-item>
+                </Col>
+                <Col>
+                    <el-form-item label="质量风险提示：" size="small" label-width="140px" >
+                        <el-input  v-model="aformData.riskRemark"  style="width:160px" maxlength="50" ></el-input>
+                    </el-form-item>
+                    <span style="color:red;position:absolute;left:322px;top:10px">*</span>
+                    <el-form-item label="图片：" size="small" label-width="75px" >
+                         <!-- <el-button type="primary" size="small" @click="getIn">上传图片</el-button> -->
+                           <Upload 
+                                                    ref="upload"
+                                                    name="file"
+                                                    :max-size="4096"
+                                                    :headers="authentic"
+                                                    :show-upload-list="false"
+                                                    :before-upload="handleUpload"
+                                                    :on-success="uploadSuccess"
+                                                    :on-error="uploadError"
+                                                    action="/eop-boot/masterData/ossFileAddress/upload"
+                                                    :data="{fileName:Filename,className:1}"
+                                                            >
+                                                    <Button type="primary"        icon="ios-cloud-upload-outline" style="width: 100px">上传图片</Button>
+                                          </Upload>
+                                          <!-- <Button v-if="dealshowFilelist.length>0" type="primary" @click="tip" icon="ios-cloud-upload-outline" style="width: 100px">上传图片</Button> -->
+                    </el-form-item>
+                    <el-form-item label="" size="small" label-width="95px" prop="taskRank">
+                         <img v-if="this.imgShowUrl" :src="this.imgShowUrl" style="width:100px;height:100px"/>
+                    </el-form-item>
+                </Col>
+                <Col style="positive:">
+                    
+                </Col>
+                <!-- <el-form-item style="padding-left:330px">
+                    
+                </el-form-item> -->
+            </el-form>
+        </Row>
+        <div slot="footer">
+            <Button type="primary" @click="submitAforms">确认</Button>
+                    <Button type="default" @click="cancelAforms">取消</Button>
+        </div>
+    </Modal>
+    <!-- 其它开发录入 -->
         <Modal v-model="dialogVisible" :styles="mystyle"  title="录入" @on-cancel='cancel' :width="810"  class-name="customize-modal-center">
         <Row class="margin-bottom-10 background-color-white exhibition">
             <el-form :inline="true" ref="ruleForm" :model="formData" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="rules">
@@ -246,13 +398,12 @@
                          <img v-if="this.imgShowUrl" :src="this.imgShowUrl" style="width:100px;height:100px"/>
                     </el-form-item>
                 </Col>
-                <el-form-item style="padding-left:330px">
-                    <Button type="primary" @click="submitForms('ruleForm')">确认</Button>
-                    <Button type="default" @click="cancel">取消</Button>
-                </el-form-item>
             </el-form>
         </Row>
-        <div slot="footer"></div>
+        <div slot="footer">
+            <Button type="primary" @click="submitForms('ruleForm')">确认</Button>
+                    <Button type="default" @click="cancel">取消</Button>
+        </div>
     </Modal>
     </Row>
     </Row>
@@ -262,10 +413,85 @@
 
 <script>
     import {debounce} from 'mixins/debounce'
+    import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
         data() {
             return {
+                unitList:[],
+                basicSupplierShortNameList:[],
+                aVisible:false,
+                aformData:{
+                   year:new Date().getFullYear(),
+                    month:new Date().getMonth()+1,
+                    yply:'A类开发',
+                    basicSupplierShortName:'',
+                    supplierMaterialNo:'',
+                    supplierMaterialColorNo:'',
+                    color:'',
+                    name:'',
+                    sku:'',
+                    first:'',
+                    second:'',
+                    one:[],
+                    fabricWidth:'',
+                    fabricWeight:'',
+                    unit:'',
+                    ingredient:'',
+                    moq:'',
+                    loss:'',
+                    loopedWeft:'',
+                    knees:'',
+                    productCycle:'',
+                    orderCycle:'',
+                    kilogramsOfRice:'',
+                    remark:'',
+                    riskRemark:'',
+                },
+                arules:{
+                       basicSupplierShortName: [
+                              { required: true, message: '请选择', trigger: 'change' }
+                        ],
+                        supplierMaterialNo: [
+                               { required: true, message: '请输入', trigger: 'blur' }
+                        ],
+                         supplierMaterialColorNo: [
+                               { required: true, message: '请输入', trigger: 'blur' }
+                        ],
+                        color: [
+                               { required: true, message: '请选择', trigger: 'change' }
+                        ],
+                        sku: [
+                              { required: true, message: '请输入', trigger: 'blur' }
+                        ],
+                        name: [
+                              { required: true, message: '请输入', trigger: 'blur' }
+                        ],
+                        first: [
+                               { required: true, message: '请选择', trigger: 'change' }
+                        ],
+                        second: [
+                               { required: true, message: '请选择', trigger: 'change' }
+                        ],
+                        one: [
+                               { required: true, message: '请选择', trigger: 'change' }
+                        ],
+                        fabricWidth: [
+                              { required: true, message: '请输入', trigger: 'blur' }
+                        ],
+                        fabricWeight: [
+                              { required: true, message: '请输入', trigger: 'blur' }
+                        ],
+                        unit: [
+                               { required: true, message: '请选择', trigger: 'change' }
+                        ],
+                         ingredient: [
+                              { required: true, message: '请输入', trigger: 'blur' }
+                        ],
+                        moq: [
+                              { required: true, message: '请输入', trigger: 'blur' }
+                        ],
+                },
                 changeColorId:'',
                 colorList:[],
                 noPict:'https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1562574299&di=846b4c904bd54d3c3821fa5938888c69&src=http://hbimg.b0.upaiyun.com/bdaca9a07e1a8947c00c2f826ebf848750927aa24963-cATwbg_fw658',
@@ -333,6 +559,12 @@ export default {
                               { required: true, message: '请输入', trigger: 'blur' }
                         ],
                 },
+                oneList:[],
+                optionProps: {
+                value: 'text',
+                label: 'text',
+                children: 'children'
+            },
             }
         },
         destroyed(){
@@ -344,8 +576,55 @@ export default {
                 this.getData() 
                 this.getSelectMaterialType(1)
                 this.getColorList()
+                this.getSupplierList()
+                this.getUnitList()
+                this.getTreeList()
         },
         methods: {
+            getTreeList(){ //
+             this.request('fabric_getFabricStyleTree', {}, false).then((res) => {
+                            if(res.code==1){
+                                let arr = res.data.children
+                    this.oneList = this.deleteChildren(arr)
+                              }
+                            })    
+            },
+            //遍历树结构，当节点的children为空时，删除children
+        deleteChildren(arr) {
+            let childs = arr
+            for (let i = childs.length; i--; i > 0) {
+                if (childs[i].children) {
+                    if (childs[i].children.length) {
+                        this.deleteChildren(childs[i].children)
+                    } else {
+                        delete childs[i].children
+                    }
+                }
+            }
+            return arr
+        },
+            getUnitList(){
+                this.request('masterData_basicMeasureUnit_pullDown', {}, false).then((res) => {
+                            if(res.code==1){
+                                this.unitList = res.data
+                              }
+                            })    
+            },
+            getSupplierList(){//
+            let data = {}
+            data.onlySupplier = true
+            this.request('masterData_supplier_selector', data, false).then((res) => {
+                            if(res.code==1){
+                                let list = []
+                                res.data.map((item)=>{
+                                    if(!!item.shortName){
+                                        list.push(item)
+                                    }
+                                })
+                                this.basicSupplierShortNameList = list
+                              }
+                            })    
+            },
             getColorList(){
                 let data = {}
                 data.pageSize = 2000
@@ -366,37 +645,137 @@ export default {
                 this.changeColorId = colorId
             },
              getIn(){
-                   this.dialogVisible=true
-                //    this.getColor(this.supplierMaterialColorNo)
+                 this.setBuryPoint('录入')
+                 if(this.tableData[0].sampleSource == 'A类开发'){
+                     this.aVisible = true
+                    this.aformData.basicSupplierShortName=this.tableData[0].basicSupplierId,
+                    this.aformData.supplierMaterialNo=this.tableData[0].supplierMaterialNo,
+                    // this.aformData.color=this.tableData[0].basicColorName,
+                    this.aformData.supplierMaterialColorNo=this.tableData[0].supplierMaterialColorNo,
+                    //赋值有问题
+                    this.aformData.one=[this.tableData[0].firstMaterialType,this.tableData[0].twiceMaterialType,this.tableData[0].thirdMaterialType]
+                    // this.aformData.second=this.tableData[0].twiceMaterialType,
+                    // this.aformData.third=this.tableData[0].thirdMaterialType
+                    
+                 }else{
+                     this.dialogVisible=true
+                 }
              },
-            //  getColor(color){
-            //          let data={}
-            //              data.colorNo=color
-            //              this.request('color_page',data,false).then(res=>{
-            //                  if(res.code==1){
-            //                      if(res.data.records){
-            //                           this.formData.colorId=res.data.records[0].id
-            //                           this.formData.color=res.data.records[0].colorNo+'-'+res.data.records[0].colorName+'-'+res.data.records[0].code
-            //                           this.formData.colorName=res.data.records[0].colorName
-            //                      }else{
-
-            //                      }
-                                  
-            //                  }else{
-            //                       this.$message.error(res.msg)
-            //                  }
-            //              })       
-            //  },
+            submitAforms(){
+                let {taskNo,taskDetailId,taskConfigurationId,taskConfigurationName}=this.$route.query
+                let name = ''
+                this.basicSupplierShortNameList.map((item)=>{
+                    if(item.id == this.aformData.basicSupplierShortName){
+                        name = item.shortName
+                    }
+                })
+                this.$refs['ruleFormA'].validate((valid) => {
+                if (valid) {
+                    let data = {}
+                    data.taskNo=taskNo //流水号
+                          data.materialImg=this.materialImg //图片
+                          data.materialYear=this.aformData.year //年
+                          data.materialMonth=this.aformData.month //月
+                          data.basicColorId=this.changeColorId //颜色ID
+                          data.basicColorName=this.aformData.color //颜色
+                          data.viewColor= this.aformData.color //颜色组合
+                          data.materialName=this.aformData.name //物料名称
+                        //   data.materialTypeId=this.aformData.third //三级分类ID
+                          data.firstMaterialType=this.aformData.one[0] //一级分类
+                          data.twiceMaterialType=this.aformData.one[1] //二级分类
+                          data.thirdMaterialType=this.aformData.one[2] //三级分类
+                        //   data.thirdMaterialTypeCode=this.getfirstName(4,this.aformData.third) //三级分类编码
+                          data.materialSpecification=this.aformData.sku //物料规格
+                          data.riskRemark          =this.aformData.riskRemark //质量风险提示
+                          data.id                  =this.tableData[0]?this.tableData[0].id:''
+                          data.taskDetailId        =taskDetailId //明细ID
+                          data.taskConfigurationId  =taskConfigurationId 
+                          data.taskConfigurationName=taskConfigurationName
+                          data.basicSupplierId = this.aformData.basicSupplierShortName //供应商ID
+                          data.basicSupplierShortName = name //供应商简称
+                          data.supplierMaterialNo = this.aformData.supplierMaterialNo //供应商物料编号
+                          data.supplierMaterialColorNo = this.aformData.supplierMaterialColorNo //供应商物料色号
+                          data.fabricWidth = this.aformData.fabricWidth //门幅
+                          data.fabricWeight = this.aformData.fabricWeight //克重
+                          data.unit = this.aformData.unit //单位
+                          data.ingredient = this.aformData.ingredient //成分
+                          data.moq = this.aformData.moq //起订量
+                          data.loss = this.aformData.loss //%默认损耗
+                          data.loopedWeft = this.aformData.loopedWeft //%纬缩
+                          data.knees = this.aformData.knees //% 经缩
+                          data.productCycle = this.aformData.productCycle //%生产周期生产周期
+                          data.orderCycle = this.aformData.orderCycle //%订货周期
+                          data.kilogramsOfRice = this.aformData.kilogramsOfRice //公斤米数
+                          data.remark = this.aformData.remark //备注
+                          if(!data.materialImg)return this.$message.error('图片不能为空')
+                           this.request('fabric_developMaterialEnter_submit',data,false).then(res=>{
+                               if(res.code==1){
+                                      this.cancel()
+                                    //    setTimeout(()=>{
+                                            this.$root.eventHub.$emit('closePageFromOtherPage', 'fabricdetail');//关闭新增页面
+                                    //    },200) 
+                                      this.$router.push({
+                                                          name:'fabriccomplated',
+                                                          query: { 
+                                                                 taskNo: taskNo,
+                                                                 taskDetailId:taskDetailId
+                                                         }
+                                                 })
+                                    
+                               }else{
+                                    this.$message.error(res.msg)
+                               }
+                          })
+                } else {
+                    return false;
+                }
+            });
+            },
+            cancelAforms(){
+                this.aVisible=false;
+                this.aformData={
+                   year:new Date().getFullYear(),
+                    month:new Date().getMonth()+1,
+                    yply:'A类开发',
+                    basicSupplierShortName:'',
+                    supplierMaterialNo:'',
+                    supplierMaterialColorNo:'',
+                    color:'',
+                    name:'',
+                    sku:'',
+                    first:'',
+                    second:'',
+                    one:[],
+                    fabricWidth:'',
+                    fabricWeight:'',
+                    unit:'',
+                    ingredient:'',
+                    moq:'',
+                    loss:'',
+                    loopedWeft:'',
+                    knees:'',
+                    productCycle:'',
+                    orderCycle:'',
+                    kilogramsOfRice:'',
+                    remark:'',
+                    riskRemark:'',
+                },
+                this.imgShowUrl=''
+                this.$refs['ruleFormA'].resetFields();
+            },
              getSelectMaterialType(level,parentId){
                       let data={}
                           data.level=level;
 
                           if(level==2){
+                               this.aformData.second=''
+                              this.aformData.third=''
                               this.formData.second=''
                               this.formData.third=''
                           }
                           if(level==3){
-                               this.formData.third='' 
+                               this.formData.third=''
+                               this.aformData.third=''
                           }
                           if(level>1){
                              data.parentId=parentId
@@ -405,16 +784,22 @@ export default {
                               if(res.code==1){
                                    if(level==1){
                                           this.firstLevelList=res.data
+                                          this.secondLevelList=[]
+                                          this.thirdLevelList =[]
                                    }else if(level==2){
                                           this.secondLevelList=res.data
+                                          this.thirdLevelList =[]
                                    }else if(level==3){
                                           this.thirdLevelList=res.data
                                    }
                               }else{
                                    if(level==1){
                                           this.firstLevelList =[]
+                                          this.secondLevelList=[]
+                                          this.thirdLevelList =[]
                                    }else if(level==2){
                                           this.secondLevelList=[]
+                                          this.thirdLevelList =[]
                                    }else if(level==3){
                                           this.thirdLevelList =[]
                                    }    
@@ -428,7 +813,7 @@ export default {
              submitRecord(){
                      let {taskNo,taskDetailId,taskConfigurationId,taskConfigurationName}=this.$route.query
                      
-                     let  data={}
+                     let  data=this.tableData[0]
                           data.taskNo=taskNo
                           data.materialImg=this.materialImg
                           data.materialYear=this.formData.year
@@ -468,6 +853,9 @@ export default {
                                }
                           })
              },
+            //          this.aformData.first=this.tableData[0].firstMaterialType,
+            //         this.aformData.second=this.tableData[0].twiceMaterialType,
+            //         this.aformData.third=this.tableData[0].thirdMaterialType
              getfirstName(type,id){
                   if(type==1){
                       for(let i=0,len=this.firstLevelList.length;i<len;i++){

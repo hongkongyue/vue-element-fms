@@ -13,17 +13,20 @@
                     <el-button v-if="judgeMenu.indexOf('导出') !== -1" size="small" type="primary" @click="onImport">导出</el-button>
                 </el-form-item>
             </div>
-            <el-form-item label="任务流编号：" size="small">
-                <el-input v-model="formSearch.taskNo" maxlength="20" style="width:150px"></el-input>
+            <el-form-item label="开发任务编号：" size="small">
+                <el-input v-model="formSearch.taskNo" maxlength="20" clearable style="width:150px"></el-input>
+            </el-form-item>
+            <el-form-item label="物料编号：" size="small">
+                <el-input v-model="formSearch.materialNo" maxlength="20" clearable style="width:150px"></el-input>
             </el-form-item>
             <el-form-item label="供应商简称：" size="small">
-                <el-input v-model="formSearch.basicSupplierShortName" maxlength="20" style="width:150px"></el-input>
+                <el-input v-model="formSearch.basicSupplierShortName" maxlength="20" clearable style="width:150px"></el-input>
             </el-form-item>
             <el-form-item label="供应商物料色号：" size="small">
-                <el-input v-model="formSearch.supplierMaterialColorNo" maxlength="20" style="width:150px"></el-input>
+                <el-input v-model="formSearch.supplierMaterialColorNo" maxlength="20" clearable style="width:150px"></el-input>
             </el-form-item>
             <el-form-item label="流程状态：" size="small">
-                <el-select v-model="formSearch.processStatus" value-key="id" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.processStatus" value-key="id" clearable filterable placeholder="请选择" style="width:150px">
                     <el-option v-show="item!='已完成'" v-for="item in statusList" :key="item" :label="item" :value="item"></el-option>
                 </el-select>
             </el-form-item>
@@ -36,7 +39,7 @@
                 </el-date-picker>
             </el-form-item>
             <el-form-item label="开发员：" size="small">
-                <el-select v-model="formSearch.developerId" filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.developerId" clearable filterable placeholder="请选择" style="width:150px">
                     <el-option  v-for="item in developerList" :key="item.id" :label="item.basicUserName" :value="item.basicUserId"></el-option>
                 </el-select>
               </el-form-item>
@@ -54,17 +57,19 @@
         </el-pagination>
         <el-table ref="multipleTable" :data="tableData" style="width: 100%" @row-click="showLog" border tooltip-effect="dark" max-height="250" @selection-change="handleSelectionChange">
             <el-table-column type="index" width="55" label="序号" align="center"></el-table-column>
-            <el-table-column prop="taskNo" label="任务流编号" align="center" min-width="120">
+            <el-table-column prop="taskNo" label="开发任务编号" align="center" min-width="120">
             </el-table-column>
             <el-table-column prop="processStatus" label="流程状态" min-width="120" align="center" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="initiateUserName" label="品牌发起人" min-width="120" align="center" show-overflow-tooltip>
+            <el-table-column prop="initiateUserName" label="发起人" min-width="120" align="center" show-overflow-tooltip>
             </el-table-column>
             <el-table-column prop="initiateDepartmentName" label="发起部门" min-width="120" align="center" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="majorClasses" label="面/辅料" min-width="120" align="center" show-overflow-tooltip>
+            <el-table-column prop="majorClasses" label="物料类型" min-width="120" align="center" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="kinds" label="面辅料品类分类" min-width="120" align="center" show-overflow-tooltip>
+            <el-table-column prop="kinds" label="品类分类" min-width="120" align="center" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column prop="materialNo" label="物料编号" min-width="120" align="center" show-overflow-tooltip>
             </el-table-column>
             <el-table-column prop="specialCategory" label="是否特殊工艺" min-width="120" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">{{ scope.row.specialCategory == 1 ? '是' : '否' }}</template>
@@ -213,8 +218,9 @@ import Util from 'libs/util'
 import { commonMixins } from 'mixins/common';
 import downLoad from '../../filter/downLoad'
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins: [commonMixins,debounce],
+    mixins: [commonMixins,debounce,burypoint],
     data() {
         return {
             noneUrl: 'https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1562574299&di=846b4c904bd54d3c3821fa5938888c69&src=http://hbimg.b0.upaiyun.com/bdaca9a07e1a8947c00c2f826ebf848750927aa24963-cATwbg_fw658',
@@ -268,6 +274,7 @@ export default {
         },
         //导出
         onImport() {
+            this.setBuryPoint('导出')
             let data = Util.deepClone(this.formSearch);
             !!this.formSearch.submitDay ? data.submitStartTime = Util.dateFormat(this.formSearch.submitDay[0],'yyyy-MM-dd') : delete data.submitStartTime
             !!this.formSearch.submitDay ? data.submitEndTime = Util.dateFormat(this.formSearch.submitDay[1],'yyyy-MM-dd') : delete data.submitEndTime
@@ -352,6 +359,7 @@ export default {
             this.getLoglist(row.taskNo)
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 

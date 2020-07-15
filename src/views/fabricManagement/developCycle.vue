@@ -142,8 +142,9 @@
 import filters from '../../filter/'
  import { commonMixins } from 'mixins/common';
  import {debounce} from 'mixins/debounce'
+ import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins: [commonMixins,debounce],
+    mixins: [commonMixins,debounce,burypoint],
     data() {
         return {
             visible: false,
@@ -235,9 +236,11 @@ export default {
             this.IDS = selection
         },
         downloadTemplate(){
+            this.setBuryPoint('下载模板')
                    location.href="https://eptison.oss-cn-hangzhou.aliyuncs.com/upload/prd/eop-fms/FabricDevelopCycleController/templateFile/开发周期-导入模板.xlsx"
         },
         onEdit() {
+            this.setBuryPoint('编辑')
             if (this.IDS.length == 1) {
                 this.dialogVisible = true
                 this.dialogtitle = "编辑"
@@ -255,11 +258,13 @@ export default {
             }
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.page = 1;
             this.getData()
 
         },
         editSubmit(){
+            this.setBuryPoint('编辑保存')
                  const {id,majorClasses,kinds,cycleDay,specialProcessCategoryDay,specialProcessCategory}=this.formData
 
                  if(specialProcessCategory&&specialProcessCategoryDay==0) return this.$message.error('特殊工艺类目不为空时，特殊工艺加时须大于0')
@@ -363,6 +368,7 @@ export default {
             this.getLoglist(row.id)
         },
         onImport() {
+            this.setBuryPoint('导入')
             this.visible = true
         },
         upload() {

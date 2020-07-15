@@ -178,8 +178,9 @@
 <script>
 var totalPageSum = {}
 import filters from '../../../filter/'
+import {burypoint} from 'mixins/burypoint'
 export default {
-
+    mixins:[burypoint],
     data() {
         return {
             typeList:[],
@@ -598,6 +599,7 @@ export default {
         },
         //同步
         onSync() {
+            this.setBuryPoint('同步')
             let data = {}
             this.request('order_sync', data, false).then(res => {
                 if (res.code == '1') {
@@ -736,6 +738,7 @@ export default {
 
                     this.loading = false
                 } else {
+                    this.total=0
                     this.initTable([])
                     this.$message({
                         message: res.msg,
@@ -807,7 +810,7 @@ export default {
             })
         },
         onSearch() {
-
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 
@@ -835,6 +838,7 @@ export default {
         },
        //导出相关
         checkExport(){
+            this.setBuryPoint('导出')
                  if(this.checkSelection()){
                     // this.onImport()
                     this.exportVisible=true
@@ -843,6 +847,7 @@ export default {
                  }
         },
         cancelExport(){
+            this.setBuryPoint('取消导出')
                    this.exportVisible=false;
                    this.moreLarge=false;
                    this.exportObj.selected=''
@@ -881,6 +886,7 @@ export default {
         },
          //导出
         onImport(){
+            this.setBuryPoint('确认导出')
                     let data = {}
                         data.pageSize = this.pagesize
                         data.currentPage = this.currentPage

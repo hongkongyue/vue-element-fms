@@ -69,8 +69,9 @@
 <script>
 import filters from '../../filter/'
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
         return {
             brandList: [],
@@ -338,6 +339,7 @@ export default {
             this.dialogVisible = true
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.page = 1;
             this.getData()
 
@@ -515,6 +517,7 @@ export default {
         },
         //异步导出
         onExport() {
+            this.setBuryPoint('导出')
             let data = {}
                 data.currentPage = this.page
                 data.pageSize = this.pageSize

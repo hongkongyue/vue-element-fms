@@ -85,8 +85,9 @@
 import filters from '../../../filter/'
 import Util from 'libs/util'
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins: [debounce],
+    mixins: [debounce,burypoint],
     data() {
         return {
             feedTypeList:[{id:1,name:'提建议'},{id:2,name:'操作优化'},{id:3,name:'吐槽'}],//问题类型
@@ -197,6 +198,7 @@ export default {
             })
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.page = 1;
             this.getData()
 
@@ -208,6 +210,7 @@ export default {
         },
         //确认问题
         onEdit(){
+            this.setBuryPoint('确认问题')
             if(this.IDS.length == 0){
                 this.$message.error('请先选择数据再确认问题')
             }else{

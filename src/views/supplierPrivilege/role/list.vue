@@ -72,8 +72,9 @@
 <script>
 import filters from '../../../filter/'
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins: [debounce],
+    mixins: [debounce,burypoint],
     data() {
         return {
             IDS: [],
@@ -137,6 +138,7 @@ export default {
                 })
         },
         onEdit() {
+            this.setBuryPoint('编辑')
             if (this.IDS.length == 1) {
                 this.$router.push({
                     name: 'edit_supply_role',
@@ -163,11 +165,13 @@ export default {
             this.getData()
         },
         onAdd() {
+            this.setBuryPoint('新增')
             this.$router.push({
                 name: 'add_supply_role',
             })
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.page = 1;
             this.getData()
             

@@ -10,20 +10,23 @@
                     <el-button size="small" @click="onReset">重置</el-button>
                 </el-form-item>
                 <el-form-item size="small">
-                    <el-button v-if="judgeMenu.indexOf('新增大货物料') !== -1" size="small" type="primary" @click="onAdd('1')">新增大货物料</el-button>
+                    <el-button v-if="judgeMenu.indexOf('检测新增') !== -1" size="small" type="primary" @click="onAdd('1')">检测新增</el-button>
                 </el-form-item>
                 <el-form-item size="small">
-                    <el-button v-if="judgeMenu.indexOf('新增设计款号物料') !== -1" size="small" type="primary" @click="onAdd('2')">新增设计款号物料</el-button>
+                    <el-button v-if="judgeMenu.indexOf('取消流程') !== -1" size="small" type="primary" @click="cancel">取消流程</el-button>
                 </el-form-item>
-                <!-- <el-form-item size="small">
-                    <el-button v-if="judgeMenu.indexOf('编辑') !== -1" size="small" type="primary" @click="onAdd('edit')">编辑</el-button>
-                </el-form-item> -->
                 <el-form-item size="small">
                     <el-button v-if="judgeMenu.indexOf('导出') !== -1" size="small" type="primary" @click="onExport">导出</el-button>
                 </el-form-item>
             </div>
             <el-form-item label="大货款号：" size="small">
                 <el-input v-model="formSearch.goodsNo" clearable placeholder="请输入" style="width:150px"></el-input>
+            </el-form-item>
+            <el-form-item label="创建人：" size="small">
+                <!-- <el-input v-model="formSearch.developer" clearable placeholder="请输入" style="width:150px"></el-input> -->
+                <el-select v-model="formSearch.developer" clearable placeholder="请选择" style="width:150px" filterable>
+                                  <el-option v-for="v in developerList" :key="v"  :label="v"  :value="v"></el-option>
+                              </el-select>
             </el-form-item>
             <el-form-item label="批次：" size="small">
                 <el-input v-model="formSearch.batchNo" clearable placeholder="请输入" style="width:150px"></el-input>
@@ -35,34 +38,25 @@
                 <el-input v-model="formSearch.taskNo" clearable placeholder="请输入" style="width:150px"></el-input>
             </el-form-item>
             <el-form-item label="检测结果：" size="small">
-                <!-- <el-input v-model="formSearch.inspectResultStr" clearable placeholder="请输入" style="width:150px"></el-input> -->
-                    <el-select v-model="formSearch.inspectResultStr"  filterable  placeholder="请选择" style="width:170px">
-                        <el-option v-for="item in checkStatus" :key="item.label" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
-            </el-form-item>
-             <el-form-item label="任务状态：" size="small">
-                <!-- <el-input v-model="formSearch.inspectResultStr" clearable placeholder="请输入" style="width:150px"></el-input> -->
-                    <el-select v-model="formSearch.flowStatus"  filterable  placeholder="请选择" style="width:170px">
-                        <el-option v-for="item in taskStatus" :key="item.label" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
-            </el-form-item>
-             <el-form-item label="数据来源：" size="small">
-                <!-- <el-input v-model="formSearch.inspectResultStr" clearable placeholder="请输入" style="width:150px"></el-input> -->
-                    <el-select v-model="formSearch.dataSource"  filterable  placeholder="请选择" style="width:170px">
-                        <el-option v-for="item in dataSourceList" :key="item.label" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
-              </el-form-item>
-              <el-form-item label="是否加急：" size="small">
-                <!-- <el-input v-model="formSearch.inspectResultStr" clearable placeholder="请输入" style="width:150px"></el-input> -->
-                    <el-select v-model="formSearch.urgentStr"  filterable  placeholder="请选择" style="width:170px">
-                        <el-option v-for="item in urgentList" :key="item.label" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
-              </el-form-item>
-            <!-- <el-form-item label="推送类型：" size="small">
-                <el-select v-model="formSearch.sendType" clearable filterable placeholder="请选择" style="width:150px">
-                    <el-option v-for="item in sendTypeList" :key="item.name" :label="item.name" :value="item.id"></el-option>
+                <el-select v-model="formSearch.inspectResultStr" filterable placeholder="请选择" style="width:170px">
+                    <el-option v-for="item in checkStatus" :key="item.label" :label="item.label" :value="item.value"></el-option>
                 </el-select>
-            </el-form-item> -->
+            </el-form-item>
+            <el-form-item label="任务状态：" size="small">
+                <el-select v-model="formSearch.flowStatus" filterable placeholder="请选择" style="width:170px">
+                    <el-option v-for="item in taskStatus" :key="item.label" :label="item.label" :value="item.value"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="数据来源：" size="small">
+                <el-select v-model="formSearch.dataSource" filterable placeholder="请选择" style="width:170px">
+                    <el-option v-for="item in dataSourceList" :key="item.label" :label="item.label" :value="item.value"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="是否加急：" size="small">
+                <el-select v-model="formSearch.urgentStr" filterable placeholder="请选择" style="width:170px">
+                    <el-option v-for="item in urgentList" :key="item.label" :label="item.label" :value="item.value"></el-option>
+                </el-select>
+            </el-form-item>
         </el-form>
 
     </header>
@@ -80,17 +74,22 @@
                     <el-table-column type="selection" width="50">
                     </el-table-column>
                     <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
-                     <el-table-column prop="taskNo" label="任务编号" sortable min-width="120" align="center" show-overflow-tooltip>
-                     </el-table-column>
-                     
+                    <el-table-column prop="taskNoGroup" label="任务编号" sortable min-width="120" align="center" show-overflow-tooltip>
+                    </el-table-column>
+                    <el-table-column prop="taskNo" label="检测任务编号" sortable min-width="120" align="center" show-overflow-tooltip>
+                    </el-table-column>
                     <el-table-column prop="flowStatus" label="任务状态" sortable min-width="120" align="center" show-overflow-tooltip>
-                    <template scope="scope">
-                        {{scope.row.flowStatus == 0 ? '待受理' : (scope.row.flowStatus == 1 ? '受理完成' :'检测完成')}}
-                    </template>
+                        <template slot-scope="scope">
+                            {{scope.row.flowStatus == 0 ? '待受理' : (scope.row.flowStatus == 1 ? '受理完成' :  (scope.row.flowStatus == 2 ? '检测完成' : '已取消'))}}
+                        </template>
                     </el-table-column>
-                     <el-table-column prop="urgentStr" label="是否加急" sortable min-width="120" align="center" show-overflow-tooltip>
+                    <el-table-column prop="contrastColor" label="是否撞色" sortable min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
-                     <el-table-column prop="inspectResultStr" label="检测结果" sortable min-width="120" align="center" show-overflow-tooltip>
+                    <el-table-column prop="realMaterial" label="是否有实物" sortable min-width="120" align="center" show-overflow-tooltip>
+                    </el-table-column>
+                    <el-table-column prop="urgentStr" label="是否加急" sortable min-width="120" align="center" show-overflow-tooltip>
+                    </el-table-column>
+                    <el-table-column prop="inspectResultStr" label="检测结果" sortable min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column prop="goodsNo" label="大货款号" sortable min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
@@ -110,8 +109,12 @@
                     </el-table-column>
                     <el-table-column prop="usingPart" label="使用部位" sortable min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
-                      <el-table-column prop="dataSource" label="数据来源" sortable min-width="120" align="center" show-overflow-tooltip>
-                     </el-table-column>
+                    <el-table-column prop="dataSource" label="数据来源" sortable min-width="120" align="center" show-overflow-tooltip>
+                    </el-table-column>
+                    <el-table-column prop="description" label="检测要求" sortable min-width="120" align="center" show-overflow-tooltip>
+                    </el-table-column>
+                    <el-table-column prop="acceptRemark" label="受理说明" sortable min-width="120" align="center" show-overflow-tooltip>
+                    </el-table-column>
                     <el-table-column prop="createUser" label="创建人" sortable min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column prop="created" label="创建时间" sortable min-width="120" align="center" show-overflow-tooltip>
@@ -162,6 +165,20 @@
                 </el-form-item>
                 </Col>
                 <Col span="6">
+                <el-form-item label="是否撞色：" prop="contrastColor" size="small">
+                    <el-select v-model="ruleForm.contrastColor" filterable clearable placeholder="请选择" style="width:150px">
+                        <el-option v-for="item in yesNoList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                    </el-select>
+                </el-form-item>
+                </Col>
+                <Col span="6">
+                <el-form-item label="是否有实物：" prop="realMaterial" size="small">
+                    <el-select v-model="ruleForm.realMaterial" filterable clearable placeholder="请选择" style="width:150px">
+                        <el-option v-for="item in yesNoList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                    </el-select>
+                </el-form-item>
+                </Col>
+                <Col span="6">
                 <el-form-item label="设计款号：" prop="designNo" size="small">
                     <el-input v-model="ruleForm.designNo" disabled clearable placeholder="请输入" style="width:150px"></el-input>
                 </el-form-item>
@@ -169,7 +186,7 @@
                 </Col>
                 <Col span="24">
                 <Col span="24">
-                <el-form-item label="检测说明：" prop="description" size="small">
+                <el-form-item label="检测要求：" prop="description" size="small">
                     <el-input v-model="ruleForm.description" type="textarea" clearable placeholder="请输入" style="width:850px"></el-input>
                 </el-form-item>
                 </Col>
@@ -187,6 +204,10 @@
                 <el-table-column prop="majorClasses" label="项目" min-width="120" align="center" show-overflow-tooltip>
                 </el-table-column>
                 <el-table-column prop="materialNoPlusColor" label="物料编码+色号" min-width="120" align="center" show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column prop="internalInspectResult" label="内检结果" min-width="120" align="center" show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column prop="externalInspectResult" label="外检结果" min-width="120" align="center" show-overflow-tooltip>
                 </el-table-column>
                 <el-table-column prop="materialName" label="物料名称" min-width="120" align="center" show-overflow-tooltip>
                 </el-table-column>
@@ -240,7 +261,7 @@
                 </Col>
                 <Col span="24">
                 <Col span="24">
-                <el-form-item label="检测说明：" prop="description" size="small">
+                <el-form-item label="检测要求：" prop="description" size="small">
                     <el-input v-model="ruleFormDesign.description" type="textarea" clearable placeholder="请输入" style="width:850px"></el-input>
                 </el-form-item>
                 </Col>
@@ -251,7 +272,7 @@
                 <el-table-column type="selection" width="50">
                 </el-table-column>
                 <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
-              
+
                 <el-table-column prop="designNo" label="设计款号" min-width="120" align="center" show-overflow-tooltip>
                 </el-table-column>
                 <el-table-column prop="styleColor" label="设计款号颜色" min-width="120" align="center" show-overflow-tooltip>
@@ -289,35 +310,72 @@
 import {
     commonMixins
 } from 'mixins/common';
-// import {
-//     debounce
-// } from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins: [commonMixins],
+    mixins: [commonMixins,burypoint],
     data() {
         return {
-             urgentList:[ {label:'是',    value:'1' },
-                          {label:'否',    value:'0'},
-                          ],
-            dataSourceList:[
-                 {label:'面料新开发',    value:'面料新开发' },
-                 {label:'设计款号',  value:'设计款号'},
-                 {label:'大货款号',  value:'大货款号'},
+            yesNoList:[{id:1,name:'是'},{id:0,name:'否'}],
+            urgentList: [{
+                    label: '是',
+                    value: '1'
+                },
+                {
+                    label: '否',
+                    value: '0'
+                },
             ],
-            checkStatus:[
-                {label:'全部',    value:'' },
-                {label:'检测中',  value:'0'},
-                {label:'不合格', value:'1'},
-                {label:'合格',  value:'2'},
+            dataSourceList: [{
+                    label: '面料新开发',
+                    value: '面料新开发'
+                },
+                {
+                    label: '设计款号',
+                    value: '设计款号'
+                },
+                {
+                    label: '大货款号',
+                    value: '大货款号'
+                },
             ],
-            taskStatus:[{label:'待受理',    value:'0' },
-                        {label:'受理完成',  value:'1'},
-                        {label:'检测完成', value:'2'},
-                        // {label:'风评完成',  value:'3'},
-                        ],
-            selectDeisgn:[],
-            simpleCategoryList:[],
-            selectBig:[],
+            checkStatus: [{
+                    label: '全部',
+                    value: ''
+                },
+                {
+                    label: '检测中',
+                    value: '0'
+                },
+                {
+                    label: '不合格',
+                    value: '1'
+                },
+                {
+                    label: '合格',
+                    value: '2'
+                },
+            ],
+            taskStatus: [{
+                    label: '待受理',
+                    value: '0'
+                },
+                {
+                    label: '受理完成',
+                    value: '1'
+                },
+                {
+                    label: '检测完成',
+                    value: '2'
+                },
+                {
+                    label: '已取消',
+                    value: '4'
+                },
+                // {label:'风评完成',  value:'3'},
+            ],
+            selectDeisgn: [],
+            simpleCategoryList: [],
+            selectBig: [],
             colorList: [],
             bicNoList: [],
             tableDesign: [], //新增设计款号
@@ -345,9 +403,11 @@ export default {
                 designNo: '',
                 num: '',
                 simpleCategory: '',
-                description: ''
+                description: '',
+                realMaterial:'',
+                contrastColor:''
             },
-            ruleFormDesign:{
+            ruleFormDesign: {
                 bigGoods: '',
                 batchNo: '',
                 color: '',
@@ -356,7 +416,8 @@ export default {
                 simpleCategory: '',
                 description: ''
             },
-            rulesDesign:{
+            rulesDesign: {
+                
                 bigGoods: [{
                     required: true,
                     message: '请输入',
@@ -401,6 +462,16 @@ export default {
                 ],
             },
             rules: {
+                contrastColor: [{
+                    required: true,
+                    message: '请选择',
+                    trigger: 'change'
+                }],
+                realMaterial: [{
+                    required: true,
+                    message: '请选择',
+                    trigger: 'change'
+                }],
                 bigGoods: [{
                     required: true,
                     message: '请输入',
@@ -468,8 +539,8 @@ export default {
             rowLenght: '',
             rowObj: {},
             selection: [],
-            logPage:1,
-            
+            logPage: 1,
+            developerList:[],
         }
     },
     created() {
@@ -484,10 +555,51 @@ export default {
         }
     },
     mounted() {
-
+        this.getDeveloperList()
         this.getButtonJurisdiction() //按钮权限
     },
     methods: {
+         getDeveloperList() { //
+            let data = {}
+            this.request('fabric_getdeveloperList', data, false).then(res => {
+                if (res.code == 1) {
+                    this.developerList = res.data;
+                }
+            })
+        },
+        //检测申请取消功能
+        cancel() {
+            this.setBuryPoint('取消流程')
+            let list = []
+            this.selection.map((item) => {
+                list.push(item.taskNo)
+            })
+            if (list.length > 0) {
+                this.$confirm('取消选中的数据, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    let data = {}
+                    data.taskNos = list
+                    this.request('fabric_cancelTask', data, true).then(res => {
+                        if (res.code == 1) {
+                            this.$message.success('取消成功')
+                            this.getData()
+                        } else {
+                            this.$message.error(res.msg)
+                        }
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消'
+                    });
+                });
+            } else {
+                this.$message.error("请先选择取消的数据！");
+            }
+        },
         bigCancel() {
             this.$refs['ruleForm'].resetFields();
             this.ruleForm = {
@@ -556,6 +668,7 @@ export default {
         },
         //新增查询
         onseeMore() {
+            if (!this.ruleForm.bigGoods) return this.$message.error('请输入大货款号')
             let data = this.ruleForm
             data.goodsNo = this.ruleForm.bigGoods
             this.request('goodsCheck_materielDetail', data, true).then(res => {
@@ -566,54 +679,40 @@ export default {
                 }
             })
         },
-        handleSelectionBig(row){
+        handleSelectionBig(row) {
             this.selectBig = row
-            console.log(row,'-----------')
+            console.log(row, '-----------')
         },
         //新增大货物料提交
         onSubmitBig() {
-            if(this.selectBig.length == 0){
+            if (this.selectBig.length == 0) {
                 this.$message.warning('请先勾选数据')
-            }else{
+            } else {
                 this.$refs['ruleForm'].validate((valid) => {
                     console.log(valid)
-                if (valid) { //新增保存
-                    let data = this.ruleForm
-                    data.goodsNo = this.ruleForm.bigGoods
-                    data.details = this.selectBig
-                    // data.includeFabricDevelopData=false
-                    this.request('goodsCheck_batchAdd', data, true).then(res => {
-                        if (res.code == 1) {
-                            this.$message.success('提交成功')
-                            this.getData()
-                            this.$refs['ruleForm'].resetFields();
-                            this.bigCancel()
-                            // this.tableAdd = []
-                            // this.selectBig = []
-                            // this.visibleBig = false
-                            // this.ruleForm = {
-                            //     bigGoods: '',
-                            //     batchNo: '',
-                            //     colors: [],
-                            //     designNo: '',
-                            //     num: '',
-                            //     simpleCategory: '',
-                            //     description: ''
-                            // }
-                            // this.bicNoList = []
-                            // this.colorList = []
-                        } else {
-                            this.$message.error(res.msg)
-                        }
-                    })
-                } else { //验证表单
-                    return false;
-                }
-            });
+                    if (valid) { //新增保存
+                        let data = this.ruleForm
+                        data.goodsNo = this.ruleForm.bigGoods
+                        data.details = this.selectBig
+                        // data.includeFabricDevelopData=false
+                        this.request('goodsCheck_batchAdd', data, true).then(res => {
+                            if (res.code == 1) {
+                                this.$message.success('提交成功')
+                                this.getData()
+                                this.$refs['ruleForm'].resetFields();
+                                this.bigCancel()
+                            } else {
+                                this.$message.error(res.msg)
+                            }
+                        })
+                    } else { //验证表单
+                        return false;
+                    }
+                });
             }
         },
 
-        changeDesign(num){
+        changeDesign(num) {
             this.ruleFormDesign.color = ''
             this.ruleFormDesign.simpleCategory = ''
             this.simpleCategoryList = []
@@ -628,7 +727,7 @@ export default {
                 }
             })
         },
-        changeDesignColor(color){
+        changeDesignColor(color) {
             this.ruleFormDesign.simpleCategory = ''
             this.simpleCategoryList = []
             let data = {}
@@ -642,9 +741,10 @@ export default {
                 }
             })
         },
-        onSeeDesign(){
+        onSeeDesign() {
             let data = this.ruleFormDesign
             data.styleColor = this.ruleFormDesign.color
+            if (!data.designNo) return this.$message.error('请输入设计款号')
             this.request('goodsCheck_design_materielDetail', data, true).then(res => {
                 if (res.code == 1) {
                     this.tableDesign = res.data
@@ -653,47 +753,33 @@ export default {
                 }
             })
         },
-        onSubmitDesign(){
-            if(this.selectDeisgn.length == 0){
+        onSubmitDesign() {
+            if (this.selectDeisgn.length == 0) {
                 this.$message.warning('请先勾选数据')
-            }else{
+            } else {
                 this.$refs['ruleFormDesign'].validate((valid) => {
                     console.log(valid)
-                if (valid) { //新增保存
-                    let data = this.ruleFormDesign
-                    data.styleColor = this.ruleFormDesign.color
-                    data.details = this.selectDeisgn
-                    this.request('goodsCheck_batchAdd', data, true).then(res => {
-                        if (res.code == 1) {
-                            this.$message.success('提交成功')
-                            this.getData()
-                            this.$refs['ruleFormDesign'].resetFields();
-                            this.designCancel()
-                            // this.tableDesign = []
-                            // this.selectDeisgn = []
-                            // this.visibleDesign = false
-                            // this.ruleFormDesign = {
-                            //     bigGoods: '',
-                            //     batchNo: '',
-                            //     color: '',
-                            //     designNo: '',
-                            //     num: '',
-                            //     simpleCategory: '',
-                            //     description: ''
-                            // }
-                            // this.simpleCategoryList = []
-                            // this.colorList = []
-                        } else {
-                            this.$message.error(res.msg)
-                        }
-                    })
-                } else { //验证表单
-                    return false;
-                }
-            });
+                    if (valid) { //新增保存
+                        let data = this.ruleFormDesign
+                        data.styleColor = this.ruleFormDesign.color
+                        data.details = this.selectDeisgn
+                        this.request('goodsCheck_batchAdd', data, true).then(res => {
+                            if (res.code == 1) {
+                                this.$message.success('提交成功')
+                                this.getData()
+                                this.$refs['ruleFormDesign'].resetFields();
+                                this.designCancel()
+                            } else {
+                                this.$message.error(res.msg)
+                            }
+                        })
+                    } else { //验证表单
+                        return false;
+                    }
+                });
             }
         },
-        handleSelectionDesign(row){
+        handleSelectionDesign(row) {
             this.selectDeisgn = row
         },
         handleShowHidden(name) {
@@ -743,18 +829,20 @@ export default {
         },
         //异步导出
         onExport() {
+            this.setBuryPoint('导出')
             let data = {}
-                data.goodsNo = this.formSearch.goodsNo
-                data.batchNo = this.formSearch.batchNo
-                data.designNo = this.formSearch.designNo
-                data.taskNo=this.formSearch.taskNo
-                data.inspectResult=this.formSearch.inspectResultStr
-                data.flowStatus=this.formSearch.flowStatus
-                data.dataSource=this.formSearch.dataSource
-                data.pageSize = this.pagesize
-                data.currentPage = this.currentPage
-                data.urgent=this.formSearch.urgentStr
-                data.includeFabricDevelopData=false
+            data.developer = this.formSearch.developer
+            data.goodsNo = this.formSearch.goodsNo
+            data.batchNo = this.formSearch.batchNo
+            data.designNo = this.formSearch.designNo
+            data.taskNo = this.formSearch.taskNo
+            data.inspectResult = this.formSearch.inspectResultStr
+            data.flowStatus = this.formSearch.flowStatus
+            data.dataSource = this.formSearch.dataSource
+            data.pageSize = this.pagesize
+            data.currentPage = this.currentPage
+            data.urgent = this.formSearch.urgentStr
+            data.includeFabricDevelopData = false
             this.request('goodsCheck_export', data, true).then(res => {
                 if (res.code == 1) {
                     this.getKey(res.data)
@@ -764,20 +852,21 @@ export default {
             })
         },
         getData() {
-            this.logPage=1
+            this.logPage = 1
             this.logList = []
             let data = {}
-                data.goodsNo = this.formSearch.goodsNo
-                data.batchNo = this.formSearch.batchNo
-                data.designNo = this.formSearch.designNo
-                data.taskNo=this.formSearch.taskNo
-                data.inspectResult=this.formSearch.inspectResultStr
-                data.flowStatus=this.formSearch.flowStatus
-                data.dataSource=this.formSearch.dataSource
-                data.pageSize = this.pagesize
-                data.currentPage = this.currentPage
-                data.urgent=this.formSearch.urgentStr
-                data.includeFabricDevelopData=false
+            data.developer = this.formSearch.developer
+            data.goodsNo = this.formSearch.goodsNo
+            data.batchNo = this.formSearch.batchNo
+            data.designNo = this.formSearch.designNo
+            data.taskNo = this.formSearch.taskNo
+            data.inspectResult = this.formSearch.inspectResultStr
+            data.flowStatus = this.formSearch.flowStatus
+            data.dataSource = this.formSearch.dataSource
+            data.pageSize = this.pagesize
+            data.currentPage = this.currentPage
+            data.urgent = this.formSearch.urgentStr
+            data.includeFabricDevelopData = false
             this.request('goodsCheck_goodsQuery', data, true).then(res => {
                 if (res.code == 1) {
                     this.total = res.data.count;
@@ -790,9 +879,9 @@ export default {
 
         getLoglist() {
             let data = {}
-                data.billNo = "fabric_qc_flow_task_prefix_" + this.billNo
-                data.pageSize = 3
-                data.currentPage = this.logPage
+            data.billNo = "fabric_qc_flow_task_prefix_" + this.billNo
+            data.pageSize = 3
+            data.currentPage = this.logPage
             this.request('billLog_getPagingByBillNo', data, true).then((res) => {
                 if (res.code == 1) {
                     if (res.data.length < data.pageSize) {
@@ -811,10 +900,10 @@ export default {
         getMore() {
             this.logPage++
             this.getLoglist()
-            
+
         },
         showLog(row) {
-            this.billNo=row.id
+            this.billNo = row.id
             this.getLoglist()
         },
         //部门
@@ -877,6 +966,7 @@ export default {
             })
         },
         onAdd(name) {
+            this.setBuryPoint('检测新增')
             if (name == '1') {
                 this.visibleBig = true
             } else {
@@ -965,6 +1055,7 @@ export default {
         },
         //查询
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 

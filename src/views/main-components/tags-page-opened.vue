@@ -20,8 +20,8 @@
                 </DropdownMenu>
             </Dropdown>
         </div>
-        <div ref="scrollBody" class="tags-inner-scroll-body" style="padding-left:16px" :style="{left: tagBodyLeft + 'px'}">
-            <transition-group name="taglist-moving-animation">
+        <div ref="scrollBody" class="tags-inner-scroll-body" style="padding-left:16px" :style="{left: tagBodyLeft + 'px'}" v-show="mode==1">
+            <transition-group name="taglist-moving-animation"  >
                 <Tag
                     type="dot"
                     v-for="(item, index) in pageTagsList"
@@ -34,6 +34,21 @@
                     :color="item.children?(item.children[0].name===currentPageName?'primary':'default'):(item.name===currentPageName?'primary':'default')"
                 >{{item.title}}</Tag>
             </transition-group>
+            <!-- <transition-group name="taglist-moving-animation"  v-show="mode==2">{{this.$route.query.title}}
+                <Tag
+                    type="dot"
+                    ref="tagsPageOpened"
+                    color="primary"
+                >{{this.$route.query.title}}</Tag>
+            </transition-group> -->
+        </div>
+         <div  class="tags-inner-scroll-body" style="padding-left:16px"  v-if="mode!=1">
+            <!-- <transition-group name="taglist-moving-animation">{{this.$route.query.title}} -->
+                <Tag
+                    type="dot"
+                    color="primary"
+                >{{this.title}}</Tag>
+            <!-- </transition-group> -->
         </div>
     </div>
 </template>
@@ -48,7 +63,8 @@ export default {
             currentPageName: this.$route.name,
             tagBodyLeft: 70,
             refsTag: [],
-            tagsCount: 1
+            tagsCount: 1,
+            title:''
         };
     },
     props: {
@@ -61,6 +77,9 @@ export default {
         }
     },
     computed: {
+         mode(){
+                 return this.$store.state.app.mode
+            },
         title () {
             return this.$store.state.app.currentTitle;
         },
@@ -72,6 +91,11 @@ export default {
         // pageTagsList(n,o){
         //     console.log(n)
         // }
+         mode(n,o){
+            if(n==2){
+                 this.title=this.$route.query.title?this.$route.query.title:document.title
+             }  
+         }
     },
     created(){
          //监听其他页面手动触发关闭指定页面事件
@@ -120,6 +144,7 @@ export default {
             }
         },
         linkTo (item) {
+            console.log(item)
             let routerObj = {};
             routerObj.name = item.name;
             if (item.argu) {
@@ -131,6 +156,7 @@ export default {
             if (this.beforePush(item)) {
                 this.$router.push(routerObj);
             }
+            localStorage.setItem('activeMenu',item.path)
         },
         handlescroll (e) {
             var type = e.type;
@@ -180,7 +206,9 @@ export default {
     },
     mounted () {
         this.refsTag = this.$refs.tagsPageOpened;
-        setTimeout(() => {
+        this.title=this.$route.query.title?this.$route.query.title:document.title
+        if(this.mode==1){
+             setTimeout(() => {
             this.refsTag.forEach((item, index) => {
                 if (this.$route.name === item.name) {
                     let tag = this.refsTag[index].$el;
@@ -188,11 +216,13 @@ export default {
                 }
             });
         }, 1); // 这里不设定时器就会有偏移bug
+        }
         this.tagsCount = this.tagsList.length;
     },
     watch: {
         '$route' (to) {
             this.currentPageName = to.name;
+            this.title=to.meta.label
             this.$nextTick(() => {
                 this.refsTag.forEach((item, index) => {
                     if (to.name === item.name) {

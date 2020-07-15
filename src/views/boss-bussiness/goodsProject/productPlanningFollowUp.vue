@@ -274,12 +274,10 @@
 import {
     commonMixins
 } from 'mixins/common';
-// import {
-//     debounce
-// } from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 import Util from 'libs/util'
 export default {
-    mixins: [commonMixins],
+    mixins: [commonMixins,burypoint],
     data() {
         return {
             detailsShow:false,
@@ -454,6 +452,7 @@ export default {
         },
         //导出
         onExport(){
+            this.setBuryPoint('导出')
             //this.saveexportVisible()
             let data = {}
             data.basicBrandId = this.formSearch.brand
@@ -510,6 +509,7 @@ export default {
 
         //查询
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
         },

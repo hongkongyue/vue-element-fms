@@ -11,18 +11,18 @@
             </Form>
             <el-table :data="list" size="mini" style="width: 100%"  border tooltip-effect="dark" max-height="350" @selection-change="handleSelectionChange">
             <el-table-column type="index" width="55" label="序号" align="center"></el-table-column>
-            <el-table-column prop="taskNo"            label="任务流编号" min-width="90" align="center" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="processStatus"     label="流程状态" align="center" min-width="80" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="initiateUserName"   label="品牌发起人"     min-width="90" align="center" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="initiateDepartmentName"      label="发起部门"       min-width="80" align="center" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="majorClasses" label="面/辅料"       min-width="120" align="center" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="kinds"      label="面辅料品类分类" min-width="120" align="center" show-overflow-tooltip>
-            </el-table-column>
+            <el-table-column prop="taskNo" label="开发任务编号" min-width="90" align="center" show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column prop="processStatus" label="流程状态" align="center" min-width="80" show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column prop="initiateUserName" label="发起人" min-width="90" align="center" show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column prop="initiateDepartmentName" label="发起部门" min-width="80" align="center" show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column prop="majorClasses" label="物料类型" min-width="120" align="center" show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column prop="kinds" label="品类分类" min-width="120" align="center" show-overflow-tooltip>
+                </el-table-column>
             <el-table-column prop="specialCategory"              label="是否特殊工艺"   min-width="120" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">{{scope.row.specialCategory == 1 ? '是' : '否'}}</template>
             </el-table-column>
@@ -269,8 +269,9 @@
 
 <script>
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
     export default {
-         mixins: [debounce],
+         mixins: [debounce,burypoint],
         data() {
             return {
                 noneUrl:'https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1562574299&di=846b4c904bd54d3c3821fa5938888c69&src=http://hbimg.b0.upaiyun.com/bdaca9a07e1a8947c00c2f826ebf848750927aa24963-cATwbg_fw658',
@@ -363,6 +364,7 @@ import {debounce} from 'mixins/debounce'
         methods: {
             
             getIn(){
+                this.setBuryPoint('录入')
                    this.dialogVisible=true
             },
              getLargePict(url){
@@ -402,7 +404,9 @@ import {debounce} from 'mixins/debounce'
                         })
                 },
                 getSupplyList(){
-                         this.request('masterData_supplier_selector',{},false).then(res=>{
+                    let data = {}
+                    data.onlySupplier = true
+                         this.request('masterData_supplier_selector',data,false).then(res=>{
                                 if(res.code==1){
                                     this.supplyList=res.data
                                 }else{

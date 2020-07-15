@@ -58,16 +58,19 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="季节：" size="small">
-                <el-select v-model="formSearch.season" clearable filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.season" clearable multiple filterable placeholder="请选择" style="width:150px">
                     <el-option v-for="item in seasonList" :key="item.name" :label="item.name" :value="item.name"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="年份：" size="small">
-                <el-date-picker v-model="formSearch.years" format="yyyy" type="year" style="width:150px" placeholder="选择年">
-                </el-date-picker>
+                <el-select v-model="formSearch.years" multiple clearable filterable placeholder="请选择" style="width:170px">
+                    <el-option v-for="item in yearList" :key="item" :label="item" :value="item"></el-option>
+                </el-select>
+                <!-- <el-date-picker v-model="formSearch.years" format="yyyy" type="year" style="width:150px" placeholder="选择年">
+                </el-date-picker> -->
             </el-form-item>
             <el-form-item label="波段：" size="small">
-                <el-select v-model="formSearch.waveBand" clearable filterable placeholder="请选择" style="width:150px">
+                <el-select v-model="formSearch.waveBand" clearable multiple filterable placeholder="请选择" style="width:150px">
                     <el-option v-for="item in waveList" :key="item.name" :label="item.name" :value="item.name"></el-option>
                 </el-select>
             </el-form-item>
@@ -140,10 +143,9 @@
                     <span @click="clickDetails('show')"><i v-if="detailsShow == true" style="font-size: 20px;cursor:pointer;float:right" class="el-icon-caret-bottom"></i></span>
                     <span @click="clickDetails('hidden')"><i v-if="detailsShow == false" style="font-size: 20px;cursor:pointer;float:right" class="el-icon-caret-top"></i></span>
                 </div>
-                
-                <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+                <el-tabs v-model="activeName" type="card" @tab-click="handleClick" :height="twoTableHeight">
                     <el-tab-pane label="明细" name="first">
-                        <el-table :data="detailsData" style="width: 100%" border highlight-current-row tooltip-effect="dark" :summary-method="getSummaries"  show-summary :height="twoTableHeight" size="mini">
+                        <el-table :data="detailsData" ref="table" style="width: 100%" border highlight-current-row tooltip-effect="dark" :summary-method="getSummaries"  show-summary :height="twoTableHeight" size="mini">
                             <el-table-column type="index" width="55" label="序号" fixed="left" align="center"></el-table-column>
                             <el-table-column prop="firstLevel" label="一级品类" fixed="left" sortable min-width="100" align="center" show-overflow-tooltip>
                             </el-table-column>
@@ -180,13 +182,13 @@
                         </el-table>
                     </el-tab-pane>
                     <el-tab-pane label="操作日志" name="second">
-                        <el-table :data="logList" style="width: 100%" border :height="twoTableHeight" tooltip-effect="dark">
-                            <el-table-column prop="operator" label="操作员" min-width="120" align="center">
+                        <el-table :data="logList" style="width: 100%" border highlight-current-row  tooltip-effect="dark" :maxHeight="showBink?200:140">
+                            <el-table-column prop="operator" label="操作员" width="120" align="center" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="operateTime" label="操作时间" align="center" min-width="120">
+                            <el-table-column prop="operateTime" label="操作时间" align="center" width="140" show-overflow-tooltip>
                                 <template slot-scope="scope">{{scope.row.operateTime}}</template>
                             </el-table-column>
-                            <el-table-column prop="logContent" label="操作记录" min-width="120" align="center" show-overflow-tooltip>
+                            <el-table-column prop="logContent" label="操作记录" min-width="120" align="left">
                             </el-table-column>
                         </el-table>
                         <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div>
@@ -237,48 +239,48 @@
                 </Col>
                 <Col span="6">
                 <el-form-item label="规划开发日期：" prop="developDate" size="small">
-                    <el-date-picker v-model="ruleForm.developDate" type="date" :picker-options="pickerOptions" style="width:140px" placeholder="选择日期">
+                    <el-date-picker v-model="ruleForm.developDate" :disabled="canEditMain" type="date" :picker-options="pickerOptions" style="width:140px" placeholder="选择日期">
                     </el-date-picker>
                 </el-form-item>
                 </Col>
                 <Col span="6">
                 <el-form-item label="规划交接日期：" prop="handoverDate" size="small">
-                    <el-date-picker style="width:140px" v-model="ruleForm.handoverDate" type="date" :picker-options="pickerOptions" placeholder="请选择"> </el-date-picker>
+                    <el-date-picker style="width:140px" v-model="ruleForm.handoverDate" :disabled="canEditMain" type="date" :picker-options="pickerOptions" placeholder="请选择"> </el-date-picker>
                 </el-form-item>
                 </Col>
                 <Col span="6">
                 <el-form-item label="齐色样日期：" prop="colorDate" size="small">
-                    <el-date-picker style="width:140px" v-model="ruleForm.colorDate" type="date" :picker-options="pickerOptions" placeholder="请选择"> </el-date-picker>
+                    <el-date-picker style="width:140px" v-model="ruleForm.colorDate" :disabled="canEditMain" type="date" :picker-options="pickerOptions" placeholder="请选择"> </el-date-picker>
                 </el-form-item>
                 </Col>
                 <Col span="6">
                 <el-form-item label="规划到货日期：" prop="arriveDate" size="small">
-                    <el-date-picker style="width:140px" v-model="ruleForm.arriveDate" type="date" :picker-options="pickerOptions" placeholder="请选择"> </el-date-picker>
+                    <el-date-picker style="width:140px" v-model="ruleForm.arriveDate" :disabled="canEditMain" type="date" :picker-options="pickerOptions" placeholder="请选择"> </el-date-picker>
                 </el-form-item>
                 </Col>
                 <Col span="6">
                 <el-form-item label="拍照日期：" prop="photoDate" size="small">
-                    <el-date-picker style="width:140px" v-model="ruleForm.photoDate" type="date" :picker-options="pickerOptions" placeholder="请选择"> </el-date-picker>
+                    <el-date-picker style="width:140px" v-model="ruleForm.photoDate" :disabled="canEditMain" type="date" :picker-options="pickerOptions" placeholder="请选择"> </el-date-picker>
                 </el-form-item>
                 </Col>
                 <Col span="6">
                 <el-form-item label="可上新日期：" prop="canUpnewDate" size="small">
-                    <el-date-picker style="width:140px" v-model="ruleForm.canUpnewDate" type="date" :picker-options="pickerOptions" placeholder="请选择"> </el-date-picker>
+                    <el-date-picker style="width:140px" v-model="ruleForm.canUpnewDate" :disabled="canEditMain" type="date" :picker-options="pickerOptions" placeholder="请选择"> </el-date-picker>
                 </el-form-item>
                 </Col>
                 <Col span="6">
                 <el-form-item label="上新日期：" prop="upnewDate" size="small">
-                    <el-date-picker style="width:140px" v-model="ruleForm.upnewDate" type="date" :picker-options="pickerOptions"  placeholder="请选择"> </el-date-picker>
+                    <el-date-picker style="width:140px" v-model="ruleForm.upnewDate" :disabled="canEditMain" type="date" :picker-options="pickerOptions"  placeholder="请选择"> </el-date-picker>
                 </el-form-item>
                 </Col>
                 <Col span="6">
                 <el-form-item label="比率：" prop="bilv" size="small">
-                    <el-input-number style="width:110px" v-model="ruleForm.bilv" size="mini" controls-position="right" :precision="2" :min="0.1" :max="1000000"></el-input-number>
+                    <el-input-number style="width:110px" v-model="ruleForm.bilv" :disabled="canEditMain" size="mini" controls-position="right" :precision="2" :min="0.1" :max="1000000"></el-input-number>
                 </el-form-item>
                 </Col>
                 <Col span="18">
                 <el-form-item label="备注：" size="small">
-                    <el-input v-model="ruleForm.remark" placeholder="请输入" style="width:730px"></el-input>
+                    <el-input v-model="ruleForm.remark" placeholder="请输入" :disabled="canEditMain" style="width:730px"></el-input>
                 </el-form-item>
                 </Col>
             </el-form>
@@ -286,60 +288,60 @@
         <Button type="primary" @click="addTable">添加</Button>
         <Button type="default" @click="deleteTable">删除</Button>
         <el-table :data="addTableList" style="width: 100%" @selection-change="handleSelectionChange" border tooltip-effect="dark" :max-height="340" size="mini">
-            <el-table-column type="selection" width="55">
+            <el-table-column type="selection" :selectable='checkboxSelect' width="55">
             </el-table-column>
             <el-table-column type="index" width="55" fixed="left" label="序号" align="center"></el-table-column>
             <el-table-column prop="one" label="品类" fixed="left" min-width="280" align="center">
                 <template slot-scope="scope">
-                    <el-cascader v-model="scope.row.one" style="width:250px" size="mini" filterable placeholder="一级品类/二级品类/三级品类" :options="oneList" :props="optionProps"></el-cascader>
+                    <el-cascader v-model="scope.row.one" ref="cascader" :disabled="scope.row.disabled" style="width:250px" size="mini" filterable placeholder="一级品类/二级品类/三级品类" :options="oneList" :props="optionProps"></el-cascader>
                     <span style="color:red" v-if="scope.row.one==undefined||scope.row.one==''">*</span>
                 </template>
             </el-table-column>
             <el-table-column prop="xl" label="系列" min-width="140" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
-                    <el-input v-model="scope.row.xl" placeholder="请输入" size="mini" style="width:110px"></el-input>
+                    <el-input v-model="scope.row.xl" :disabled="scope.row.disabled" placeholder="请输入" size="mini" style="width:110px"></el-input>
                     <span style="color:red" v-if="scope.row.xl==undefined||scope.row.xl==''">*</span>
                 </template>
             </el-table-column>
             <el-table-column prop="kfks" label="开发款数" min-width="140" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
-                    <el-input-number style="width:110px" v-model="scope.row.kfks" size="mini" controls-position="right" :precision="0" :min="1" :max="1000000"></el-input-number>
+                    <el-input-number style="width:110px" :disabled="scope.row.disabled"  v-model="scope.row.kfks" size="mini" controls-position="right" :precision="0" :min="1" :max="1000000"></el-input-number>
                     <span style="color:red" v-if="scope.row.kfks==undefined||scope.row.kfks==''">*</span>
                 </template>
             </el-table-column>
             <el-table-column prop="cbxx" label="成本下限" min-width="140" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
-                    <el-input-number style="width:110px" v-model="scope.row.cbxx" size="mini" controls-position="right" :precision="2" :min="0" :max="1000000"></el-input-number>
+                    <el-input-number style="width:110px" :disabled="scope.row.disabled" v-model="scope.row.cbxx" size="mini" controls-position="right" :precision="2" :min="0" :max="1000000"></el-input-number>
                     <span style="color:red" v-if="scope.row.cbxx==undefined||scope.row.cbxx==''">*</span>
                 </template>
             </el-table-column>
             <el-table-column prop="cbsx" label="成本上限" min-width="140" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
-                    <el-input-number style="width:110px" v-model="scope.row.cbsx" size="mini" controls-position="right" :precision="2" :min="0" :max="1000000"></el-input-number>
+                    <el-input-number style="width:110px" :disabled="scope.row.disabled" v-model="scope.row.cbsx" size="mini" controls-position="right" :precision="2" :min="0" :max="1000000"></el-input-number>
                     <span style="color:red" v-if="scope.row.cbsx==undefined||scope.row.cbsx==''">*</span>
                 </template>
             </el-table-column>
             <el-table-column prop="kfcb" label="开发成本" min-width="140" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
-                    <el-input-number style="width:110px" v-model="scope.row.kfcb" size="mini" controls-position="right" :precision="2" :min="0" :max="1000000"></el-input-number>
+                    <el-input-number style="width:110px" :disabled="scope.row.disabled" v-model="scope.row.kfcb" size="mini" controls-position="right" :precision="2" :min="0" :max="1000000"></el-input-number>
                     <span style="color:red" v-if="scope.row.kfcb==undefined||scope.row.kfcb==''">*</span>
                 </template>
             </el-table-column>
             <el-table-column prop="sb" label="色比" min-width="140" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
-                    <el-input-number style="width:110px" v-model="scope.row.sb" size="mini" controls-position="right" :precision="2" :min="1" :max="1000000"></el-input-number>
+                    <el-input-number style="width:110px" :disabled="scope.row.disabled" v-model="scope.row.sb" size="mini" controls-position="right" :precision="2" :min="1" :max="1000000"></el-input-number>
                     <span style="color:red" v-if="scope.row.sb==undefined||scope.row.sb==''">*</span>
                 </template>
             </el-table-column>
             <el-table-column prop="zs" label="主色" min-width="140" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
-                    <el-input-number style="width:110px" v-model="scope.row.zs" size="mini" controls-position="right" :precision="0" :min="0" :max="1000000"></el-input-number>
+                    <el-input-number style="width:110px" :disabled="scope.row.disabled" v-model="scope.row.zs" size="mini" controls-position="right" :precision="0" :min="0" :max="1000000"></el-input-number>
                     <span style="color:red" v-if="scope.row.zs==undefined||scope.row.zs==''">*</span>
                 </template>
             </el-table-column>
             <el-table-column prop="fs" label="辅色" min-width="140" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
-                    <el-input-number style="width:110px" v-model="scope.row.fs" size="mini" controls-position="right" :precision="0" :min="0" :max="1000000"></el-input-number>
+                    <el-input-number style="width:110px" :disabled="scope.row.disabled" v-model="scope.row.fs" size="mini" controls-position="right" :precision="0" :min="0" :max="1000000"></el-input-number>
                     <span style="color:red" v-if="scope.row.fs==undefined||scope.row.fs==''">*</span>
                 </template>
             </el-table-column>
@@ -362,7 +364,7 @@
             </el-table-column>
             <el-table-column prop="remark" label="备注" min-width="140" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
-                    <el-input style="width:110px" type="textarea" v-model="scope.row.remark" size="mini" placeholder="请输入内容"></el-input>
+                    <el-input style="width:110px" type="textarea" :disabled="scope.row.disabled" v-model="scope.row.remark" size="mini" placeholder="请输入内容"></el-input>
                 </template>
             </el-table-column>
         </el-table>
@@ -393,19 +395,19 @@
     </Modal>
 
      <!--发起调整指令-->
-    <Modal v-model="startAdjustVisible" @on-cancel="cancelStartAdjust" title="发起调整指令" :width="940">
+    <Modal v-model="startAdjustVisible" @on-cancel="cancelStartAdjust" title="发起调整指令" :width="1040">
         <el-form :rules="startAdjustRules" ref="startAdjustForm" label-width="120px" :model="startAdjustForm" class="demo-ruleForm " :label-position="right">
             <el-row>
             <el-col :span="8">
             <el-form-item label="品牌名称：" prop="brand" size="small">
-                <el-select v-model="startAdjustForm.brand" clearable filterable placeholder="请选择" style="width:140px">
+                <el-select v-model="startAdjustForm.brand" @change="getWaveBand()" clearable filterable placeholder="请选择" style="width:170px">
                     <el-option v-for="item in brandList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
             </el-col>
              <el-col :span="8">
             <el-form-item label="调整类型：" prop="changeType" size="small">
-                <el-select v-model="startAdjustForm.changeType" multiple clearable filterable placeholder="请选择" style="width:140px">
+                <el-select v-model="startAdjustForm.changeType" multiple clearable filterable placeholder="请选择" style="width:170px">
                     <el-option v-for="item in adjustTypeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
@@ -413,14 +415,28 @@
             
             <el-col :span="8">
             <el-form-item label="年份：" prop="year" size="small">
-                <el-select v-model="startAdjustForm.year" multiple clearable filterable placeholder="请选择" style="width:140px">
+                <el-select v-model="startAdjustForm.year" @change="getWaveBand()" clearable filterable placeholder="请选择" style="width:170px">
                     <el-option v-for="item in yearList" :key="item" :label="item" :value="item"></el-option>
                 </el-select>
             </el-form-item>
             </el-col>
-            <el-col :span="24">
+            <el-col :span="8">
+                <el-form-item label="季节：" size="small" prop="season">
+                    <el-select v-model="startAdjustForm.season" clearable @change="getWaveBand()" filterable placeholder="请选择" style="width:170px;height:30px">
+                        <el-option v-for="item in seasonList" :key="item.name" :label="item.name" :value="item.name"></el-option>
+                    </el-select>
+                </el-form-item>
+            </el-col>
+            <el-col :span="8">
+            <el-form-item label="波段：" size="small">
+                <el-select v-model="startAdjustForm.waveBand" multiple clearable filterable placeholder="请选择" style="width:170px">
+                    <el-option v-for="item in waveBandList" :key="item" :label="item" :value="item"></el-option>
+                </el-select>
+            </el-form-item>
+            </el-col>
+            <el-col :span="8">
             <el-form-item label="调整建议：" prop="remark" size="small">
-                <el-input type="textarea" maxlength="300" clearable  show-word-limit v-model="startAdjustForm.remark" placeholder="请输入" style="width:600px"></el-input>
+                <el-input type="textarea" maxlength="300" clearable  show-word-limit v-model="startAdjustForm.remark" placeholder="请输入" style="width:170px"></el-input>
             </el-form-item>
             </el-col>
             </el-row>
@@ -568,14 +584,21 @@
 import {
     commonMixins
 } from 'mixins/common';
-// import {
-//     debounce
-// } from 'mixins/debounce'
+import {
+    debounce
+} from 'mixins/debounce'
 import Util from 'libs/util'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins: [commonMixins],
+    mixins: [commonMixins,debounce,burypoint],
     data() {
         return {
+            currentPageSum:{
+                   developCostPrice:308,
+                   developStyleQty:309,         
+            },
+            canEditMain:false,
+            waveBandList:[],
             leftOrRight:true,
             detailsShow:false,
             pickerOptions: {
@@ -592,8 +615,10 @@ export default {
             startAdjustForm: {
                 brand: '',
                 changeType: [],
-                year: [],
-                remark: ''
+                year: '',
+                remark: '',
+                waveBand:'',
+                season:'',
             },
             startAdjustRules: {
                 brand: [{
@@ -607,6 +632,11 @@ export default {
                     trigger: 'change'
                 }],
                 year: [{
+                    required: true,
+                    message: '请选择',
+                    trigger: 'change'
+                }],
+                 season: [{
                     required: true,
                     message: '请选择',
                     trigger: 'change'
@@ -727,11 +757,11 @@ export default {
             showhidden: false,
             formSearch: {
                 planningStatus:[],
-                years:'',
+                years:[],
                 bizNo:'',
                 brand:[],
-                season:'',
-                waveBand:'',
+                season:[],
+                waveBand:[],
                 remark:''
             },
             maxHeight: '',
@@ -789,11 +819,18 @@ export default {
                     console.log(this.adjustTypeList,'09')
                 }
             })
-        this.formSearch.years = new Date().getFullYear().toString()
+        // this.formSearch.years = new Date().getFullYear().toString()
         this.getTreeData()
         this.getButtonJurisdiction() //按钮权限
+        this.$nextTick(() => {
+            this.$refs['table'].doLayout();
+        }) 
     },
     methods: {
+        // blurCascader(name,scope){
+        //     this.addTableList[scope.$index].one = name
+        //     console.log(name,scope.$index,'00000000000')
+        // },
         handleLeftOrRight(){
             if(this.leftOrRight){
                 this.leftOrRight = false
@@ -900,7 +937,8 @@ export default {
             data.mainId = row.id
             this.request('goods_planning_manage_detail', data, true).then(res => {
                 if (res.code == 1) {
-                    this.detailsData = res.data
+                    this.detailsData = res.data.detailVOList
+                    this.currentPageSum=res.data
                 }
             })
             this.getLoglist(row.id)
@@ -929,10 +967,10 @@ export default {
             let data = {}
             data.bizNo = this.formSearch.bizNo
             data.brandIds = this.formSearch.brand
-            data.season = this.formSearch.season
+            data.seasons = this.formSearch.season
             data.planningStatuss = this.formSearch.planningStatus
-            this.formSearch.years ? data.years = Util.dateFormat(this.formSearch.years, 'yyyy') : delete data.years
-            data.waveBand = this.formSearch.waveBand
+            data.yearsList = this.formSearch.years
+            data.waveBandList = this.formSearch.waveBand
             data.remark = this.formSearch.remark
             data.pageSize = this.pagesize
             data.currentPage = this.currentPage
@@ -961,9 +999,9 @@ export default {
             let data = {}
             data.bizNo = this.formSearch.bizNo
             data.brandIds = this.formSearch.brand
-            data.season = this.formSearch.season
-            this.formSearch.years ? data.years = Util.dateFormat(this.formSearch.years, 'yyyy') : delete data.years
-            data.waveBand = this.formSearch.waveBand
+            data.seasons = this.formSearch.season
+            data.yearsList = this.formSearch.years
+            data.waveBandList = this.formSearch.waveBand
             data.planningStatuss = this.formSearch.planningStatus
             data.treePlanningStatus = planningStatus
             data.remark = this.formSearch.remark
@@ -1040,8 +1078,10 @@ export default {
         command(name) {
             let massage = ''
             if (name == 'audit') {
+                this.setBuryPoint('审核')
                 massage = '审核'
             } else {
+                this.setBuryPoint('反审核')
                 massage = '反审核'
             }
             let arr = this.selectMain
@@ -1074,6 +1114,7 @@ export default {
         },
         //推送
         onSend() {
+            this.setBuryPoint('推送')
             let arr = this.selectMain
             this.$confirm('推送选中的数据, 是否继续?', '提示', {
                 confirmButtonText: '确定',
@@ -1085,10 +1126,10 @@ export default {
                 data.ids = arr
                 data.bizNo = this.formSearch.bizNo
                 data.brandIds = this.formSearch.brand
-                data.season = this.formSearch.season
-                this.formSearch.years ? data.years = Util.dateFormat(this.formSearch.years, 'yyyy') : delete data.years
+                data.seasons = this.formSearch.season
+                data.yearsList = this.formSearch.years
                 !!this.visibleStatus ? data.planningStatuss = [this.visibleStatus] : data.planningStatuss = this.formSearch.planningStatus
-                data.waveBand = this.formSearch.waveBand
+                data.waveBandList = this.formSearch.waveBand
                 data.remark = this.formSearch.remark
                 this.request('goods_planning_manage_send', data, true).then(res => {
                     if (res.code == 1) {
@@ -1107,6 +1148,7 @@ export default {
         },
         //关闭
         onClosed() {
+            this.setBuryPoint('关闭')
             let arr = this.selectMain
             if (arr.length == 1) {
                 this.$confirm('关闭选中的数据, 是否继续?', '提示', {
@@ -1136,6 +1178,7 @@ export default {
         },
         //删除
         onDelete() {
+            this.setBuryPoint('删除')
             let arr = this.selectMain
             if (arr.length > 0) {
                 this.$confirm('删除选中的数据, 是否继续?', '提示', {
@@ -1165,6 +1208,7 @@ export default {
         },
         //重新启用
         userAgain() {
+            this.setBuryPoint('重新启用')
             let arr = this.selectMain
             if (arr.length == 1) {
                 this.$confirm('重新启用选中的数据, 是否继续?', '提示', {
@@ -1194,10 +1238,12 @@ export default {
         },
         //下载模板
         downLoad() {
+            this.setBuryPoint('下载模板')
             window.location = ('https://eptison.oss-cn-hangzhou.aliyuncs.com/upload/prd/eop-fms/ BossGoodsPlanningManageController/uploadTemplate/企划管理导入模板.xlsx')
         },
         //导入
         onUpload() {
+            this.setBuryPoint('导入')
             this.uploadVisible = true
         },
         //上传之前
@@ -1254,14 +1300,15 @@ export default {
         },
         //导出
         onExport() {
+            this.setBuryPoint('导出')
             let data = {}
             let arr = this.selectMain
             data.ids = arr
             data.bizNo = this.formSearch.bizNo
             data.brandIds = this.formSearch.brand
-            data.season = this.formSearch.season
-            this.formSearch.years ? data.years = Util.dateFormat(this.formSearch.years, 'yyyy') : delete data.years
-            data.waveBand = this.formSearch.waveBand
+            data.seasons = this.formSearch.season
+            data.yearsList = this.formSearch.years
+            data.waveBandList = this.formSearch.waveBand
             data.remark = this.formSearch.remark
             data.planningStatuss = this.formSearch.planningStatus
             this.request('goods_planning_manage_exportCount', data, true).then(res => {
@@ -1283,9 +1330,9 @@ export default {
             data.ids = arr
             data.bizNo = this.formSearch.bizNo
             data.brandIds = this.formSearch.brand
-            data.season = this.formSearch.season
-            this.formSearch.years ? data.years = Util.dateFormat(this.formSearch.years, 'yyyy') : delete data.years
-            data.waveBand = this.formSearch.waveBand
+            data.seasons = this.formSearch.season
+            data.yearsList = this.formSearch.years
+            data.waveBandList = this.formSearch.waveBand
             data.remark = this.formSearch.remark
             data.planningStatuss = this.formSearch.planningStatus
             this.request('goods_planning_manage_export', data, true).then(res => {
@@ -1303,19 +1350,18 @@ export default {
         },
         //发起调整指令
         startAdjust() {
+            this.setBuryPoint('发起调整指令')
             this.startAdjustVisible = true
         },
         //保存调整指令
         saveStartAdjust() {
-            this.$refs['startAdjustForm'].validate((valid) => {
+            // if(this.waveBandList.length > 0){
+                this.$refs['startAdjustForm'].validate((valid) => {
                 if (valid) { //新增保存
+                if(this.waveBandList.length == 0){
+                    this.$message.error('该品牌没有符合条件企划计划，不可发起调整！')
+                }else{
                     let data = {}
-                    // let obj = {}
-                    // this.adjustTypeList.map((i) => {
-                    //     if (i.id == this.startAdjustForm.changeType) {
-                    //         obj = i
-                    //     }
-                    // })
                     let brandObj = {}
                     this.brandList.map((v)=>{
                         if(v.id == this.startAdjustForm.brand){
@@ -1325,20 +1371,23 @@ export default {
                     data.basicBrandName = brandObj.name
                     data.basicBrandCode = brandObj.code
                     data.basicBrandId = this.startAdjustForm.brand
-                    data.yearsList = this.startAdjustForm.year
+                    data.yearsList = [this.startAdjustForm.year]
                     data.adjustTypeId = this.startAdjustForm.changeType
-                    // data.adjustTypeName = obj.name
-                    // data.adjustTypeCode = obj.code
                     data.asjustAdvise = this.startAdjustForm.remark
+                    data.waveBandList = this.startAdjustForm.waveBand
+                    data.season      =   this.startAdjustForm.season
                     this.request('goods_planning_manage_createAdjust', data, true).then(res => {
                         if (res.code == 1) {
                             this.$message.success('保存调整指令成功')
                             this.getData()
+                            this.waveBandList = []
                             this.startAdjustForm = {
                                 brand: '',
                                 changeType: [],
-                                year: [],
-                                remark: ''
+                                year: '',
+                                remark: '',
+                                waveBand:'',
+                                season:''
                             }
                             this.$refs['startAdjustForm'].resetFields();
                             this.startAdjustVisible = false
@@ -1346,24 +1395,49 @@ export default {
                             this.$message.error(res.msg)
                         }
                     })
+                }
                 } else { //验证表单
                     return false;
                 }
             });
+            // }else{
+            //     this.$message.error('该品牌没有符合条件企划计划，不可发起调整！')
+            // }
+        },
+        getWaveBand(){
+            this.waveBandList = []
+            this.startAdjustForm.waveBand = ''
+            if(!!this.startAdjustForm.brand && !!this.startAdjustForm.year&&!!this.startAdjustForm.season){
+                let data = {}
+                data.basicBrandId = this.startAdjustForm.brand
+                data.yearsList = [this.startAdjustForm.year]
+                data.season= this.startAdjustForm.season
+                this.request('goods_planning_manage_queryWaveBandList', data, true).then(res => {
+                if (res.code == 1) {
+                    this.waveBandList = res.data
+                }else{
+                    this.$message.error(res.msg)
+                }
+            })
+            }
         },
         //取消调整指令
         cancelStartAdjust() {
+            this.waveBandList = []
             this.startAdjustVisible = false
             this.startAdjustForm = {
                 brand: '',
                 changeType: [],
-                year: [],
-                remark: ''
+                year: '',
+                remark: '',
+                waveBand:'',
+                season:''
             }
             this.$refs['startAdjustForm'].resetFields();
         },
         //查看历史
         seeHistory() {
+            this.setBuryPoint('查看历史')
             if (this.rowLenght == 0) {
                 this.$message.warning('请先选择查看的数据')
             } else if (this.rowLenght > 1) {
@@ -1422,9 +1496,9 @@ export default {
             let data = {}
             data.bizNo = this.formSearch.bizNo
             data.brandIds = this.formSearch.brand
-            data.season = this.formSearch.season
-            this.formSearch.years ? data.years = Util.dateFormat(this.formSearch.years, 'yyyy') : delete data.years
-            data.waveBand = this.formSearch.waveBand
+            data.seasons = this.formSearch.season
+            data.yearsList = this.formSearch.years
+            data.waveBandList = this.formSearch.waveBand
             data.planningStatuss = this.formSearch.planningStatus
             data.treePlanningStatus = this.visibleStatus
             data.remark = this.formSearch.remark
@@ -1453,9 +1527,9 @@ export default {
             let data = {}
             data.bizNo = this.formSearch.bizNo
             data.brandIds = this.formSearch.brand
-            data.season = this.formSearch.season
-            this.formSearch.years ? data.years = Util.dateFormat(this.formSearch.years, 'yyyy') : delete data.years
-            data.waveBand = this.formSearch.waveBand
+            data.seasons = this.formSearch.season
+            data.yearsList = this.formSearch.years
+            data.waveBandList = this.formSearch.waveBand
             data.planningStatuss = this.formSearch.planningStatus
             data.treePlanningStatus = this.visibleStatus
             data.remark = this.formSearch.remark
@@ -1504,22 +1578,55 @@ export default {
         },
         onAdd(name) {
             if (name == 'add') {
+                this.setBuryPoint('新增')
                 this.dialogVisible = true
                 this.addtitle = '新增'
                 this.ruleForm.bilv = 0.8
                 this.getByPuniqueKey(1)
             } else if (name == 'edit') {
+                this.setBuryPoint('编辑')
                 this.addtitle = '编辑'
                 if (this.rowLenght == 0) {
                     this.$message.warning('请先选择编辑的数据')
                 } else if (this.rowLenght > 1) {
                     this.$message.warning('一次只能编辑一条数据')
                 } else {
-                    if(this.selectObj.planningStatus != '待审核'){
-                        this.$message.warning('所选数据企划状态不为待审核不能编辑！')
-                    }else{
-                        this.getByPuniqueKey(1)
-                        this.dialogVisible = true
+                    // if(this.selectObj.planningStatus == '待审核'){
+                    //     this.assignment(this.selectObj.planningStatus)
+                    //     // this.$message.warning('期初数据不可编辑！')
+                    // }
+                    // else if(this.selectObj.planningStatus == '已审核'){
+                    //     this.$message.warning('已审核数据不可编辑，请反审核后编辑！')
+                    // }else if(this.selectObj.planningStatus == '推送中'){
+                    //     this.$message.warning('推送中数据不可编辑！')
+                    // }
+                    if(this.selectObj.planningStatus == '已推送' || this.selectObj.planningStatus == '待审核'){
+                        //调接口判断能不能编辑  并且 原数据不能编辑    
+                        let data = {}
+                        data.bizNo = this.selectObj.bizNo
+                        this.request('goods_planning_manage_checkEdit', data, true).then(res => {
+                            if (res.code == 1) {
+                                this.assignment(this.selectObj.planningStatus)
+                            } else {
+                                this.$message.error(res.msg)
+                                }
+                            })
+                    }
+                    else{
+                        this.$message.warning('该条数据不可编辑！')
+                    }
+                }
+            }
+        },
+        //赋值
+        assignment(status){
+            // if(status == '待审核'){
+            //     this.changeDisabled = false
+            // }else{
+            //     this.changeDisabled = true
+            // }
+            this.getByPuniqueKey(1)
+                    this.dialogVisible = true
                     this.ruleForm.purchaseOrderNo = this.selectObj.bizNo //企划单号
                     this.ruleForm.brand = this.selectObj.basicBrandId // 品牌
                     this.ruleForm.season = this.selectObj.season //季节
@@ -1534,11 +1641,31 @@ export default {
                     this.ruleForm.upnewDate = this.selectObj.launchDate //上新日期
                     this.ruleForm.remark = this.selectObj.remark //备注
                     this.ruleForm.bilv = this.selectObj.orderRatio//比率
+                    this.canEditMain = this.selectObj.canEditMain//能否编辑
                     let data = {}
                     data.mainId = this.selectObj.id
                     this.request('goods_planning_manage_detail', data, true).then(res => {
                         if (res.code == 1) {
-                            res.data.map((item) => {
+                            // if(this.changeDisabled == false){
+                            //     res.data.map((item) => {
+                            //     this.addTableList.push({
+                            //         one: [item.firstLevel, item.secondLevel, item.thirdLevel],
+                            //         xl: item.series,
+                            //         kfks: item.developStyleQty,
+                            //         cbxx: item.costLowerLimit,
+                            //         cbsx: item.costUpperLimit,
+                            //         kfcb: item.developCostPrice,
+                            //         sb: item.colorRate,
+                            //         zs: item.mainColorQty,
+                            //         fs: item.subColorQty,
+                            //         // xdkl: item.orderStyleQty,
+                            //         remark: item.remark,
+                            //         mainId: item.mainId,
+                            //         id:item.id
+                            //     })
+                            // })
+                            // }else if(this.changeDisabled == true){
+                                res.data.detailVOList.map((item) => {
                                 this.addTableList.push({
                                     one: [item.firstLevel, item.secondLevel, item.thirdLevel],
                                     xl: item.series,
@@ -1552,14 +1679,13 @@ export default {
                                     // xdkl: item.orderStyleQty,
                                     remark: item.remark,
                                     mainId: item.mainId,
-                                    id:item.id
+                                    id:item.id,
+                                    disabled:item.canEdit //判断数据能不能编辑的标识
                                 })
                             })
+                            // }
                         }
                     })
-                    }
-                }
-            }
         },
         //新增
         addSave() {
@@ -1637,6 +1763,7 @@ export default {
                             data.detailsFoList = list
                             this.request(postUrl, data, true).then(res => {
                                 if (res.code == 1) {
+                                    this.canEditMain = false
                                     this.$message.success('保存成功')
                                     this.getData()
                                     this.addTableList = []
@@ -1670,7 +1797,16 @@ export default {
                 }
             });
         },
+        checkboxSelect(row, rowIndex){
+            console.log(row, rowIndex)
+             if (row.disabled == true) {
+          return false // 禁用
+        }else{
+          return true // 不禁用
+        }
+        },
         addCancel() {
+            this.canEditMain = false
             this.addTableList = []
             this.dialogVisible = false
             this.ruleForm = {
@@ -1738,25 +1874,59 @@ export default {
                 this.$message.success('删除成功')
             }
         },
-    //     getSummaries(param) {
-    //     const { columns, data } = param;
-    //         const sums = [];
-    //         columns.forEach((column, index) => {
-    //         if (index === 0) {
-    //             sums[index] = '合计';
-    //             return;
-    //         }
-    //              sums[5] = 11
-    //              sums[6] = 22
-    //              sums[7] = 22
-    //              sums[8] = 22
-    //              sums[14] = 22
-    //              sums[15] = 22
-    //         });
-    //         return sums;
-    //   },
+        getSummaries(param) {
+           setTimeout(() => {
+                 this.twoTableHeight -= 0.0000000000001
+           }, 500)
+        const { columns, data } = param;
+            const sums = [];
+            columns.forEach((column, index) => {
+            if (index === 0) {
+                sums[index] = '合计';
+                // return;
+            }else{
+                //  const values = data.map(item => Number(item[column.property]));
+                       let obj = this.currentPageSum
+                        for (let i in obj) {
+                            if (column.property === i) {
+                                   sums[index] = obj[i]
+                            }
+                        }
+
+            }
+            // const values = data.map(item => Number(item[column.property]));
+            //       console.log(column.property,'000')
+            //  if(column.property=='developCostPrice'){
+            //           if (!values.every(value => isNaN(value))) {
+            //             sums[index] = values.reduce((prev, curr) => {
+            //             const value = Number(curr);
+            //             if (!isNaN(value)) {
+            //                 return prev + curr;
+            //             } else {
+            //                 return prev;
+            //             }
+            //             }, 0);
+                    
+            //             // sums[index] += ' 元';
+            //         } else {
+            //             // sums[index] = 'N/A';
+            //         }
+              
+            // }
+         
+                //  sums[5] = 11
+                //  sums[6] = 22
+                //  sums[7] = 22
+                //  sums[8] = 22
+                //  sums[14] = 22
+                //  sums[15] = 22
+            });
+            // sums[column.property]=19
+            return sums;
+      },
         //查询
         onSearch() {
+            this.setBuryPoint('查询')
             this.visibleStatus = null
             this.currentPage = 1
             this.getData()
@@ -1766,11 +1936,11 @@ export default {
         onReset() {
             this.formSearch = {
                 planningStatus:[],
-                years:'',
+                years:[],
                 bizNo:'',
                 brand:[],
                 season:'',
-                waveBand:'',
+                waveBand:[],
                 remark:''
             }
         },

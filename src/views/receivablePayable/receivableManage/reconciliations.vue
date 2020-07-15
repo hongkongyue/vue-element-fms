@@ -93,8 +93,9 @@
 
 <script>
 // import yunJi from '../component/yunji.vue'
+import{burypoint} from 'mixins/burypoint.js'
 export default {
-
+    mixins:[burypoint],
     data() {
         return {
             timeAA: null,
@@ -1483,16 +1484,17 @@ export default {
         },
         //导出
         onImport() {
+                this.setBuryPoint('导出')
             let data = {}
-            data.pageSize = this.pagesize
-            data.currentPage = this.currentPage
-            data.basicPlatformId = this.basicPlatformId //平台ID
-            data.basicPlatformName = this.formSearch.code //平台名称
-            data.basicCompanyId = this.formSearch.name //公司ID
-            data.basicStoreId = this.formSearch.person //店铺ID
-            data.period = this.formSearch.time //期间名称
-            data.platformPattern=this.formSearch.vip
-            data.billNo         =this.formSearch.yunjibillNo
+                data.pageSize = this.pagesize
+                data.currentPage = this.currentPage
+                data.basicPlatformId = this.basicPlatformId //平台ID
+                data.basicPlatformName = this.formSearch.code //平台名称
+                data.basicCompanyId = this.formSearch.name //公司ID
+                data.basicStoreId = this.formSearch.person //店铺ID
+                data.period = this.formSearch.time //期间名称
+                data.platformPattern=this.formSearch.vip
+                data.billNo         =this.formSearch.yunjibillNo
             if(this.formSearch.billNo){
                data.accRecvdBillNos=this.formSearch.billNo.split(',')
             }else{
@@ -1763,6 +1765,7 @@ export default {
             })
         },
         onSearch() {
+             this.setBuryPoint('查询')
             this.currentPage = 1
             if(this.formSearch.code=='唯品会'){
               this.getVipData()

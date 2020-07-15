@@ -192,8 +192,9 @@
 
 <script>
 import filters from '../../../filter/'
+import{burypoint} from 'mixins/burypoint.js'
 export default {
-
+    mixins:[burypoint],
     data() {
         return {
             platformOptions: [],
@@ -556,15 +557,16 @@ export default {
         },
         //异步导出
         onImport() {
+               this.setBuryPoint('导出')
             let data = {}
-            data.pageSize = this.pagesize
-            data.currentPage = this.currentPage
-            this.formSearch.themID ? data.accRecvdBillNos = this.formSearch.themID.split(",") : delete data.accRecvdBillNos //账单ID列表
-            data.accRecvdPeriodIds = this.formSearch.time //账期ID列表
-            data.basicCompanyIds = this.formSearch.name //公司ID列表
-            data.basicPlatformId = this.formSearch.code //平台ID
-            data.basicStoreIds = this.formSearch.person //店铺ID列表
-            data.status = this.formSearch.status //状态 0 未核销 1已核销
+                data.pageSize = this.pagesize
+                data.currentPage = this.currentPage
+                this.formSearch.themID ? data.accRecvdBillNos = this.formSearch.themID.split(",") : delete data.accRecvdBillNos //账单ID列表
+                data.accRecvdPeriodIds = this.formSearch.time //账期ID列表
+                data.basicCompanyIds = this.formSearch.name //公司ID列表
+                data.basicPlatformId = this.formSearch.code //平台ID
+                data.basicStoreIds = this.formSearch.person //店铺ID列表
+                data.status = this.formSearch.status //状态 0 未核销 1已核销
             this.request('accverification_asyncExport', data, false).then(res => {
                 if (res.code == 1) {
                     this.getKey(res.data)
@@ -578,6 +580,7 @@ export default {
         },
         //自动核销
         onWrite() {
+            this.setBuryPoint('自动核销')
             let data = {}
             data.pageSize = this.pagesize
             data.currentPage = this.currentPage
@@ -600,6 +603,7 @@ export default {
         },
         //强制核销
         forceWrite() {
+             this.setBuryPoint('强制核销')
             if(this.formSearch.code == ''){
                 this.$message.error('平台不能为空')
             }else if(this.formSearch.status !== 0){
@@ -951,6 +955,7 @@ export default {
             this.getLoglist(row.orderId)
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 

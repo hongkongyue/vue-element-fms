@@ -9,63 +9,55 @@
                 <el-form-item size="small">
                     <el-button size="small" @click="onReset">重置</el-button>
                 </el-form-item>
-                <!-- <el-form-item size="small">
-                    <el-button v-if="judgeMenu.indexOf('新增大货物料') !== -1" size="small" type="primary" @click="onAdd('1')">新增大货物料</el-button>
+                <el-form-item size="small">
+                    <el-button v-if="judgeMenu.indexOf('调整检测结果') !== -1" size="small" type="primary" @click="changeTesting">调整检测结果</el-button>
                 </el-form-item>
                 <el-form-item size="small">
-                    <el-button v-if="judgeMenu.indexOf('新增设计款号物料') !== -1" size="small" type="primary" @click="onAdd('2')">新增设计款号物料</el-button>
-                </el-form-item> -->
-                <!-- <el-form-item size="small">
-                    <el-button v-if="judgeMenu.indexOf('编辑') !== -1" size="small" type="primary" @click="onAdd('edit')">编辑</el-button>
-                </el-form-item> -->
-                <el-form-item size="small">
-                    <el-button v-if="judgeMenu.indexOf('导出') !== -1" size="small" type="primary" @click="onExport">导出</el-button>
+                    <el-button v-if="judgeMenu.indexOf('导出') !== -1" size="small" type="primary" @click="checkExport">导出</el-button>
                 </el-form-item>
             </div>
+               <el-form-item label="开发任务编号：" size="small">
+                <el-input v-model="formSearch.fabricDevelopTaskNo" clearable placeholder="请输入" style="width:150px"></el-input>
+            </el-form-item>
+              <el-form-item label="检测任务编号：" size="small">
+                <el-input v-model="formSearch.taskNo" clearable placeholder="请输入" style="width:150px"></el-input>
+            </el-form-item>
+            <el-form-item label="开发员：" size="small">
+                    <el-select v-model="formSearch.developer"  filterable  placeholder="请选择" style="width:120px">
+                        <el-option v-for="item in developerList" :key="item" :label="item" :value="item"></el-option>
+                    </el-select>
+            </el-form-item>
             <el-form-item label="大货款号：" size="small">
                 <el-input v-model="formSearch.goodsNo" clearable placeholder="请输入" style="width:150px"></el-input>
             </el-form-item>
-            <el-form-item label="批次：" size="small">
+            <el-form-item label="批次号：" size="small">
                 <el-input v-model="formSearch.batchNo" clearable placeholder="请输入" style="width:150px"></el-input>
             </el-form-item>
             <el-form-item label="设计款号：" size="small">
                 <el-input v-model="formSearch.designNo" clearable placeholder="请输入" style="width:150px"></el-input>
             </el-form-item>
-            <el-form-item label="任务编号：" size="small">
-                <el-input v-model="formSearch.taskNo" clearable placeholder="请输入" style="width:150px"></el-input>
-            </el-form-item>
-            <el-form-item label="检测结果：" size="small">
-                <!-- <el-input v-model="formSearch.inspectResultStr" clearable placeholder="请输入" style="width:150px"></el-input> -->
-                    <el-select v-model="formSearch.inspectResultStr"  filterable  placeholder="请选择" style="width:170px">
-                        <el-option v-for="item in checkStatus" :key="item.label" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
-            </el-form-item>
-             <el-form-item label="任务状态：" size="small">
-                <!-- <el-input v-model="formSearch.inspectResultStr" clearable placeholder="请输入" style="width:150px"></el-input> -->
-                    <el-select v-model="formSearch.flowStatus"  filterable  placeholder="请选择" style="width:170px">
+            <el-form-item label="任务状态：" size="small">
+                    <el-select v-model="formSearch.flowStatus"  filterable  placeholder="请选择" style="width:120px">
                         <el-option v-for="item in taskStatus" :key="item.label" :label="item.label" :value="item.value"></el-option>
                     </el-select>
             </el-form-item>
-            <el-form-item label="数据来源：" size="small">
-                <!-- <el-input v-model="formSearch.inspectResultStr" clearable placeholder="请输入" style="width:150px"></el-input> -->
+            <el-form-item label="检测结果：" size="small">
+                    <el-select v-model="formSearch.inspectResultStr"  filterable  placeholder="请选择" style="width:120px">
+                        <el-option v-for="item in checkStatus" :key="item.label" :label="item.label" :value="item.value"></el-option>
+                    </el-select>
+            </el-form-item>
+             
+            <!-- <el-form-item label="数据来源：" size="small">
                     <el-select v-model="formSearch.dataSource"  filterable  placeholder="请选择" style="width:170px">
                         <el-option v-for="item in dataSourceList" :key="item.label" :label="item.label" :value="item.value"></el-option>
                     </el-select>
               </el-form-item>
-              <el-form-item label="面料开发任务编号：" size="small">
-                <el-input v-model="formSearch.fabricDevelopTaskNo" clearable placeholder="请输入" style="width:150px"></el-input>
-            </el-form-item>
+            
               <el-form-item label="是否加急：" size="small">
-                <!-- <el-input v-model="formSearch.inspectResultStr" clearable placeholder="请输入" style="width:150px"></el-input> -->
                     <el-select v-model="formSearch.urgentStr"  filterable  placeholder="请选择" style="width:170px">
                         <el-option v-for="item in urgentList" :key="item.label" :label="item.label" :value="item.value"></el-option>
                     </el-select>
-              </el-form-item>
-            <!-- <el-form-item label="推送类型：" size="small">
-                <el-select v-model="formSearch.sendType" clearable filterable placeholder="请选择" style="width:150px">
-                    <el-option v-for="item in sendTypeList" :key="item.name" :label="item.name" :value="item.id"></el-option>
-                </el-select>
-            </el-form-item> -->
+              </el-form-item> -->
         </el-form>
 
     </header>
@@ -83,18 +75,31 @@
                     <el-table-column type="selection" width="50">
                     </el-table-column>
                     <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
-                     <el-table-column prop="taskNo" label="任务编号" sortable min-width="120" align="center" show-overflow-tooltip>
+                    <el-table-column prop="fabricDevelopTaskNo" label="开发任务编号" sortable min-width="150" align="center" show-overflow-tooltip>
                      </el-table-column>
-                   
+                     <el-table-column prop="taskNo" label="检测任务编号" sortable min-width="120" align="center" show-overflow-tooltip>
+                     </el-table-column>
+                     <el-table-column prop="dataSource" label="样品来源" sortable min-width="120" align="center" show-overflow-tooltip>
+                     </el-table-column>
                     <el-table-column prop="flowStatus" label="任务状态" sortable min-width="120" align="center" show-overflow-tooltip>
-                    <template scope="scope">
-                        {{scope.row.flowStatus == 0 ? '待受理' : (scope.row.flowStatus == 1 ? '受理完成' :'检测完成')}}
+                    <template slot-scope="scope">
+                        {{scope.row.flowStatus == 0 ? '待受理' : (scope.row.flowStatus == 1 ? '受理完成' :  (scope.row.flowStatus == 2 ? '检测完成' : '已取消'))}}
                     </template>
                     </el-table-column>
-                      <el-table-column prop="urgentStr" label="是否加急" sortable min-width="120" align="center" show-overflow-tooltip>
+                      <el-table-column prop="developer" label="开发员" sortable min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
                      <el-table-column prop="inspectResultStr" label="检测结果" sortable min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
+                    <el-table-column prop="acceptUser" label="受理人" sortable min-width="120" align="center" show-overflow-tooltip>
+                    </el-table-column>
+                    <el-table-column prop="inspectUser" label="检测人" sortable min-width="120" align="center" show-overflow-tooltip>
+                    </el-table-column>
+                     <el-table-column prop="description" label="检测要求" sortable min-width="120" align="center" show-overflow-tooltip>
+                     </el-table-column>
+                     <el-table-column prop="acceptRemark" label="受理说明" sortable min-width="120" align="center" show-overflow-tooltip>
+                     </el-table-column>
+                     <el-table-column prop="supplier" label="加工厂" sortable min-width="120" align="center" show-overflow-tooltip>
+                     </el-table-column>
                     <el-table-column prop="goodsNo" label="大货款号" sortable min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column prop="styleColor" label="颜色" sortable min-width="120" align="center" show-overflow-tooltip>
@@ -105,6 +110,14 @@
                     </el-table-column>
                     <el-table-column prop="purchaseQty" label="下单总数" sortable min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
+                    <el-table-column prop="majorClasses" label="物料类型" sortable min-width="120" align="center" show-overflow-tooltip>
+                    </el-table-column>
+                     <el-table-column prop="weaveMethod" label="织  法" sortable min-width="120" align="center" show-overflow-tooltip>
+                    </el-table-column>
+                     <el-table-column prop="kinds" label="品类分类" sortable min-width="120" align="center" show-overflow-tooltip>
+                    </el-table-column>
+                     <el-table-column prop="materialName" label="物料名称" sortable min-width="120" align="center" show-overflow-tooltip>
+                    </el-table-column>
                     <el-table-column prop="supplier" label="供应商" sortable min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column prop="supplierColor" label="供应商色号" sortable min-width="120" align="center" show-overflow-tooltip>
@@ -113,17 +126,55 @@
                     </el-table-column>
                     <el-table-column prop="usingPart" label="使用部位" sortable min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
-                    <el-table-column prop="dataSource" label="数据来源" sortable min-width="120" align="center" show-overflow-tooltip>
-                     </el-table-column>
-                     <el-table-column prop="fabricDevelopTaskNo" label="面料开发任务编号" sortable min-width="120" align="center" show-overflow-tooltip>
-                     </el-table-column>
+                     <el-table-column prop="styleColor" label="物料颜色" sortable min-width="120" align="center" show-overflow-tooltip>
+                    </el-table-column>
+                     <el-table-column prop="supplierMaterialNo" label="供应商物料编号" sortable min-width="130" align="center" show-overflow-tooltip>
+                    </el-table-column>
+                  <el-table-column prop="styleImg" label="样图1" min-width="120" align="center" show-overflow-tooltip>
+                <template slot-scope="scope">
+                    <div v-if="scope.row.styleImg">
+                        <el-image style="width: 40px; height: 40px" :src="scope.row.styleImg" :preview-src-list="[scope.row.styleImg]">
+                        </el-image>
+                    </div>
+                    <div v-if="!scope.row.styleImg">
+                        <el-image style="width: 40px; height: 40px" :src="noneUrl"></el-image>
+                    </div>
+                </template>
+            </el-table-column>
+            <el-table-column prop="styleImg2" label="样图2" min-width="120" align="center" show-overflow-tooltip>
+                <template slot-scope="scope">
+                    <div v-if="scope.row.styleImg2" >
+                        <el-image style="width: 40px; height: 40px" :src="scope.row.styleImg2" :preview-src-list="[scope.row.styleImg2]">
+                        </el-image>
+                    </div>
+                    <div v-if="!scope.row.styleImg2">
+                        <el-image style="width: 40px; height: 40px" :src="noneUrl"></el-image>
+                    </div>
+                </template>
+            </el-table-column>
                     <el-table-column prop="createUser" label="创建人" sortable min-width="120" align="center" show-overflow-tooltip>
+                    </el-table-column>
+                    <el-table-column prop="remark" label="备注" sortable min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column prop="created" label="创建时间" sortable min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
                 </el-table>
-                <p style="font-size:12px;">操作日志</p>
-                <el-table :data="logList" style="width: 100%" border :height="twoTableHeight" tooltip-effect="dark">
+                <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+                    <el-tab-pane label="明细" name="first">
+                        <el-table :data="detailsData" style="width: 100%" border highlight-current-row tooltip-effect="dark" :height="twoTableHeight" size="mini">
+                            <el-table-column type="index" width="55" label="序号" fixed="left" align="center"></el-table-column>
+                            <el-table-column prop="basicQcItemContent" label="检测项目" fixed="left" width="160" align="center" show-overflow-tooltip>
+                            </el-table-column>
+                            <el-table-column prop="internalOrOutside" label="内检/外检" fixed="left" align="center" width="100" show-overflow-tooltip>
+                            </el-table-column>
+                            <el-table-column prop="inspectResult" label="检测结果" fixed="left" width="100" align="center" show-overflow-tooltip>
+                            </el-table-column>
+                            <el-table-column prop="checkRemark" label="检测说明" fixed="left" min-width="100" align="center" show-overflow-tooltip>
+                            </el-table-column>
+                        </el-table>
+                    </el-tab-pane>
+                    <el-tab-pane label="操作日志" name="second">
+                         <el-table :data="logList" style="width: 100%" border :height="twoTableHeight" tooltip-effect="dark">
                     <el-table-column prop="operator" label="操作员" min-width="80" align="center">
                     </el-table-column>
                     <el-table-column prop="operateTime" label="操作时间" align="center" min-width="80">
@@ -132,160 +183,35 @@
                     <el-table-column prop="logContent" label="操作记录" min-width="220" align="center" show-overflow-tooltip>
                     </el-table-column>
                 </el-table>
-                <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div>
-                <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div>
+                        <div class="getmore" v-if="logList.length>0&&dataFlag" @click="getMore">点击加载更多</div>
+                <div class="getmore" v-if="logList.length>0&&!dataFlag">没有更多了…</div> 
+                    </el-tab-pane>
+                </el-tabs>
             </el-col>
         </el-row>
-
+         <!-- 导出 -->
+    <Modal v-model="exportVisible" title="导出" @on-cancel='cancelExport' :width="430" class-name="customize-modal-center">
+        <Row class="margin-bottom-10 background-color-white exhibition">
+            <el-form :inline="true" ref="ruleForm" :model="exportObj" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="rules">
+                <Col>
+                    <el-form-item label="导出类型" size="small" label-width="95px" prop="platform">
+                        <el-select  v-model="exportObj.selected" filterable placeholder="请选择" style="width:150px">
+                            <el-option label="导出主表" value="0"></el-option>
+                            <el-option label="导出主表+明细" value="1"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </Col>
+                <el-form-item style="padding-left:130px">
+                    <!-- 二次确认 -->
+                    <Button type="primary" @click="onExport">确认</Button> 
+                    <Button type="default" @click="cancelExport">取消</Button>
+                </el-form-item>
+            </el-form>
+        </Row>
+        <div slot="footer"></div>
+    </Modal>
     </section>
 
-    <!-- 新增弹框 -->
-    <Modal v-model="visibleBig" @on-cancel="bigCancel" :styles="mystyle" :title="'大货物料检测'" :width="1180" class-name="customize-modal-center">
-        <Row class="">
-            <el-button size="small" type="primary" @click="onSubmitBig">提交</el-button>
-            <el-button size="small" type="primary" @click="onseeMore">查询</el-button>
-            <el-form :rules="rules" ref="ruleForm" label-width="120px" :model="ruleForm" class="demo-ruleForm " :label-position="right">
-                <Col span="24">
-                <Col span="6">
-                <el-form-item label="大货款号：" prop="bigGoods" size="small">
-                    <el-input v-model="ruleForm.bigGoods" @change="changeBigGoods(ruleForm.bigGoods)" clearable placeholder="请输入" style="width:150px"></el-input>
-                </el-form-item>
-                </Col>
-                <Col span="6">
-                <el-form-item label="批次号：" prop="batchNo" size="small">
-                    <el-select v-model="ruleForm.batchNo" @change="changeBizNo(ruleForm.batchNo)" filterable placeholder="请选择" style="width:170px">
-                        <el-option v-for="item in bicNoList" :key="item.batchNo" :label="item.batchNo" :value="item.batchNo"></el-option>
-                    </el-select>
-                </el-form-item>
-                </Col>
-                <Col span="6">
-                <el-form-item label="颜色：" prop="colors" size="small">
-                    <el-select v-model="ruleForm.colors" filterable multiple clearable placeholder="请选择" style="width:170px">
-                        <el-option v-for="item in colorList" :key="item.styleColor" :label="item.styleColor" :value="item.styleColor"></el-option>
-                    </el-select>
-                </el-form-item>
-                </Col>
-                <Col span="6">
-                <el-form-item label="设计款号：" prop="designNo" size="small">
-                    <el-input v-model="ruleForm.designNo" disabled clearable placeholder="请输入" style="width:150px"></el-input>
-                </el-form-item>
-                </Col>
-                </Col>
-                <Col span="24">
-                <Col span="24">
-                <el-form-item label="检测说明：" prop="description" size="small">
-                    <el-input v-model="ruleForm.description" type="textarea" clearable placeholder="请输入" style="width:850px"></el-input>
-                </el-form-item>
-                </Col>
-                </Col>
-            </el-form>
-            <h3>物料明细</h3>
-            <el-table ref="multipleTable" :data="tableAdd" style="width: 100%" border tooltip-effect="dark" :height="350" @selection-change="handleSelectionBig">
-                <el-table-column type="selection" width="50">
-                </el-table-column>
-                <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
-                <el-table-column prop="goodsNo" label="大货款号" min-width="120" align="center" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="styleColor" label="大货颜色" min-width="120" align="center" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="majorClasses" label="项目" min-width="120" align="center" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="materialNoPlusColor" label="物料编码+色号" min-width="120" align="center" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="materialName" label="物料名称" min-width="120" align="center" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="materialNo" label="供应商物料编号" min-width="120" align="center" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="materialColor" label="颜色" min-width="120" align="center" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="supplierColor" label="供应商物料色号" min-width="120" align="center" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="supplier" label="供应商" min-width="120" align="center" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="usingPart" label="使用部位" min-width="120" align="center" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="kinds" label="样品名称" min-width="120" align="center" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="weaveMethod" label="织法" min-width="120" align="center" show-overflow-tooltip>
-                </el-table-column>
-
-            </el-table>
-        </Row>
-        <div slot="footer">
-        </div>
-    </Modal>
-
-    <!-- 新增弹框 -->
-    <Modal v-model="visibleDesign" @on-cancel="designCancel" :styles="mystyle" :title="'设计款号物料检测'" :width="1180" class-name="customize-modal-center">
-        <Row class="">
-            <el-button size="small" type="primary" @click="onSubmitDesign">提交</el-button>
-            <el-button size="small" type="primary" @click="onSeeDesign">查询</el-button>
-            <el-form :rules="rulesDesign" ref="ruleFormDesign" label-width="120px" :model="ruleFormDesign" class="demo-ruleForm " :label-position="right">
-                <Col span="24">
-                <Col span="8">
-                <el-form-item label="设计款号：" prop="designNo" size="small">
-                    <el-input v-model="ruleFormDesign.designNo" @change="changeDesign(ruleFormDesign.designNo)" clearable placeholder="请输入" style="width:150px"></el-input>
-                </el-form-item>
-                </Col>
-                <Col span="8">
-                <el-form-item label="颜色：" prop="color" size="small">
-                    <el-select v-model="ruleFormDesign.color" @change="changeDesignColor(ruleFormDesign.color)" filterable placeholder="请选择" style="width:170px">
-                        <el-option v-for="item in colorList" :key="item" :label="item" :value="item"></el-option>
-                    </el-select>
-                </el-form-item>
-                </Col>
-                <Col span="8">
-                <el-form-item label="版样类别：" prop="simpleCategory" size="small">
-                    <el-select v-model="ruleFormDesign.simpleCategory" filterable placeholder="请选择" style="width:170px">
-                        <el-option v-for="item in simpleCategoryList" :key="item" :label="item" :value="item"></el-option>
-                    </el-select>
-                </el-form-item>
-                </Col>
-                </Col>
-                <Col span="24">
-                <Col span="24">
-                <el-form-item label="检测说明：" prop="description" size="small">
-                    <el-input v-model="ruleFormDesign.description" type="textarea" clearable placeholder="请输入" style="width:850px"></el-input>
-                </el-form-item>
-                </Col>
-                </Col>
-            </el-form>
-            <h3>物料明细</h3>
-            <el-table ref="multipleTable" :data="tableDesign" style="width: 100%" border tooltip-effect="dark" :height="350" @selection-change="handleSelectionDesign">
-                <el-table-column type="selection" width="50">
-                </el-table-column>
-                <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
-              
-                <el-table-column prop="designNo" label="设计款号" min-width="120" align="center" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="styleColor" label="设计款号颜色" min-width="120" align="center" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="majorClasses" label="项目" min-width="120" align="center" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="materialNoPlusColor" label="物料编码+色号" min-width="120" align="center" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="materialName" label="物料名称" min-width="120" align="center" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="materialNo" label="供应商物料编号" min-width="120" align="center" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="materialColor" label="颜色" min-width="120" align="center" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="supplierColor" label="供应商物料色号" min-width="120" align="center" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="supplier" label="供应商" min-width="120" align="center" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="usingPart" label="使用部位" min-width="120" align="center" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="kinds" label="样品名称" min-width="120" align="center" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column prop="weaveMethod" label="织法" min-width="120" align="center" show-overflow-tooltip>
-                </el-table-column>
-
-            </el-table>
-        </Row>
-        <div slot="footer">
-        </div>
-    </Modal>
 </div>
 </template>
 
@@ -293,13 +219,15 @@
 import {
     commonMixins
 } from 'mixins/common';
-// import {
-//     debounce
-// } from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins: [commonMixins],
+    mixins: [commonMixins,burypoint],
     data() {
         return {
+            noneUrl:'https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1562574299&di=846b4c904bd54d3c3821fa5938888c69&src=http://hbimg.b0.upaiyun.com/bdaca9a07e1a8947c00c2f826ebf848750927aa24963-cATwbg_fw658',
+            developerList:[],
+            activeName:'first',
+            detailsData:[],//明细
             urgentList:[ {label:'是',    value:'1' },
                           {label:'否',  value:'0'},
                           ],
@@ -317,7 +245,7 @@ export default {
             taskStatus:[{label:'待受理',    value:'0' },
                         {label:'受理完成',  value:'1'},
                         {label:'检测完成', value:'2'},
-                        // {label:'风评完成',  value:'3'},
+                        {label:'已取消',  value:'4'},
                         ],
             selectDeisgn:[],
             simpleCategoryList:[],
@@ -473,238 +401,43 @@ export default {
             rowObj: {},
             selection: [],
             logPage:1,
+            exportVisible:false,
+            exportObj:{
+                selected:''
+            },
+            moreLarge:true,
             
         }
     },
     created() {
         if (document.body.offsetHeight > 800) {
-            this.oneTableHeight = (document.body.offsetHeight - 280) * 0.6
+            this.oneTableHeight = (document.body.offsetHeight - 280) * 0.55
             this.twoTableHeight = (document.body.offsetHeight - 280) * 0.25
             this.maxHeight = 'height:' + (document.body.offsetHeight - 250) + 'px'
         } else {
             this.oneTableHeight = (document.body.offsetHeight - 280) * 0.5
-            this.twoTableHeight = (document.body.offsetHeight - 280) * 0.27
-            this.maxHeight = 'height:' + (document.body.offsetHeight - 250) + 'px'
+            this.twoTableHeight = (document.body.offsetHeight - 280) * 0.25
+            this.maxHeight = 'height:' + (document.body.offsetHeight - 245) + 'px'
         }
     },
     mounted() {
-
+        this.getdeveloperList()
         this.getButtonJurisdiction() //按钮权限
     },
     methods: {
-        bigCancel() {
-            this.$refs['ruleForm'].resetFields();
-            this.ruleForm = {
-                bigGoods: '',
-                batchNo: '',
-                colors: [],
-                designNo: '',
-                num: '',
-                simpleCategory: '',
-                description: ''
-            }
-            this.bicNoList = []
-            this.colorList = []
-            this.tableAdd = []
-            this.selectBig = []
-            this.visibleBig = false
-        },
-        designCancel() {
-            this.$refs['ruleFormDesign'].resetFields();
-            this.ruleFormDesign = {
-                bigGoods: '',
-                batchNo: '',
-                color: '',
-                designNo: '',
-                num: '',
-                simpleCategory: '',
-                description: ''
-            }
-            this.colorList = []
-            this.simpleCategoryList = []
-            this.tableDesign = []
-            this.selectDeisgn = []
-            this.visibleDesign = false
-        },
-        changeBigGoods(num) {
-            this.ruleForm.batchNo = ''
-            this.ruleForm.colors = ''
-            this.ruleForm.designNo = ''
-            this.bicNoList = []
-            this.colorList = []
-            let data = {}
-            data.goodsNo = num
-            this.request('goodsCheck_selector', data, true).then(res => {
+        getdeveloperList(){
+            this.request('fabric_getdeveloperList', {}, true).then(res => {
                 if (res.code == 1) {
-                    this.bicNoList = res.data
-                } else {
-                    this.$message.error(res.msg)
+                    this.developerList = res.data
                 }
             })
-        },
-        changeBizNo(biz) {
-            this.ruleForm.colors = ''
-            this.ruleForm.designNo = ''
-            this.colorList = []
-            let data = {}
-            data.batchNo = biz
-            data.goodsNo = this.ruleForm.bigGoods
-            this.request('goodsCheck_selector', data, true).then(res => {
-                if (res.code == 1) {
-                    this.colorList = res.data
-                    this.ruleForm.designNo = res.data[0].designNo
-                } else {
-                    this.$message.error(res.msg)
-                }
-            })
-        },
-        //新增查询
-        onseeMore() {
-            let data = this.ruleForm
-            data.goodsNo = this.ruleForm.bigGoods
-            this.request('goodsCheck_materielDetail', data, true).then(res => {
-                if (res.code == 1) {
-                    this.tableAdd = res.data
-                } else {
-                    this.$message.error(res.msg)
-                }
-            })
-        },
-        handleSelectionBig(row){
-            this.selectBig = row
-            console.log(row,'-----------')
-        },
-        //新增大货物料提交
-        onSubmitBig() {
-            if(this.selectBig.length == 0){
-                this.$message.warning('请先勾选数据')
-            }else{
-                this.$refs['ruleForm'].validate((valid) => {
-                    console.log(valid)
-                if (valid) { //新增保存
-                    let data = this.ruleForm
-                    data.goodsNo = this.ruleForm.bigGoods
-                    data.details = this.selectBig
-                    this.request('goodsCheck_batchAdd', data, true).then(res => {
-                        if (res.code == 1) {
-                            this.$message.success('提交成功')
-                            this.getData()
-                            this.$refs['ruleForm'].resetFields();
-                            this.bigCancel()
-                            // this.tableAdd = []
-                            // this.selectBig = []
-                            // this.visibleBig = false
-                            // this.ruleForm = {
-                            //     bigGoods: '',
-                            //     batchNo: '',
-                            //     colors: [],
-                            //     designNo: '',
-                            //     num: '',
-                            //     simpleCategory: '',
-                            //     description: ''
-                            // }
-                            // this.bicNoList = []
-                            // this.colorList = []
-                        } else {
-                            this.$message.error(res.msg)
-                        }
-                    })
-                } else { //验证表单
-                    return false;
-                }
-            });
-            }
-        },
-
-        changeDesign(num){
-            this.ruleFormDesign.color = ''
-            this.ruleFormDesign.simpleCategory = ''
-            this.simpleCategoryList = []
-            this.colorList = []
-            let data = {}
-            data.designNo = num
-            this.request('goodsCheck_colorSelector', data, true).then(res => {
-                if (res.code == 1) {
-                    this.colorList = res.data
-                } else {
-                    this.$message.error(res.msg)
-                }
-            })
-        },
-        changeDesignColor(color){
-            this.ruleFormDesign.simpleCategory = ''
-            this.simpleCategoryList = []
-            let data = {}
-            data.designNo = this.ruleFormDesign.designNo
-            data.styleColor = color
-            this.request('goodsCheck_simpleCategorySelector', data, true).then(res => {
-                if (res.code == 1) {
-                    this.simpleCategoryList = res.data
-                } else {
-                    this.$message.error(res.msg)
-                }
-            })
-        },
-        onSeeDesign(){
-            let data = this.ruleFormDesign
-            data.styleColor = this.ruleFormDesign.color
-            this.request('goodsCheck_design_materielDetail', data, true).then(res => {
-                if (res.code == 1) {
-                    this.tableDesign = res.data
-                } else {
-                    this.$message.error(res.msg)
-                }
-            })
-        },
-        onSubmitDesign(){
-            if(this.selectDeisgn.length == 0){
-                this.$message.warning('请先勾选数据')
-            }else{
-                this.$refs['ruleFormDesign'].validate((valid) => {
-                    console.log(valid)
-                if (valid) { //新增保存
-                    let data = this.ruleFormDesign
-                    data.styleColor = this.ruleFormDesign.color
-                    data.details = this.selectDeisgn
-                    this.request('goodsCheck_batchAdd', data, true).then(res => {
-                        if (res.code == 1) {
-                            this.$message.success('提交成功')
-                            this.getData()
-                            this.$refs['ruleFormDesign'].resetFields();
-                            this.designCancel()
-                            // this.tableDesign = []
-                            // this.selectDeisgn = []
-                            // this.visibleDesign = false
-                            // this.ruleFormDesign = {
-                            //     bigGoods: '',
-                            //     batchNo: '',
-                            //     color: '',
-                            //     designNo: '',
-                            //     num: '',
-                            //     simpleCategory: '',
-                            //     description: ''
-                            // }
-                            // this.simpleCategoryList = []
-                            // this.colorList = []
-                        } else {
-                            this.$message.error(res.msg)
-                        }
-                    })
-                } else { //验证表单
-                    return false;
-                }
-            });
-            }
-        },
-        handleSelectionDesign(row){
-            this.selectDeisgn = row
         },
         handleShowHidden(name) {
             if (name == 'show') {
                 this.showhidden = true
                 if (document.body.offsetHeight > 800) {
                     this.maxHeight = 'height:' + (document.body.offsetHeight - 110) + 'px'
-                    this.oneTableHeight = (document.body.offsetHeight - 110) * 0.6
+                    this.oneTableHeight = (document.body.offsetHeight - 110) * 0.55
                     this.twoTableHeight = (document.body.offsetHeight - 110) * 0.25
                 } else {
                     this.maxHeight = 'height:' + (document.body.offsetHeight - 110) + 'px'
@@ -715,11 +448,11 @@ export default {
             } else {
                 this.showhidden = false
                 if (document.body.offsetHeight > 800) {
-                    this.oneTableHeight = (document.body.offsetHeight - 280) * 0.6
+                    this.oneTableHeight = (document.body.offsetHeight - 280) * 0.55
                     this.twoTableHeight = (document.body.offsetHeight - 280) * 0.25
                     this.maxHeight = 'height:' + (document.body.offsetHeight - 250) + 'px'
                 } else {
-                    this.maxHeight = 'height:' + (document.body.offsetHeight - 250) + 'px'
+                    this.maxHeight = 'height:' + (document.body.offsetHeight - 245) + 'px'
                     this.oneTableHeight = (document.body.offsetHeight - 280) * 0.5
                     this.twoTableHeight = (document.body.offsetHeight - 280) * 0.27
                 }
@@ -744,9 +477,62 @@ export default {
             this.rowLenght = row.length
             this.rowObj = row[0]
         },
+        //调整检测结果
+        changeTesting(){
+            this.setBuryPoint('调整检测结果')
+            if(this.selection.length != 1){
+                this.$message.warning('请选择一条检测不合格的数据进行调整！')
+            }else if(this.selection[0].inspectResultStr !== '不合格'){
+                this.$message.warning('请选择检测不合格的数据进行调整！')
+                }else{
+                let msg = this.selection[0].taskNo
+                this.$prompt('【' + msg +'】原检测状态为不合格，请确认是否修改为合格？', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                inputPattern: /\S/,
+                inputErrorMessage: '请输入备注信息',
+                type: 'warning'
+            }).then(({value}) => {
+                console.log(!value || value.trim() == '')
+                if(!value || value.trim() == ''){
+                    this.$message.warning('请输入备注信息')
+                }else{
+                    let data = {}
+                data.remark = value
+                data.id = this.selection[0].id
+            this.request('fabric_checkQualified', data, true).then(res => {
+                if (res.code == 1) {
+                    this.$message.success('调整成功')
+                    this.getData()
+                } else {
+                    this.$message.error(res.msg)
+                }
+            })
+                }
+                
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消'
+                });
+            });
+            }
+        },
+        //导出相关
+        checkExport(){
+            this.setBuryPoint('导出')
+            this.exportVisible=true
+        },
+        cancelExport(){
+            this.exportVisible=false;
+            this.exportObj.selected=''
+        },
+        
         //异步导出
         onExport() {
+            if(!this.exportObj.selected) return this.$message.error('请选择导出类型')
             let data = {}
+                data.includeDetail = this.exportObj.selected
                 data.goodsNo = this.formSearch.goodsNo
                 data.batchNo = this.formSearch.batchNo
                 data.designNo = this.formSearch.designNo
@@ -758,8 +544,10 @@ export default {
                 data.currentPage = this.currentPage
                 data.urgent=this.formSearch.urgentStr
                 data.fabricDevelopTaskNo=this.formSearch.fabricDevelopTaskNo
+                data.developer = this.formSearch.developer //开发员
             this.request('goodsCheck_export', data, true).then(res => {
                 if (res.code == 1) {
+                    this.cancelExport()
                     this.getKey(res.data)
                 } else {
                     this.$message.error(res.msg)
@@ -769,6 +557,7 @@ export default {
         getData() {
             this.logPage=1
             this.logList = []
+            this.detailsData = []
             let data = {}
                 data.goodsNo = this.formSearch.goodsNo
                 data.batchNo = this.formSearch.batchNo
@@ -781,6 +570,7 @@ export default {
                 data.currentPage = this.currentPage
                 data.urgent=this.formSearch.urgentStr
                 data.fabricDevelopTaskNo=this.formSearch.fabricDevelopTaskNo
+                data.developer = this.formSearch.developer //开发员
             this.request('goodsCheck_goodsQuery', data, true).then(res => {
                 if (res.code == 1) {
                     this.total = res.data.count;
@@ -816,39 +606,21 @@ export default {
             this.getLoglist()
             
         },
+        getDetailsList(id){ //明细
+        let data = {}
+        data.id = id
+        this.request('goodsCheck_detail', data, true).then((res) => {
+                if (res.code == 1) {
+                    this.detailsData = res.data
+                }else{
+                    this.detailsData = []
+                }
+            })
+        },
         showLog(row) {
             this.billNo=row.id
             this.getLoglist()
-        },
-        //部门
-        getDepartmentList() {
-            let data = {}
-            data.parentName = '杭州全尚科技股份有限公司'
-            this.request('masterData_department_selector', data, true).then((res) => {
-                if (res.code == 1) {
-                    this.departmentList = res.data
-                }
-            })
-        },
-        getBrandList() {
-            let data = {}
-            this.request('masterData_brand_selector', data, true).then((res) => {
-                if (res.code == 1) {
-                    let obj = {
-                        name: '全部',
-                        id: -1
-                    }
-                    this.brandList = [obj, ...res.data]
-                    this.brandNewList = res.data
-                }
-            })
-        },
-        getplatformOptions() { //接收人
-            this.request('sendDingTalkConfig_userSelector', {}, true).then(res => {
-                if (res.code == 1) {
-                    this.personList = res.data;
-                }
-            })
+            this.getDetailsList(row.id)
         },
 
         handleSizeChange(val) {
@@ -859,115 +631,10 @@ export default {
             this.currentPage = val
             this.getData()
         },
-        //人员部门联动
-        changeAddDepartmeng(id) {
-            this.ruleForm.person = ""
-            let name
-            this.departmentList.map((item) => {
-                if (id == item.id) {
-                    name = item.name
-                }
-            })
-            let data = {}
-            data.departmentName = name
-            this.request('getByDepartment', data, true).then((res) => {
-                if (res.code == 1) {
-                    this.addpersonList = res.data
-                } else {
-                    this.$message.error(res.msg)
-                    this.addpersonList = []
-                }
-            })
-        },
-        onAdd(name) {
-            if (name == '1') {
-                this.visibleBig = true
-            } else {
-                this.visibleDesign = true
-            }
-        },
-        //新增
-        addSave() {
-            let postUrl = ''
-            let departmentObj = {}
-            let personObj = {}
-            let data = {}
-            this.departmentList.map((i) => {
-                if (this.ruleForm.department == i.id) {
-                    departmentObj = i
-                }
-            })
-            this.addpersonList.map((i) => {
-                if (this.ruleForm.person == i.id) {
-                    personObj = i
-                }
-            })
-            if (this.addtitle == '新增') {
-                postUrl = 'sendDingTalkConfig_add'
-            } else {
-                postUrl = 'sendDingTalkConfig_update'
-                data.id = this.rowObj.id
-            }
-            this.dialogVisible = true
-            this.$refs['ruleForm'].validate((valid) => {
-                if (valid) { //新增保存
-                    data.departmentId = this.ruleForm.department
-                    data.departmentCode = departmentObj.code
-                    data.departmentName = departmentObj.name
-                    data.userId = this.ruleForm.person
-                    data.userCode = personObj.staffCode
-                    data.userName = personObj.userName
-                    data.userEopId = personObj.eopUserId
-                    data.sendType = this.ruleForm.sendType
-                    data.adjustTypeCodes = this.ruleForm.workType
-                    data.brandIds = this.ruleForm.brand
-                    this.request(postUrl, data, true).then(res => {
-                        if (res.code == 1) {
-                            // this.pagesize= 10,
-                            this.currentPage = 1,
-                                this.$message.success('保存成功')
-                            this.getData()
-                            this.$refs['ruleForm'].resetFields();
-                            this.dialogVisible = false
-                            this.ruleForm = {
-                                department: '',
-                                person: '',
-                                brand: '',
-                                sendType: 0,
-                                workType: ''
-                            }
-                            this.addpersonList = []
-                        } else {
-                            this.$message.error(res.msg)
-                        }
-                    })
-                } else { //验证表单
-                    return false;
-                }
-            });
-        },
-        changeBrand(name) {
-            if (name.length == 0) {
-                this.ruleForm.sendType = 0
-            } else {
-                this.ruleForm.sendType = 1
-            }
-        },
-        addCancel() {
-            this.dialogVisible = false
-            this.addpersonList = []
-            this.ruleForm = {
-                department: '',
-                person: '',
-                brand: '',
-                sendType: 0,
-                workType: ''
-            }
-            this.$refs['ruleForm'].resetFields();
-
-        },
+        
         //查询
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 
@@ -989,15 +656,15 @@ export default {
     width: 99%;
     margin: 0 auto;
     background: #fff;
-    padding: 20px 20px 10px 20px;
+    padding: 10px 10px 10px 10px;
     margin-bottom: 10px;
 }
 
 .getmore {
-    padding-top: 6px;
+    // padding-top: 6px;
     width: 100%;
-    height: 40px;
-    line-height: 40px;
+    height: 20px;
+    line-height: 20px;
     text-align: center;
     font-size: 12px;
     cursor: pointer;

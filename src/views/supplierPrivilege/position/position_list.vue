@@ -184,8 +184,9 @@
 <script>
 import filters from './position_list'
   import {debounce} from 'mixins/debounce'
+  import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins: [debounce],
+    mixins: [debounce,burypoint],
     data() {
       return {
         newCodePrefix: "spos", //岗位编码前缀
@@ -337,6 +338,7 @@ export default {
              this. getLoglist(row.id)  
           },
       onSearch(){
+        this.setBuryPoint('查询')
          this.currentPage = 1
          this.getData()
        
@@ -377,6 +379,7 @@ export default {
         },
         //编辑
         clickTable(row){
+          this.setBuryPoint('编辑')
           if(this.rowLenght == 0){
             this.$message.error('请先选择修改的数据！')
           }else if(this.rowLenght > 1){
@@ -422,6 +425,7 @@ export default {
               this.getData()
           },
         onAdd(){
+          this.setBuryPoint('新增')
             this.dialogVisible=true
         }
     }

@@ -8,18 +8,6 @@
                           <el-form-item label="人员名称：" size="small">
                               <el-input :disabled="true" v-model="formSearch.name"></el-input>
                           </el-form-item>
-                          <!-- <el-form-item label="部门：" size="small">
-                              <el-input v-model="formSearch.bm"></el-input>
-                          </el-form-item>
-                          <el-form-item label="岗位：" size="small">
-                              <el-input v-model="formSearch.gw"></el-input> 
-                          </el-form-item>
-                          <el-form-item label="手机号：" size="small">
-                              <el-input v-model="formSearch.phone"></el-input>
-                          </el-form-item>
-                          <el-form-item label="绑定邮箱：" size="small">
-                              <el-input v-model="formSearch.email"></el-input>
-                          </el-form-item> -->
                           <el-form-item label="状态：" size="small">
                               <el-select v-model="formSearch.status" placeholder="请选择" style="width:100px" filterable>
                                   <el-option     label="冻结"  value="2"></el-option>
@@ -111,56 +99,7 @@
                     <el-tab-pane label="角色包含权限" name="second">
                         <el-tree :data="dataUser" :props="defaultPropsQ" @node-click="handleNodeClick"></el-tree>
                     </el-tab-pane>
-                    <!-- <el-tab-pane label="分配公司" name="third">
-                         <div style="text-align: center">
-                          <el-transfer
-                            style="text-align: left; display: inline-block"
-                            v-model="valueCompany"
-                            :props="{
-                              key: 'id',
-                              label: 'name'
-                            }"
-                            filterable
-                            :render-content="renderFunc"
-                            :titles="['待分配公司', '已分配公司']"
-                            :button-texts="['撤销分配', '分配']"
-                            :format="{
-                              noChecked: '${total}',
-                              hasChecked: '${checked}/${total}'
-                            }"
-                            @change="handleChangeCompany"
-                            :data="datags">
-                          </el-transfer>
-                        </div>
-                    </el-tab-pane> -->
-<!-- 
-                    <el-tab-pane label="分配品牌" name="fourth">
-                        <div style="text-align: center">
-                          <el-transfer
-                            style="text-align: left; display: inline-block"
-                            v-model="valueBrand"
-                            :props="{
-                              key: 'id',
-                              label: 'name'
-                            }"
-                            filterable
-                            :render-content="renderFunc"
-                            :titles="['待分配品牌', '已分配品牌']"
-                            :button-texts="['撤销分配', '分配']"
-                            :format="{
-                              noChecked: '${total}',
-                              hasChecked: '${checked}/${total}'
-                            }"
-                            @change="handleChangeBrand"
-                            :data="dataPP">
-                          </el-transfer>
-                        </div>
-                    </el-tab-pane> -->
-                    <!-- <el-tab-pane label="分配店铺" name="five">
-                        <tree-transfer :title="titleDP" :from_data='fromData' :button_text='["分配 ","撤销分配"]' :to_data='toData' :defaultProps="defaultPropsDp" @addBtn='addStore' 
-                            @removeBtn='removeStore' :mode='mode' height='540px' filter openAll>
-                        </tree-transfer>
-                    </el-tab-pane> -->
+                    
                     <el-tab-pane label="分配供应商" name="six">
                         <div style="text-align: center">
                           <el-transfer
@@ -199,10 +138,10 @@
 <script>
   import filters from '../../../filter/'
   import treeTransfer from 'el-tree-transfer' // 引入
-
+import {burypoint} from 'mixins/burypoint'
   import {debounce} from 'mixins/debounce'
 export default {
-    mixins: [debounce],
+    mixins: [debounce,burypoint],
     data() {
       return {
         valueSupplier:[],
@@ -591,6 +530,7 @@ export default {
       },
       //保存
       onSave(){
+        this.setBuryPoint('保存')
       let data = {}
           data.id = this.$route.query.id
           data.status = this.formSearch.status
@@ -609,6 +549,7 @@ export default {
           },
       //重置密码
           onReset(){
+            this.setBuryPoint('重置密码')
             let vars = {}
                 vars.id = this.$route.query.id
             this.requestWithUriVars('basicsupplieruser_basic_supplier_user_reBuildPwd', vars, null,false).then(res => { 
@@ -622,12 +563,14 @@ export default {
               })
           },
           goBlack(){
+            this.setBuryPoint('返回上一页')
             this.$router.push({
                            name:'supply_user_list',
               })  
           },
           //解锁
           unLock(){
+            this.setBuryPoint('解冻')
             let vars = {} 
                 vars.id = this.$route.query.id
             this.requestWithUriVars('basicsupplieruser_basic_supplier_user_unLock', vars,null, false).then(res => { 
@@ -640,6 +583,7 @@ export default {
               })
           },
           weChat(){
+            this.setBuryPoint('微信解绑')
                   let vars = {} 
                       vars.id = this.$route.query.id
             this.requestWithUriVars('basicsupplieruser_basic_supplier_user_unBindWx', vars,null, false).then(res => { 

@@ -199,8 +199,9 @@
 <script>
 import filters from '../../../filter/'
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
         return {
             editywlxList:[],
@@ -334,6 +335,7 @@ export default {
 
         // },
         onEdit() {
+            this.setBuryPoint('编辑')
             if (this.IDS.length == 1) {
                 console.log(this.IDS,'-90-9087890')
                 this.editVisible = true;
@@ -430,11 +432,14 @@ export default {
             this.getData()
         },
         onAdd() {
+
             // this.editformdata={}
             this.dialogtitle = "新增"
             this.dialogVisible = true
+            this.setBuryPoint('新增')
         },
         confirmAdd() {
+            this.setBuryPoint('新增确认')
             console.log(this.editformdata.platform,'4567890')
             let data = {};
             data.businessTypeId = this.editformdata.ywlx.id
@@ -469,21 +474,21 @@ export default {
 
         },
         confirmEdit() {
-            console.log(this.editData.ywlx,'-098765',this.IDS,'00000000000000000',this.IDS.basicCodeTypeId)
+            this.setBuryPoint('编辑确认')
             let data = {};
-            data.id = this.editData.id;
-            data.code = this.editData.code;
-            data.businessTypeId = this.IDS[0].businessTypeId
-            data.businessTypeCode = this.IDS[0].businessTypeCode
-            data.businessType = this.IDS[0].businessType
-            // data.name = this.editData.platform;
-            data.basicCompanyId = this.editData.basicCompanyIds;
-            data.codeHeaderTimeFormat = this.editData.timeInfor
-            data.codeSerialLength = Number(this.editData.number)
-            data.enable = Number(this.editData.status)
-            data.basicCodeTypeId = this.IDS[0].basicCodeTypeId
-            data.basicCodeTypeCode = this.IDS[0].basicCodeTypeCode
-            data.basicCodeTypeName = this.IDS[0].basicCodeTypeName
+                data.id = this.editData.id;
+                data.code = this.editData.code;
+                data.businessTypeId = this.IDS[0].businessTypeId
+                data.businessTypeCode = this.IDS[0].businessTypeCode
+                data.businessType = this.IDS[0].businessType
+                // data.name = this.editData.platform;
+                data.basicCompanyId = this.editData.basicCompanyIds;
+                data.codeHeaderTimeFormat = this.editData.timeInfor
+                data.codeSerialLength = Number(this.editData.number)
+                data.enable = Number(this.editData.status)
+                data.basicCodeTypeId = this.IDS[0].basicCodeTypeId
+                data.basicCodeTypeCode = this.IDS[0].basicCodeTypeCode
+                data.basicCodeTypeName = this.IDS[0].basicCodeTypeName
             this.request('masterData_coderuler_update', data, false).then((res) => {
                 if (res.code == 1) {
                     this.editVisible = false;
@@ -500,6 +505,7 @@ export default {
 
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.page = 1;
             this.getData()
         },

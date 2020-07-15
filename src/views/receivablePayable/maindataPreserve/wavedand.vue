@@ -27,8 +27,6 @@
                                   <el-option v-for="item in developTypeList" :key="item.developType" :label="item.developType" :value="item.id"></el-option>
                               </el-select>
                           </el-form-item>
-                          
-                          
                 </el-form>
           </header>
           <section class="middle" :style="maxHeight">
@@ -162,7 +160,9 @@
 
 
 <script>
+  import {burypoint} from 'mixins/burypoint'
   export default {
+    mixins:[burypoint],
     data() {
       return {
         developTypeList:[],
@@ -223,11 +223,12 @@
     methods: {
        //同步
       synchronous(){
+        this.setBuryPoint('同步')
         let data = {}
         this.request('waveBand_sync', data, true).then(res => {
           if (res.code==1) {
-            this.getData()
-            this.$message.success('同步成功')
+              this.getData()
+              this.$message.success('同步成功')
             }else{
               this.$message.error(res.msg)
             }
@@ -235,13 +236,13 @@
       },
       getButtonJurisdiction(){
         let data = {}
-        data.parentResourceCode = this.$route.query.code
+            data.parentResourceCode = this.$route.query.code
         this.request('masterData_resource_buttonResource', data, true).then(res => {
           if (res.code==1) {
             this.buttonList = res.data
             let newList = []
             this.buttonList.map(function(item){
-              newList.push(item.resourceName)
+                newList.push(item.resourceName)
             })
             this.judgeMenu = newList
             }
@@ -323,6 +324,7 @@
         },
       //编辑
       addSave(){
+        this.setBuryPoint('编辑确认')
         this.dialogVisible=true
           this.$refs['ruleForm'].validate((valid) => {
             if (valid) { //编辑保存
@@ -386,6 +388,7 @@
           },
           //编辑
           onAdd(){
+             this.setBuryPoint('编辑')
             if(this.rowLenght == 0){
               this.$message.warning('请先选择编辑的数据')
             }else if(this.rowLenght > 1){
@@ -402,6 +405,7 @@
           },
           //查询
         onSearch(){
+          this.setBuryPoint('查询')
           this.currentPage = 1
           this.getData()
           

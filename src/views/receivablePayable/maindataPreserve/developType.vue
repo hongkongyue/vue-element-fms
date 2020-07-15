@@ -129,7 +129,9 @@
 
 
 <script>
+  import {burypoint} from 'mixins/burypoint'
   export default {
+    mixins:[burypoint],
     data() {
       return {
         addtitle:'新增',
@@ -284,12 +286,16 @@
         },
       //新增
       addSave(){
-        this.dialogVisible=true
+         
+          this.dialogVisible=true
           this.$refs['ruleForm'].validate((valid) => {
             if (valid) { //新增保存
             let data = {}
             if(this.addtitle == '编辑'){
               data.id = this.rowObj.id
+               this.setBuryPoint('编辑确认')
+            }else{
+                this.setBuryPoint('新增确认')
             }
             data.developType = this.ruleForm.developType.trim()
             data.status = this.ruleForm.status
@@ -336,10 +342,12 @@
           },
           onAdd(name){
             if(name == 'add'){
+              this.setBuryPoint('新增')
               this.dialogVisible=true
               this.addtitle = '新增'
             }else if(name == 'edit'){
-              this.addtitle = '编辑'
+                this.setBuryPoint('编辑')
+                this.addtitle = '编辑'
               if(this.rowLenght == 0){
                 this.$message.warning('请先选择编辑的数据')
               }else if(this.rowLenght > 1){
@@ -353,6 +361,7 @@
           },
           //查询
         onSearch(){
+          this.setBuryPoint('查询')
           this.currentPage = 1
           this.page = 1;
           this.getData()

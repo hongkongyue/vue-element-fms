@@ -215,15 +215,14 @@
 <script>
 
 import filters from '../../../filter/'
+import {burypoint} from 'mixins/burypoint'
 // import importComponent from '../components/import.vue'
 import {
     mapState
 } from 'vuex'
 let record;
 export default {
-    // components:{
-    //       importComponent,
-    // },
+    mixins:[burypoint],
     data() {
         return {
             payableUserList:[],
@@ -371,6 +370,7 @@ export default {
               })
         },
         onAdd(){
+            this.setBuryPoint('新增')
                   this.adjustVisible=true
                   this.title="新增"
                   for(let i in this.adjustObj){
@@ -378,7 +378,7 @@ export default {
                   }
         },
         modify(){
-
+            this.setBuryPoint('编辑')
                   let arr = w2ui.paymentBill.getSelection()
                 if(arr.length<1){
                     this.$message.error('请选择编辑数据')
@@ -701,6 +701,7 @@ export default {
             this.getLoglist()
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.getData()
         },
         handleSizeChange(val) {
@@ -786,6 +787,7 @@ export default {
         },
         //审核
         onExamine() {
+            this.setBuryPoint('审核')
                  let arr = w2ui.paymentBill.getSelection()
                  if(arr.length==0){
                       return  this.$message.error('请勾选审核数据')
@@ -839,6 +841,7 @@ export default {
         },
         // 取消审核
         onExamineCancel() {
+            this.setBuryPoint('取消审核')
              let arr = w2ui.paymentBill.getSelection()
                  if(arr.length==0){
                       return  this.$message.error('请勾选取消审核数据')
@@ -876,73 +879,12 @@ export default {
                                                 }
                                     }
                                     })
-                        //  let data = {};
-                        //       data.ids =arr
-                        //     this.request('acc_acc_payment_cancelAudit', data, false).then((res) => {
-                        //         if (res.code == 1) {
-                        //             this.$message.success(res.msg)
-                        //             this.getData()
-                        //         } else {
-                        //             this.$message.error(res.msg)
-                        //         }
-                        //     })
                 }
-            //   let arr = w2ui.paymentBill.getSelection()
-            //     if(arr.length>1){
-            //           return this.$message.error('一次只能取消审核一条数据')
-            //     }else if(arr.length==0){
-            //           return  this.$message.error('请勾选取消审核数据')
-            //     }else if(arr.length==1){
-            //              let data = {};
-            //                  data.payableId = arr[0]
-            //                 this.request('eop_boot_payable_payable_unaudit', data, false).then((res) => {
-            //                     if (res.code == 1) {
-            //                         this.$message.success(res.msg)
-            //                         this.getData()
-            //                     } else {
-            //                         this.$message.error(res.msg)
-            //                     }
-            //                 })
-            //     }
-            // let arr = w2ui.paymentBill.getSelection()
-            // let data = {};
-            // // data.command = 'unAudit'
-            // data.payableId = arr
-            // if (this.checkSelection()) {
-            //     this.request('payable_deductionOrder_check', data, false).then((res) => {
-            //         if (res.code == 1) {
-            //             this.$prompt('确定要取消审核选中的数据吗', '操作确认', {
-            //                 confirmButtonText: '确定',
-            //                 cancelButtonText: '取消',
-            //             }).then(({
-            //                 value
-            //             }) => {
-            //                 data.remark = '取消审核 备注:'+(value?value:'无')
-            //                 this.request('eop_boot_payable_payable_unaudit', data, false).then((res) => {
-            //                     if (res.code == 1) {
-            //                         this.$message.success('取消审核成功')
-            //                         this.getData()
-            //                     } else {
-            //                         this.$message.error(res.msg)
-            //                     }
-            //                 })
-            //             }).catch(() => {
-            //                 this.$message({
-            //                     type: 'info',
-            //                     message: '已取消'
-            //                 });
-            //             });
-            //         } else {
-            //             this.$message.error(res.msg)
-            //         }
-            //     })
-            // } else {
-            //     this.$message.error('请勾选取消审核数据')
-            // }
 
         },
         //删除
         onDel() {
+            this.setBuryPoint('删除')
             let arr = w2ui.paymentBill.getSelection()
             let data = {};
                data.ids = arr
@@ -996,6 +938,7 @@ export default {
             this.$refs[name].resetFields();
         },
         submitForm12(formName) {
+            this.setBuryPoint('编辑确认')
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                       this.saveEdit()
@@ -1005,6 +948,7 @@ export default {
             });
         },
         submitForms(formName){
+            this.setBuryPoint('新增确认')
               this.$refs[formName].validate((valid) => {
                 if (valid) {
                     this.saveAdd()
@@ -1128,76 +1072,13 @@ export default {
                    this.moreLarge=false;
                    this.exportObj.selected=''
         },
-        // getExportTotal(){
-        //    if(!this.exportObj.selected) return this.$message.error('请选择导出类型')
-        //    let data={}
-        //                     data.pageSize = this.pagesize
-        //                     data.currentPage = this.currentPage
-        //                     // data.year = filters.get_unix_only(this.formSearch.year)
-        //                     data.basicCompanyId  = this.formSearch.companyId  //
-        //                     data.basicSupplierId = this.formSearch.supplierId//供应商id
-        //                     data.invoiceNo=   this.formSearch.invoiceNo;//发票号
-        //                     this.formSearch.createTime?data.createdStartTime=this.formSearch.createTime[0]:delete data.createdStartTime; //创建日期开始时间
-        //                     this.formSearch.createTime?data.createdEndTime=this.formSearch.createTime[1]:delete data.createdEndTime;      //创建日期结束时间
-        //                     this.formSearch.invoiceTime?data.invoiceStartDate=this.formSearch.invoiceTime[0]:delete data.invoiceStartDate;
-        //                     this.formSearch.invoiceTime?data.invoiceEndDate=this.formSearch.invoiceTime[1]:delete data.invoiceEndDate;
-        //                     this.formSearch.arriveTime?data.arriveInvoiceStartDate=this.formSearch.arriveTime[0]:delete data.arriveInvoiceStartDate;
-        //                     this.formSearch.arriveTime?data.arriveInvoiceEndDate=this.formSearch.arriveTime[1]:delete data.arriveInvoiceEndDate;
-        //                     data.status=this.formSearch.status!=''?Number(this.formSearch.status):'';                      //结束状态
-        //                     data.invoiceType=this.formSearch.invoiceType!=''?Number(this.formSearch.invoiceType):'';     
-        //                     w2ui.paymentBill.getSelection().length>0?data.ids= w2ui.paymentBill.getSelection():delete data.ids
-        //                     this.exportObj.selected==1? data.inclusionDetails=false:data.inclusionDetails=true;
-        //    this.request('payable_deductionOrder_count',data,false).then(res=>{
-        //        if(res.code==1){
-        //            if(res.data>100000){
-        //                this.moreLarge=true
-        //            }else{
-        //                this.moreLarge=false
-        //                this.onImport()
-        //            }
-        //        }else{
-        //            this.$message.error(res.msg)
-        //        }
-        //    })
-        // },
-        //  //导出
-        // onImport(){
-        //             let data={}
-        //                     data.pageSize = this.pagesize
-        //                     data.currentPage = this.currentPage
-        //                     // data.year = filters.get_unix_only(this.formSearch.year)
-        //                     data.basicCompanyId  = this.formSearch.companyId  //
-        //                     data.basicSupplierId = this.formSearch.supplierId//供应商id
-        //                     data.invoiceNo=   this.formSearch.invoiceNo;//发票号
-        //                     this.formSearch.createTime?data.createdStartTime=this.formSearch.createTime[0]:delete data.createdStartTime; //创建日期开始时间
-        //                     this.formSearch.createTime?data.createdEndTime=this.formSearch.createTime[1]:delete data.createdEndTime;      //创建日期结束时间
-        //                     this.formSearch.invoiceTime?data.invoiceStartDate=this.formSearch.invoiceTime[0]:delete data.invoiceStartDate;
-        //                     this.formSearch.invoiceTime?data.invoiceEndDate=this.formSearch.invoiceTime[1]:delete data.invoiceEndDate;
-        //                     this.formSearch.arriveTime?data.arriveInvoiceStartDate=this.formSearch.arriveTime[0]:delete data.arriveInvoiceStartDate;
-        //                     this.formSearch.arriveTime?data.arriveInvoiceEndDate=this.formSearch.arriveTime[1]:delete data.arriveInvoiceEndDate;
-        //                     data.status=this.formSearch.status!=''?Number(this.formSearch.status):'';                      //结束状态
-        //                     data.invoiceType=this.formSearch.invoiceType!=''?Number(this.formSearch.invoiceType):'';       //发票类型
-
-                        
-        //                     w2ui.paymentBill.getSelection().length>0?data.ids= w2ui.paymentBill.getSelection():delete data.ids
-        //                     this.exportObj.selected==1? data.inclusionDetails=false:data.inclusionDetails=true;
-        //               this.request('payable_deductionOrder_exportAsync', data, false).then(res => {
-        //                 if (res.code == 1) {
-        //                     this.cancelExport()
-        //                     this.getKeyD(res.data)
-        //                 } else {
-        //                     this.$message({
-        //                         message: res.msg,
-        //                         type: 'error'
-        //                     });
-        //                 }
-        //         }) 
-        // },
          //导入
         onImport() {
+            this.setBuryPoint('导入')
             this.visible = true
         },
         upload() {
+            this.setBuryPoint('导入确认')
             if(!this.basicCompanyId) return this.$message.error('公司不能为空')
             if (this.file == null) {
                 this.$message.warning('请先选择文件再导入')
@@ -1249,7 +1130,9 @@ export default {
         uploadError(res, file) {
             this.$message.error(res.msg);
         },
+        
         cancelImport() {
+            this.setBuryPoint('导入取消')
             this.file = null
             this.visible = false
             this.basicCompanyId=''

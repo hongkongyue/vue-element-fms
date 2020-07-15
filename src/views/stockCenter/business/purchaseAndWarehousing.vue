@@ -1,121 +1,136 @@
 <template>
 <div>
     <header class="headerstyle">
-        <el-form :inline="true" :model="formSearch" class="demo-form-inline ">
+        <el-form :inline="true" :model="formSearch" class="demo-form-inline">
             <div>
-                <el-form-item size="small">
-                    <el-button v-if="judgeMenu.indexOf('查询') !== -1" size="small" type="primary" @click="onSearch">查询</el-button>
+                <el-form-item size="mini">
+                    <el-button v-if="judgeMenu.indexOf('查询') !== -1" size="mini" type="primary" @click="onSearch">查询</el-button>
                 </el-form-item>
-                 <el-form-item size="small">
-                    <el-button v-if="judgeMenu.indexOf('导出') !== -1" size="small" type="primary" @click="checkExport">导出</el-button>
+                 <el-form-item size="mini">
+                    <el-button v-if="judgeMenu.indexOf('导出') !== -1" size="mini" type="primary" @click="checkExport">导出</el-button>
                 </el-form-item>
-                <el-form-item size="small">
-                    <el-button size="small" type="default" @click="onReset">重置</el-button>
+                <el-form-item size="mini">
+                    <el-button size="mini" type="default" @click="onReset">重置</el-button>
                 </el-form-item>
-                <el-form-item size="small">
-                    <el-button v-if="judgeMenu.indexOf('生成结算明细') !== -1" size="small" type="primary" @click="onGenerate">生成结算明细</el-button>
+                <el-form-item size="mini">
+                    <el-button v-if="judgeMenu.indexOf('生成结算明细') !== -1" size="mini" type="primary" @click="onGenerate">生成结算明细</el-button>
                 </el-form-item>
-            </div>
-            <el-form-item label="仓库：" size="small">
-                <el-select v-model="formSearch.warehouse" filterable placeholder="请选择" style="width:250px">
-                    <el-option v-for="item in warehouseList" :key="item.id" :label="item.warehouseName" :value="item.id"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="货品编码：" size="small">
-                <el-input v-model="formSearch.themID" style="width:150px"></el-input>
-            </el-form-item>
-            <el-form-item label="商家编码：" size="small">
-                <el-input v-model="formSearch.themCode" style="width:150px"></el-input>
-            </el-form-item>
-            <el-form-item label="品牌：" size="small">
-                <el-select v-model="formSearch.brand" filterable placeholder="请选择" style="width:150px">
-                    <el-option v-for="item in brandList" :key="item.name" :label="item.name" :value="item.id"></el-option>
-                </el-select>
-            </el-form-item>
-
-            <el-form-item v-if="show == true" label="账单编号：" size="small">
-                <el-input v-model="formSearch.orderCode" style="width:210px"></el-input>
-            </el-form-item>
-            <el-form-item v-if="show == true" label="允许结算：" size="small">
-                <el-select v-model="formSearch.allowed" filterable placeholder="请选择" style="width:80px">
-                    <el-option v-for="item in allowedList" :key="item.name" :label="item.name" :value="item.id"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item v-if="show == true" label="关单后入库：" size="small">
-                <el-select v-model="formSearch.closed" filterable placeholder="请选择" style="width:80px">
-                    <el-option v-for="item in closedList" :key="item.name" :label="item.name" :value="item.id"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item v-if="show == true" label="结算类型：" size="small">
-                <el-select v-model="formSearch.setType" filterable placeholder="请选择" style="width:100px">
-                    <el-option v-for="item in setTypeList" :key="item.name" :label="item.name" :value="item.id"></el-option>
-                </el-select>
-            </el-form-item>
-
-            <el-form-item v-if="show == true" label="主采购单号：" size="small">
-                <el-input style="width:180px" placeholder="请输入" v-model="formSearch.platformNo"></el-input>
-            </el-form-item>
-            <el-form-item v-if="show == true" label="业务类型：" size="small">
-                <el-select v-model="formSearch.orderType" filterable placeholder="请选择" style="width:150px">
-                    <el-option v-for="item in busTypeList" :key="item.name" :label="item.name" :value="item.name"></el-option>
-                </el-select>
-            </el-form-item>
-             <el-form-item v-if="show == true" label="所属对账人员：" size="small">
-                <el-select v-model="formSearch.payableUser" @change="changePayable(formSearch.payableUser)" filterable placeholder="请选择" style="width:120px">
+             </div>
+             <div>
+                   <el-form-item label="仓库：" size="mini">
+                        <el-select v-model="formSearch.warehouse" multiple filterable  placeholder="请选择" style="width:200px">
+                            <el-option v-for="item in warehouseList" :key="item.id" :label="item.warehouseName" :value="item.id"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="货品编码：" size="mini">
+                        <el-input v-model="formSearch.themID" placeholder="请输入" style="width:150px"  clearable></el-input>
+                    </el-form-item>
+                    <el-form-item label="商家编码：" size="mini">
+                        <el-input v-model="formSearch.themCode" placeholder="请输入" style="width:150px" clearable></el-input>
+                    </el-form-item>
+                    <el-form-item label="品牌：" size="mini">
+                        <el-select v-model="formSearch.brand" filterable clearable placeholder="请选择" style="width:150px">
+                            <el-option v-for="item in brandList" :key="item.name" :label="item.name" :value="item.id"></el-option>
+                        </el-select>
+                    </el-form-item>
+                     <el-form-item size="mini">
+                        <el-button v-if="show == false" @click="changeShow" style="float:right" size="mini"><i class="el-icon-bottom"></i></el-button>
+                    </el-form-item>
+                    <el-form-item v-if="show == true" label="账单编号：" size="mini">
+                                <el-input v-model="formSearch.orderCode" placeholder="请输入" style="width:150px" clearable></el-input>
+                    </el-form-item>
+             </div>
+             <div>
+                    <el-form-item v-if="show == true" label="允许结算：" size="mini">
+                        <el-select v-model="formSearch.allowed" filterable clearable placeholder="请选择" style="width:191px">
+                            <el-option v-for="item in allowedList" :key="item.name" :label="item.name" :value="item.id"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item v-if="show == true" label="关单后入库：" size="mini">
+                        <el-select v-model="formSearch.closed" filterable clearable  placeholder="请选择" style="width:135px">
+                            <el-option v-for="item in closedList" :key="item.name" :label="item.name" :value="item.id"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item v-if="show == true" label="结算类型：" size="mini">
+                        <el-select v-model="formSearch.setType" filterable clearable  placeholder="请选择" style="width:150px">
+                            <el-option v-for="item in setTypeList" :key="item.name" :label="item.name" :value="item.id"></el-option>
+                        </el-select>
+                    </el-form-item>
+                     <el-form-item v-if="show == true" label="原入库单号：" size="mini">
+                        <el-input v-model="formSearch.outNo"       placeholder="请输入" clearable style="width:115px"></el-input>
+                    </el-form-item>
+                 
+                    <el-form-item v-if="show == true" label="主采购单号：" size="mini">
+                        <el-input style="width:145px" clearable placeholder="请输入" v-model="formSearch.platformNo"></el-input>
+                    </el-form-item>
+             </div>
+             <div>
+             <el-form-item v-if="show == true" label="所属对账人员：" size="mini">
+                <el-select clearable v-model="formSearch.payableUser" @change="changePayable(formSearch.payableUser)" filterable placeholder="请选择" style="width:120px">
                     <el-option v-for="item in payableUserList" :key="item.payableUserId" :label="item.payableUser" :value="item.payableUserId"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item v-if="show == true" label="供应商：" size="small">
-                <el-select v-model="formSearch.supplierId" filterable placeholder="请选择" style="width:250px">
+            <el-form-item v-if="show == true" label="供应商：" size="mini">
+                <el-select clearable v-model="formSearch.supplierId" filterable placeholder="请选择" style="width:240px">
                     <el-option v-for="item in supplyList" :key="item.name" :label="item.name" :value="item.code"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item v-if="show == true" label=" 公 司 ：" size="small">
-                <el-select v-model="formSearch.companyId" filterable placeholder="请选择" style="width:220px">
+            <el-form-item v-if="show == true" label=" 公 司 ：" size="mini">
+                <el-select v-model="formSearch.companyId" filterable clearable placeholder="请选择" style="width:210px">
                     <el-option v-for="item in companyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item v-if="show == true" label="入库时间：" size="small">
+            <el-form-item v-if="show == true" label="入库时间：" size="mini">
                 <!-- <el-date-picker v-model="formSearch.date" style="width:260px" type="daterange" value-format="yyyy-MM-dd" range-separator="~" start-placeholder="开始日期" end-placeholder="结束日期">
                 </el-date-picker> -->
-                <el-date-picker v-model="formSearch.dateStart" type="date" value-format="yyyy-MM-dd" style="width:150px" placeholder="开始日期"></el-date-picker>
+                <el-date-picker v-model="formSearch.dateStart" type="date" value-format="yyyy-MM-dd" style="width:130px" placeholder="开始日期"></el-date-picker>
                 <span>~</span>
-                <el-date-picker v-model="formSearch.dateEnd" type="date" value-format="yyyy-MM-dd" style="width:150px" placeholder="结束日期"></el-date-picker>
+                <el-date-picker v-model="formSearch.dateEnd" type="date" value-format="yyyy-MM-dd" style="width:130px" placeholder="结束日期"></el-date-picker>
             </el-form-item>
-            <el-form-item v-if="show == true" label="结算明细编号：" size="small">
-                <el-input v-model="formSearch.setCode" style="width:150px"></el-input>
-            </el-form-item>
-            <el-form-item v-if="show == true" label="单据时间：" size="small">
-                <!-- <el-date-picker :clearable="false"
-                  v-model="dateRange"
-                  type="daterange"
-                  range-separator="~"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"  style="width:280px" placeholer="请选择">
-                </el-date-picker> -->
-                <el-date-picker v-model="formSearch.orderdateStart" type="date" value-format="yyyy-MM-dd" style="width:150px" placeholder="开始日期"></el-date-picker>
-                <span>~</span>
-                <el-date-picker v-model="formSearch.orderdateEnd" type="date" value-format="yyyy-MM-dd" style="width:150px" placeholder="结束日期"></el-date-picker>
-            </el-form-item>
-            <el-form-item v-if="show==true" label="开票状态：" size="small" label-width="100px">
-                <el-select v-model="formSearch.invoiceStatus" filterable placeholder="请选择" style="width:120px">
-                    <el-option label="未完成" value="0"></el-option>
-                    <el-option label="已完成" value="1"></el-option>
-                </el-select>
-            </el-form-item>
-             <el-form-item v-if="show==true" label="是否生成结算明细：" size="small" label-width="140px">
-                <el-select v-model="formSearch.settle" filterable placeholder="请选择" style="width:80px">
-                   <el-option label="是" value="1"></el-option>
-                    <el-option label="否" value="0"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item size="small">
-                <el-button v-if="show == false" @click="changeShow" style="float:right" size="small"><i class="el-icon-bottom"></i></el-button>
-            </el-form-item>
-            <el-form-item size="small">
-                <el-button v-if="show == true" @click="changeHidden" style="float:right" size="small"><i class="el-icon-top"></i></el-button>
-            </el-form-item>
-
+            </div>
+            <div>
+                <el-form-item v-if="show == true" label="结算明细编号：" size="mini">
+                    <el-input v-model="formSearch.setCode"  placeholder="请输入" style="width:150px" clearable></el-input>
+                </el-form-item>
+                <el-form-item v-if="show==true" label="开票状态：" size="mini">
+                    <el-select v-model="formSearch.invoiceStatus" filterable placeholder="请选择" clearable style="width:150px">
+                        <el-option label="未完成" value="0"></el-option>
+                        <el-option label="已完成" value="1"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item v-if="show==true" label="是否生成结算明细：" size="mini">
+                    <el-select v-model="formSearch.settle" filterable clearable placeholder="请选择" style="width:155px">
+                    <el-option label="是" value="1"></el-option>
+                        <el-option label="否" value="0"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item v-if="show == true" label="单据时间：" size="mini">
+                    <!-- <el-date-picker :clearable="false"
+                    v-model="dateRange"
+                    type="daterange"
+                    range-separator="~"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"  style="width:280px" placeholer="请选择">
+                    </el-date-picker> -->
+                    <el-date-picker v-model="formSearch.orderdateStart" type="date" value-format="yyyy-MM-dd" style="width:150px" placeholder="开始日期"></el-date-picker>
+                    <span>~</span>
+                    <el-date-picker v-model="formSearch.orderdateEnd" type="date" value-format="yyyy-MM-dd" style="width:155px" placeholder="结束日期"></el-date-picker>
+                </el-form-item>
+                </div>
+                <div v-if="show == true">
+                    <el-form-item v-if="show == true" label="外部系统采购单号：" size="mini">
+                        <el-input v-model="formSearch.sourceOrderNo" placeholder="请输入" clearable style="width:180px"></el-input>
+                    </el-form-item>
+                   
+                     <el-form-item v-if="show == true" label="业务类型：" size="mini">
+                        <el-select v-model="formSearch.orderType" filterable multiple placeholder="请选择" style="width:200px">
+                            <el-option v-for="item in busTypeList" :key="item.name" :label="item.name" :value="item.name"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item size="mini">
+                        <el-button v-if="show == true" @click="changeHidden" style="float:right" size="mini"><i class="el-icon-top"></i></el-button>
+                    </el-form-item>
+                </div>
         </el-form> 
     </header>
     <el-dialog title="生成结算明细" :visible="dialogFormVisible" :modal-append-to-body="false" width="35%" :before-close="dialogFormCancel">
@@ -132,10 +147,10 @@
         </div>
     </el-dialog>
 
-    <section class="middle">
+    <section class="middle" :style="{minHeight:showBink?'700px':'400px'}">
         <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[1000, 5000, 10000, 20000]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
-        <div id="outStock" style="width: 100%; height: 400px;margin-bottom:20px"></div>
+        <div id="outStock" style="width: 100%; height: 400px;margin-bottom:10px"></div>
 
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
             <el-tab-pane label="货品明细" name="first">
@@ -244,8 +259,11 @@
 <script>
 let record
 import filter from '../../../filter/'
+import{debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
     name: 'timelyComponent',
+    mixins:[debounce,burypoint],
     data() {
         return {
             payableUserList:[],
@@ -360,6 +378,7 @@ export default {
         // },
         //生成结算明细  //bizStockIn_add
         onGenerate() {
+            this.setBuryPoint('生成结算明细')
             let arr = w2ui.purchase.getSelection()
             if (arr.length == 0) {
                 this.$message.error('请先选择生成结算明细的数据')
@@ -541,7 +560,7 @@ export default {
                             sortable: true
                         },
                         {
-                            field: 'goodsQty',
+                            field: 'actualInCount',
                             caption: '货品数量',
                             size: '100px',
                             sortable: true
@@ -616,6 +635,24 @@ export default {
                             size: '100px',
                             sortable: true
                         },
+                        //  {
+                        //     field: 'actualArriveDate',
+                        //     caption: '实际收货时间',
+                        //     size: '100px',
+                        //     sortable: true
+                        // },
+                        {
+                            field: 'actualReceivedDate',
+                            caption: '实际收货时间',
+                            size: '100px',
+                            sortable: true  
+                        },
+                         {
+                            field: 'exceptionRemark',
+                            caption: '入库说明',
+                            size: '100px',
+                            sortable: true
+                        },
                         {
                             field: 'remark',
                             caption: '备注',
@@ -647,6 +684,49 @@ export default {
             if (arr.length > 0) {
                 w2ui.purchase.clear(); //清空
                 w2ui.purchase.records = arr
+                current?w2ui.purchase.records.push({
+                    w2ui: {
+                        summary: true
+                    },
+                    index: '<span>当页小计</span>',
+                    actualInCount:current.actualInCount,
+                    taxTrialAmount:current.taxTrialAmount,
+                    taxPurchaseAmount:current.taxPurchaseAmount,
+                    trialAmount:current.trialAmount,
+                    purchaseAmount:current.purchaseAmount,
+                    // totalCurrentPeriodAmount: current.totalCurrentPeriodAmount,
+                    // totalTaxTrialAmount: current.totalTaxTrialAmount,
+                    // totalSaleAmount: current.totalSaleAmount,
+                    // totalProcessingAmount: current.totalProcessingAmount,
+                    // totalReturnRepairAmount: current.totalReturnRepairAmount,
+                    // totalDeductionAmount: current.totalDeductionAmount,
+                    // goodsInvoiceAmount: current.goodsInvoiceAmount,
+                    // tryFeeInvoiceAmount: current.tryFeeInvoiceAmount,
+                    // totalTicketAmount: current.totalTicketAmount,
+                    // totalChargeAgainstAmount: current.totalChargeAgainstAmount,
+                    // totalUnTicketAmount: current.totalUnTicketAmount
+                }, {
+                    w2ui: {
+                        summary: true
+                    },
+                    index: '<span>合计</span>',
+                    actualInCount:total.actualInCount,
+                    taxTrialAmount:total.taxTrialAmount,
+                    taxPurchaseAmount:total.taxPurchaseAmount,
+                    trialAmount:total.trialAmount,
+                    purchaseAmount:total.purchaseAmount,
+                    // totalCurrentPeriodAmount: total.totalCurrentPeriodAmount,
+                    // totalTaxTrialAmount: total.totalTaxTrialAmount,
+                    // totalSaleAmount: total.totalSaleAmount,
+                    // totalProcessingAmount: total.totalProcessingAmount,
+                    // totalReturnRepairAmount: total.totalReturnRepairAmount,
+                    // totalDeductionAmount: total.totalDeductionAmount,
+                    // goodsInvoiceAmount: total.goodsInvoiceAmount,
+                    // tryFeeInvoiceAmount: total.tryFeeInvoiceAmount,
+                    // totalTicketAmount: total.totalTicketAmount,
+                    // totalChargeAgainstAmount: total.totalChargeAgainstAmount,
+                    // totalUnTicketAmount: total.totalUnTicketAmount
+                }):'';
                 $('#outStock').w2render('purchase');
                 w2ui.purchase.refresh();
             } else {
@@ -750,12 +830,12 @@ export default {
             data.closed = this.formSearch.closed //关单后入库
             data.billingType = this.formSearch.setType //结算类型
             data.payableSettlementOrderCode = this.formSearch.setCode //结算明细编号
-            data.basicWarehouseId = this.formSearch.warehouse //仓库ID
+            data.basicWarehouseIds = this.formSearch.warehouse //仓库ID
             data.originPoInNo = this.formSearch.platformNo //平台单号
             data.basicBrandId = this.formSearch.brand //品牌ID
             data.merchantCode = this.formSearch.themCode //商家编码
             data.goodsNo = this.formSearch.themID //货品编码
-            data.busType = this.formSearch.orderType //业务类型
+            data.busTypes = this.formSearch.orderType //业务类型
             data.payableUserId = this.formSearch.payableUser //所属人员
             data.basicCompanyId = this.formSearch.companyId //公司ID
             data.basicSupplierCode = this.formSearch.supplierId //供应商编码
@@ -767,6 +847,8 @@ export default {
             // data.endDate  =filter.get_year_month_day(this.dateRange[1])
             data.invoiceStatus=this.formSearch.invoiceStatus!=''?Number(this.formSearch.invoiceStatus):''
             this.formSearch.settle ? data.settle=Number(this.formSearch.settle):delete data.settle
+            data.sourceOrderNo=this.formSearch.sourceOrderNo
+            data.outNo=this.formSearch.outNo
             this.request('bizStockIn_page', data, true).then(res => {
                 if (res.code == 1) {
                     this.total = res.data.count;
@@ -775,7 +857,7 @@ export default {
                             res.data.records[i].index = i + 1
                             res.data.records[i].recid = res.data.records[i].id
                         }
-                        this.initTable(res.data.records, res.data.perAmount, res.data.totalAmount)
+                        this.initTable(res.data.records, res.data.currentPageSum?res.data.currentPageSum:'', res.data.totalPageSum?res.data.totalPageSum:'')
                         this.newTableList = res.data.records
                     } else {
                         this.initTable([])
@@ -793,6 +875,7 @@ export default {
             })
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 
@@ -827,6 +910,7 @@ export default {
         },
          //导出相关
         checkExport(){
+                  this.setBuryPoint('导出') 
                  if(this.checkSelection()){
                     // this.onImport()
                     this.exportVisible=true
@@ -840,6 +924,7 @@ export default {
                    this.exportObj.selected=''
         },
         getExportTotal(){
+              this.setBuryPoint('导出确认') 
               if(!this.exportObj.selected) return this.$message.error('请选择导出类型')
               let data={}
                         data.pageSize = this.pagesize
@@ -850,15 +935,17 @@ export default {
                         data.closed = this.formSearch.closed //关单后入库
                         data.billingType = this.formSearch.setType //结算类型
                         data.payableSettlementOrderCode = this.formSearch.setCode //结算明细编号
-                        data.basicWarehouseId = this.formSearch.warehouse //仓库ID
+                        data.basicWarehouseIds = this.formSearch.warehouse //仓库ID
                         data.originPoInNo = this.formSearch.platformNo //平台单号
                         data.basicBrandId = this.formSearch.brand //品牌ID
                         data.merchantCode = this.formSearch.themCode //商家编码
                         data.goodsNo = this.formSearch.themID //货品编码
-                        data.busType = this.formSearch.orderType //业务类型
+                        data.busTypes = this.formSearch.orderType //业务类型
                         data.payableUserId = this.formSearch.payableUser //所属人员
                         data.basicCompanyId = this.formSearch.companyId //公司ID
                         data.basicSupplierCode = this.formSearch.supplierId //供应商编码
+                        data.sourceOrderNo=this.formSearch.sourceOrderNo
+                        data.outNo =this.formSearch.outNo
                         this.formSearch.dateStart ? data.omsStartDate = this.formSearch.dateStart : delete data.omsStartDate //开始时间
             this.formSearch.dateEnd ? data.omsEndDate = this.formSearch.dateEnd : delete data.omsEndDate //结束时间
                        this.formSearch.orderdateStart ? data.startDate = this.formSearch.orderdateStart : delete data.startDate //开始时间
@@ -880,6 +967,7 @@ export default {
         },
          //导出
         onImport(){
+                     this.setBuryPoint('导出')
                     let data = {}
                         data.pageSize = this.pagesize
                         data.currentPage = this.currentPage
@@ -889,15 +977,17 @@ export default {
                         data.closed = this.formSearch.closed //关单后入库
                         data.billingType = this.formSearch.setType //结算类型
                         data.payableSettlementOrderCode = this.formSearch.setCode //结算明细编号
-                        data.basicWarehouseId = this.formSearch.warehouse //仓库ID
+                        data.basicWarehouseIds = this.formSearch.warehouse //仓库ID
                         data.originPoInNo = this.formSearch.platformNo //平台单号
                         data.basicBrandId = this.formSearch.brand //品牌ID
                         data.merchantCode = this.formSearch.themCode //商家编码
                         data.goodsNo = this.formSearch.themID //货品编码
-                        data.busType = this.formSearch.orderType //业务类型
+                        data.busTypes = this.formSearch.orderType //业务类型
                         data.payableUserId = this.formSearch.payableUser //所属人员
                         data.basicCompanyId = this.formSearch.companyId //公司ID
                         data.basicSupplierCode = this.formSearch.supplierId //供应商编码
+                        data.sourceOrderNo=this.formSearch.sourceOrderNo
+                        data.outNo=this.formSearch.outNo
                         this.formSearch.dateStart ? data.omsStartDate = this.formSearch.dateStart : delete data.omsStartDate //开始时间
             this.formSearch.dateEnd ? data.omsEndDate = this.formSearch.dateEnd : delete data.omsEndDate //结束时间
                         this.formSearch.orderdateStart ? data.startDate = this.formSearch.orderdateStart : delete data.startDate //开始时间
@@ -979,7 +1069,6 @@ export default {
 </script> 
 
 <style lang="less" scoped>
-.headerstyle,
 .main,
 .middle,
 .footer {
@@ -990,7 +1079,14 @@ export default {
     padding: 20px 20px 10px 20px;
     margin-bottom: 10px;
 }
-
+.headerstyle{
+    transform: translateZ(0);
+    width: 99%;
+    margin: 0 auto;
+    background: #fff;
+    padding: 10px 0px 0px 10px;
+    margin-bottom: 10px;
+}
 .getmore {
     padding-top: 6px;
     width: 100%;

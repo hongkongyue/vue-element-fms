@@ -227,8 +227,9 @@
 <script>
 import filters from '../../../filter/'
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
         return {
         	true:true,
@@ -365,6 +366,7 @@ export default {
                    this.cancelVisible=false
       },
       del111(){
+               this.setBuryPoint('删除')
             if (this.IDS.length == 1) {
             	  this.cancelVisible=true
             } else if (this.IDS.length == 0) {
@@ -374,6 +376,7 @@ export default {
             }
       },
        onEdit() {
+                this.setBuryPoint('编辑')
             if (this.IDS.length == 1) {
                 this.dialogtitle = "编辑"
                 this.dialogVisible = true
@@ -446,10 +449,12 @@ export default {
             })
         },
         onAdd() {
+            this.setBuryPoint('新增')
             this.dialogtitle = "新增"
             this.dialogVisible = true
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.page = 1;
             this.getData()
             
@@ -463,6 +468,7 @@ export default {
         },
 
         submitForm(formName) {
+            this.setBuryPoint('新增确认')
             this.dialogVisible = true
             this.$refs[formName].validate((valid) => {
                 if (valid) {
@@ -473,6 +479,7 @@ export default {
             });
         },
         submitFormEdit(formName) {
+            this.setBuryPoint('编辑确认')
             this.dialogVisible = true
             this.$refs[formName].validate((valid) => {
                 if (valid) {
@@ -600,6 +607,7 @@ export default {
             })
         },
         downLoadTemplate(){
+                  this.setBuryPoint('下载模板')
         	      this.downLoadVisible=true;
         },
         confirmDownload(){
@@ -616,6 +624,7 @@ export default {
             this.dialogVisible = false;
         },
         onImport(){
+            this.setBuryPoint('导入')
             this.importVisible=true
         },
         showLog(row) {
@@ -642,6 +651,7 @@ export default {
         	    console.log(this.file)
         },
         importConfirm(){
+                    this.setBuryPoint('导入确认')
                     let data =new FormData()
                         data.append('file',this.file.raw)
                         this.request('masterData_deductionDiscount_uploadAsync',data,false).then(res=>{

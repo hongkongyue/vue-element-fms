@@ -217,8 +217,9 @@
 <script>
   import filters from '../../../filter/'
   import {debounce} from 'mixins/debounce'
+  import {burypoint} from 'mixins/burypoint'
   export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
       return {
         add:false,
@@ -287,6 +288,7 @@
           })
       },
           confirmSub(){
+                this.setBuryPoint('新增启用确认')
                 let arr=[]
                if(this.addList.length>0){
                   for(let i=0;i<this.addList.length;i++){
@@ -325,10 +327,12 @@
                     this.getData()
           },
           onAdd(){
-                       this.dialogVisible=true    
+                       this.dialogVisible=true
+                       this.setBuryPoint('新增启用')
           },
           onSearch(){
-            this.page=1;
+                     this.setBuryPoint('查询')
+                     this.page=1;
                      this.getData()
                      
                      console.log()
@@ -365,6 +369,7 @@
                    }
           },
           submitForm(formName) {
+                    this.setBuryPoint('新增启用添加')
                     this.dialogVisible=true
                     this.$refs[formName].validate((valid) => {
                       if (valid) {

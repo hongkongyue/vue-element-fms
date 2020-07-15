@@ -231,7 +231,7 @@
     // import the styles
     import '@riophae/vue-treeselect/dist/vue-treeselect.css'
     import Util from 'libs/util';
-
+    import {burypoint} from 'mixins/burypoint'
     function submit_data() {
         return {
             isLeaf: '',
@@ -266,7 +266,7 @@
 
    import {debounce} from 'mixins/debounce'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
         name: "resource_list",
         data() {
             return {
@@ -466,12 +466,14 @@ export default {
         });
         },
         deleteTree(row){
+            this.setBuryPoint('删除')
                 console.log(row,'76890')
                 this.$confirm('该条数据将永久删除, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+              this.setBuryPoint('删除确认')
             let data = {}
             data.codeList = [row.code]
             this.request('resource_removeBatchId', data, true).then(res => {
@@ -574,8 +576,10 @@ export default {
             },
             openModal(type, row) {
                 console.log(type, row)
+                
                 this.$refs['addMenu'].resetFields();
                 if (type == '编辑') {
+                     this.setBuryPoint('编辑')
                     this.modal_title = '修改资源',
                     this.disabled = true
                     this.addMenu.menuLevel = row.resourceLevel
@@ -587,6 +591,7 @@ export default {
                     this.addMenu.resourceType = row.resourceType
                     this.addMenu.id = row.id
                 } else {
+                     this.setBuryPoint('新增')
                     this.modal_title = '新增资源',
                     this.disabled = false
                     this.addMenu = {}

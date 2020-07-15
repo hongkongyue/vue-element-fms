@@ -147,11 +147,12 @@
 var record={}
 import filters from '../../../filter/'
 import {debounce}from 'mixins/debounce.js'
+import {burypoint} from 'mixins/burypoint'
 import {
     mapState
 } from 'vuex'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
         return {
              exportObj:{
@@ -261,16 +262,6 @@ export default {
             // }
         },
         handleChange(price){
-                            // let currentPageSum=0;
-                            //      this.tableData.forEach(x=>{
-                            //        if(x.delayDays){
-                                    
-                            //         }else{
-                            //             x.delayDays=0  
-                            //         }
-                            //         currentPageSum+=x.delayDays*100
-                            //     })
-                            //  this.currentPageSum=currentPageSum/100
                               let    currentPageSum=this.tableData.reduce((val,item)=>{
                                          if(!item.dischargeAmount){
                                              item.dischargeAmount=0
@@ -282,6 +273,7 @@ export default {
                             
         },
         onSave(){
+            this.setBuryPoint('保存')
                 const {tag,code}=this.$route.query
                 let data={
                           id:this.$route.query.id,
@@ -308,6 +300,7 @@ export default {
                 })
         },
          onExamine(){
+             this.setBuryPoint('保存并审核')
                 const {tag,code}=this.$route.query
                 let data={
                           id:this.$route.query.id,

@@ -215,8 +215,9 @@
 import filters from '../../../filter/'
 var record
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
         return {
             // addTable:'',
@@ -594,6 +595,7 @@ export default {
         },
         //新增
         onAdd() {
+            this.setBuryPoint('新增')
             this.dialogVisible = true
             this.addchangetitle = '新增'
         },
@@ -613,6 +615,7 @@ export default {
         },
         //审核
         onExamine() {
+             this.setBuryPoint('审核')
             let arr = w2ui.adjustStock.getSelection()
             if (arr.length == 0) {
                 this.$message.error('请先选择审核的数据')
@@ -631,6 +634,7 @@ export default {
         },
         //取消
         onMainCancel() {
+            this.setBuryPoint('取消')
             let arr = w2ui.adjustStock.getSelection()
             if (arr.length == 0) {
                 this.$message.error('请先选择取消的数据')
@@ -649,6 +653,7 @@ export default {
         },
         //编辑
         onEdit() {
+             this.setBuryPoint('编辑')
             let arr = w2ui.adjustStock.getSelection()
             if (arr.length == 0) {
                 this.$message.error('请先选中编辑的数据')
@@ -1022,6 +1027,7 @@ export default {
             })
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 

@@ -18,10 +18,13 @@
                 <el-form-item size="small">
                     <el-button v-if="judgeMenu.indexOf('导出') !== -1" size="small" type="primary" @click="exportImport">导出</el-button>
                 </el-form-item>
+                <el-form-item size="small">
+                    <el-button  size="small" type="primary" @click="sorting">排序</el-button>
+                </el-form-item>
             </div>
             <el-form-item label="检测项目" size="small">
                 <el-input v-model="formData.name" placeholder="检测项目" maxlength="20" style="width:170px"></el-input>
-                
+
             </el-form-item>
         </el-form>
     </header>
@@ -38,17 +41,12 @@
                     </el-table-column>
                     <el-table-column prop="itemContent" label="检测项目" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
-                    <!-- <el-table-column prop="basicPlatformCode" label="检测方法" min-width="120" align="center" show-overflow-tooltip>
-                    </el-table-column>
-                    <el-table-column prop="platformPattern" label="标准值及允差" min-width="120" align="center" show-overflow-tooltip>
-                    </el-table-column> -->
                     <el-table-column prop="enable" label="启用" min-width="120" align="center" show-overflow-tooltip>
                         <template slot-scope="scope">
                             {{scope.row.enable == 1 ? '是' : '否'}}
                         </template>
                     </el-table-column>
                 </el-table>
-
                 <section class="log">
                     <div style="width:100%;font-size:20px;">操作日志</div>
                     <el-table :data="logList" style="width: 100%" border tooltip-effect="dark" max-height="170">
@@ -76,19 +74,11 @@
                 <el-form-item label="检测项目" size="small" label-width="120px" prop="platformPattern">
                     <el-input v-model="addformdata.platformPattern" placeholder="检测项目" maxlength="20" style="width:170px"></el-input>
                 </el-form-item>
-                <!-- <el-form-item label="检测方法" size="small" label-width="120px" prop="billPattern">
-                    <el-input v-model="addformdata.billPattern" placeholder="检测方法" maxlength="20" style="width:170px"></el-input>
-                </el-form-item>
-                <el-form-item label="标准值及允差" size="small" label-width="120px" prop="useTime">
-                    <el-input v-model="addformdata.useTime" placeholder="标准值及允差" maxlength="20" style="width:170px"></el-input>
-                </el-form-item> -->
                 <el-form-item label="启用" size="small" label-width="120px" prop="status">
                     <el-select v-model="addformdata.status" filterable placeholder="请选择" style="width:170px">
                         <el-option v-for="item in statusList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
-
-                <!-- </Col> -->
 
             </el-form>
         </Row>
@@ -97,20 +87,43 @@
             <Button type="default" @click="cancel">取消</Button>
         </div>
     </Modal>
+
+    <!-- 排序 -->
+    <Modal v-model="sortableVisible" :styles="mystyle" title="排序" @on-cancel='cancelSortable' :width="490" class-name="customize-modal-center">
+        <Row class="margin-bottom-10 background-color-white exhibition">
+            <Table :columns="columns15" :data="datas" size="small"  border height="350"  :draggable="true"
+        @on-drag-drop="onDragDrop"></Table>
+        </Row>
+        <div slot="footer">
+            <Button type="primary" @click="saveSortable">确认</Button>
+            <Button type="default" @click="cancelSortable">取消</Button>
+        </div>
+    </Modal>
 </div>
 </template>
 
 <script>
+import Sortable from 'sortablejs'
 import filters from '../../../filter/'
 import fetchData from '../../../filter/axios'
 import downLoad from '../../../filter/downLoad'
 import {
     debounce
 } from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins: [debounce],
+    mixins: [debounce,burypoint],
     data() {
         return {
+            sortableVisible:false,
+            columns15: [
+                    {
+                        title: '检测项目',
+                        key: 'itemContent',
+                        align:'center'
+                    }
+                ],
+                datas: [ ],
             statusList: [{
                 name: '是',
                 id: 1
@@ -135,7 +148,7 @@ export default {
             formData: {
 
             },
-            logPage:1,
+            logPage: 1,
             // 日志相关
             dataFlag: true,
             logList: [], //日志列表
@@ -152,7 +165,12 @@ export default {
                     required: true,
                     message: '请输入检测项目',
                     trigger: 'blur'
-                },{ min: 1, max: 15, message: '长度在15 个字符以内', trigger: 'blur' }],
+                }, {
+                    min: 1,
+                    max: 15,
+                    message: '长度在15 个字符以内',
+                    trigger: 'blur'
+                }],
                 billPattern: [{
                     required: true,
                     message: '请输入检测方法',
@@ -176,9 +194,59 @@ export default {
         this.getButtonJurisdiction() //按钮权限
     },
     methods: {
+        //行拖拽
+     onDragDrop(first, end) {
+            first = parseInt(first)
+            end = parseInt(end)
+ 
+            let tmp = this.datas[first]
+ 
+            if(first < end) {
+                for(var i=first+1; i<=end; i++) {
+                    this.datas.splice(i-1, 1, this.datas[i])
+                }
+                this.datas.splice(end, 1, tmp)
+            }
+ 
+            if(first > end) {
+                for(var i=first; i>end; i--) {
+                    this.datas.splice(i, 1, this.datas[i-1])
+                }
+                this.datas.splice(end, 1, tmp)
+            }
+        },
+    sorting(){
+        this.setBuryPoint('排序')
+        this.sortableVisible = true
+        let data = {}
+            data.currentPage = 1
+            data.pageSize = 300
+            this.request('basicFabricQcItem_page', data, true).then((res) => {
+                if (res.code == 1) {
+                    this.datas = res.data.records
+                }
+            })
+    },
+    saveSortable(){//
+    this.setBuryPoint('保存排序')
+        let data = {}
+        data.foList = this.datas
+        this.request('fabric_sortLevel', data, true).then((res) => {
+                if (res.code == 1) {
+                    this.sortableVisible = false
+                    this.$message.success('保存成功')
+                    this.getData()
+                }else{
+                    this.$message.error(res.msg)
+                }
+            })
+    },
+    cancelSortable(){
+        this.sortableVisible = false
+    },
         getButtonJurisdiction() {
             let data = {}
-            data.parentResourceCode = this.$route.query.code
+                data.parentResourceCode = this.$route.query.code
             this.request('masterData_resource_buttonResource', data, true).then(res => {
                 if (res.code == 1) {
                     this.buttonList = res.data
@@ -208,9 +276,11 @@ export default {
         },
         onAdd(name) {
             if (name == 'add') {
-                this.showtitle = '新增'
-                this.dialogVisible = true
+                   this.showtitle = '新增'
+                   this.dialogVisible = true
+                   this.setBuryPoint('新增')
             } else {
+                    this.setBuryPoint('编辑')
                 if (this.selectRow.length != 1) {
                     this.$message.warning('请选择一条数据进行编辑')
                 } else {
@@ -223,6 +293,7 @@ export default {
             }
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.page = 1;
             this.getData()
         },
@@ -233,18 +304,6 @@ export default {
         },
         //导出
         exportImport() {
-            // let data = {}
-            // data.currentPage = this.page
-            // data.pageSize = this.pageSize
-            // data.code = this.formData.code
-            // data.name = this.formData.name
-            // data.departmentName = this.formData.basicDepartmentName
-            // data.levelName = this.formData.level
-            // data.onJob = Number(this.formData.onJob)
-            // data.classCommittee = Number(this.formData.classCommittee)
-            // data.type = this.formData.type
-            // downLoad.downLoad(data, '/eop-boot/masterData/staff/export')
-
         },
         getData() {
             this.logList = []
@@ -261,6 +320,7 @@ export default {
         },
         //新增提交
         confirmSub() {
+            this.setBuryPoint('新增确认')
             this.submitForm()
         },
         //新增
@@ -270,7 +330,8 @@ export default {
                 if (valid) {
                     let data = {}
                     if(this.showtitle == '编辑'){
-                        data.id = this.selectRow[0].id
+                         data.id = this.selectRow[0].id
+                         this.setBuryPoint('编辑确认')
                     }
                     data.itemContent = this.addformdata.platformPattern.trim() //质检项目
                     data.enable = this.addformdata.status //质检项目
@@ -405,5 +466,14 @@ export default {
     background-color: #f19944;
     /* color: #f19944; */
     /* 设置文字颜色，可以选择不设置 */
+}
+</style>
+
+<style>
+.ivu-table-small th{
+    height: 28px !important;
+}
+.ivu-table-small td{
+    height: 28px !important;
 }
 </style>

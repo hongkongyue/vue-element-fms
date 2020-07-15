@@ -222,7 +222,9 @@
 </template>
 
 <script>
+import{burypoint} from 'mixins/burypoint.js'
 export default {
+    mixins:[burypoint],
     data() {
         return {
             saveVisible: false,
@@ -429,6 +431,7 @@ export default {
         //删除
          
         onDel(){
+              this.setBuryPoint('删除')
               let arr=[]
                   arr=w2ui.grid.getSelection()
                   if(arr.length>0){
@@ -437,6 +440,7 @@ export default {
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
+                      this.setBuryPoint('删除确认')
                      //结尾
                       let data={};//received_accReceived_manual_delete
                           data.AccReceivedManualQOs=[]
@@ -478,6 +482,7 @@ export default {
         },
         //编辑
         onEdit() {
+            this.setBuryPoint('编辑')
             let arr = []
             arr = w2ui.grid.getSelection()
             if (arr.length == 0) {
@@ -513,6 +518,7 @@ export default {
         // 编辑提交
             //保存手工录入
         editSave(formName) {
+            this.setBuryPoint('编辑确认')
             this.$refs[formName].validate((valid) => {
                 if (valid) { //新增保存
                     let data = {}
@@ -541,6 +547,7 @@ export default {
         },
         //保存手工录入
         addSave(formName) {
+            this.setBuryPoint('手工录入确认')
             this.$refs[formName].validate((valid) => {
                 if (valid) { //新增保存
                     let data = {}
@@ -589,14 +596,17 @@ export default {
         },
         //手工录入
         onImport() {
+            this.setBuryPoint('手工录入')
             this.dialogVisible = true
         },
         //内部核销
         onInternal() {
+            this.setBuryPoint('内部核销')
             this.saveVisible = true
 
         },
         addTwoSave() {
+              this.setBuryPoint('内部核销确认')
             let data = {}
             data.basicPlatformName = this.formSearch.code //核销平台名称
             data.status = this.formSearch.nbhxStatus //核销状态
@@ -1207,6 +1217,7 @@ export default {
             })
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 

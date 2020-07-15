@@ -224,10 +224,12 @@
 <script>
 var record={}
 import filters from '../../../filter/'
+import {burypoint} from 'mixins/burypoint'
 import {
     mapState
 } from 'vuex'
 export default {
+    mixins:[burypoint],
     data() {
         return {
             payableUserList:[],
@@ -315,6 +317,7 @@ export default {
             })
         },
         modify(){
+            this.setBuryPoint('编辑')
                   const{code}=this.$route.query
                   let arr = w2ui.rankMoneyBil.getSelection()
                 if(arr.length<1){
@@ -672,6 +675,7 @@ export default {
             this.getLoglist()
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.getData()
         },
         handleSizeChange(val) {
@@ -728,6 +732,7 @@ export default {
         },
          //关闭
         onClose() {
+            this.setBuryPoint('关闭')
             let arr = w2ui.rankMoneyBil.getSelection()
             let data = {};
                 data.ids = arr
@@ -851,6 +856,7 @@ export default {
         },
         //审核
         onExamine() {
+            this.setBuryPoint('审核')
             let arr = w2ui.rankMoneyBil.getSelection()
             let data = {};
                 data.ids = arr
@@ -886,6 +892,7 @@ export default {
         },
         // 取消审核
         onExamineCancel() {
+            this.setBuryPoint('取消审核')
             let arr = w2ui.rankMoneyBil.getSelection()
             let data = {}
                 data.ids = arr
@@ -938,6 +945,7 @@ export default {
         },
         //删除
         onDel() {
+            this.setBuryPoint('删除')
             let arr = w2ui.rankMoneyBil.getSelection()
             let data = {};
                data.ids = arr
@@ -1017,6 +1025,7 @@ export default {
         },
               //导出相关
         checkExport(){
+            this.setBuryPoint('导出')
                  if(this.checkSelection()){
                     // this.onImport()
                      this.exportVisible=true
@@ -1025,11 +1034,13 @@ export default {
                  }
         },
         cancelExport(){
+            this.setBuryPoint('导出取消')
                    this.exportVisible=false;
                    this.moreLarge=false;
                    this.exportObj.selected=''
         },
         getExportTotal(){
+            this.setBuryPoint('导出确认')
            if(!this.exportObj.selected) return this.$message.error('请选择导出类型')
            let data={}
                         data.pageSize = this.pagesize

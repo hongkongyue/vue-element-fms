@@ -174,15 +174,13 @@
 var totalPageSum = {}
 import DragList from '_c/drag-list'
 import filters from '../../../filter/'
-// import {
-//     debounce
-// } from 'mixins/debounce.js'
+import {burypoint} from 'mixins/burypoint'
 import {
     commonMixins
 } from 'mixins/common'
 import { export_json_to_excel,format_json_list_by_filter,convert26 } from '@/libs/excel/Export2Excel'
 export default {
-    mixins: [commonMixins],
+    mixins: [commonMixins,burypoint],
     components: {
         DragList
     },
@@ -477,6 +475,7 @@ export default {
             })
         },
         onExport(){
+            this.setBuryPoint('导出')
             let data = {}
             let propList = ["basicBrandName"]
             data.pageResourceCode = "photo-page"
@@ -511,6 +510,7 @@ export default {
             })
         },
         exportExcel(){
+            
          if(this.exportList.length==0)return this.$message.error('暂无导出数据')
         let dynamicFirstHead = new Array()
         let dynamicSecondHead = new Array()
@@ -558,7 +558,7 @@ export default {
             console.log(row,'--------------')
         },
         onSearch() {
-            console.log(this.formSearch.documentDate)
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 

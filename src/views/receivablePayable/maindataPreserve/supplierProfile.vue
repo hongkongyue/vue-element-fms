@@ -694,8 +694,9 @@
 
 <script>
  import {debounce} from 'mixins/debounce'
+ import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
         return {
             userList:[],
@@ -1017,6 +1018,7 @@ export default {
         },
         //同步
         getNewData() {
+            this.setBuryPoint('同步')
             this.request('supplier_sync', {}, true).then(res => {
                 if (res.code == 1) {
                     this.$notify.success({
@@ -1204,6 +1206,7 @@ export default {
 
         //新增
         addSave() {
+            this.setBuryPoint('新增确认')
             console.log(this.ruleForm.mobilePhone)
             this.dialogVisible = true
             this.$refs['ruleForm'].validate((valid) => {
@@ -1322,6 +1325,7 @@ export default {
 
         },
         progressConfirm(){
+            this.setBuryPoint('供应商功能启用配置确认')
                let data={}
                    data.supplierId=this.formData.id
                    data.infos=this.subArr
@@ -1462,6 +1466,7 @@ export default {
                    
         },
         progressShow(){
+               this.setBuryPoint('供应商功能启用配置')
                let obj = this.rowObj
                console.log(obj, '456789')
             if (this.rowLenght == 0) {
@@ -1477,6 +1482,7 @@ export default {
         },
         //编辑
         clickTable() {
+            this.setBuryPoint('编辑')
             // console.log(this.rowObj, '/45678')
             let obj = this.rowObj
             console.log(obj.enable, '456789')
@@ -1539,6 +1545,7 @@ export default {
         },
         //编辑保存
         changeSave() {
+            this.setBuryPoint('编辑确认')
             if (this.formChange.pinyin == '') {
                 this.$message.warning('拼音代号不能为空！')
             } else if (this.formChange.fullName == '') {
@@ -1660,6 +1667,7 @@ export default {
             this.getData()
         },
         onAdd() {
+            this.setBuryPoint('新增')
             this.dialogVisible = true
             this.ruleForm.checked = true
             this.ruleForm.dataSources = '手动新建'
@@ -1667,6 +1675,7 @@ export default {
         },
         //查询
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 

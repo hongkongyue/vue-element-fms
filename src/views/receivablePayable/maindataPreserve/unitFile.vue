@@ -55,8 +55,9 @@
 <script>
 import filters from '../../../filter/'
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
         return {
             dialogVisible: false,
@@ -127,6 +128,7 @@ export default {
       },
         //同步
         synchronization(){
+           this.setBuryPoint('同步')
             let data = {}
             this.request('basicMeasureUnit_syncMeasureUnit', data, true).then((res) => {
                 if (res.code == 1) {

@@ -79,22 +79,24 @@
 
 
 <script>
+  import {burypoint} from 'mixins/burypoint'
   export default {
+    mixins:[burypoint],
     data() {
       return {
-          formSearch:{},
-          maxHeight:'',
-        logList:[],//日志
-        billNo:'',
-        total:0,
-        pagesize:10,
-        currentPage:1,
-        tableData:[],//主table数据
-        tableJournal:[],//操作日志数据
-        buttonList:[],//按钮权限
-        judgeMenu:[],
-        logPage:1,
-      }
+              formSearch:{},
+              maxHeight:'',
+              logList:[],//日志
+              billNo:'',
+              total:0,
+              pagesize:10,
+              currentPage:1,
+              tableData:[],//主table数据
+              tableJournal:[],//操作日志数据
+              buttonList:[],//按钮权限
+              judgeMenu:[],
+              logPage:1,
+         }
     },
     mounted() {
         console.log(window.screen.height)
@@ -109,6 +111,7 @@
     methods: {
       //同步
       synchronous(){
+        this.setBuryPoint('同步')
         let data = {}
         this.request('season_sync', data, true).then(res => {
           if (res.code==1) {
@@ -121,7 +124,7 @@
       },
       getButtonJurisdiction(){
         let data = {}
-        data.parentResourceCode = this.$route.query.code
+            data.parentResourceCode = this.$route.query.code
         this.request('masterData_resource_buttonResource', data, true).then(res => {
           if (res.code==1) {
             this.buttonList = res.data

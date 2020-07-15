@@ -256,8 +256,9 @@
     import Util from 'libs/util'
     import downLoad from '../../../filter/downLoad'
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins: [debounce],
+    mixins: [debounce,burypoint],
         data() {
             return {
                 logList: [],//日志
@@ -388,6 +389,7 @@ export default {
                 })
             },
             exportCsv() {
+                this.setBuryPoint('导出')
                 let data = Util.deepClone(this.formSearch);
                 downLoad.downLoad(data,'/eop-boot/basicsupplierstaff/basic-supplier-staff/export')
             },
@@ -401,6 +403,7 @@ export default {
                 this.formSearch = {}
             },
             onSearch() {
+                this.setBuryPoint('查询')
                 this.currentPage = 1
                 this.getData()
 
@@ -408,6 +411,7 @@ export default {
 
             //============新增相关
             onAdd() {
+                this.setBuryPoint('新增')
                 this.autoCreateBizCode();
                 this.dialogVisible = true
             },
@@ -463,6 +467,7 @@ export default {
 
             //==========编辑相关
             clickTable(row) {
+                this.setBuryPoint('编辑')
                 if (this.rowLenght == 0) {
                     this.$message.error('请先选择修改的数据！')
                 } else if (this.rowLenght > 1) {

@@ -175,8 +175,9 @@
 <script>
 import filters from '../../../filter/'
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
   export default {
-    mixins:[debounce], 
+    mixins:[debounce,burypoint], 
     data() {
       return {
         logList:[],//日志
@@ -335,7 +336,7 @@ import {debounce} from 'mixins/debounce'
         },
       //新增
       addSave(){
-        
+          this.setBuryPoint('新增确认')
           this.$refs['ruleForm'].validate((valid) => {
             console.log(this.ruleForm)
             if (valid) { //新增保存
@@ -369,6 +370,7 @@ import {debounce} from 'mixins/debounce'
       },
         //编辑
         clickTable(row){
+          this.setBuryPoint('编辑')
           if(this.rowLenght == 0){
             this.$message.error('请先选择修改的数据！')
           }else if(this.rowLenght > 1){
@@ -383,6 +385,7 @@ import {debounce} from 'mixins/debounce'
         },
         //编辑保存
         changeSave(){
+            this.setBuryPoint('编辑确认')
           if(this.formChange.subjectName.length == 0){
             this.$message.warning('选项不能为空！')
           }else{
@@ -438,10 +441,12 @@ import {debounce} from 'mixins/debounce'
               this.getData()
           },
           onAdd(){
+                this.setBuryPoint('新增')
                 this.dialogVisible=true    
           },
           //查询
         onSearch(){
+          this.setBuryPoint('查询')
           this.currentPage = 1
           this.getData()
           

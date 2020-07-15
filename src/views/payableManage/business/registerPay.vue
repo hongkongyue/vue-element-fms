@@ -133,8 +133,9 @@ var record
 import filters from '../../../filter/'
 import Util from 'libs/util'
 import{ debounce } from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
         return {
             newId:null,
@@ -334,6 +335,7 @@ export default {
         },
         //导入
         onImport() {
+            this.setBuryPoint('导入')
             this.visible = true
         },
         upload() {
@@ -387,10 +389,12 @@ export default {
         },
         //下载模板
         downLoad() {
+            this.setBuryPoint('下载模板')
             window.location.href = 'https://eptison.oss-cn-hangzhou.aliyuncs.com/upload/prd/eop-fms/PayablePaymentRegistrationController/import/%E4%BB%98%E6%AC%BE%E7%99%BB%E8%AE%B0%E5%AF%BC%E5%85%A5%E6%A8%A1%E6%9D%BF.xlsx'
         },
         //异步导出
         onExport() {
+            this.setBuryPoint('导出')
            let data = {}
             data.currentPage = this.page
             data.pageSize = this.pageSize
@@ -506,6 +510,7 @@ export default {
             })
         },
         onDelete() {
+            this.setBuryPoint('删除')
             let arr = w2ui.registerPay.getSelection()
             if (arr.length > 0) {
                 this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
@@ -553,6 +558,7 @@ export default {
             })
         },
         onAdd(){
+            this.setBuryPoint('新增')
                 for(let i in this.formData){
                   this.formData[i]=''
                  }
@@ -596,6 +602,7 @@ export default {
                       
         },
         onEdit() {
+            this.setBuryPoint('编辑')
             let arr = w2ui.registerPay.getSelection()
             let obj = {}
             console.log(arr, '0987689', w2ui['registerPay'].records, arr[0])
@@ -674,6 +681,7 @@ export default {
             this.getData()
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.page = 1;
             this.getData()
         },

@@ -431,8 +431,9 @@
 var record
 import downLoad from '../../../filter/downLoad'
 import filters from '../../../filter/'
+import {burypoint} from 'mixins/burypoint'
 export default {
-
+    mixins:[burypoint],
     data() {
         return {
             payableUserList:[],
@@ -627,6 +628,7 @@ export default {
             }
         },
         addSave(name, code) {
+            this.setBuryPoint('新增保存')
             this.$refs['ruleForm'].validate((valid) => {
                 if (valid) { //新增保存
                     let data = {}
@@ -671,6 +673,7 @@ export default {
             });
         },
         addCancel() {
+            this.setBuryPoint('新增取消')
             this.addVisible = false
             this.ruleForm = {
                 manager: '',
@@ -705,10 +708,12 @@ export default {
         },
         //新增
         onAdd() {
+            this.setBuryPoint('新增')
             this.addVisible = true
         },
         //编辑
         onEdit() {
+            this.setBuryPoint('编辑')
             let arr = w2ui.deductionAdvice.getSelection()
             console.log(arr)
             if (arr.length > 1) {
@@ -734,6 +739,7 @@ export default {
             }
         },
         editSave(name, code) {
+            this.setBuryPoint('编辑保存')
             if (this.changeForm.overNo.length == 0) {
                 this.$message.error('结算之单号不能为空')
             } else {
@@ -781,14 +787,17 @@ export default {
         },
         //取消编辑
         editCancel() {
+            this.setBuryPoint('编辑取消')
             this.editVisible = false
         },
         //导入
         onImportBill() {
+            this.setBuryPoint('导入')
             this.importVisible = true
         },
         //导入
         importSave() {
+            this.setBuryPoint('导入确认')
             if (this.file == null) {
                 this.$message.error('请先选择文件再导入')
             } else if (this.deductionTypeAdd == '') {
@@ -812,6 +821,7 @@ export default {
             }
         },
         importCancel() {
+            this.setBuryPoint('导入取消')
             this.importVisible = false
             this.file = null
             this.deductionTypeAdd = ''
@@ -859,9 +869,11 @@ export default {
         },
         //下载模板 
         onDownload() {
+            this.setBuryPoint('下载模板')
             this.downloadVisible = true
         },
         downloadSave() { //确认下载模板   
+        this.setBuryPoint('确认下载模板')
             if (this.deductionTypeDownload == '') {
                 this.$message.error('请先选择扣款类型')
             } else {
@@ -897,6 +909,7 @@ export default {
         },
         //取消下载文件
         downloadCancel() {
+            this.setBuryPoint('取消下载模板')
             this.downloadVisible = false
             this.deductionTypeDownload = ''
         },
@@ -909,6 +922,7 @@ export default {
         },
         //审核
         onExamine() {
+            this.setBuryPoint('审核')
             let arr = w2ui.deductionAdvice.getSelection()
             let data = {};
             data.command = 'audit'
@@ -947,6 +961,7 @@ export default {
         },
         //取消审核
         offExamine() {
+            this.setBuryPoint('取消审核')
             let arr = w2ui.deductionAdvice.getSelection()
             let data = {};
             data.command = 'unAudit'
@@ -985,6 +1000,7 @@ export default {
         },
         //关闭
         onClose() {
+            this.setBuryPoint('关闭')
             let arr = w2ui.deductionAdvice.getSelection()
             let data = {};
             data.command = 'close'
@@ -1023,6 +1039,7 @@ export default {
         },
         //删除
         onDelete() {
+            this.setBuryPoint('删除')
             let arr = w2ui.deductionAdvice.getSelection()
             let data = {};
             data.command = 'delete'
@@ -1061,6 +1078,7 @@ export default {
         },
         //生成扣款单
         onDeduction() {
+            this.setBuryPoint('生成扣款单')
             let arr = w2ui.deductionAdvice.getSelection()
             let data = {};
             data.command = 'generateDeductionOrder'
@@ -1201,6 +1219,12 @@ export default {
                         {
                             field: 'lastUpdated',
                             caption: '最后修改时间',
+                            size: '100px',
+                            sortable: true
+                        },
+                        {
+                            field: 'remark',
+                            caption: '备注',
                             size: '100px',
                             sortable: true
                         },
@@ -1449,6 +1473,7 @@ export default {
         //     this.getLoglist(row.orderId)
         // },
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 
@@ -1470,6 +1495,7 @@ export default {
         },
                //导出相关
         checkExport(){
+            this.setBuryPoint('导出')
                  if(this.checkSelection()){
                     // this.onImport()
                      this.exportVisible=true
@@ -1478,11 +1504,13 @@ export default {
                  }
         },
         cancelExport(){
+            this.setBuryPoint('导出取消')
                    this.exportVisible=false;
                    this.moreLarge=false;
                    this.exportObj.selected=''
         },
         getExportTotal(){
+            this.setBuryPoint('导出确认')
            if(!this.exportObj.selected) return this.$message.error('请选择导出类型')
            let data={}
                         data.pageSize = this.pagesize

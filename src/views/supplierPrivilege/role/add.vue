@@ -26,7 +26,7 @@
         <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
               <el-tab-pane label="角色包含权限" name="first">
                        <section class="middle">
-                            <tree-transfer :title="title"  :button_text='["分配 ","撤销"]' :from_data='fromData' @addBtn='add12' @removeBtn='remove' :to_data='toData' :defaultProps="{label:'label'}" :mode='mode' height='540px' placeholder="请输入权限名称" filter openAll>
+                            <tree-transfer :title="title"  :button_text='["分配 ","撤销"]' :from_data='fromData' @addBtn='add12' @removeBtn='remove' :to_data='toData' :defaultProps="{label:'label'}" :mode='mode' height='540px' placeholder="请输入权限名称" filter :defaultTransfer="true" :transferOpenNode="false">
                             </tree-transfer>
                        </section>
               </el-tab-pane>
@@ -154,8 +154,9 @@
   import filters from '../../../filter/'
   import treeTransfer from 'el-tree-transfer' // 引入
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins: [debounce],
+    mixins: [debounce,burypoint],
     data() {
       return {
       
@@ -306,6 +307,7 @@ export default {
            }
          },
           confirmSave(){
+            this.setBuryPoint('保存')
                     let arr=[]
                     let userIds=[]
                     console.log(this.toData)
@@ -399,24 +401,6 @@ export default {
                       }
                     });
           },
-          // getData(){
-          //         this.logList=[]
-          //         let data={}
-          //             data.currentPage     =this.page
-          //             data.pageSize        =this.pageSize
-          //             data.basicBrandId    =this.formData.brandId
-          //             data.basicCompanyId  =this.formData.basicCompanyId
-          //             data.basicPlatformId =this.formData.basicPlatformId
-          //             data.id              =this.formData.shopId
-          //             data.enable          =this.formData.enable
-          //             data.status          =this.formData.status
-          //             this.request('merchantstore_basic_pageQuery', data, true).then((res) => {
-          //                     if (res.code == 1) {
-          //                             this.list      =  res.data.records
-          //                             this.total     =  res.data.count
-          //                     }
-          //                 })
-          // },
         getCompany(){
                   //masterData_company_selector
                    let data={}

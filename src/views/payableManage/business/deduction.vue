@@ -223,10 +223,12 @@
 <script>
 var record={}
 import filters from '../../../filter/'
+import {burypoint} from 'mixins/burypoint'
 import {
     mapState
 } from 'vuex'
 export default {
+    mixins:[burypoint],
     data() {
         return {
             payableUserList:[],
@@ -317,6 +319,7 @@ export default {
                  }
         },
         modify(){
+            this.setBuryPoint('编辑')
                   let arr = w2ui.deduction.getSelection()
                 if(arr.length<1){
                     this.$message.error('请选择编辑数据')
@@ -645,6 +648,7 @@ export default {
             this.getLoglist()
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.getData()
         },
         handleSizeChange(val) {
@@ -701,6 +705,7 @@ export default {
         },
         //审核
         onExamine() {
+            this.setBuryPoint('审核')
             let arr = w2ui.deduction.getSelection()
             let data = {};
             data.command = 'audit'
@@ -757,6 +762,7 @@ export default {
         },
         // 取消审核
         onExamineCancel() {
+            this.setBuryPoint('取消审核')
             let arr = w2ui.deduction.getSelection()
             let data = {};
             data.command = 'unAudit'
@@ -796,6 +802,7 @@ export default {
         },
         //删除
         onDel() {
+            this.setBuryPoint('删除')
             let arr = w2ui.deduction.getSelection()
             let data = {};
             data.command = 'delete'
@@ -836,6 +843,7 @@ export default {
             this.$refs[name].resetFields();
         },
         saveAdjust(){
+            this.setBuryPoint('编辑确认')
             let data = {}
             data.targetPurchaseOrderNo = this.adjustObj.codeNo//结算制单号
             data.finalDeductionAmount = this.adjustObj.kkje //扣款金额
@@ -852,6 +860,7 @@ export default {
             })     
         },
         cancelAdjust() {
+            this.setBuryPoint('编辑取消')
             this.adjustVisible = false;
             this.resetForm('adjustForm')
         },
@@ -864,6 +873,7 @@ export default {
         },
               //导出相关
         checkExport(){
+            this.setBuryPoint('导出')
                  if(this.checkSelection()){
                     // this.onImport()
                      this.exportVisible=true
@@ -872,11 +882,13 @@ export default {
                  }
         },
         cancelExport(){
+            this.setBuryPoint('导出取消')
                    this.exportVisible=false;
                    this.moreLarge=false;
                    this.exportObj.selected=''
         },
         getExportTotal(){
+            this.setBuryPoint('导出确认')
            if(!this.exportObj.selected) return this.$message.error('请选择导出类型')
            let data={}
                         data.pageSize = this.pagesize

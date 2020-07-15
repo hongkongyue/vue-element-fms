@@ -30,7 +30,18 @@ router.beforeEach((to, from, next) => {
       }
     }
     if(to){
+        //  console.log(router.history.current.fullPath)
          document.title=to.meta.label?to.meta.label:'云系统管理平台'
-         localStorage.setItem('title',to.meta.title)
+        //  localStorage.setItem('title',to.meta.title)
+    }
+});
+router.afterEach((to, from, next) => {
+    if(to){
+         document.title=to.meta.label?to.meta.label:'云系统管理平台'
+         if(router.history.current.fullPath.indexOf('title')>-1){
+         }else{
+          localStorage.setItem('title',to.meta.title)
+         }
+         
     }
 });

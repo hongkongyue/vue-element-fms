@@ -177,8 +177,9 @@
 <script>
 import filters from '../../filter/'
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
         return {
             staffList: [],
@@ -341,6 +342,7 @@ export default {
                this.staffList.splice(index,1)    
         },
         onEdit() {
+            this.setBuryPoint('编辑')
             this.staffList=[] 
             this.formData.taskStaffMappingVOS=[]
             if (this.IDS.length == 1) {
@@ -370,6 +372,7 @@ export default {
             }
         },
         onAdd() {
+            this.setBuryPoint('新增')
             this.staffList=[];
             for(let i in this.formData){
                    this.formData[i]=''
@@ -378,6 +381,7 @@ export default {
             this.dialogVisible = true
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.page = 1;
             this.getData()
 
@@ -408,6 +412,7 @@ export default {
             });
         },
         onDel(){
+            this.setBuryPoint('删除')
               let arr=[]
                   for(let i=0,len=this.IDS.length;i<len;i++){
                        arr.push(this.IDS[i].id)

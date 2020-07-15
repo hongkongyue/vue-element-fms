@@ -28,7 +28,9 @@
 </template>
 
 <script>
+import {burypoint} from 'mixins/burypoint'
     export default {
+        mixins:[burypoint],
         data() {
             return {
                 visible: false,
@@ -112,6 +114,7 @@
                                     },
                                     on: {
                                         click: () => {
+                                            this.setBuryPoint('已完成查看详情')
                                                this.$router.push({
                                                           name:'planningAdjustmentAuditComplated',
                                                           query: { 

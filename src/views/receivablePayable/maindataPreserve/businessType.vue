@@ -181,9 +181,9 @@
 
 <script>
 import {debounce} from 'mixins/debounce'
-
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
         return {
             kcdtList:[{id:0,name:'出库'},{id:1,name:'入库'}],
@@ -395,6 +395,7 @@ export default {
         },
         //新增
         addSave() {
+            this.setBuryPoint('新增确认')
             this.dialogVisible = true
             this.$refs['ruleForm'].validate((valid) => {
                 if (valid) { //新增保存
@@ -414,7 +415,7 @@ export default {
                             this.ruleForm = {}
                         } else {
                             this.$message.error(res.msg)
-                            this.dialogVisible = false
+                            // this.dialogVisible = false
                         }
                         this.$refs['ruleForm'].resetFields();
                     })
@@ -431,6 +432,7 @@ export default {
         },
         //编辑
         clickTable(row) {
+            this.setBuryPoint('编辑')
             if (this.rowLenght == 0) {
                 this.$message.error('请先选择修改的数据！')
             } else if (this.rowLenght > 1) {
@@ -447,6 +449,7 @@ export default {
         },
         //编辑保存
         changeSave() {
+                 this.setBuryPoint('编辑确认')
                 let data = {}
                 data.id = this.rowObj.id
                 data.name = this.formChange.subjectName //业务类型
@@ -480,11 +483,13 @@ export default {
             this.getData()
         },
         onAdd() {
+            this.setBuryPoint('新增')
             this.dialogVisible = true
             this.ruleForm.enable = 1
         },
         //查询
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 

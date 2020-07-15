@@ -226,10 +226,12 @@
 <script>
 var record={}
 import filters from '../../../filter/'
+import {burypoint} from 'mixins/burypoint'
 import {
     mapState
 } from 'vuex'
 export default {
+    mixins:[burypoint],
     data() {
         return {
             payableUserList:[],
@@ -743,6 +745,7 @@ export default {
             this.getLoglist()
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.getData()
         },
         handleSizeChange(val) {
@@ -799,6 +802,7 @@ export default {
         },
         //审核
         onExamine() {
+            this.setBuryPoint('审核')
             let arr = w2ui.billspayable.getSelection()
                 // if(arr.length>1){
                 //       return this.$message.error('一次只能审核一条数据')
@@ -895,6 +899,7 @@ export default {
         },
         // 取消审核
         onExamineCancel() {
+            this.setBuryPoint('取消审核')
               let arr = w2ui.billspayable.getSelection()
                if(arr.length==0){
                       return  this.$message.error('请勾选取消审核数据')
@@ -1048,6 +1053,7 @@ export default {
         },
               //导出相关
         checkExport(){
+            this.setBuryPoint('导出')
                  if(this.checkSelection()){
                     // this.onImport()
                      this.exportVisible=true
@@ -1056,11 +1062,13 @@ export default {
                  }
         },
         cancelExport(){
+            this.setBuryPoint('导出取消')
                    this.exportVisible=false;
                    this.moreLarge=false;
                    this.exportObj.selected=''
         },
         getExportTotal(){
+            this.setBuryPoint('导出确认')
            if(!this.exportObj.selected) return this.$message.error('请选择导出类型')
                         let data={}
                             data.pageSize = this.pagesize

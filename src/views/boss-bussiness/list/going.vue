@@ -32,12 +32,14 @@
 <script>
     import Util from 'libs/util';
     import filter from  '../../../filter'
+    import {burypoint} from 'mixins/burypoint'
     function formSearch() { 
         return {
             search: ''
         }
     }
     export default {
+        mixins:[burypoint],
         data() {
             return {
                 visible: false,
@@ -121,6 +123,7 @@
                                     },
                                     on: {
                                         click: () => {
+                                            this.setBuryPoint('进行中进入详情')
                                                 this.$router.push({
                                                     name:'planningAdjustmentAuditDetail',
                                                     query: {   

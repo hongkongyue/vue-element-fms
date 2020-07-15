@@ -1,6 +1,14 @@
 <template>
     <div>
         <!-- 数据列表 -->
+         <el-form :inline="true" :model="formSearch" class="demo-form-inline" @submit.native.prevent>
+                                    <el-form-item size="mini" label="开发任务编号:" style="margin-bottom:0px!important">
+                                        <el-input size="mini" v-model="formSearch.taskNo"  clearable></el-input>
+                                    </el-form-item>
+                                 <el-form-item size="mini" style="margin-bottom:0px!important">
+                                      <el-button @click="search" type="primary">查询</el-button>
+                                </el-form-item>
+        </el-form>
         <Row class="background-color-white exhibition" style="min-height:630px;padding-left:0px">
             <!--  -->
             <!-- <Table  ref="currentRowTable"  @on-row-dblclick="showChakan"	@on-row-click="selectRow" @on-select-cancel="choiceId" @on-select-all-cancel="choiceId"  @on-select="choiceId" @on-select-all="choiceId"	:columns="columns" size="small" highlight-row :data="list"></Table> -->
@@ -15,14 +23,19 @@
 <script>
     import Util from 'libs/util';
     import filter from  '../../../filter'
+    import {burypoint} from 'mixins/burypoint'
     function formSearch() { 
         return {
             search: ''
         }
     }
     export default {
+        mixins: [burypoint],
         data() {
             return {
+                formSearch:{
+                      taskNo:''
+                },
                 visible: false,
                 red_packet_table_row_index:-1,
                 list:[],
@@ -35,7 +48,7 @@
 
                     },
                      {
-                        title: '任务编号',
+                        title: '开发任务编号',
                         key: 'taskNo',
                         align: 'center',
                         minWidth: 190,
@@ -97,6 +110,7 @@
                                     },
                                     on: {
                                         click: () => {
+                                            this.setBuryPoint('进入进行中详情')
                                                 this.$router.push({
                                                     name:'purchasingdetail',
                                                     query: {   
@@ -139,6 +153,7 @@
                         },1000)
                 },
                search() {
+                   this.setBuryPoint('进行中查询')
                               this.page =1
                               this.initdata()
                 },  
@@ -171,6 +186,7 @@
                                data.pageSize              = this.pageSize
                                data.status                = 1
                                data.taskConfigurationId   =this.getID()
+                               data.taskNo                =this.formSearch.taskNo
                             this.request('fabric_fabricTaskDetail_page', data, false).then((res) => {
                             if(res.code==1){
                                    this.list =res.data.records

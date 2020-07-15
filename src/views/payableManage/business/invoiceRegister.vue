@@ -32,6 +32,9 @@
                 <el-form-item size="small">
                     <el-button v-if="judgeMenu.indexOf('取消立账') !== -1" size="small" type="primary" @click="setAccountCancel">取消立账</el-button>
                 </el-form-item>
+                <el-form-item size="small">
+                    <el-button v-if="judgeMenu.indexOf('日期调整') !== -1" size="small" type="primary" @click="dayChange">日期调整</el-button>
+                </el-form-item>
                 <el-form-item size="small" class="marginT0">
                     <el-button  size="small" type="primary" @click="checkExport">导出</el-button>
                 </el-form-item>
@@ -157,6 +160,16 @@
                                      <div style="text-align:right">{{scope.row.taxIncludedAmount|moneyFilters}}</div>
                          </template>
                     </el-table-column>
+                     <el-table-column prop="taxIncludedPaymentAmount" label="含税扣款金额" min-width="120" align="center" show-overflow-tooltip>
+                          <template slot-scope="scope">
+                                     <div style="text-align:right">{{scope.row.taxIncludedPaymentAmount|moneyFilters}}</div>
+                         </template>
+                    </el-table-column>
+                     <el-table-column prop="taxExcludedPaymentAmount" label="不含税扣款金额" min-width="120" align="center" show-overflow-tooltip>
+                          <template slot-scope="scope">
+                                     <div style="text-align:right">{{scope.row.taxExcludedPaymentAmount|moneyFilters}}</div>
+                         </template>
+                    </el-table-column>
                 </el-table>
             </el-tab-pane>
             <el-tab-pane label="操作日志" name="third">
@@ -174,6 +187,25 @@
             </el-tab-pane>
         </el-tabs>
     </section>
+     <!--日期调整-->
+    <Modal v-model="dayChangeVisible" :styles="mystyle"  title="日期调整" @on-cancel='cancelDayChange' :width="440" class-name="customize-modal-center">
+        <Row class="margin-bottom-10 background-color-white exhibition">
+            <el-form :inline="true" ref="dayChangeForm" :model="dayChangeObj" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="dayChangeRules">
+                <!-- <Col> -->
+                    <el-form-item label="到票日期：" size="small" label-width="115px" > <!-- form表单之后一项的时候 enter 会触发提交表单事件 -->
+                        <el-date-picker v-model="dayChangeObj.arriveDate" type="date"  value-format="yyyy-MM-dd"> </el-date-picker>
+                    </el-form-item>
+                    <el-form-item label="开票日期：" size="small" label-width="115px" > <!-- form表单之后一项的时候 enter 会触发提交表单事件 -->
+                        <el-date-picker v-model="dayChangeObj.openDate" type="date"  value-format="yyyy-MM-dd"> </el-date-picker>
+                    </el-form-item>
+                <!-- </Col> -->
+            </el-form>
+        </Row>
+        <div slot="footer">
+            <Button type="primary" @click="saveDayChange()">确定</Button>
+            <Button type="default" @click="cancelDayChange">取消</Button>
+        </div>
+    </Modal>
     <!--修改-->
     <Modal v-model="adjustVisible" :styles="mystyle"  title="新增" @on-cancel='cancelAdjust' :width="440" class-name="customize-modal-center">
         <Row class="margin-bottom-10 background-color-white exhibition">
@@ -233,13 +265,19 @@ import {
     commonMixins
 } from 'mixins/common';
 import filters from '../../../filter/'
+import {burypoint} from 'mixins/burypoint'
 import {
     mapState
 } from 'vuex'
 export default {
- mixins: [commonMixins],
+ mixins: [commonMixins,burypoint],
     data() {
         return {
+            dayChangeVisible:false,
+            dayChangeObj:{
+                arriveDate:'',
+                openDate:''
+            },//日期调整
             exportObj:{},
             exportVisible:false,
             moreLarge:false,
@@ -315,6 +353,14 @@ export default {
                 }],
                 
             },
+            dayChangeRules:{
+                arriveDate: [
+                    { type: 'string', required: true, message: '请选择日期', trigger: 'change' }
+                ],
+                openDate: [
+                    { type: 'string', required: true, message: '请选择日期', trigger: 'change' }
+                ],
+            },
         }
     },
     computed: mapState({
@@ -360,6 +406,7 @@ export default {
             console.log(e,'--------')
         },
         modify(){
+            this.setBuryPoint('编辑')
                   const{code}=this.$route.query
                   let arr = w2ui.invoiceRegister.getSelection()
                 if(arr.length<1){
@@ -515,16 +562,6 @@ export default {
                         },
                     ],
                     onClick: function (event) {
-                        // let orderId = null
-                        // self.currentPage = 1
-                        // self.$store.commit('clearInvoiceAdvice')
-                        // w2ui['invoiceRegister'].records.map(function (item) {
-                        //     if (obj.recid == item.recid) {
-                        //         orderId = item.orderId
-                        //     }
-                        // })
-                        // self.getLoglist(orderId)
-                        // self.getDetail(obj.recid)
                            record = this.get(event.recid);
                            console.log(this.get(event.recid))
                             self.activeName = 'first'
@@ -561,11 +598,6 @@ export default {
                    taxExcludedAmount: currentPageSummary.totalTaxExcludedAmount,
                    taxAmount:currentPageSummary.totalTaxAmount,
                    taxIncludedAmount:currentPageSummary.totalTaxIncludedAmount,
-                    // qty: currentPageSummary.qty,
-                    // goodsAmount: currentPageSummary.goodsAmount,
-                    // post: currentPageSummary.post,
-                    // otherAmount: currentPageSummary.otherAmount,
-                    // discount: currentPageSummary.discount,
                  }, {
                     w2ui: {
                         summary: true
@@ -589,6 +621,7 @@ export default {
         },
                //导出相关
         checkExport(){
+            this.setBuryPoint('导出')
                  if(this.checkSelection()){
                     // this.onImport()
                      this.exportVisible=true
@@ -604,6 +637,7 @@ export default {
             return false
         },
         cancelExport(){
+            this.setBuryPoint('导出取消')
                    this.exportVisible=false;
                    this.moreLarge=false;
                    this.exportObj.selected=''
@@ -611,6 +645,7 @@ export default {
         
          //导出
         onImport(){
+            this.setBuryPoint('导出确认')
             if(!this.exportObj.selected) return this.$message.error('请选择导出类型')
                     let data={}
                     let arr = w2ui.invoiceRegister.getSelection()
@@ -749,6 +784,7 @@ export default {
             })
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 
@@ -777,6 +813,7 @@ export default {
         },
              //审核
         onExamine() {
+            this.setBuryPoint('审核')
                  let arr = w2ui.invoiceRegister.getSelection()
                  if(arr.length==0){
                       return  this.$message.error('请勾选审核数据')
@@ -814,21 +851,12 @@ export default {
                                                 }
                                     }
                                     })
-                        //  let data = {};
-                        //       data.ids= arr
-                        //     this.request('accPayable_invoiceRegister_examine', data, false).then((res) => {
-                        //         if (res.code == 1) {
-                        //             this.$message.success('审核成功')
-                        //             this.getData()
-                        //         } else {
-                        //             this.$message.error(res.msg)
-                        //         }
-                        //     })
                 }
             
         },
         // 取消审核
         onExamineCancel() {
+            this.setBuryPoint('取消审核')
              let arr = w2ui.invoiceRegister.getSelection()
                  if(arr.length==0){
                       return  this.$message.error('请勾选取消审核数据')
@@ -881,6 +909,7 @@ export default {
         },
                //立账
         setAccount() {
+            this.setBuryPoint('立账')
                  let arr = w2ui.invoiceRegister.getSelection()
                  if(arr.length==0){
                       return  this.$message.error('请勾选立账数据')
@@ -900,6 +929,7 @@ export default {
         },
         // 取消立账
         setAccountCancel() {
+            this.setBuryPoint('取消立账')
              let arr = w2ui.invoiceRegister.getSelection()
                  if(arr.length==0){
                         return  this.$message.error('请勾选取消立账数据')
@@ -917,7 +947,64 @@ export default {
                 }
            
         },
+        //日期调整
+        dayChange(){
+            this.setBuryPoint('日期调整')
+            let arr = w2ui.invoiceRegister.getSelection()
+                 if(arr.length==0){
+                        return  this.$message.error('请勾选日期调整数据')
+                }else if(arr.length>0){
+                    //校验所选数据能否进行日期调整
+                    let data = {}
+                    data.ids = arr
+                    this.request('accPayable_invoiceRegister_checkDate', data, false).then((res) => {
+                        if (res.code == 1) {
+                            this.dayChangeVisible = true
+                        } else {
+                            this.$message.error(res.msg)
+                        }
+                    })
+                }
+        },
+        //保存日期调整
+        saveDayChange(){
+            if(!this.dayChangeObj.arriveDate && !this.dayChangeObj.openDate){
+                this.cancelDayChange()
+            }else{
+                let arr = w2ui.invoiceRegister.getSelection()
+            // this.$refs['dayChangeForm'].validate((valid) => {
+            //     if (valid) {
+                    let data = {}
+                    data.ids = arr
+                    data.arriveInvoiceDate = this.dayChangeObj.arriveDate
+                    data.invoiceDate = this.dayChangeObj.openDate
+                    this.request('accPayable_invoiceRegister_updateList', data, false).then((res) => {
+                        if (res.code == 1) {
+                            this.$message.success('日期调整成功')
+                            this.getData()
+                            this.cancelDayChange()
+                        } else {
+                            this.$message.error(res.msg)
+                        }
+                    })
+            //     } else {
+            //         return false;
+            //     }
+            // })
+            }
+            
+        },
+        //取消日期调整
+        cancelDayChange(){
+            this.dayChangeVisible = false
+            this.dayChangeObj = {
+                arriveDate:'',
+                openDate:'',
+            }
+            // this.$refs['dayChangeForm'].resetFields();
+        },
         onAdd(){
+            this.setBuryPoint('新增')
                 this.adjustVisible=true
         },
          resetForm(name) {
@@ -942,6 +1029,7 @@ export default {
                 })        
         },
         submitForms(formName){
+            this.setBuryPoint('新增保存')
               this.$refs[formName].validate((valid) => {
                 if (valid) {
                     this.saveAdd()
@@ -951,10 +1039,12 @@ export default {
             })
         },
         cancelAdjust() {
+            this.setBuryPoint('新增取消')
             this.adjustVisible = false;
             this.resetForm('adjustForm')
         }, 
         onDel(){
+            this.setBuryPoint('删除')
                let arr = w2ui.invoiceRegister.getSelection()
                  if(arr.length==0){
                        return  this.$message.error('请勾选删除数据')

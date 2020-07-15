@@ -79,10 +79,10 @@
 <script>
 import Util from 'libs/util';
 import axios from 'axios';
-
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins: [debounce],
+    mixins: [debounce,burypoint],
     name: 'testingComplete',
     data() {
         return {

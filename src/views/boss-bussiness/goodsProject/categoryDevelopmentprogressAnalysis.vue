@@ -75,16 +75,6 @@
                         show-summary  border style="width: 100%"   :height="oneTableHeight"  :pagination-show="false">
                         <plx-table-column fixed="left"  type="index"  width="70" label="序号"  resizable   align="center"/>
                         <plx-table-column fixed="left"  prop="basicBrandName" sortable  min-width="100"  resizable  label="品牌"        align="center"/>
-                        <!-- <plx-table-column fixed="left"  prop="secondLevel"  min-width="80"  resizable  label="二级品类"  align="center"/>
-                        <plx-table-column fixed="left"  prop="developCostPrice"  min-width="90"  resizable  label="品类开发成本"  align="center"/>
-                        <plx-table-column fixed="left"  prop="developStyleQty"  min-width="90"  resizable  label="计划开发款数"  align="center"/>
-                        <plx-table-column fixed="left"  prop="finishStyleQty"  min-width="90"  resizable  label="已开发款数"  align="center"/>
-                        <plx-table-column fixed="left"  prop="orderStyleQty"  min-width="80"  resizable  label="下单款数"  align="center"/>
-                        <plx-table-column fixed="left"  prop="firstColorQty"  min-width="80"  resizable  label="下单色数"  align="center"/>
-                        <plx-table-column fixed="left"  prop="unPricingStyleQty"  min-width="90"  resizable  label="大货未核价款数"  align="center"/>
-                        <plx-table-column fixed="left"  prop="firstQty"  min-width="80"  resizable  label="下单数量"  align="center"/>
-                        <plx-table-column fixed="left"  prop="firstAmount"  min-width="80"  resizable  label="下单金额"  align="center"/>
-                        <plx-table-column fixed="left"  prop="orderTotalAmount"  min-width="90"  resizable  label="规划开发金额"  align="center"/> -->
                         <plx-table-column style="height:20px!important"  v-for="v in columns" :key="v.label" sortable   :prop="v.prop"  resizable min-width="100"   :label="v.label"  align="center"/>
             </plx-table-grid>
             <div style="padding-top:10px;text-align:right;float:right;position:relative;z-index:1000" v-if="showhidden">
@@ -116,10 +106,8 @@
                     <plx-table-column prop="planningDeliverDate"  label="规划交接日期" sortable min-width="120" align="center" show-overflow-tooltip>
                     </plx-table-column>
                     <plx-table-column prop="colorSimpleDate" label="齐色样日期" sortable min-width="120" align="center" show-overflow-tooltip>
-                        <!-- <template slot-scope="scope">{{scope.row.taxIncludedTotalPurchaseUnitPrice|singlePrice}}</template> -->
                     </plx-table-column>
                     <plx-table-column prop="planningArriveDate" label="规划到货日期" sortable min-width="120" align="center" show-overflow-tooltip>
-                        <!-- <template slot-scope="scope">{{scope.row.taxIncludedPurchaseUnitPrice|singlePrice}}</template> -->
                     </plx-table-column>
                     <plx-table-column prop="developCostPrice" label="品类开发成本" sortable min-width="120" align="center" show-overflow-tooltip>
                          <template slot-scope="scope">{{scope.row.developCostPrice|moneyFilters}}</template>
@@ -129,16 +117,12 @@
                      <plx-table-column prop="finishStyleQty" label="已开发款数" sortable min-width="120" align="center" show-overflow-tooltip>
                     </plx-table-column>
                      <plx-table-column prop="planningDevelopPostponeDate" label="设计稿延期天数" sortable min-width="120" align="center" show-overflow-tooltip>
-                        <!-- <template slot-scope="scope">{{scope.row.planningDevelopPostponeDate|singlePrice}}</template> -->
                     </plx-table-column>
                      <plx-table-column prop="fillingPostponeDay" label="建档延期天数" min-width="120" sortable align="center" show-overflow-tooltip>
-                         <!-- <template slot-scope="scope">{{scope.row.excludingTaxPurchaseUnitPrice|singlePrice}}</template> -->
                     </plx-table-column>
                      <plx-table-column prop="firstSimplePostponeDay" label="头版样衣指令延期天数" sortable min-width="120" align="center" show-overflow-tooltip>
-                          <!-- <template slot-scope="scope">{{scope.row.excludingTaxTotalPurchaseUnitPrice|singlePrice}}</template> -->
                     </plx-table-column>
                     <plx-table-column prop="firstSimpleFinishPostponeDay" label="头版样衣完成延期天数" sortable min-width="120" align="center" show-overflow-tooltip>
-                           <!-- <template slot-scope="scope">{{scope.row.contractAmount|moneyFilters}}</template> -->
                     </plx-table-column>
                     <plx-table-column prop="orderStyleQty" label="下单款数" min-width="120" align="center" sortable show-overflow-tooltip>
 
@@ -164,13 +148,13 @@
                             <template slot-scope="scope">{{scope.row.orderTotalAmount|moneyFilters}}</template>
                     </plx-table-column>
                     <plx-table-column prop="actualCostAmount" label="实际开发成本" min-width="120" align="center" sortable show-overflow-tooltip>
-                           <template slot-scope="scope">{{scope.row.actualCostAmount|moneyFilters}}</template>
+                           <template slot-scope="scope">{{scope.row.actualCostAmount|singlePrice}}</template>
                     </plx-table-column>
                     <plx-table-column prop="diffAmount" label="金额差异" min-width="120" align="center" sortable show-overflow-tooltip>
                           <template slot-scope="scope">{{scope.row.diffAmount|moneyFilters}}</template>
                     </plx-table-column>
                     <plx-table-column prop="diffCostAmount" label="成本差异" min-width="120" align="center" sortable show-overflow-tooltip>
-                          <template slot-scope="scope">{{scope.row.diffCostAmount|moneyFilters}}</template>
+                          <template slot-scope="scope">{{scope.row.diffCostAmount|singlePrice}}</template>
                     </plx-table-column>
                     <plx-table-column prop="purchasePostponeDay" label="入库延期天数" min-width="120" sortable align="center" show-overflow-tooltip>
                     </plx-table-column>
@@ -242,11 +226,12 @@ var totalPageSum = {}
 import DragList from '_c/drag-list'
 import filters from '../../../filter/'
 import {debounce} from 'mixins/debounce.js'
+import {burypoint} from 'mixins/burypoint'
 import {commonMixins} from 'mixins/common'
 import { export_json_to_excel,format_json_list_by_filter,convert26 } from '@/libs/excel/Export2Excel'
 // import {  PlxTableGrid, PlxTableColumn } from 'pl-table';
 export default {
-     mixins    : [debounce,commonMixins],
+     mixins    : [debounce,commonMixins,burypoint],
     components: {
            DragList,
         //    PlxTableGrid, PlxTableColumn
@@ -520,6 +505,7 @@ export default {
 
         },
         queryFollowByExportMdx(){
+            this.setBuryPoint('导出')
                  let arr=[]
                      arr.push('basicBrandName')
                     //  arr.push('finishStyleQty')
@@ -612,7 +598,7 @@ export default {
             })
         },
         onSearch() {
-            console.log(this.formSearch.documentDate)
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 

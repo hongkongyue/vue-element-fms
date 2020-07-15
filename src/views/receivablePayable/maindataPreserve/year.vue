@@ -56,7 +56,9 @@
 
 <script>
 import Util from 'libs/util';
+import {burypoint} from 'mixins/burypoint'
 export default {
+    mixins:[burypoint],
     data() {
         return {
             formSearch: {},
@@ -86,6 +88,7 @@ export default {
     methods: {
         //同步
         synchronous() {
+            this.setBuryPoint('同步')
             let data = {}
             this.request('year_sync', data, true).then(res => {
                 if (res.code == 1) {
@@ -192,8 +195,9 @@ export default {
         },
         //查询
         onSearch() {
+            this.setBuryPoint('查询');
             this.currentPage = 1
-            this.getData()
+            this.getData();
 
         },
         //重置

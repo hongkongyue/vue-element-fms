@@ -153,7 +153,7 @@
                     </el-tab-pane>
                     <el-tab-pane label="分配店铺" name="five">
                         <tree-transfer :title="titleDP" :from_data='fromData' :button_text='["分配 ","撤销分配"]' :to_data='toData' :defaultProps="defaultPropsDp" @addBtn='addStore' 
-                            @removeBtn='removeStore' :mode='mode' height='540px' filter openAll>
+                            @removeBtn='removeStore' :mode='mode' height='540px' filter :defaultTransfer="true" :transferOpenNode="false">
                         </tree-transfer>
                     </el-tab-pane>
                     
@@ -195,8 +195,9 @@
 <script>
   import filters from '../../../filter/'
   import treeTransfer from 'el-tree-transfer' // 引入
-
+  import {burypoint} from 'mixins/burypoint'
   export default {
+    mixins:[burypoint],
     data() {
       return {
         dataSupplier:[],
@@ -352,6 +353,7 @@
           })
     },
     addStore(fromData,toData,obj){
+      this.setBuryPoint('分配店铺分配')
       console.log(fromData,toData,obj)
       let Liat = []
        toData.map(function (item) {
@@ -372,6 +374,7 @@
               })
     },
     removeStore(fromData,toData,obj){
+       this.setBuryPoint('分配店铺撤销分配')
        console.log(obj.keys)
        let Liat = []
        toData.map(function (item) {
@@ -393,6 +396,7 @@
     },
     //删除
     handleClickDelete(row){
+      this.setBuryPoint('分配角色删除')
       console.log(row)
       let data = {}
         data.userId = this.$route.query.id
@@ -471,6 +475,12 @@
     
     //获取公司分配权限
       handleChangeCompany(value, direction, movedKeys){
+       if(direction=='right'){
+            this.setBuryPoint('分配公司分配')
+       }else{
+            this.setBuryPoint('分配公司撤销分配')
+       }
+      
         let data = {}
         data.userId = this.$route.query.id
         data.allocationType = 'company'
@@ -485,6 +495,12 @@
       },
     //获取品牌分配权限
       handleChangeBrand(value, direction, movedKeys){
+        // this.setBuryPoint('分配公司撤销分配')
+         if(direction=='right'){
+            this.setBuryPoint('分配品牌分配')
+       }else{
+            this.setBuryPoint('分配品牌撤销分配')
+       }
         let data = {}
         data.userId = this.$route.query.id
         data.allocationType = 'brand'
@@ -499,6 +515,11 @@
       },
       //供应商分配权限
       handleChangeSupplier(value, direction, movedKeys){
+          if(direction=='right'){
+            this.setBuryPoint('分配供应商分配')
+       }else{
+            this.setBuryPoint('分配供应商撤销分配')
+       }
         let data = {}
         data.userId = this.$route.query.id
         data.allocationType = 'supplier'
@@ -533,6 +554,7 @@
       },
       //添加角色  basic_role_add
       addUserName(){
+          this.setBuryPoint('添加角色')
         if(this.formAdd.userName.length == 0){
           this.$message.warning('请先选择角色名称再添加！')
         }else{
@@ -563,6 +585,7 @@
       },
       //保存
       onSave(){
+         this.setBuryPoint('编辑保存')
         if(this.formSearch.bm == undefined){
           this.$message.warning('部门不能为空！')
         }else if(this.formSearch.gw == undefined){
@@ -591,11 +614,13 @@
         }
       },
       cancelvisible(){
+            this.setBuryPoint('新密码确认')
             this.Password = null
             this.visible = false
           },
       //重置密码
           onReset(){
+            this.setBuryPoint('重置密码')
             let data = {}
             data.id = this.$route.query.id
             this.request('user_resetPassword', data, true).then(res => { 
@@ -609,12 +634,14 @@
               })
           },
           goBlack(){
+             this.setBuryPoint('返回上一页')
             this.$router.push({
                 name:'new_user_list',
               })  
           },
           //解锁
           unLock(){
+             this.setBuryPoint('解锁')
             let data = {}
             data.id = this.$route.query.id
             this.request('user_unlock', data, true).then(res => { 
@@ -645,9 +672,11 @@
         console.log("fromData:", fromData);
         console.log("toData:", toData);
         console.log("obj:", obj);
+        this.setBuryPoint('分配店铺分配')
       },
       // 监听穿梭框组件移除
       remove(fromData,toData,obj){
+         this.setBuryPoint('分配店铺撤销分配')
         // 树形穿梭框模式transfer时，返回参数为左侧树移动后数据、右侧树移动后数据、移动的{keys,nodes,halfKeys,halfNodes}对象
         // 通讯录模式addressList时，返回参数为右侧收件人列表、右侧抄送人列表、右侧密送人列表
         console.log("fromData:", fromData);

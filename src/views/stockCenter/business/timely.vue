@@ -60,8 +60,9 @@
 
 <script>
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     name:'timelyComponent',
     data() {
         return {
@@ -284,6 +285,7 @@ export default {
             })
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 
@@ -305,6 +307,7 @@ export default {
         },
         //导出
         onImport(){
+                           this.setBuryPoint('导出')
                         let data={}
                             data.basicCompanyId = this.formSearch.basicCompanyId 
                             data.basicBrandId = this.formSearch.basicBrandId 

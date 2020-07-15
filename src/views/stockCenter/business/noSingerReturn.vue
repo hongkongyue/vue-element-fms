@@ -85,8 +85,9 @@
 import { mapState } from 'vuex'
 import filter from '../../../filter/'
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     name: 'noSingerReturnComponent',
     data() {
         return {
@@ -287,6 +288,7 @@ export default {
         },
         //导出
         onImport() {
+            this.setBuryPoint('导出')
             let data = {}
             this.request('accverification_asyncExport', data, false).then(res => {
                 if (res.code == 1) {
@@ -432,6 +434,7 @@ export default {
             })
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 

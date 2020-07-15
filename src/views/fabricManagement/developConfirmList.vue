@@ -4,6 +4,14 @@
         <Row class="background-color-white exhibition">
             <Tabs style="min-height:880px;padding-left:0px" type="card" @on-click='changeTab(changeTabs)' v-model='changeTabs'>
                 <TabPane label="待完成" name='dwc'>
+                    <el-form :inline="true" :model="formSearch" class="demo-form-inline" @submit.native.prevent>
+                                    <el-form-item size="mini" label="开发任务编号:" style="margin-bottom:0px!important">
+                                        <el-input size="mini" v-model="formSearch.taskNo"  clearable></el-input>
+                                    </el-form-item>
+                                 <el-form-item size="mini" style="margin-bottom:0px!important">
+                                      <el-button @click="initdata(true)" type="primary">查询</el-button>
+                                </el-form-item>
+                      </el-form>
                     <Row class="background-color-white exhibition" style="min-height:630px;padding-left:0px">
                         <Page style="margin-top:5px;text-align:right" :total="total" :page-size="pageSize" :current="page" show-sizer show-total show-elevator @on-change="currentChange" @on-page-size-change="sizeChange"></Page>
                         <div @click="handleSave(item.taskDetailId,item)" v-model="changeRoute" v-for="item in List" :value="item.id" :key="item.id" style="margin-bottom:10px;background-color:#f5f7f9">
@@ -27,19 +35,38 @@
                     </Row>
                 </TabPane>
                 <TabPane label="进行中" name='jxz'>
+                     <el-form :inline="true" :model="formSearch" class="demo-form-inline" @submit.native.prevent>
+                                    <el-form-item size="mini" label="开发任务编号:" style="margin-bottom:0px!important">
+                                        <el-input size="mini" v-model="formSearch.taskNo"  clearable></el-input>
+                                    </el-form-item>
+                                 <el-form-item size="mini" style="margin-bottom:0px!important">
+                                      <el-button @click="getConduct(true)" type="primary">查询</el-button>
+                                </el-form-item>
+                      </el-form>
                     <Row class="background-color-white exhibition" style="max-height:530px;padding-left:0px">
                         <Page style="margin-top:5px;text-align:right" :total="total" :page-size="pageSize" :current="page" show-sizer show-total show-elevator @on-change="currentChange1" @on-page-size-change="sizeChange1"></Page>
                         <Table :columns="columns" height="530" size="small" highlight-row :data="list1" @on-row-click="clickRow"></Table>
                         
                     </Row>
-                    <Modal title="查看大图" v-model="visible"> 
-                    <img :src="bigstyleImg" v-if="visible" style="width: 100%">
-                </Modal>
-                    <div style="height:80px"></div>
+                    
+                    <div style="height:60px"></div>
                     <Row>
-                        <div style="font-size:20px">操作日志</div>
-                        
-                        <el-table :data="logsList" style="width: 100%" border tooltip-effect="dark" max-height="250">
+                        <el-tabs v-model="activeName" type="card">
+                    <el-tab-pane label="明细" name="first">
+                        <el-table :data="detailsData" style="width: 100%" border highlight-current-row tooltip-effect="dark" max-height="250" size="mini">
+                            <el-table-column type="index" width="55" label="序号" fixed="left" align="center"></el-table-column>
+                            <el-table-column prop="basicQcItemContent" label="检测项目" fixed="left" width="160" align="center" show-overflow-tooltip>
+                            </el-table-column>
+                            <el-table-column prop="internalOrOutside" label="内检/外检" fixed="left" align="center" width="100" show-overflow-tooltip>
+                            </el-table-column>
+                            <el-table-column prop="inspectResult" label="检测结果" fixed="left" width="100" align="center" show-overflow-tooltip>
+                            </el-table-column>
+                            <el-table-column prop="checkRemark" label="检测说明" fixed="left" min-width="100" align="center" show-overflow-tooltip>
+                            </el-table-column>
+                        </el-table>
+                    </el-tab-pane>
+                    <el-tab-pane label="操作日志" name="second">
+                         <el-table :data="logsList" style="width: 100%" border tooltip-effect="dark" max-height="250">
                         <el-table-column prop="operator" label="操作员" min-width="120" align="center">
                         </el-table-column>
                         <el-table-column prop="operateTime" label="操作时间" align="center" min-width="120">
@@ -50,7 +77,12 @@
                     </el-table>
                     <div class="getmore" v-if="logsList.length>0&&dataFlag" @click="getMore">点击加载更多</div>
                     <div class="getmore" v-if="logsList.length>0&&!dataFlag">没有更多了…</div>
+                    </el-tab-pane>
+                </el-tabs>
                     </Row>
+                    <Modal title="查看大图" v-model="visible"> 
+                    <img :src="bigstyleImg" v-if="visible" style="width: 100%">
+                </Modal>
                     <Modal v-model="turnvisible" :styles="mystyle" title="转交" @on-cancel='turnCancel' :width="410" @on-ok="turnSave" class-name="customize-modal-center">
             <Row class="margin-bottom-10 background-color-white exhibition">
                 <el-form :inline="true" ref="ruleForm" :model="turnData" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="rules">
@@ -73,6 +105,14 @@
         </Modal>
                 </TabPane>
                 <TabPane label="已完成" name='ywc'>
+                     <el-form :inline="true" :model="formSearch" class="demo-form-inline" @submit.native.prevent>
+                                    <el-form-item size="mini" label="开发任务编号:" style="margin-bottom:0px!important">
+                                        <el-input size="mini" v-model="formSearch.taskNo"  clearable></el-input>
+                                    </el-form-item>
+                                 <el-form-item size="mini" style="margin-bottom:0px!important">
+                                      <el-button @click="getComplete(true)" type="primary">查询</el-button>
+                                </el-form-item>
+                      </el-form>
                     <Row class="background-color-white exhibition" style="max-height:530px;padding-left:0px">
                         <Page style="margin-top:5px;text-align:right" :total="total" :page-size="pageSize" :current="page" show-sizer show-total show-elevator @on-change="currentChange2" @on-page-size-change="sizeChange2"></Page>
                         <Table :columns="columns2" size="small" highlight-row :data="list2" @on-row-click="clickRow"></Table>
@@ -100,16 +140,20 @@
 
 <script>
 import Util from 'libs/util';
-// import Util from 'libs/util';
-// import axios from 'axios';
-
+import {burypoint} from 'mixins/burypoint'
 export default {
+    mixins: [burypoint],
     name: 'developConfirmList',
     data() {
         return {
+            detailsData:[],
+            activeName:'first',
             visible:false,
             turnvisible:false,
             logsList:[],
+            formSearch:{
+                        taskNo:''
+            },
             userInfo: '', //缓存
             columns: [{
                     title: '序号',
@@ -118,7 +162,7 @@ export default {
                     width: 80,
                 },
                 {
-                    title: '任务编号',
+                    title: '开发任务编号',
                     key: 'taskNo',
                     align: 'center',
                     minWidth: 100,
@@ -256,7 +300,7 @@ export default {
                     width: 80,
                 },
                 {
-                    title: '任务编号',
+                    title: '开发任务编号',
                     key: 'taskNo',
                     align: 'center',
                     minWidth: 100,
@@ -464,12 +508,15 @@ export default {
                 }
             }
         },
-        initdata() {
+        initdata(type) {
+            this.setBuryPoint('待完成查询')
+           if(type)this.page=1
             let data = {};
             data.currentPage = this.page;
             data.pageSize = this.pageSize
             data.status = 0
             data.taskConfigurationId = this.getID()
+            data.taskNo=this.formSearch.taskNo
             this.request('fabric_fabricTaskDetail_dingding', data, false).then((res) => {
                 if (res.code == 1) {
                     this.List = res.data.records
@@ -480,12 +527,17 @@ export default {
             })
         },
         //进行中
-        getConduct() {
+        getConduct(type) {
+            this.setBuryPoint('进行中查询')
+            this.logsList = []
+            this.detailsData = []
+             if(type)this.page=1
             let data = {};
             data.currentPage = this.page;
             data.pageSize = this.pageSize
             data.status = 1
             data.taskConfigurationId = this.getID()
+            data.taskNo=this.formSearch.taskNo
             this.request('fabric_fabricTaskDetail_page', data, false).then((res) => {
                 if (res.code == 1) {
                     this.list1 = res.data.records
@@ -495,12 +547,16 @@ export default {
                 }
             })
         },
-        getComplete() {
+        getComplete(type) {
+            this.setBuryPoint('已完成查询')
+            this.logsList = []
+             if(type)this.page=1
             let data = {};
             data.currentPage = this.page;
             data.pageSize = this.pageSize
             data.status = 2
             data.taskConfigurationId = this.getID()
+            data.taskNo=this.formSearch.taskNo
             this.request('fabric_fabricTaskDetail_page', data, false).then((res) => {
                 if (res.code == 1) {
                     this.list2 = res.data.records
@@ -526,6 +582,7 @@ export default {
         //改变tabs选项
         changeTab(name) {
             console.log(name)
+            this.formSearch.taskNo=''
             if (name == 'jxz') {
                 this.logsList = []
                 this.page = 1
@@ -608,6 +665,18 @@ export default {
         clickRow(row){
             console.log(row,'0000000000')
             this.getLoglist(row.id)
+            this.getDetailsList(row.taskNo)
+        },
+        getDetailsList(taskNo){
+            let data = {}
+            data.taskNo = taskNo
+            this.request('fabric_showBackReason', data, false).then(res => {
+                if (res.code == 1) {
+                    this.detailsData = res.data
+                }else{
+                    this.detailsData = []
+                }
+            })
         },
         getLoglist(id) {
             this.logsList = []

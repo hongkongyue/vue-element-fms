@@ -1,7 +1,7 @@
 <template>
 <span>
     <Tooltip content="点击切换浏览模式" placement="bottom">
-        <Icon type="md-aperture" :size="23" style="cursor:pointer" @click="showT" />
+        <Icon type="md-aperture" :size="23" style="cursor:pointer" @click="showModal" />
     </Tooltip>
     <Modal v-model="dialogVisible" :styles="mystyle" title="切换浏览模式" @on-cancel='cancel' :width="540" class-name="customize-modal-center">
         <Row class="margin-bottom-10 background-color-white exhibition">
@@ -33,7 +33,7 @@ export default {
         }
     },
     methods: {
-        showT() {
+        showModal() {
             this.$store.state.app.mode == 1 ? this.disabledGroup = '窗口内浏览' : this.disabledGroup = '新开窗口浏览'
             this.dialogVisible = true
         },
@@ -43,6 +43,7 @@ export default {
                 this.$store.commit('clearAllTags'); //清除头部标签
                 this.dialogVisible = false
             } else {
+                this.$route.query.title='haah'
                 this.$store.commit('becomeMore')
                 this.$store.commit('clearAllTags'); //清除头部标签
                 this.dialogVisible = false

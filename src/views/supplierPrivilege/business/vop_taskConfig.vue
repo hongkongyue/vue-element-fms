@@ -166,8 +166,9 @@
 <script>
 import filters from '../../../filter/'
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins: [debounce],
+    mixins: [debounce,burypoint],
     data() {
         return {
             positionObj: {},
@@ -252,6 +253,7 @@ export default {
     methods: {
         //新增
         onAdd() {
+            this.setBuryPoint('新增')
             this.addVisible = true
         },
         //新增取消
@@ -372,6 +374,7 @@ export default {
         },
          //编辑
         onEdit() {
+            this.setBuryPoint('编辑')
             if (this.IDS.length == 1) {
                 console.log(this.IDS)
                 this.editVisible = true
@@ -513,6 +516,7 @@ export default {
             })
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.page = 1;
             this.getData()
 
@@ -584,6 +588,7 @@ export default {
         },
         //启用
         onEnable(){
+            this.setBuryPoint('启用')
             if(this.IDS.length == 0){
                 this.$message.error('请先选择数据')
             }else{
@@ -606,6 +611,7 @@ export default {
         },
         //禁用
         onProhibit(){
+            this.setBuryPoint('禁用')
             if(this.IDS.length == 0){
                 this.$message.error('请先选择数据')
             }else{

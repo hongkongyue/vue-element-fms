@@ -133,13 +133,13 @@
                             <template slot-scope="scope">{{scope.row.orderTotalAmount|moneyFilters}}</template>
                     </plx-table-column>
                     <plx-table-column prop="actualCostAmount" label="实际开发成本" sortable min-width="120" align="center" show-overflow-tooltip>
-                           <template slot-scope="scope">{{scope.row.actualCostAmount|moneyFilters}}</template>
+                           <template slot-scope="scope">{{scope.row.actualCostAmount|singlePrice}}</template>
                     </plx-table-column>
                     <plx-table-column prop="diffAmount" label="金额差异" sortable min-width="120" align="center" show-overflow-tooltip>
                           <template slot-scope="scope">{{scope.row.diffAmount|moneyFilters}}</template>
                     </plx-table-column>
                     <plx-table-column prop="diffCostAmount" label="成本差异" sortable min-width="120" align="center" show-overflow-tooltip>
-                          <template slot-scope="scope">{{scope.row.diffCostAmount|moneyFilters}}</template>
+                          <template slot-scope="scope">{{scope.row.diffCostAmount|singlePrice}}</template>
                     </plx-table-column>
                     <plx-table-column prop="purchasePostponeDay" label="入库延期天数" sortable min-width="120" align="center" show-overflow-tooltip>
                     </plx-table-column>
@@ -206,12 +206,12 @@
 var totalPageSum = {}
 import DragList from '_c/drag-list'
 import filters from '../../../filter/'
-// import {debounce} from 'mixins/debounce.js'
+import {burypoint} from 'mixins/burypoint'
 import {commonMixins} from 'mixins/common'
 import { export_json_to_excel,format_json_list_by_filter,convert26 } from '@/libs/excel/Export2Excel'
 // import {  PlxTableGrid, PlxTableColumn } from 'pl-table';
 export default {
-     mixins    : [commonMixins],
+     mixins    : [commonMixins,burypoint],
     components: {
            DragList,
         //    PlxTableGrid, PlxTableColumn
@@ -538,6 +538,7 @@ export default {
 
         },
         queryFollowByExportMdx(){
+            this.setBuryPoint('导出')
                  let arr=[]
                      arr.push('basicBrandName')
                     //  arr.push('finishStyleQty')
@@ -629,7 +630,7 @@ export default {
             })
         },
         onSearch() {
-            console.log(this.formSearch.documentDate)
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 

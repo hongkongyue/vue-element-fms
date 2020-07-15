@@ -62,6 +62,8 @@
                     </el-table-column>
                     <el-table-column prop="goodsNo" label="大货款号" align="center" min-width="120" show-overflow-tooltip>
                     </el-table-column>
+                    <el-table-column prop="thirdLevel" label="三级分类" align="center" min-width="120" show-overflow-tooltip>
+                    </el-table-column>
                     <el-table-column prop="invoiceQty" label="开票数量" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column prop="taxExcludedPrice" label="不含税单价" min-width="120" align="center" show-overflow-tooltip>
@@ -105,6 +107,8 @@
                     </el-table-column>
                     <el-table-column prop="goodsNo" label="大货款号" align="center" min-width="120" show-overflow-tooltip>
                     </el-table-column>
+                    <el-table-column prop="thirdLevel" label="三级分类" align="center" min-width="120" show-overflow-tooltip>
+                    </el-table-column>
                     <el-table-column prop="invoiceQty" label="开票数量" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column prop="taxExcludedPrice" label="不含税单价" min-width="120" align="center" show-overflow-tooltip>
@@ -147,6 +151,8 @@
                     <el-table-column prop="invoiceNo" label="发票号码" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column prop="goodsNo" label="大货款号" align="center" min-width="120" show-overflow-tooltip>
+                    </el-table-column>
+                    <el-table-column prop="thirdLevel" label="三级分类" align="center" min-width="120" show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column prop="invoiceQty" label="开票数量" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
@@ -207,8 +213,9 @@
 import Util from 'libs/util'
  import { commonMixins } from 'mixins/common';
  import {debounce} from 'mixins/debounce'
+ import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins: [commonMixins,debounce],
+    mixins: [commonMixins,debounce,burypoint],
 
     data() {
         return {
@@ -329,6 +336,7 @@ export default {
         },
         //导出
         onImport(){
+            this.setBuryPoint('导出')
             let arr = w2ui.invoiceAdvice.getSelection()
             let data = {}
             data.idList = arr
@@ -533,6 +541,7 @@ export default {
                     res.data.totalPageSum ? this.totalPageSum = res.data.totalPageSum : this.totalPageSum = {
                     }
                 }else{
+                    this.total=0
                     this.$message.error(res.msg)
                     this.initTable()
                 }
@@ -603,6 +612,7 @@ export default {
             })
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 

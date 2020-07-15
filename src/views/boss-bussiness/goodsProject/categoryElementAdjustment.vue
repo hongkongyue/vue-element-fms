@@ -274,9 +274,10 @@
 var totalPageSum = {}
 import filters from '../../../filter/'
 import{debounce}  from 'mixins/debounce.js'
+import {burypoint} from 'mixins/burypoint'
 import { export_json_to_excel,format_json_list_by_filter,convert26 } from '@/libs/excel/Export2Excel'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     components: {
 
         //    DragList
@@ -346,6 +347,7 @@ export default {
     },
     methods: {
         exportExcel(){
+            this.setBuryPoint('导出明细')
          if(this.list.length==0)return this.$message.error('暂无导出数据')
         let dynamicFirstHead = new Array()
         let dynamicSecondHead = new Array()

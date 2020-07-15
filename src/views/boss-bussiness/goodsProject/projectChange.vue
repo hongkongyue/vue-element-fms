@@ -79,11 +79,6 @@
                             </template>
                         </pl-table-column>
                     </pl-table-column>
-                    <!-- <pl-table-column  resizable label="原企划已开发" align="center">
-                        <pl-table-column prop="originDevelopedQty" width="95" resizable label="款数" align="center" />
-                        <pl-table-column prop="originDevelopedStyleColor" width="95" resizable label="款色" align="center" />
-                        <pl-table-column prop="originDevelopedPercent" width="95" resizable label="占比" align="center" />
-                    </pl-table-column> -->
                     <pl-table-column  resizable label="实际已开发" align="center">
                         <pl-table-column prop="actualDevelopedQty"  sortable width="95" resizable label="款数" align="center" />
                         <pl-table-column prop="actualDevelopedStyleColor"  sortable width="95" resizable label="款色" align="center" />
@@ -108,19 +103,19 @@
     </section>
 
     <!--发起调整指令-->
-    <Modal v-model="startAdjustVisible" @on-cancel="cancelStartAdjust" title="发起调整指令" :width="940">
+    <Modal v-model="startAdjustVisible" @on-cancel="cancelStartAdjust" title="发起调整指令" :width="1040">
         <el-form :rules="startAdjustRules" ref="startAdjustForm" label-width="120px" :model="startAdjustForm" class="demo-ruleForm " :label-position="right">
             <el-row>
             <el-col :span="8">
             <el-form-item label="品牌名称：" prop="brand" size="small">
-                <el-select v-model="startAdjustForm.brand" clearable filterable placeholder="请选择" style="width:140px">
+                <el-select v-model="startAdjustForm.brand" @change="getWaveBand()" clearable filterable placeholder="请选择" style="width:170px">
                     <el-option v-for="item in brandList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
             </el-col>
              <el-col :span="8">
             <el-form-item label="调整类型：" prop="changeType" size="small">
-                <el-select v-model="startAdjustForm.changeType" multiple clearable filterable placeholder="请选择" style="width:140px">
+                <el-select v-model="startAdjustForm.changeType" multiple clearable filterable placeholder="请选择" style="width:170px">
                     <el-option v-for="item in adjustTypeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
@@ -128,14 +123,28 @@
             
             <el-col :span="8">
             <el-form-item label="年份：" prop="year" size="small">
-                <el-select v-model="startAdjustForm.year" multiple clearable filterable placeholder="请选择" style="width:140px">
+                <el-select v-model="startAdjustForm.year" @change="getWaveBand()" clearable filterable placeholder="请选择" style="width:170px">
                     <el-option v-for="item in yearList" :key="item" :label="item" :value="item"></el-option>
                 </el-select>
             </el-form-item>
             </el-col>
-            <el-col :span="24">
+             <el-col :span="8">
+                <el-form-item label="季节：" size="small" prop="season">
+                    <el-select v-model="startAdjustForm.season" clearable @change="getWaveBand()" filterable placeholder="请选择" style="width:170px;height:30px">
+                        <el-option v-for="item in seasonList" :key="item.name" :label="item.name" :value="item.name"></el-option>
+                    </el-select>
+                </el-form-item>
+            </el-col>
+            <el-col :span="8">
+            <el-form-item label="波段：" size="small">
+                <el-select v-model="startAdjustForm.waveBand" multiple clearable filterable placeholder="请选择" style="width:170px">
+                    <el-option v-for="item in waveBandList" :key="item" :label="item" :value="item"></el-option>
+                </el-select>
+            </el-form-item>
+            </el-col>
+            <el-col :span="8">
             <el-form-item label="调整建议：" prop="remark" size="small">
-                <el-input type="textarea" maxlength="300" clearable  show-word-limit v-model="startAdjustForm.remark" placeholder="请输入" style="width:600px"></el-input>
+                <el-input type="textarea" maxlength="300" clearable  show-word-limit v-model="startAdjustForm.remark" placeholder="请输入" style="width:170px"></el-input>
             </el-form-item>
             </el-col>
             </el-row>
@@ -146,6 +155,7 @@
             <Button type="primary" @click="saveStartAdjust">确定</Button>
         </div>
     </Modal>
+
 </div>
 </template>
 
@@ -156,17 +166,20 @@ import {commonMixins} from 'mixins/common';
 import {
     debounce
 } from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 import { export_json_to_excel,format_json_list_by_filter,convert26 } from '@/libs/excel/Export2Excel'
 export default {
-    mixins: [commonMixins, debounce],
+    mixins: [commonMixins, debounce,burypoint],
     data() {
         return {
+            waveBandList:[],
             startAdjustVisible: false,
             startAdjustForm: {
                 brand: '',
                 changeType: [],
-                year: [],
-                remark: ''
+                year: '',
+                remark: '',
+                waveBand:''
             },
             startAdjustRules: {
                 brand: [{
@@ -184,6 +197,11 @@ export default {
                     message: '请选择',
                     trigger: 'change'
                 }],
+                season: [{
+                    required: true,
+                    message: '请选择',
+                    trigger: 'change'
+                }, ],
                 remark: [{
                     required: true,
                     message: '请输入调整建议',
@@ -354,6 +372,7 @@ export default {
     },
     methods: {
 clickTest(){
+    this.setBuryPoint('导出')
     if(this.tableData.length == 0){
         this.$message.warning('请先查询或暂无数据')
     }else{
@@ -393,19 +412,18 @@ clickTest(){
 
 //发起调整指令
         startAdjust() {
+            this.setBuryPoint('发起调整指令')
             this.startAdjustVisible = true
         },
         //保存调整指令
         saveStartAdjust() {
-            this.$refs['startAdjustForm'].validate((valid) => {
+            // if(this.waveBandList.length > 0){
+                this.$refs['startAdjustForm'].validate((valid) => {
                 if (valid) { //新增保存
+                if(this.waveBandList.length == 0){
+                    this.$message.error('该品牌没有符合条件企划计划，不可发起调整！')
+                }else{
                     let data = {}
-                    // let obj = {}
-                    // this.adjustTypeList.map((i) => {
-                    //     if (i.id == this.startAdjustForm.changeType) {
-                    //         obj = i
-                    //     }
-                    // })
                     let brandObj = {}
                     this.brandList.map((v)=>{
                         if(v.id == this.startAdjustForm.brand){
@@ -415,19 +433,23 @@ clickTest(){
                     data.basicBrandName = brandObj.name
                     data.basicBrandCode = brandObj.code
                     data.basicBrandId = this.startAdjustForm.brand
-                    data.yearsList = this.startAdjustForm.year
+                    data.yearsList = [this.startAdjustForm.year]
                     data.adjustTypeId = this.startAdjustForm.changeType
-                    // data.adjustTypeName = obj.name
-                    // data.adjustTypeCode = obj.code
                     data.asjustAdvise = this.startAdjustForm.remark
+                    data.waveBandList = this.startAdjustForm.waveBand
+                    data.season=this.startAdjustForm.season
                     this.request('goods_planning_manage_createAdjust', data, true).then(res => {
                         if (res.code == 1) {
                             this.$message.success('保存调整指令成功')
+                            this.getData()
+                            this.waveBandList = []
                             this.startAdjustForm = {
                                 brand: '',
                                 changeType: [],
-                                year: [],
-                                remark: ''
+                                year: '',
+                                remark: '',
+                                waveBand:'',
+                                season:''
                             }
                             this.$refs['startAdjustForm'].resetFields();
                             this.startAdjustVisible = false
@@ -435,19 +457,43 @@ clickTest(){
                             this.$message.error(res.msg)
                         }
                     })
+                }
                 } else { //验证表单
                     return false;
                 }
             });
+            // }else{
+            //     this.$message.error('该品牌没有符合条件企划计划，不可发起调整！')
+            // }
+        },
+        getWaveBand(){
+            this.waveBandList = []
+            this.startAdjustForm.waveBand = ''
+            if(!!this.startAdjustForm.brand && !!this.startAdjustForm.year&&!!this.startAdjustForm.season){
+                let data = {}
+                data.basicBrandId = this.startAdjustForm.brand
+                data.yearsList = [this.startAdjustForm.year]
+                data.season= this.startAdjustForm.season
+                this.request('goods_planning_manage_queryWaveBandList', data, true).then(res => {
+                if (res.code == 1) {
+                    this.waveBandList = res.data
+                }else{
+                    this.$message.error(res.msg)
+                }
+            })
+            }
         },
         //取消调整指令
         cancelStartAdjust() {
+            this.waveBandList = []
             this.startAdjustVisible = false
             this.startAdjustForm = {
                 brand: '',
                 changeType: [],
-                year: [],
-                remark: ''
+                year: '',
+                remark: '',
+                waveBand:'',
+                season:''
             }
             this.$refs['startAdjustForm'].resetFields();
         },
@@ -537,6 +583,7 @@ clickTest(){
 
         //查询
         onSearch() {
+            this.setBuryPoint('查询')
             if (!this.formSearch.brand || !this.formSearch.projectStatus) {
                 this.$message.warning('请先选择品牌与企划状态')
             } else {

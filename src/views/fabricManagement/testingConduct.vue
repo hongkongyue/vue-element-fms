@@ -92,10 +92,10 @@
 <script>
 import Util from 'libs/util';
 import axios from 'axios';
-
+import {burypoint} from 'mixins/burypoint'
 import {debounce} from 'mixins/debounce'
 export default {
-    mixins: [debounce],
+    mixins: [debounce,burypoint],
     name: 'testingConduct',
     data() {
         return {
@@ -132,6 +132,7 @@ export default {
         },
         //检测合格
         submit() {
+            this.setBuryPoint('检测结果')
             this.visible = true
             this.addformdata.requireDate = Util.currentDate()
         },

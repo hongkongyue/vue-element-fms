@@ -51,10 +51,9 @@
 
 <script>
 import Util from 'libs/util';
-// import Util from 'libs/util';
-// import axios from 'axios';
-
+import {burypoint} from 'mixins/burypoint'
 export default {
+    mixins:[burypoint],
     name: 'testingList',
     data() {
         return {
@@ -176,6 +175,7 @@ export default {
                                 },
                                 on: {
                                     click: (e) => {
+                                        this.setBuryPoint('进入详情页')
                                         this.handleEditSave(params.row.id, params.row)
                                     }
                                 }
@@ -246,6 +246,7 @@ export default {
                                 },
                                 on: {
                                     click: (e) => {
+                                        this.setBuryPoint('查看完成页')
                                         this.handleSaveT(params.row.id, params.row)
                                     }
                                 }
@@ -261,11 +262,7 @@ export default {
                                 },
                                 on: {
                                     click: (e) => {
-                                        // const {
-                                        //     taskCode,
-                                        //     taskName,
-                                        //     projectCode
-                                        // } = params.row
+                                        this.setBuryPoint('撤回已完成')
                                         this.backTask(params.row)
                                     }
                                 }

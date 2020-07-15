@@ -26,9 +26,9 @@
             <el-form-item v-if="judgeMenu.indexOf('删除') !== -1" size="small">
                 <el-button size="small" type="primary" @click="onDelete">删除</el-button>
             </el-form-item>
-             <el-form-item size="small" class="marginT0">
-                        <el-button v-if="judgeMenu.indexOf('导出') != -1" size="small" type="primary" @click="checkExport">导出</el-button>
-                    </el-form-item>
+            <el-form-item size="small" class="marginT0">
+                <el-button v-if="judgeMenu.indexOf('导出') != -1" size="small" type="primary" @click="checkExport">导出</el-button>
+            </el-form-item>
             <el-form-item size="small">
                 <el-button size="small" type="default" @click="onReset">重置</el-button>
             </el-form-item>
@@ -47,12 +47,12 @@
             <el-form-item label="制单号：" size="small">
                 <el-input v-model="formSearch.ordersNo" style="width:150px" clearable></el-input>
             </el-form-item>
-            <el-form-item label=" 公 司 ：" size="small" >
-                        <el-select v-model="formSearch.companyId" filterable clearable placeholder="请选择" style="width:220px">
+            <el-form-item label=" 公 司 ：" size="small">
+                <el-select v-model="formSearch.companyId" filterable clearable placeholder="请选择" style="width:220px">
                     <el-option v-for="item in companyCodeOptions" :key="item.name" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item  label="所属对账人员：" size="small">
+            <el-form-item label="所属对账人员：" size="small">
                 <el-select v-model="formSearch.payableUser" @change="changePayable(formSearch.payableUser)" filterable clearable placeholder="请选择" style="width:120px">
                     <el-option v-for="item in payableUserList" :key="item.payableUserId" :label="item.payableUser" :value="item.payableUserId"></el-option>
                 </el-select>
@@ -117,8 +117,7 @@
     <section class="footer" style="margin-bottom:0px">
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
             <el-tab-pane label="明细" name="first">
-                <el-table :data="customsList" style="width: 100%" border  show-summary
-                          :summary-method="getSummaries" tooltip-effect="dark" max-height="250" size="mini">
+                <el-table :data="customsList" style="width: 100%" border show-summary :summary-method="getSummaries" tooltip-effect="dark" max-height="250" size="mini">
                     <el-table-column type="index" width="55" label="序号" align="center"></el-table-column>
                     <el-table-column prop="closingTime" label="关单时间" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
@@ -136,23 +135,31 @@
                     </el-table-column>
                     <el-table-column prop="size" label="尺码" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
-                     <el-table-column prop="quantity" label="数量" min-width="120" align="center" show-overflow-tooltip>
+                    <el-table-column prop="quantity" label="数量" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column prop="photoSampleNum" label="拍照样数量" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column prop="taxIncludedTotalPurchaseUnitPrice" label="含税总采购单价" min-width="120" align="center" show-overflow-tooltip>
-                          <template slot-scope="scope"><div style="text-align:right">{{scope.row.taxIncludedTotalPurchaseUnitPrice|singlePrice}}</div></template>
+                        <template slot-scope="scope">
+                            <div style="text-align:right">{{scope.row.taxIncludedTotalPurchaseUnitPrice|singlePrice}}</div>
+                        </template>
                     </el-table-column>
                     <el-table-column prop="taxIncludedPurchaseUnitPrice" label="含税采购单价" min-width="120" align="center" show-overflow-tooltip>
-                         <template slot-scope="scope"><div style="text-align:right">{{scope.row.taxIncludedPurchaseUnitPrice|singlePrice}}</div></template>
+                        <template slot-scope="scope">
+                            <div style="text-align:right">{{scope.row.taxIncludedPurchaseUnitPrice|singlePrice}}</div>
+                        </template>
                     </el-table-column>
                     <el-table-column prop="taxIncludedTrialFee" label="含税试制费单价" min-width="120" align="center" show-overflow-tooltip>
-                      <template slot-scope="scope"><div style="text-align:right">{{scope.row.taxIncludedTrialFee|singlePrice}}</div></template>
+                        <template slot-scope="scope">
+                            <div style="text-align:right">{{scope.row.taxIncludedTrialFee|singlePrice}}</div>
+                        </template>
                     </el-table-column>
                     <el-table-column prop="contractAmount" label="合约金额" min-width="120" align="center" show-overflow-tooltip>
-                        <template slot-scope="scope"><div style="text-align:right">{{scope.row.contractAmount|moneyFilters}}</div></template>
+                        <template slot-scope="scope">
+                            <div style="text-align:right">{{scope.row.contractAmount|moneyFilters}}</div>
+                        </template>
                     </el-table-column>
-                     <el-table-column prop="remark" label="备注" min-width="120" align="center" show-overflow-tooltip>
+                    <el-table-column prop="remark" label="备注" min-width="120" align="center" show-overflow-tooltip>
                     </el-table-column>
                 </el-table>
             </el-tab-pane>
@@ -171,20 +178,20 @@
             </el-tab-pane>
         </el-tabs>
     </section>
-       <!-- 代销转经销 -->
-       <Modal v-model="visible"  title="代销转经销" @on-cancel="cancelSales"  :width="610"  class-name="customize-modal-center">
+    <!-- 代销转经销 -->
+    <Modal v-model="visible" title="代销转经销" @on-cancel="cancelSales" :width="610" class-name="customize-modal-center">
         <Row class="margin-bottom-10 background-color-white exhibition">
-            <el-form :inline="true" ref="ruleForm"  :model="addformdata" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="rules">
-               
+            <el-form :inline="true" ref="ruleForm" :model="addformdata" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="rules">
+
                 <Col span="24">
                 <Col span="24">
                 <span style="color:red;position:relative;left:40px;top:10px">*</span>
-                <el-form-item label="调整原因 :"  size="small" label-width="120px">
+                <el-form-item label="调整原因 :" size="small" label-width="120px">
                     <el-select v-model="addformdata.reason" style="width:200px" filterable clearable>
                         <el-option v-for="v in adjustReason" :key="v.id" :label="v.name" :value="v.name"></el-option>
                     </el-select>
                 </el-form-item>
-                   </Col>
+                </Col>
                 </Col>
                 <Col span='24'>
                 <Col span="24">
@@ -192,7 +199,7 @@
                     <div style="width: 100px; height: 100px" @click="clickImg('1')">
                         <el-image v-if="imgUrl1" style="width: 100px; height: 100px" :src="bowersPict">
                         </el-image>
-                       <el-image v-if="!imgUrl1" style="width: 100px; height: 100px" :src="noneUrl"></el-image>
+                        <el-image v-if="!imgUrl1" style="width: 100px; height: 100px" :src="noneUrl"></el-image>
                     </div>
                 </el-form-item>
                 </Col>
@@ -201,7 +208,7 @@
                     <el-image v-if="imgUrl2.length>0" style="width: 100px; height: 100px" :src="imgUrl2"></el-image>
                     <el-image v-if="imgUrl2.length == 0" style="width: 100px; height: 100px" :src = noneUrl></el-image>
                 </div>
-                
+
                 </Col> -->
                 </Col>
                 <Col span="24">
@@ -214,7 +221,7 @@
         </Row>
         <div slot="footer"></div>
     </Modal>
-      <!--导入账单选择文件-->
+    <!--导入账单选择文件-->
     <Modal v-model="picVisible" @on-cancel='cancelGood' title="上传图片">
         <div>
             <Upload ref="upload" name="file" :show-upload-list="false" :before-upload="handleUpload" :on-success="uploadSuccess" :on-error="uploadError" type="drag" action="/eop-boot/masterData/ossFileAddress/upload" :data="{className:'面料开发'}">
@@ -233,25 +240,25 @@
             <Button type="primary" @click="upload">确定</Button>
         </div>
     </Modal>
-     <!-- 导出 -->
+    <!-- 导出 -->
     <Modal v-model="exportVisible" title="导出" @on-cancel='cancelExport' :width="430" class-name="customize-modal-center">
         <Row class="margin-bottom-10 background-color-white exhibition">
             <el-form :inline="true" ref="ruleForm" :model="exportObj" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="rules">
                 <Col v-show="!moreLarge">
-                    <el-form-item label="导出类型" size="small" label-width="95px" prop="platform">
-                        <el-select  v-model="exportObj.selected" filterable placeholder="请选择" style="width:150px">
-                            <el-option label="导出主表" value="1"></el-option>
-                            <el-option label="导出主表+明细" value="2"></el-option>
-                        </el-select>
-                    </el-form-item>
+                <el-form-item label="导出类型" size="small" label-width="95px" prop="platform">
+                    <el-select v-model="exportObj.selected" filterable placeholder="请选择" style="width:150px">
+                        <el-option label="导出主表" value="1"></el-option>
+                        <el-option label="导出主表+明细" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
                 </Col>
                 <Col v-show="moreLarge" style="text-align:center">
-                       目前要导出的数据超过10万条，确定继续导出吗？
+                目前要导出的数据超过10万条，确定继续导出吗？
                 </Col>
                 <el-form-item style="padding-left:130px">
                     <Button type="primary" v-if="!moreLarge" @click="getExportTotal">确认</Button>
                     <!-- 二次确认 -->
-                    <Button type="primary" v-if="moreLarge" @click="onImport">确认</Button> 
+                    <Button type="primary" v-if="moreLarge" @click="onImport">确认</Button>
                     <Button type="default" @click="cancelExport">取消</Button>
                 </el-form-item>
             </el-form>
@@ -262,40 +269,66 @@
 </template>
 
 <script>
-     import { mapState } from 'vuex'
-     import filters from '../../../filter/'
-     let delaiList = [];
-     let logList = [];
-     var record={}
+import {
+    mapState
+} from 'vuex'
+import filters from '../../../filter/'
+import {burypoint} from 'mixins/burypoint'
+let delaiList = [];
+let logList = [];
+var record = {}
 export default {
-// delaiList,
-// logList,
+    // delaiList,
+    // logList,
+    mixins:[burypoint],
     data() {
         return {
-             noneUrl:'https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1562574299&di=846b4c904bd54d3c3821fa5938888c69&src=http://hbimg.b0.upaiyun.com/bdaca9a07e1a8947c00c2f826ebf848750927aa24963-cATwbg_fw658',
-            payableUserList:[],
-            settleList:[{name:'是',id:1},{name:'否',id:0}],
-            companyList:[],
-             exportObj:{
-                       selected:''
+            logListId:'',
+            noneUrl: 'https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1562574299&di=846b4c904bd54d3c3821fa5938888c69&src=http://hbimg.b0.upaiyun.com/bdaca9a07e1a8947c00c2f826ebf848750927aa24963-cATwbg_fw658',
+            payableUserList: [],
+            settleList: [{
+                name: '是',
+                id: 1
+            }, {
+                name: '否',
+                id: 0
+            }],
+            companyList: [],
+            exportObj: {
+                selected: ''
             },
-            exportVisible:false,
-            moreLarge:false,
-            logList:[],
-            delaiList:[],
-            supplierList:[],
-            logPage     : 1,      //当前页面数量
-            settlementList:[
-                {value:1,name:'经销'},
-                {value:-1,name:'代销'},
+            exportVisible: false,
+            moreLarge: false,
+            logList: [],
+            delaiList: [],
+            supplierList: [],
+            logPage: 1, //当前页面数量
+            settlementList: [{
+                    value: 1,
+                    name: '经销'
+                },
+                {
+                    value: -1,
+                    name: '代销'
+                },
             ],
-            agreeSettlementList:[
-                {value:-1,name:'否'},
-                {value:1,name:'是'}
+            agreeSettlementList: [{
+                    value: -1,
+                    name: '否'
+                },
+                {
+                    value: 1,
+                    name: '是'
+                }
             ],
-            statusList:[
-                {value:0,name:'待审核'},
-                {value:1,name:'已审核'}
+            statusList: [{
+                    value: 0,
+                    name: '待审核'
+                },
+                {
+                    value: 1,
+                    name: '已审核'
+                }
             ],
             platformOptions: [],
             activeName: 'first',
@@ -349,7 +382,7 @@ export default {
                 code: '',
                 name: '',
                 person: '',
-                supplier:'',
+                supplier: '',
             },
             formChange: {
                 code: '',
@@ -362,7 +395,7 @@ export default {
                 enable: '',
                 status: '',
             },
-            activeName:'first',
+            activeName: 'first',
             titleArray: [],
             total: 0,
             pagesize: 1000,
@@ -372,21 +405,21 @@ export default {
             judgeMenu: [],
             buttonList: [], //按钮权限
             ASDid: '',
-            list:[],
-            addformdata:{
-                         reason:null
+            list: [],
+            addformdata: {
+                reason: null
             },
-            imgUrl1:'',
-            bowersPict:'',
-            adjustReason:[],
+            imgUrl1: '',
+            bowersPict: '',
+            adjustReason: [],
             rules: {
-                 reason: [{
+                reason: [{
                     required: true,
                     message: '请选择',
                     trigger: 'change'
                 }]
             },
-            picVisible:false,
+            picVisible: false,
         }
     },
     // computed: {
@@ -397,14 +430,14 @@ export default {
     //         return this.$store.state.app.oneverificationList
     //     }
     // },
-     computed: mapState({
-                customsList  : state => state.customs.customsList,
-                customsLogList :  state => state.customs.customsLogList,
-                customsId  :  state => state.customs.id,
-                recordHttpList:state=>state.customs.recordHttpList,
-      }),
+    computed: mapState({
+        customsList: state => state.customs.customsList,
+        customsLogList: state => state.customs.customsLogList,
+        customsId: state => state.customs.id,
+        recordHttpList: state => state.customs.recordHttpList,
+    }),
     destroyed() {
-       this.resetCommit()
+        this.resetCommit()
     },
     mounted() {
         this.getPayableUser()
@@ -419,71 +452,74 @@ export default {
         this.initTable([], '')
     },
     methods: {
-       submitForm(formName) {
-         if(!this.addformdata.reason)return this.$message.error('调整原因不能为空')
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-              this.onConfirmRound()
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
-      },
-      cancelSales(){
-               this.visible=false;
-               this.imgUrl1=''
-               this.bowersPict=''
-               this.addformdata.reason=''
-      },
-      resetForm() {
-            this.visible=false
+        submitForm(formName) {
+            if (!this.addformdata.reason) return this.$message.error('调整原因不能为空')
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    this.onConfirmRound()
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+        },
+        cancelSales() {
+            this.visible = false;
+            this.imgUrl1 = ''
+            this.bowersPict = ''
+            this.addformdata.reason = ''
+        },
+        resetForm() {
+            this.visible = false
             this.$refs['ruleForm'].resetFields();
-            this.addformdata.reason=''
-      },
-        getAdjustReason(){
-             this.request('payable_payable_closed_order_reasonSelector',{},false).then(res=>{
-                 if(res.code==1){
-                            this.adjustReason=res.data
-                 }else{
+            this.addformdata.reason = ''
+        },
+        getAdjustReason() {
+            this.request('payable_payable_closed_order_reasonSelector', {}, false).then(res => {
+                if (res.code == 1) {
+                    this.adjustReason = res.data
+                } else {
 
-                 }
-             })
+                }
+            })
         },
         //重新获取供应商下拉
-        changePayable(name){
+        changePayable(name) {
             this.formSearch.supplier = ''
-            console.log(name)
-            let vars = {}
-            vars.payableUserId = name
-             this.requestWithUriVars('selectorPayableSupplier', vars, null, true).then(res => {
-          if (res.code==1) {
-              this.supplierList = res.data
-            }else{
-                this.supplierList = []
+            if (!!name) {
+                let vars = {}
+                vars.payableUserId = name
+                this.requestWithUriVars('selectorPayableSupplier', vars, null, true).then(res => {
+                    if (res.code == 1) {
+                        this.supplierList = res.data
+                    } else {
+                        this.supplierList = []
+                    }
+                })
+            } else {
+                this.getSupply()
             }
-          })
         },
-        getPayableUser(){
+        getPayableUser() {
             this.request('supplier_selectorPayable', {}, true).then(res => {
                 if (res.code == 1) {
                     this.payableUserList = res.data
                 }
             })
         },
-        handleClick(tab, event) {
-            if(tab.name=='first'){
-               
-            }else if(tab.name=='second'){
-              if(!this.customsId) return
-                 this.getLoglist()  
-            }
-         },
-        resetCommit(){
-                this.$store.commit('clearcustomsList')
-                this.$store.commit('clearcustomsId')
-                this.$store.commit('clearcustomsLogList')
-                this.$store.commit('clearinitRecordHttpList')
+        // handleClick(tab, event) {
+        //     if (tab.name == 'first') {
+
+        //     } else if (tab.name == 'second') {
+        //         if (!this.customsId) return
+        //         this.getLoglist()
+        //     }
+        // },
+        resetCommit() {
+            this.$store.commit('clearcustomsList')
+            this.$store.commit('clearcustomsId')
+            this.$store.commit('clearcustomsLogList')
+            this.$store.commit('clearinitRecordHttpList')
         },
         getSupply() {
             this.request('masterData_supplier_selector', {}, false).then(res => {
@@ -492,8 +528,9 @@ export default {
                 }
             })
         },
-         //审核
+        //审核
         onExamine() {
+            this.setBuryPoint('审核')
             let arr = w2ui.customs.getSelection()
             let data = {};
             data.bizType = 1
@@ -507,7 +544,7 @@ export default {
                         }).then(({
                             value
                         }) => {
-                            data.remark = '审核 备注:'+(value?value:'无')
+                            data.remark = '审核 备注:' + (value ? value : '无')
                             this.request('closed_doBizService', data, false).then((res) => {
                                 if (res.code == 1) {
                                     this.$message.success(res.msg)
@@ -532,6 +569,7 @@ export default {
         },
         //取消审核
         offExamine() {
+            this.setBuryPoint('取消审核')
             let arr = w2ui.customs.getSelection()
             let data = {};
             data.bizType = 2
@@ -545,7 +583,7 @@ export default {
                         }).then(({
                             value
                         }) => {
-                            data.remark = '取消审核 备注:' +(value?value:'无')
+                            data.remark = '取消审核 备注:' + (value ? value : '无')
                             this.request('closed_doBizService', data, false).then((res) => {
                                 if (res.code == 1) {
                                     this.$message.success(res.msg)
@@ -569,7 +607,8 @@ export default {
             }
         },
         //确认结算
-        onConfirm(){
+        onConfirm() {
+            this.setBuryPoint('代销结算')
             let arr = w2ui.customs.getSelection()
             let data = {};
             data.bizType = 3
@@ -583,7 +622,7 @@ export default {
                         }).then(({
                             value
                         }) => {
-                            data.remark = '结算 备注:'  +(value?value:'无')
+                            data.remark = '结算 备注:' + (value ? value : '无')
                             this.request('closed_doBizService', data, false).then((res) => {
                                 if (res.code == 1) {
                                     this.$message.success(res.msg)
@@ -607,8 +646,9 @@ export default {
             }
         },
         //生成结算明细
-        generateSettlementDetails(){
-           let arr = w2ui.customs.getSelection()
+        generateSettlementDetails() {
+            this.setBuryPoint('生成结算明细')
+            let arr = w2ui.customs.getSelection()
             let data = {};
             data.bizType = 7
             data.idList = arr
@@ -621,8 +661,8 @@ export default {
                         }).then(({
                             value
                         }) => {
-                            console.log(value,'88888')
-                            data.remark = '生成结算明细 备注:' +''+(value? value :'无')
+                            console.log(value, '88888')
+                            data.remark = '生成结算明细 备注:' + '' + (value ? value : '无')
                             this.request('closed_doBizService', data, true).then((res) => {
                                 if (res.code == 1) {
                                     this.$message.success('成功')
@@ -643,10 +683,11 @@ export default {
                 })
             } else {
                 this.$message.error('请勾选要生成结算明细的数据')
-            } 
+            }
         },
         //经销转代销
-        distributionAndresale(){
+        distributionAndresale() {
+            this.setBuryPoint('经销转代销')
             let arr = w2ui.customs.getSelection()
             let data = {};
             data.bizType = 6
@@ -661,7 +702,7 @@ export default {
                         }).then(({
                             value
                         }) => {
-                            data.remark = '经销转代销 备注:' +''+(value?value:'无')
+                            data.remark = '经销转代销 备注:' + '' + (value ? value : '无')
                             this.request('closed_doBizService', data, true).then((res) => {
                                 if (res.code == 1) {
                                     this.$message.success('成功')
@@ -685,7 +726,8 @@ export default {
             }
         },
         //代销转经销
-        onTurnAround(){
+        onTurnAround() {
+            this.setBuryPoint('代销转经销')
             let arr = w2ui.customs.getSelection()
             let data = {};
             data.bizType = 4
@@ -693,7 +735,7 @@ export default {
             if (arr.length == 1) {
                 this.request('closed_check', data, false).then((res) => {
                     if (res.code == 1) {
-                        this.visible=true
+                        this.visible = true
                         // this.$prompt('确定要代销转经销选中的数据吗', '操作确认', {
                         //     confirmButtonText: '确定',
                         //     cancelButtonText: '取消',
@@ -724,28 +766,29 @@ export default {
             }
         },
         //代销转经销确认
-        onConfirmRound(){
-                        let arr = w2ui.customs.getSelection()
-                        let data = {};
-                            data.bizType = 4
-                            data.idList = arr
-                            data.agencyTransferDistributionReason=this.addformdata.reason
-                            data.reasonImgUrl=this.imgUrl1;
-                      this.request('closed_doBizService', data, true).then((res) => {
-                                if (res.code == 1) {
-                                    this.$message.success('代销转经销成功')
-                                    this.visible=false;
-                                    this.imgUrl1=''
-                                    this.bowersPict=''
-                                    this.addformdata.reason=''
-                                    this.getData()
-                                } else {
-                                    this.$message.error(res.msg)
-                                }
-                            })
+        onConfirmRound() {
+            let arr = w2ui.customs.getSelection()
+            let data = {};
+            data.bizType = 4
+            data.idList = arr
+            data.agencyTransferDistributionReason = this.addformdata.reason
+            data.reasonImgUrl = this.imgUrl1;
+            this.request('closed_doBizService', data, true).then((res) => {
+                if (res.code == 1) {
+                    this.$message.success('代销转经销成功')
+                    this.visible = false;
+                    this.imgUrl1 = ''
+                    this.bowersPict = ''
+                    this.addformdata.reason = ''
+                    this.getData()
+                } else {
+                    this.$message.error(res.msg)
+                }
+            })
         },
         //删除
-        onDelete(){
+        onDelete() {
+            this.setBuryPoint('删除')
             let arr = w2ui.customs.getSelection()
             let data = {};
             data.bizType = 5
@@ -759,7 +802,7 @@ export default {
                         }).then(({
                             value
                         }) => {
-                            data.remark = '删除 备注:'+(value?value:'无')
+                            data.remark = '删除 备注:' + (value ? value : '无')
                             this.request('closed_doBizService', data, false).then((res) => {
                                 if (res.code == 1) {
                                     this.$message.success(res.msg)
@@ -790,12 +833,13 @@ export default {
             return false
 
         },
-        getDocumentEncoding(id){
-            for(let i=0,len=this.recordHttpList.length;i<len;i++){
-                if(this.recordHttpList[i].recid==id){
+        getDocumentEncoding(id) {
+            console.log(id,'0000000000000000000')
+            for (let i = 0, len = this.recordHttpList.length; i < len; i++) {
+                if (this.recordHttpList[i].recid == id) {
                     return this.recordHttpList[i].documentEncoding
                 }
-            }  
+            }
         },
         getButtonJurisdiction() {
             let data = {}
@@ -811,7 +855,7 @@ export default {
                 }
             })
         },
-        initTable(arr = [], page,total) {
+        initTable(arr = [], page, total) {
             let self = this;
             $(function () {
                 $('#main').w2grid({
@@ -823,8 +867,7 @@ export default {
                     },
                     reorderColumns: true,
                     reorderRows: true,
-                    columns: [
-                          {
+                    columns: [{
                             field: 'index',
                             caption: '序号',
                             size: '80px',
@@ -963,6 +1006,12 @@ export default {
                             size: '100px',
                             sortable: true
                         },
+                         {
+                            field: 'afterAdjustQty',
+                            caption: '裁剪数',
+                            size: '100px',
+                            sortable: true
+                        },
                         {
                             field: 'stockInNum',
                             caption: '入库数量',
@@ -974,7 +1023,7 @@ export default {
                             caption: '面料总成本',
                             size: '100px',
                             sortable: true,
-                            render:'money'
+                            render: 'money'
                         },
                         {
                             field: 'deferredDays',
@@ -1024,18 +1073,18 @@ export default {
                             size: '100px',
                             sortable: true
                         },
-                        
+
                         {
                             field: 'reasonImgUrl',
                             caption: '代销转经销调整附件',
                             size: '200px',
                             sortable: true,
                             render: function (record, index, col_index) {
-                                var html = '<a target="_blank" href="'+this.getCellValue(index,col_index)+'">'+this.getCellValue(index,col_index)+'</a>';
+                                var html = '<a target="_blank" href="' + this.getCellValue(index, col_index) + '">' + this.getCellValue(index, col_index) + '</a>';
                                 return html;
                             }
                         },
-                         {
+                        {
                             field: 'agencyTransferDistributionReason',
                             caption: '代销转经销调整原因',
                             size: '100px',
@@ -1043,31 +1092,30 @@ export default {
                         },
                     ],
                     onClick: function (event) {
-                        self.activeName='first'
+                        // self.activeName = 'first'
                         // self.getGoodsList(self.getDocumentEncoding(event.recid))
                         // self.$store.commit('getcustomsId',self.getDocumentEncoding(event.recid))
                         // self.$store.commit('clearcustomsLogList')
                         // self.logPage = 1;
                         let record = this.get(event.recid)
-                        console.log(record,'888881212')
-                        console.log(event.recid)
-                       setTimeout(function(){
-                            if(w2ui.customs.getSelection().length == 1){
-                                   let arr = w2ui.customs.getSelection()
-                                   console.log(arr,'999991212')
-                                if(arr[0]!= record.id){
-                                     console.log('走了')
-                                }else{
-                                    console.log('走了2')
-                                    console.log(record.id)
-                                    self.logPage = 1
+                        console.log(event.recid,'---------------------',w2ui.customs.getSelection())
+                        self.logPage = 1
                                     self.getGoodsList(self.getDocumentEncoding(event.recid))
-                                    self.$store.commit('getcustomsId',self.getDocumentEncoding(event.recid))
-                                 }
-                            }else{
-                                 self.resetCommit()
-                            }
-                        }, 200);
+                                    self.getLoglist(self.getDocumentEncoding(event.recid))
+                        // setTimeout(function () {
+                        //     if (w2ui.customs.getSelection().length == 1) {
+                        //         let arr = w2ui.customs.getSelection()
+                        //         if (arr[0] != record.id) {
+                        //             self.resetCommit()
+                        //         } else {
+                        //             self.logPage = 1
+                        //             self.getGoodsList(self.getDocumentEncoding(event.recid))
+                        //             // self.$store.commit('getcustomsId', self.getDocumentEncoding(event.recid))
+                        //         }
+                        //     } else {
+                        //         self.resetCommit()
+                        //     }
+                        // }, 200);
                     }
                 })
             });
@@ -1081,7 +1129,8 @@ export default {
                     index: '<span>当页小计</span>',
                     orderQuantity: page.orderQuantity,
                     stockInNum: page.stockInNum,
-                   
+                    afterAdjustQty:page.afterAdjustQty
+
                 }, {
                     w2ui: {
                         summary: true
@@ -1089,166 +1138,21 @@ export default {
                     index: '<span >合计</span>',
                     orderQuantity: total.orderQuantity,
                     stockInNum: total.stockInNum,
-                  
+                    afterAdjustQty:total.afterAdjustQty
                 })
                 $('#main').w2render('customs');
                 w2ui.customs.refresh();
-                
+
             } else {
-                 $(document).ready(function () {
+                $(document).ready(function () {
                     w2ui.customs.clear(); //清空
                     w2ui['customs'].records = []
                     w2ui.customs.refresh();
-                   $('#main').w2render('customs')
+                    $('#main').w2render('customs')
                 })
             }
 
         },
-        //异步导出
-        // onImport() {
-        //     let data = {}
-        //     data.pageSize = this.pagesize
-        //     data.currentPage = this.currentPage
-        //     this.formSearch.themID ? data.accRecvdBillNos = this.formSearch.themID.split(",") : delete data.accRecvdBillNos //账单ID列表
-        //     data.accRecvdPeriodIds = this.formSearch.time //账期ID列表
-        //     data.basicCompanyIds = this.formSearch.name //公司ID列表
-        //     data.basicPlatformId = this.formSearch.code //平台ID
-        //     data.basicStoreIds = this.formSearch.person //店铺ID列表
-        //     data.status = this.formSearch.status //状态 0 未核销 1已核销
-        //     this.request('accverification_asyncExport', data, false).then(res => {
-        //         if (res.code == 1) {
-        //             this.getKey(res.data)
-        //         } else {
-        //             this.$message({
-        //                 message: res.msg,
-        //                 type: 'warning'
-        //             });
-        //         }
-        //     })
-        // },
-        //自动核销
-        // onWrite() {
-        //     let data = {}
-        //     data.pageSize = this.pagesize
-        //     data.currentPage = this.currentPage
-        //     this.formSearch.themID ? data.accRecvdBillNos = this.formSearch.themID.split(",") : delete data.accRecvdBillNos //账单ID列表//账单ID列表
-        //     data.accRecvdPeriodIds = this.formSearch.time //账期ID列表
-        //     data.basicCompanyIds = this.formSearch.name //公司ID列表
-        //     data.basicPlatformId = this.formSearch.code //平台ID
-        //     data.basicStoreIds = this.formSearch.person //店铺ID列表
-        //     data.status = this.formSearch.status //状态 0 未核销 1已核销
-        //     this.request('accverification_asyncAutoVerify', data, false).then(res => {
-        //         if (res.code == 1) {
-        //             this.getKeyD(res.data)
-        //         } else {
-        //             this.$message({
-        //                 message: res.msg,
-        //                 type: 'warning'
-        //             });
-        //         }
-        //     })
-        // },
-       
-        //循环key
-        // getKey(key) {
-        //     const h = this.$createElement;
-        //     let data = {}
-        //     data.taskKey = key
-        //     this.timeAA = setTimeout(() => {
-        //         this.request('getProcessResultByTaskKey', data, false).then(res => {
-        //             if (res.code == 1) {
-        //                 if (res.data.processStatus !== 0) {
-
-        //                     this.$notify.success({
-        //                         title: res.data.title,
-        //                         message: h('p', null, [
-        //                             h('a', {
-        //                                 on: {
-        //                                     click: this.clickA(res.data.subTitle)
-        //                                 }
-        //                             }, res.data.subTitle.indexOf('[') == -1 ? res.data.subTitle : "下载链接"),
-        //                         ]),
-        //                         duration: 0,
-        //                     });
-        //                     this.cleanKey(key)
-
-        //                     function myStopFunction() {
-        //                         clearTimeout(this.timeAA);
-        //                     }
-
-        //                 } else {
-        //                     this.$notify.success({
-        //                         title: res.data.title,
-        //                         message: res.data.subTitle,
-        //                         duration: 3000
-        //                     });
-        //                     this.getKey(key)
-        //                 }
-        //             } else {
-        //                 this.$message.warning(res.msg)
-        //             }
-        //         })
-        //     }, 5000)
-        // },
-        // clickA(url) {
-        //     console.log(url)
-        //     if (url.indexOf('[') == -1) {
-        //         console.log('没有地址')
-        //     } else {
-        //         url.replace()
-        //         let aPos = url.indexOf('[');
-        //         let bPos = url.indexOf(']');
-        //         let r = url.substr(aPos + 1, bPos - aPos - 1);
-        //         window.location.href = r
-        //     }
-        // },
-        // getKeyD(key) {
-        //     const h = this.$createElement;
-        //     let data = {}
-        //     data.taskKey = key
-        //     this.timeBB = setTimeout(() => {
-        //         this.request('getProcessResultByTaskKey', data, false).then(res => {
-        //             if (res.code == 1) {
-        //                 if (res.data.processStatus !== 0) {
-        //                     this.$notify.success({
-        //                         title: res.data.title,
-        //                         message: h('p', null, [
-        //                             h('a', {
-        //                                 on: {
-        //                                     click: this.clickA(res.data.subTitle)
-        //                                 }
-        //                             }, res.data.subTitle.indexOf('[') == -1 ? res.data.subTitle : "下载链接"),
-        //                         ]),
-        //                         duration: 0,
-        //                     });
-        //                     this.cleanKey(key)
-
-        //                     function myStopFunction() {
-        //                         clearTimeout(this.timeBB);
-        //                     }
-        //                 } else {
-        //                     this.$notify.success({
-        //                         title: res.data.title,
-        //                         message: res.data.subTitle,
-        //                         duration: 3000
-        //                     });
-        //                     this.getKeyD(key)
-        //                 }
-        //             } else {
-        //                 this.$message.warning(res.msg)
-        //             }
-        //         })
-        //     }, 5000)
-        // },
-        // cleanKey(key) {
-        //     let data = {}
-        //     data.taskKey = key
-        //     this.request('delByTaskKey', data, false).then(res => {
-        //         if (res.code == 1) {
-        //             console.log('oooo')
-        //         }
-        //     })
-        // },
         changeCode(code) {
             console.log(code)
             let data = {}
@@ -1265,7 +1169,7 @@ export default {
                 code: '',
                 name: '',
                 person: '',
-                supplier:'',
+                supplier: '',
             }
             this.getSupply()
             // this.initTable([], '')
@@ -1274,7 +1178,7 @@ export default {
         getplatformOptions() {
             this.request('getPlatformSelector', {}, true).then(res => {
                 if (res.code == 1) {
-                       this.platformOptions = res.data;
+                    this.platformOptions = res.data;
                 }
             })
         },
@@ -1315,7 +1219,7 @@ export default {
             data.years = this.formSearch.year //年份
             data.goodsNo = this.formSearch.goodsNo //大货款号
             data.purchaseOrderNo = this.formSearch.ordersNo //采购单号
-            data.payableUserId = this.formSearch.payableUser//所属人员
+            data.payableUserId = this.formSearch.payableUser //所属人员
             data.supplierId = this.formSearch.supplier //供应商
             data.companyId = this.formSearch.companyId
             data.settle = this.formSearch.settle
@@ -1325,7 +1229,7 @@ export default {
             this.formSearch.documentDateStart ? data.createStart = this.formSearch.documentDateStart : delete data.createStart //单据日期
             this.formSearch.documentDateEnd ? data.createEnd = this.formSearch.documentDateEnd : delete data.createEnd
             this.formSearch.orderDateStart ? data.completeStartTime = this.formSearch.orderDateStart : delete data.completeStartTime //关单起始时间
-            this.formSearch.orderDateEnd? data.completeEndTime = this.formSearch.orderDateEnd : delete data.completeEndTime
+            this.formSearch.orderDateEnd ? data.completeEndTime = this.formSearch.orderDateEnd : delete data.completeEndTime
             // data.createStart = //单据起始时间
             // data.createEnd = //单据结束时间
             // data.completeStartTime = //关单起始时间
@@ -1337,21 +1241,20 @@ export default {
 
                     if (res.data.records) {
                         for (let i = 0, len = res.data.records.length; i < len; i++) {
-                            res.data.records[i].index =i+1
+                            res.data.records[i].index = i + 1
                             res.data.records[i].recid = res.data.records[i].id
                         }
                         // this.list=res.data.records;
-                        this.$store.commit('initRecordHttpList',res.data.records)
+                        this.$store.commit('initRecordHttpList', res.data.records)
                         this.initTable(res.data.records, res.data.currentPageSum, res.data.totalPageSum)
                         // this.hasData=true
                     } else {
                         this.initTable([])
                     }
-
                     this.loading = false
                 } else {
                     this.initTable([])
-                    this.total=0
+                    this.total = 0
                     this.resetCommit()
                     this.$message({
                         message: res.msg,
@@ -1361,17 +1264,17 @@ export default {
             })
         },
         //获取货品明细
-         getGoodsList(id){
-            if(!id)return 
+        getGoodsList(id) {
+            if (!id) return
             let data = {}
-                data.documentEncoding =id
+            data.documentEncoding = id
             this.request('payable_payable_closed_order_getDetailByClosedNo', data, false).then((res) => {
                 if (res.code == 1) {
-                      this.$store.commit('getcustomsList', res.data)
-                 }else{
-                      this.$store.commit('clearcustomsList')
-                 }
-            })        
+                    this.$store.commit('getcustomsList', res.data)
+                } else {
+                    this.$store.commit('clearcustomsList')
+                }
+            })
         },
         //订单明细
         getOrderList(code) {
@@ -1388,9 +1291,9 @@ export default {
                         this.dataFlagD = true
                     }
                     if (this.currentPageDelait == 1) {
-                        console.log(delaiList,'5678')
+                        console.log(delaiList, '5678')
                         delaiList = res.data.records
-                        console.log(delaiList,'5678')
+                        console.log(delaiList, '5678')
                         // this.$store.commit('Oneverification', this.delaiList)
                     } else {
                         delaiList = delaiList.concat(res.data.records)
@@ -1422,12 +1325,13 @@ export default {
                 }
             })
         },
-                 //日志
-        getLoglist() {
+        //日志
+        getLoglist(id) {
+            this.logListId = id
             let data = {}
-                data.billNo ='payable_closed_order_'+this.customsId
-                data.pageSize = 3
-                data.currentPage = this.logPage
+            data.billNo = 'payable_closed_order_' + id
+            data.pageSize = 3
+            data.currentPage = this.logPage
             this.request('billLog_getPagingByBillNo', data, false).then((res) => {
                 if (res.code == 1) {
                     if (res.data.length < data.pageSize) {
@@ -1447,9 +1351,10 @@ export default {
         },
         getMore() {
             this.logPage++
-            this.getLoglist()
+            this.getLoglist(this.logListId)
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 
@@ -1469,117 +1374,123 @@ export default {
             this.currentPage = val
             this.getData()
         },
-         getSummaries(param) {
-            const { columns, data } = param;
+        getSummaries(param) {
+            const {
+                columns,
+                data
+            } = param;
             const sums = [];
             columns.forEach((column, index) => {
-            if (index === 0) {
-                sums[index] = '合计';
-                return;
-            }
-            const values = data.map(item => Number(item[column.property]));
-            if(column.property!='quantity' )return
-            if (!values.every(value => isNaN(value))) {
-                sums[index] = values.reduce((prev, curr) => {
-                const value = Number(curr);
-                if (!isNaN(value)) {
-                    return prev + curr;
-                } else {
-                    return prev;
+                if (index === 0) {
+                    sums[index] = '合计';
+                    return;
                 }
-                }, 0);
-                sums[index] += ' ';
-            } else {
-                sums[index] = '';
-            }
+                const values = data.map(item => Number(item[column.property]));
+                if (column.property != 'quantity') return
+                if (!values.every(value => isNaN(value))) {
+                    sums[index] = values.reduce((prev, curr) => {
+                        const value = Number(curr);
+                        if (!isNaN(value)) {
+                            return prev + curr;
+                        } else {
+                            return prev;
+                        }
+                    }, 0);
+                    sums[index] += ' ';
+                } else {
+                    sums[index] = '';
+                }
             });
             return sums;
-      },
-     //导出相关
-        checkExport(){
-                 if(this.checkSelection()){
-                    // this.onImport()
-                    this.exportVisible=true
-                 }else{
-                     this.exportVisible=true
-                 }
         },
-        cancelExport(){
-                   this.exportVisible=false;
-                   this.moreLarge=false;
-                   this.exportObj.selected=''
+        //导出相关
+        checkExport() {
+            this.setBuryPoint('导出')
+            if (this.checkSelection()) {
+                // this.onImport()
+                this.exportVisible = true
+            } else {
+                this.exportVisible = true
+            }
         },
-        getExportTotal(){
-           if(!this.exportObj.selected) return this.$message.error('请选择导出类型')
-                    let data={}
-                        data.pageSize = this.pagesize
-                        data.currentPage = this.currentPage
-                        data.years = this.formSearch.year //年份
-                        data.goodsNo = this.formSearch.goodsNo //大货款号
-                        data.purchaseOrderNo = this.formSearch.ordersNo //采购单号
-                        data.payableUserId = this.formSearch.payableUser//所属人员
-                        data.supplierId = this.formSearch.supplier //供应商
-                        data.companyId = this.formSearch.companyId
-                        data.settle = this.formSearch.settle
-                        data.billingType = this.formSearch.settlement //结算类型
-                        data.allowSettlement = this.formSearch.agreeSettlement //允许结算
-                        data.documentStatus = this.formSearch.status //单据状态
-                        this.formSearch.documentDateStart ? data.createStart = this.formSearch.documentDateStart : delete data.createStart //单据日期
-                        this.formSearch.documentDateEnd ? data.createEnd = this.formSearch.documentDateEnd : delete data.createEnd
-                        this.formSearch.orderDateStart ? data.completeStartTime = this.formSearch.orderDateStart : delete data.completeStartTime //关单起始时间
-                        this.formSearch.orderDateEnd? data.completeEndTime = this.formSearch.orderDateEnd : delete data.completeEndTime
-                        w2ui.customs.getSelection().length>0?data.ids= w2ui.customs.getSelection():delete data.ids
-                        this.exportObj.selected==1? data.containDetail=false:data.containDetail=true;
-           this.request('payable_payableclosedorder_exportCount',data,false).then(res=>{
-               if(res.code==1){
-                   if(res.data>100000){
-                       this.moreLarge=true
-                   }else{
-                       this.moreLarge=false
-                       this.onImport()
-                   }
-               }else{
-                   this.$message.error(res.msg)
-               }
-           })
+        cancelExport() {
+            this.setBuryPoint('取消导出')
+            this.exportVisible = false;
+            this.moreLarge = false;
+            this.exportObj.selected = ''
+        },
+        getExportTotal() {
+            if (!this.exportObj.selected) return this.$message.error('请选择导出类型')
+            let data = {}
+            data.pageSize = this.pagesize
+            data.currentPage = this.currentPage
+            data.years = this.formSearch.year //年份
+            data.goodsNo = this.formSearch.goodsNo //大货款号
+            data.purchaseOrderNo = this.formSearch.ordersNo //采购单号
+            data.payableUserId = this.formSearch.payableUser //所属人员
+            data.supplierId = this.formSearch.supplier //供应商
+            data.companyId = this.formSearch.companyId
+            data.settle = this.formSearch.settle
+            data.billingType = this.formSearch.settlement //结算类型
+            data.allowSettlement = this.formSearch.agreeSettlement //允许结算
+            data.documentStatus = this.formSearch.status //单据状态
+            this.formSearch.documentDateStart ? data.createStart = this.formSearch.documentDateStart : delete data.createStart //单据日期
+            this.formSearch.documentDateEnd ? data.createEnd = this.formSearch.documentDateEnd : delete data.createEnd
+            this.formSearch.orderDateStart ? data.completeStartTime = this.formSearch.orderDateStart : delete data.completeStartTime //关单起始时间
+            this.formSearch.orderDateEnd ? data.completeEndTime = this.formSearch.orderDateEnd : delete data.completeEndTime
+            w2ui.customs.getSelection().length > 0 ? data.ids = w2ui.customs.getSelection() : delete data.ids
+            this.exportObj.selected == 1 ? data.containDetail = false : data.containDetail = true;
+            this.request('payable_payableclosedorder_exportCount', data, false).then(res => {
+                if (res.code == 1) {
+                    if (res.data > 100000) {
+                        this.moreLarge = true
+                    } else {
+                        this.moreLarge = false
+                        this.onImport()
+                    }
+                } else {
+                    this.$message.error(res.msg)
+                }
+            })
         },
         //导出
-        onImport(){
-                    let data={} 
-                        data.pageSize = this.pagesize
-                        data.currentPage = this.currentPage
-                        data.years = this.formSearch.year //年份
-                        data.goodsNo = this.formSearch.goodsNo //大货款号
-                        data.purchaseOrderNo = this.formSearch.ordersNo //采购单号
-                        data.payableUserId = this.formSearch.payableUser//所属人员
-                        data.supplierId = this.formSearch.supplier //供应商
-                        data.companyId = this.formSearch.companyId 
-                        data.settle = this.formSearch.settle //是否结算
-                        data.billingType = this.formSearch.settlement //结算类型
-                        data.allowSettlement = this.formSearch.agreeSettlement //允许结算
-                        data.documentStatus = this.formSearch.status //单据状态
-                        this.formSearch.documentDateStart ? data.createStart = this.formSearch.documentDateStart : delete data.createStart //单据日期
-                        this.formSearch.documentDateEnd ? data.createEnd = this.formSearch.documentDateEnd : delete data.createEnd
-                        this.formSearch.orderDateStart ? data.completeStartTime = this.formSearch.orderDateStart : delete data.completeStartTime //关单起始时间
-                        this.formSearch.orderDateEnd? data.completeEndTime = this.formSearch.orderDateEnd : delete data.completeEndTime
-                        w2ui.customs.getSelection().length>0?data.ids= w2ui.customs.getSelection():delete data.ids
-                        this.exportObj.selected==1? data.containDetail=false:data.containDetail=true;
-                      this.request('payable_payableclosedorder_exportAsync', data, false).then(res => {
-                        if (res.code == 1) {
-                            this.cancelExport()
-                            this.getKeyD(res.data)
-                        } else {
-                            this.$message({
-                                message: res.msg,
-                                type: 'error'
-                            });
-                        }
-                }) 
+        onImport() {
+            this.setBuryPoint('确认导出')
+            let data = {}
+            data.pageSize = this.pagesize
+            data.currentPage = this.currentPage
+            data.years = this.formSearch.year //年份
+            data.goodsNo = this.formSearch.goodsNo //大货款号
+            data.purchaseOrderNo = this.formSearch.ordersNo //采购单号
+            data.payableUserId = this.formSearch.payableUser //所属人员
+            data.supplierId = this.formSearch.supplier //供应商
+            data.companyId = this.formSearch.companyId
+            data.settle = this.formSearch.settle //是否结算
+            data.billingType = this.formSearch.settlement //结算类型
+            data.allowSettlement = this.formSearch.agreeSettlement //允许结算
+            data.documentStatus = this.formSearch.status //单据状态
+            this.formSearch.documentDateStart ? data.createStart = this.formSearch.documentDateStart : delete data.createStart //单据日期
+            this.formSearch.documentDateEnd ? data.createEnd = this.formSearch.documentDateEnd : delete data.createEnd
+            this.formSearch.orderDateStart ? data.completeStartTime = this.formSearch.orderDateStart : delete data.completeStartTime //关单起始时间
+            this.formSearch.orderDateEnd ? data.completeEndTime = this.formSearch.orderDateEnd : delete data.completeEndTime
+            w2ui.customs.getSelection().length > 0 ? data.ids = w2ui.customs.getSelection() : delete data.ids
+            this.exportObj.selected == 1 ? data.containDetail = false : data.containDetail = true;
+            this.request('payable_payableclosedorder_exportAsync', data, false).then(res => {
+                if (res.code == 1) {
+                    this.cancelExport()
+                    this.getKeyD(res.data)
+                } else {
+                    this.$message({
+                        message: res.msg,
+                        type: 'error'
+                    });
+                }
+            })
         },
-          getKeyD(key) {
+        getKeyD(key) {
             const h = this.$createElement;
             let data = {}
-                data.taskKey = key
+            data.taskKey = key
             this.timeBB = setTimeout(() => {
                 this.request('getProcessResultByTaskKey', data, false).then(res => {
                     if (res.code == 1) {
@@ -1596,6 +1507,7 @@ export default {
                                 duration: 0,
                             });
                             this.cleanKey(key)
+
                             function myStopFunction() {
                                 clearTimeout(this.timeBB);
                             }
@@ -1627,20 +1539,20 @@ export default {
         },
         cleanKey(key) {
             let data = {}
-                data.taskKey = key
+            data.taskKey = key
             this.request('delByTaskKey', data, false).then(res => {
                 if (res.code == 1) {
                     console.log('oooo')
                 }
             })
         },
-         clickImg(type) {
+        clickImg(type) {
             this.imgType = type
             console.log(this.imgType)
             this.picVisible = true
             console.log('00000000000')
         },
-        cancelGood(){
+        cancelGood() {
             this.file = null
             this.picVisible = false
         },
@@ -1657,7 +1569,7 @@ export default {
                     if (res.code == 1) {
                         console.log(res.data)
                         this.imgUrl1 = res.data.ossAddress
-                        this.bowersPict=res.data.htmlBreviaryOssAddress
+                        this.bowersPict = res.data.htmlBreviaryOssAddress
                         this.picVisible = false
                         this.file = null
                     } else {

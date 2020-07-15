@@ -126,11 +126,12 @@
 var record={}
 import filters from '../../../filter/'
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 import {
     mapState
 } from 'vuex'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
         return {
             payableUserList:[],
@@ -225,9 +226,11 @@ export default {
         },
         //重新计算
         onRefresh(){
+            this.setBuryPoint('重算排款建议')
             this.refreshVisible = true
         },
         refreshSave(){
+            this.setBuryPoint('重算排款建议保存')
             if(this.radioyes == '1'){
                 this.getAdviceSync()
             }
@@ -236,6 +239,7 @@ export default {
             console.log(this.radioyes,'-------------')
         },
         refreshCancel(){
+            this.setBuryPoint('重算排款建议取消')
             this.radioyes = '1'
             this.refreshVisible = false
         },
@@ -651,6 +655,7 @@ export default {
             this.getLoglist()
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.getData()
         },
         handleSizeChange(val) {
@@ -770,6 +775,7 @@ export default {
       },
         //生成排款建议
      async onExamine() {
+         this.setBuryPoint('生成排款单')
             let arr = w2ui.rankMoneySuggest.getSelection()
             let data = {};
                 data.ids = arr
@@ -933,6 +939,7 @@ export default {
         },
               //导出相关
         checkExport(){
+            this.setBuryPoint('导出')
                  if(this.checkSelection()){
                     // this.onImport()
                      this.exportVisible=true
@@ -941,11 +948,13 @@ export default {
                  }
         },
         cancelExport(){
+            this.setBuryPoint('导出取消')
                    this.exportVisible=false;
                    this.moreLarge=false;
                    this.exportObj.selected=''
         },
         getExportTotal(){
+            this.setBuryPoint('导出确认')
            if(!this.exportObj.selected) return this.$message.error('请选择导出类型')
            let data={}
                         data.pageSize = this.pagesize

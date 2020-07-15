@@ -7,7 +7,8 @@
                           <!-- <i class="ivu-icon">
                            <icon :name="item.icon" :scale="1.5"></icon>
                          </i> -->
-                         <Icon style="color:white" :type="item.icon" size="18" />
+                         <!-- <Icon style="color:white" :type="item.icon" size="18" /> -->
+                          <i style="color:#fff" class="iconfont" :class="item.icon"></i>
                          <!-- <Icon style="color:white" v-if="index == 2" type="md-settings" size="24" />
                          <Icon style="color:white" v-if="index == 1" type="logo-yen" size="24" /> -->
                     </div>

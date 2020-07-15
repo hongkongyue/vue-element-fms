@@ -4,8 +4,11 @@
     <el-pagination style="margin-bottom:10px;text-align:right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[10, 20, 30, 40]" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
             </el-pagination>
         <ul class="container">  
-            <li v-for="(v,index) in tableData" :key="v.id"  @click="show(v,index)">
-                 {{v.releaseTime+'更新内容(版本号:'+v.versionNo+')'}} <Badge v-if="v.currentVersion==1" text="new"></Badge> <i v-show="!v.visible"  class="el-icon-arrow-down"></i> <i v-show="v.visible" class="el-icon-arrow-up"></i>
+            <li v-for="(v,index) in tableData" :key="v.id" >
+                <div  @click="show(v,index)">
+                     {{v.releaseTime+'更新内容(版本号:'+v.versionNo+')'}} <Badge v-if="v.currentVersion==1" text="new"></Badge> <i v-show="!v.visible"  class="el-icon-arrow-down"></i> <i v-show="v.visible" class="el-icon-arrow-up"></i>
+                </div>
+                
                  <div v-show="v.visible" v-html="v.releaseContent"></div>
             </li>
         </ul>

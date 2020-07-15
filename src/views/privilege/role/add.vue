@@ -26,7 +26,7 @@
         <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
               <el-tab-pane label="角色包含权限" name="first">
                        <section class="middle">
-                            <tree-transfer :title="title"  :button_text='["分配 ","撤销"]' :from_data='fromData' @addBtn='add12' @removeBtn='remove' :to_data='toData' :defaultProps="{label:'label'}" :mode='mode' height='540px' placeholder="请输入权限名称" filter openAll>
+                            <tree-transfer :title="title" :transferOpenNode="false"  :button_text='["分配 ","撤销"]' :from_data='fromData' @addBtn='add12' @removeBtn='remove' :to_data='toData' :defaultProps="{label:'label'}" :mode='mode' height='540px' placeholder="请输入权限名称" filter >
                             </tree-transfer>
                        </section>
               </el-tab-pane>
@@ -149,7 +149,9 @@
 <script>
   import filters from '../../../filter/'
   import treeTransfer from 'el-tree-transfer' // 引入
+  import {burypoint} from 'mixins/burypoint'
   export default {
+    mixins:[burypoint],
     data() {
       return {
         activeName2  :'first',
@@ -291,6 +293,7 @@
          },
 
           confirmSave(){
+                    this.setBuryPoint('新增保存')
                     let arr=[]
                     let userIds=[]
                     console.log(this.toData)
@@ -336,6 +339,7 @@
                           })
           },
           onAdd(){
+                    this.setBuryPoint('新增角色包含用户新增')
                     this.add=true
                     this.list.unshift({
                     })
@@ -360,6 +364,7 @@
                     this.list=[]
           },
            handleDelete(index){
+                this.setBuryPoint('新增角色包含用户删除')
                 this.list.splice(index,1)
              },
           submitForm(formName) {
@@ -475,11 +480,13 @@
         add12(fromData,toData,obj){
             this.toData=toData;
             this.fromData=fromData
+            this.setBuryPoint('新增角色包含权限分配')
         },
       // 监听穿梭框组件移除
         remove(fromData,toData,obj){
              this.toData=toData;
              this.fromData=fromData
+             this.setBuryPoint('新增角色包含权限撤销')
         }
     // },
 

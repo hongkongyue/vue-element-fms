@@ -56,8 +56,9 @@
 <script>
   import filters from '../../../filter/'
   import {debounce} from 'mixins/debounce'
+  import {burypoint} from 'mixins/burypoint'
   export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
       return {
         page              :1,
@@ -134,6 +135,7 @@
                     this.getData()
           },
           onSearch(){
+                     this.setBuryPoint('查询')
                      this.page = 1;
                      this.getData()
           },

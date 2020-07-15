@@ -74,8 +74,9 @@
 <script>
 import filters from '../../../filter/'
 import {debounce} from 'mixins/debounce' 
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
         return {
             fristName:'',
@@ -132,6 +133,7 @@ export default {
         },
         
         onSearch() {
+            this.setBuryPoint('查询')
             this.page = 1;
             this.getData()
             
@@ -146,6 +148,7 @@ export default {
         },
         //同步
         synchronization(){
+            this.setBuryPoint('同步')
             let data = {}
             this.request('materialType_sync', data, true).then((res) => {
                 if (res.code == 1) {

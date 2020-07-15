@@ -1,6 +1,14 @@
 <template>
     <div>
         <!-- 数据列表 -->
+        <el-form :inline="true" :model="formSearch" class="demo-form-inline" @submit.native.prevent>
+                                    <el-form-item size="mini" label="开发任务编号:" style="margin-bottom:0px!important">
+                                        <el-input size="mini" v-model="formSearch.taskNo"  clearable></el-input>
+                                    </el-form-item>
+                                 <el-form-item size="mini" style="margin-bottom:0px!important">
+                                      <el-button @click="search" type="primary">查询</el-button>
+                                </el-form-item>
+        </el-form>
         <Row class="background-color-white exhibition" style="min-height:630px;padding-left:0px">
             <Page style="margin-top:5px;text-align:right" :total="total" :page-size="pageSize" :current="page" show-sizer show-total
                 show-elevator @on-change="currentChange" @on-page-size-change="sizeChange"></Page>
@@ -11,9 +19,14 @@
 </template>
 
 <script>
+import {burypoint} from 'mixins/burypoint'
     export default {
+        mixins: [burypoint],
         data() {
             return {
+                formSearch:{
+                          taskNo:''
+                },
                 visible: false,
                 red_packet_table_row_index:-1,
                 list:[],
@@ -26,7 +39,7 @@
 
                     },
                      {
-                        title: '任务编号',
+                        title: '开发任务编号',
                         key: 'taskNo',
                         align: 'center',
                         minWidth: 190,
@@ -158,6 +171,7 @@
                         })
                 },
                  search() {
+                     this.setBuryPoint('已完成查询')
                            this.page =1
                            this.initdata()
                     },  
@@ -191,6 +205,7 @@
                                data.pageSize              = this.pageSize
                                data.status                = 2
                                data.taskConfigurationId   = this.getID()
+                               data.taskNo                = this.formSearch.taskNo
                             this.request('fabric_fabricTaskDetail_page', data, false).then((res) => {
                             if(res.code==1){
                                    this.list =res.data.records

@@ -131,11 +131,12 @@
 var record={}
 import filters from '../../../filter/'
 import {debounce}from 'mixins/debounce.js'
+import {burypoint} from 'mixins/burypoint'
 import {
     mapState
 } from 'vuex'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
         return {
              exportObj:{
@@ -259,6 +260,7 @@ export default {
                             
         },
         onSave(){
+            this.setBuryPoint('保存')
                 const {tag,code}=this.$route.query
                 let data={
                           id:this.$route.query.id,

@@ -172,47 +172,46 @@
           <Modal v-model="changeVisible" :styles="mystyle" title="编辑"  @on-cancel='changeCancel' :width="900"
             class-name="customize-modal-center"> 
             <Row class="margin-bottom-10 background-color-white exhibition">   
-            <el-form ref="formChange" :model="formChange" label-width="120px" class="demo-ruleForm " :label-position="right">
-                        <Col span="8">
-                          <el-form-item label="平台编码："   size="small">
-                              <el-input v-model="formChange.code" :disabled="true" style="width:150px"></el-input>
-                          </el-form-item>
+            <el-form  ref="formChange" :model="formChange" label-width="120px" class="demo-ruleForm demo-form-inline"  label-position="right">
+                          <Col span="8">
+                            <el-form-item label="平台编码："   size="small">
+                                <el-input v-model="formChange.code" :disabled="true" style="width:150px"></el-input>
+                            </el-form-item>
                           </Col>
                           <Col span="8">
-                          <el-form-item label="平台名称："size="small"> 
-                              <el-input v-model="formChange.name" :disabled="true" style="width:150px"></el-input>
-                          </el-form-item>
+                            <el-form-item label="平台名称：" size="small"> 
+                                <el-input v-model="formChange.name" :disabled="true" style="width:150px"></el-input>
+                            </el-form-item>
                           </Col>
                           <Col span="8">
-                          <el-form-item type="textarea" label="平台主体名称：" size="small">
-                              <el-input v-model="formChange.subjectName" style="width:150px"></el-input>
-                          </el-form-item>
+                            <el-form-item type="textarea" label="平台主体名称：" size="small">
+                                <el-input v-model="formChange.subjectName" style="width:150px"></el-input>
+                            </el-form-item>
                          </Col>
-                         <Col span="8">
-                           <el-form-item type="textarea" label="平台地址：" size="small">
-                              <el-input v-model="formChange.address" style="width:150px"></el-input>
-                          </el-form-item>
+                          <Col span="8">
+                            <el-form-item type="textarea" label="平台地址：" size="small">
+                                <el-input v-model="formChange.address" style="width:150px"></el-input>
+                            </el-form-item>
                           </Col>
                           <Col span="8">
-                          <el-form-item  label="平台电话：" size="small">
-                              <el-input v-model="formChange.telephone" style="width:150px"></el-input>
-                          </el-form-item>
+                            <el-form-item  label="平台电话：" size="small">
+                                <el-input v-model="formChange.telephone" style="width:150px"></el-input>
+                            </el-form-item>
                         </Col>
                         <Col span="8">
-                  <el-form-item label="状态："prop="enable" size="small">
-                    <el-select v-model="formChange.enable" filterable placeholder="请选择" style="width:150px">
-                            <el-option v-for="item in enableList" :key="item.value" :label="item.name" :value="item.value"></el-option>
-                        </el-select>
-                  </el-form-item>
-                </Col>
+                            <el-form-item label="状态：" size="small">
+                              <el-select v-model="formChange.enable" filterable placeholder="请选择" style="width:150px">
+                                      <el-option v-for="item in enableList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                                  </el-select>
+                            </el-form-item>
+                        </Col>
                          <Col span="24">
-                  <el-form-item style="text-align:center">
-                      <Button type="primary" @click="changeSave">确认</Button>
-                      <Button type="default" @click="changeCancel">取消</Button>
-                    </el-form-item>
-                </Col>
+                            <el-form-item style="text-align:center">
+                                <Button type="primary" @click="changeSave">确认</Button>
+                                <Button type="default" @click="changeCancel">取消</Button>
+                              </el-form-item>
+                          </Col>
                 </el-form>
-            
           </Row>
           <div slot="footer"></div>
         </Modal>
@@ -222,8 +221,9 @@
 
 <script>
   import {debounce} from 'mixins/debounce'
+  import {burypoint} from 'mixins/burypoint'
   export default {
-    mixins: [debounce],
+    mixins: [debounce,burypoint],
     data() {
       return {
         enableList:[{value:0,name:'停用'},{value:1,name:'启用'}],
@@ -387,6 +387,7 @@
         },
       //新增
       addSave(){
+         this.setBuryPoint('新增确认')
         this.dialogVisible=true
           this.$refs['ruleForm'].validate((valid) => {
             if (valid) { //新增保存
@@ -421,6 +422,7 @@
       },
         //编辑
         clickTable(row){
+           this.setBuryPoint('编辑')
            if(this.rowLenght == 0){
             this.$message.error('请先选择修改的数据！')
           }else if(this.rowLenght > 1){
@@ -448,6 +450,7 @@
         },
         //编辑保存
         changeSave(){
+           this.setBuryPoint('编辑确认')
           if(this.formChange.subjectName == ''){
             this.$message.warning('平台主体名称不能为空！')
           }else if(this.formChange.address == ''){
@@ -490,10 +493,12 @@
               this.getData()
           },
           onAdd(){
+                this.setBuryPoint('新增')
                 this.dialogVisible=true    
           },
           //查询
         onSearch(){
+          this.setBuryPoint('查询')
           this.currentPage = 1
           this.getData()
           

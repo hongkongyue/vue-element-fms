@@ -34,11 +34,6 @@
                     <el-option v-for="item in personList" :key="item.username" :label="item.username" :value="item.userId"></el-option>
                 </el-select>
             </el-form-item>
-            <!-- <el-form-item label="推送类型：" size="small">
-                <el-select v-model="formSearch.sendType" clearable filterable placeholder="请选择" style="width:150px">
-                    <el-option v-for="item in sendTypeList" :key="item.name" :label="item.name" :value="item.id"></el-option>
-                </el-select>
-            </el-form-item> -->
         </el-form>
         
     </header>
@@ -125,14 +120,6 @@
                 </el-form-item>
                 </Col>
                 </Col>
-                <!-- <Col span="12">
-                <el-form-item label="推送类型：" size="small">
-                    <el-select v-model="ruleForm.sendType" disabled filterable placeholder="请选择" style="width:270px">
-                        <el-option v-for="item in sendTypeList" :key="item.value" :label="item.name" :value="item.id"></el-option>
-                    </el-select>
-                </el-form-item>
-                
-                </Col> -->
             </el-form>
         </Row>
         <div slot="footer">
@@ -147,11 +134,9 @@
 import {
     commonMixins
 } from 'mixins/common';
-// import {
-//     debounce
-// } from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins: [commonMixins],
+    mixins: [commonMixins,burypoint],
     data() {
         return {
             addpersonList: [],
@@ -280,6 +265,7 @@ export default {
             this.rowObj = row[0]
         },
         onDelete() {
+            this.setBuryPoint('删除')
             let arr = []
             this.selection.map((i) => {
                 arr.push(i.id)
@@ -433,19 +419,12 @@ export default {
             })
         },
         onAdd(name) {
-            // // 查询接收人
-            // let data = {}
-            // data.pagesize = 10000
-            // data.onJob = 1
-            // this.request('user_page', data, true).then(res => {
-            //     if (res.code == 1) {
-            //         this.addpersonList = res.data.records
-            //     }
-            // })
             if (name == 'add') {
                 this.dialogVisible = true
                 this.addtitle = '新增'
+                this.setBuryPoint('新增')
             } else if (name == 'edit') {
+                this.setBuryPoint('编辑')
                 this.addtitle = '编辑'
                 if (this.rowLenght == 0) {
                     this.$message.warning('请先选择编辑的数据')
@@ -560,6 +539,7 @@ export default {
         },
         //查询
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 

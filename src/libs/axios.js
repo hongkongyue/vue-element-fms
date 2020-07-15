@@ -45,11 +45,11 @@ AsInst.interceptors.response.use(response => {
     return Promise.reject(response);
   }
   //检查登陆信息是否还存在
-  if (response.data.code === 2001 && response.data.status === false) {
+  if (response.data.status ==401) {
     window.localStorage.removeItem('userInfo');
     window.localStorage.removeItem('loginToken');
     router.push({
-      path: '/passport/login'
+      path: '/login'
     });
     return Promise.reject(response);
   }
@@ -58,6 +58,14 @@ AsInst.interceptors.response.use(response => {
   // 下面是接口回调的status ,因为我做了一些错误页面,所以都会指向对应的报错页面
   if (error.response.status === 404) {
       Message.error('后端服务请求404错误');
+  }
+  if (error.response.status ==401) {
+    window.localStorage.clear();
+    window.sessionStorage.clear();
+    router.push({
+      path: '/login'
+    });
+    return Message.error('授权失败或登录时间过期，请重新登录！');
   }
   //请求错误时做些事
   return Promise.reject(error);

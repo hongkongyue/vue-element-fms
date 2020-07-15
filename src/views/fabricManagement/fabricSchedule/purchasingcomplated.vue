@@ -11,33 +11,25 @@
             </Form>
             <el-table :data="list" size="mini" style="width: 100%"  border tooltip-effect="dark" max-height="350" @selection-change="handleSelectionChange">
             <el-table-column type="index" width="55" label="序号" align="center"></el-table-column>
-            <el-table-column prop="taskNo"            label="任务流编号" min-width="90" align="center" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="processStatus"     label="流程状态" align="center" min-width="80" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="initiateUserName"   label="品牌发起人"     min-width="90" align="center" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="initiateDepartmentName"      label="发起部门"       min-width="80" align="center" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="majorClasses" label="面/辅料"       min-width="120" align="center" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="kinds"      label="面辅料品类分类" min-width="120" align="center" show-overflow-tooltip>
-            </el-table-column>
+            <el-table-column prop="taskNo" label="开发任务编号" min-width="90" align="center" show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column prop="processStatus" label="流程状态" align="center" min-width="80" show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column prop="initiateUserName" label="发起人" min-width="90" align="center" show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column prop="initiateDepartmentName" label="发起部门" min-width="80" align="center" show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column prop="majorClasses" label="物料类型" min-width="120" align="center" show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column prop="kinds" label="品类分类" min-width="120" align="center" show-overflow-tooltip>
+                </el-table-column>
             <el-table-column prop="specialCategory"              label="是否特殊工艺"   min-width="120" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">{{scope.row.specialCategory == 1 ? '是' : '否'}}</template>
             </el-table-column>
             <el-table-column prop="styleImg"               label="样品图1"        min-width="80" align="center" show-overflow-tooltip>
                  <template slot-scope="scope">
                         <span>
-                              <!-- <img v-if="scope.row.materialImg" :src="scope.row.materialImg" style="width:40px;height:40px" />
-                              <img v-else  :src="noPict"> -->
-                                <!-- <div class="demo-image__preview">
-                                    <el-image  @click.native="getLargePict(scope.row.styleImg)"
-                                        style="width: 40px; height: 40px"
-                                        :src="scope.row.styleImg" 
-                                        :preview-src-list="[scope.row.styleImg]">
-                                    </el-image>
-                                </div> -->
+                             
                                   <div v-if="scope.row.styleImg" class="demo-image__preview">
                                     <el-image  @click.native="getLargePict(scope.row.styleImg)"
                                         style="width: 40px; height: 40px"
@@ -54,15 +46,7 @@
             <el-table-column prop="styleImg2"       label="样图2"           min-width="80" align="center" show-overflow-tooltip>
                    <template slot-scope="scope">
                         <span>
-                              <!-- <img v-if="scope.row.materialImg" :src="scope.row.materialImg" style="width:40px;height:40px" />
-                              <img v-else  :src="noPict"> -->
-                                <!-- <div class="demo-image__preview">
-                                    <el-image  @click.native="getLargePict(scope.row.styleImg2)"
-                                        style="width: 40px; height: 40px"
-                                        :src="scope.row.styleImg2" 
-                                        :preview-src-list="[scope.row.styleImg2]">
-                                    </el-image>
-                                </div> -->
+                              
                                  <div v-if="scope.row.styleImg2" class="demo-image__preview">
                                     <el-image  @click.native="getLargePict(scope.row.styleImg2)"
                                         style="width: 40px; height: 40px"

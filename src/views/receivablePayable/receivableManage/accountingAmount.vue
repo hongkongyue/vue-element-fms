@@ -84,9 +84,9 @@
    import filters from '../../../filter/'
    import instance from '../../../filter/downLoad.js'
    import {debounce} from 'mixins/debounce'
-   console.log(instance)
+   import{burypoint} from 'mixins/burypoint.js'
   export default {
-      mixins:[debounce],
+      mixins:[debounce,burypoint],
     data() {
       return {
         show    : false,
@@ -183,6 +183,7 @@
           })
       },
        onImport(){
+             this.setBuryPoint('导出')
              let data                = {}
                   // data.pageSize       = this.pagesize
                   // data.currentPage    = this.currentPage
@@ -326,6 +327,8 @@
                 })
           },
           onSearch(){
+              this.page=1
+              this.setBuryPoint('查询')
               this.getData()
           },
           changeRadio(i){

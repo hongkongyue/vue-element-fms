@@ -209,8 +209,9 @@
 
 <script>
 import filters from '../../../filter/'
+import{burypoint} from 'mixins/burypoint.js'
 export default {
-
+    mixins:[burypoint],
     data() {
         return {
             newTime: null,
@@ -599,7 +600,7 @@ export default {
                     w2ui: {
                         summary: true
                     },
-                    lastUpdated: '<span>当页小计</span>',
+                    index: '<span>当页小计</span>',
                     amount: currentPageSummary.amount,
                     qty: currentPageSummary.qty,
                     goodsAmount: currentPageSummary.goodsAmount,
@@ -610,7 +611,7 @@ export default {
                     w2ui: {
                         summary: true
                     },
-                    lastUpdated: '<span >合计</span>',
+                    index: '<span>合计</span>',
                     amount: totalPageSummary.amount,
                     qty: totalPageSummary.qty,
                     goodsAmount: totalPageSummary.goodsAmount,
@@ -752,6 +753,7 @@ export default {
             })
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 

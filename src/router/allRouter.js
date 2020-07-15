@@ -746,6 +746,19 @@ const appRouter = [
                 hidden: false
             },
             {
+                path: 'purchaseAndWarehousingError',
+                title: '采购入库单异常池',
+                name: 'purchaseAndWarehousingError',
+                meta: {
+                    title: '/库存中心/采购入库单异常池',
+                    path: '/stockCenter/purchaseAndWarehousingError',
+                    label: '采购入库单异常池'
+                },
+                component: () =>
+                    import('@/views/stockCenter/business/purchaseAndWarehousingError.vue'),
+                hidden: false
+            },
+            {
                 path: 'stockTaking',
                 title: '库存盘点出入库',
                 name: 'stockTaking',
@@ -1117,6 +1130,32 @@ const appRouter = [
                 },
                 component: () =>
                     import('@/views/payableManage/business/test.vue'),
+                hidden: false
+            },
+            {
+                path: 'chart',
+                title: '应付暂估明细表',
+                name: 'chart',
+                meta: {
+                    title: '/应付管理/应付暂估明细表',
+                    path: '/payableManage/chart',
+                    label: '应付暂估明细表'
+                },
+                component: () =>
+                    import('@/views/payableManage/business/payEstimationDetails.vue'),
+                hidden: false
+            },
+            {
+                path: 'payableSummary',
+                title: '应付暂估汇总表',
+                name: 'payableSummary',
+                meta: {
+                    title: '/应付管理/应付暂估汇总表',
+                    path: '/payableManage/payableSummary',
+                    label: '应付暂估汇总表'
+                },
+                component: () =>
+                    import('@/views/payableManage/business/payableSummary.vue'),
                 hidden: false
             },
         ]
@@ -1697,7 +1736,7 @@ const appRouter = [
         path:'/boss-bussiness',
         icon:'',
         name:'boss-bussiness',
-        title:'大商品',
+        title:'商品企划',
         component:Main,
         children:[
             {
@@ -1705,7 +1744,7 @@ const appRouter = [
                 title: '人员配置',
                 name: 'personConfig',
                 meta:{
-                    title:'/大商品/人员配置',
+                    title:'/商品企划/人员配置',
                     path:'/boss-bussiness/personConfig',
                     label:'人员配置'
                 },
@@ -1718,7 +1757,7 @@ const appRouter = [
                 title: '企划管理',
                 name: 'projectManagement',
                 meta:{
-                    title:'/大商品/企划管理',
+                    title:'/商品企划/企划管理',
                     path:'/boss-bussiness/projectManagement',
                     label:'企划管理'
                 },
@@ -1731,7 +1770,7 @@ const appRouter = [
                 title: '企划调整任务列表',
                 name: 'planningAdjustmentTask',
                 meta:{
-                    title:'/大商品/企划调整任务列表',
+                    title:'/商品企划/企划调整任务列表',
                     path:'/boss-bussiness/planningAdjustmentTask',
                     label:'企划调整任务列表'
                 },
@@ -1744,7 +1783,7 @@ const appRouter = [
                 title: '企划调整审核任务列表',
                 name: 'planningAdjustmentAuditTask',
                 meta:{
-                    title:'/大商品/企划调整审核任务列表',
+                    title:'/商品企划/企划调整审核任务列表',
                     path:'/boss-bussiness/planningAdjustmentAuditTask',
                     label:'企划调整审核任务列表'
                 },
@@ -1757,7 +1796,7 @@ const appRouter = [
                 title: '企划调整确认详情',
                 name: 'planningAdjustmentDetail',
                 meta:{
-                    title:'/大商品/企划调整确认详情',
+                    title:'/商品企划/企划调整确认详情',
                     path:'/boss-bussiness/planningAdjustmentDetail',
                     label:'企划调整确认详情'
                 },
@@ -1770,7 +1809,7 @@ const appRouter = [
                 title: '企划调整确认详情完成页',
                 name: 'planningAdjustmentComplated',
                 meta:{
-                    title:'/大商品/企划调整确认详情完成页',
+                    title:'/商品企划/企划调整确认详情完成页',
                     path:'/boss-bussiness/planningAdjustmentComplated',
                     label:'企划调整确认详情完成页'
                 },
@@ -1783,7 +1822,7 @@ const appRouter = [
                 title: '企划调整审核确认详情',
                 name: 'planningAdjustmentAuditDetail',
                 meta:{
-                    title:'/大商品/企划调整审核确认详情',
+                    title:'/商品企划/企划调整审核确认详情',
                     path:'/boss-bussiness/planningAdjustmentAuditDetail',
                     label:'企划调整审核确认详情'
                 },
@@ -1796,7 +1835,7 @@ const appRouter = [
                 title: '企划调整审核确认完成页',
                 name: 'planningAdjustmentAuditComplated',
                 meta:{
-                    title:'/大商品/企划调整审核确认完成页',
+                    title:'/商品企划/企划调整审核确认完成页',
                     path:'/boss-bussiness/planningAdjustmentAuditComplated',
                     label:'企划调整审核确认完成页'
                 },
@@ -1809,7 +1848,7 @@ const appRouter = [
                 title: '企划调整',
                 name: 'projectChange',
                 meta:{
-                    title:'/大商品/企划调整',
+                    title:'/商品企划/企划调整',
                     path:'/boss-bussiness/projectChange',
                     label:'企划调整'
                 },
@@ -1822,7 +1861,7 @@ const appRouter = [
                 title: '企划消息列表',
                 name: 'planningMessageTask',
                 meta:{
-                    title:'/大商品/企划消息列表',
+                    title:'/商品企划/企划消息列表',
                     path:'/boss-bussiness/planningMessageTask',
                     label:'企划消息列表'
                 },
@@ -1835,7 +1874,7 @@ const appRouter = [
                 title: '企划消息确认详情',
                 name: 'planningMessageDetail',
                 meta:{
-                    title:'/大商品/企划消息确认详情',
+                    title:'/商品企划/企划消息确认详情',
                     path:'/boss-bussiness/planningMessageDetail',
                     label:'企划消息确认详情'
                 },
@@ -1848,7 +1887,7 @@ const appRouter = [
                 title: '品类企划跟进',
                 name: 'categoryPlanningFollowUp',
                 meta:{
-                    title:'/大商品/品类企划跟进',
+                    title:'/商品企划/品类企划跟进',
                     path:'/boss-bussiness/categoryPlanningFollowUp',
                     label:'品类企划跟进'
                 },
@@ -1861,7 +1900,7 @@ const appRouter = [
                 title: '商品企划跟进',
                 name: 'productPlanningFollowUp',
                 meta:{
-                    title:'/大商品/商品企划跟进',
+                    title:'/商品企划/商品企划跟进',
                     path:'/boss-bussiness/productPlanningFollowUp',
                     label:'商品企划跟进'
                 },
@@ -1874,7 +1913,7 @@ const appRouter = [
                 title: '计费参数配置',
                 name: 'parameterConfiguration',
                 meta:{
-                    title:'/大商品/计费参数配置',
+                    title:'/商品企划/计费参数配置',
                     path:'/boss-bussiness/parameterConfiguration',
                     label:'计费参数配置'
                 },
@@ -1887,7 +1926,7 @@ const appRouter = [
                 title: '品牌企划跟进',
                 name: 'brandPlanningFollowUp',
                 meta:{
-                    title:'/大商品/品牌企划跟进',
+                    title:'/商品企划/品牌企划跟进',
                     path:'/boss-bussiness/brandPlanningFollowUp',
                     label:'品牌企划跟进'
                 },
@@ -1900,7 +1939,7 @@ const appRouter = [
                 title: '企划延期计费单',
                 name: 'planningDelayBilling',
                 meta:{
-                    title:'/大商品/企划延期计费单',
+                    title:'/商品企划/企划延期计费单',
                     path:'/boss-bussiness/planningDelayBilling',
                     label:'企划延期计费单'
                 },
@@ -1914,7 +1953,7 @@ const appRouter = [
                 title: '正常波段开发进度分析',
                 name: 'categoryDevelopmentprogressAnalysis',
                 meta:{
-                    title:'/大商品/正常波段开发进度分析',
+                    title:'/商品企划/正常波段开发进度分析',
                     path:'/boss-bussiness/categoryDevelopmentprogressAnalysis',
                     label:'正常波段开发进度分析'
                 },
@@ -1927,7 +1966,7 @@ const appRouter = [
                 title: '爆款开发进度分析',
                 name: 'hotAnalysis',
                 meta:{
-                    title:'/大商品/爆款开发进度分析',
+                    title:'/商品企划/爆款开发进度分析',
                     path:'/boss-bussiness/hotAnalysis',
                     label:'爆款开发进度分析'
                 },
@@ -1940,7 +1979,7 @@ const appRouter = [
                 title: '成本开发进度分析',
                 name: 'costDevelopmentProgressAnalysis',
                 meta:{
-                    title:'/大商品/成本开发进度分析',
+                    title:'/商品企划/成本开发进度分析',
                     path:'/boss-bussiness/costDevelopmentProgressAnalysis',
                     label:'成本开发进度分析'
                 },
@@ -1953,7 +1992,7 @@ const appRouter = [
                 title: '拍照时间分析',
                 name: 'photoTimeAnalysis',
                 meta:{
-                    title:'/大商品/拍照时间分析',
+                    title:'/商品企划/拍照时间分析',
                     path:'/boss-bussiness/photoTimeAnalysis',
                     label:'拍照时间分析'
                 },
@@ -1966,7 +2005,7 @@ const appRouter = [
                 title: '延期天数分析',
                 name: 'delayDayAnalysis',
                 meta:{
-                    title:'/大商品/延期天数分析',
+                    title:'/商品企划/延期天数分析',
                     path:'/boss-bussiness/delayDayAnalysis',
                     label:'延期天数分析'
                 },
@@ -1976,12 +2015,12 @@ const appRouter = [
             },
             {//categoryElementAdjustment
                 path: 'hotAdjust',
-                title: '爆款调整',
+                title: '爆款企划',
                 name: 'hotAdjust',
                 meta:{
-                    title:'/大商品/爆款调整',
+                    title:'/商品企划/爆款企划',
                     path:'/boss-bussiness/hotAdjust',
-                    label:'爆款调整'
+                    label:'爆款企划'
                 },
                 component: () =>
                     import ('@/views/boss-bussiness/goodsProject/hotAdjust.vue'),
@@ -1992,7 +2031,7 @@ const appRouter = [
                 title: '品类要素调整',
                 name: 'categoryElementAdjustment',
                 meta:{
-                    title:'/大商品/品类要素调整',
+                    title:'/商品企划/品类要素调整',
                     path:'/boss-bussiness/categoryElementAdjustment',
                     label:'品类要素调整'
                 },

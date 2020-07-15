@@ -69,8 +69,9 @@
 <script>
 import filters from '../../../filter/'
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
         return {
             colorList:[],
@@ -118,6 +119,7 @@ export default {
       },
         //同步
         synchronization(){
+            this.setBuryPoint('同步')
             let data = {}
             this.request('color_syncColor', data, true).then((res) => {
                 if (res.code == 1) {
@@ -160,6 +162,7 @@ export default {
             this.getData()
         },
         onSearch() {
+             this.setBuryPoint('查询')
             this.page = 1;
             this.getData()
         },

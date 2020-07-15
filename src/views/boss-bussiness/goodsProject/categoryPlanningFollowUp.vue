@@ -328,8 +328,9 @@ var totalPageSum = {}
 import filters from '../../../filter/'
 import {debounce} from 'mixins/debounce.js'
 import {commonMixins} from 'mixins/common'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins    : [debounce,commonMixins],
+    mixins    : [debounce,commonMixins,burypoint],
     components: {
         //    DragList
     },
@@ -442,11 +443,13 @@ export default {
                 })
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 
         },
         onExport(){
+            this.setBuryPoint('导出')
                   const{secondLevel,basicBrandId,years,season,waveBand}=this.formSearch
                 let data = {}
                     data.pageSize = this.pageSize

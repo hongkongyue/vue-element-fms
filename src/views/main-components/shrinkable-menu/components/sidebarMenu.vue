@@ -55,14 +55,15 @@
             <Submenu v-if="item.children.length>=1" :name="item.code" :key="item.code">
                     <!--二级数据中的一级菜单 -->
                 <template slot="title">
-                    <Icon :type="item.icon" :size="iconSize" :key="item.code"/>
+                    <!-- <Icon :type="item.icon" :size="iconSize" :key="item.code"/> -->
+                    <i class="iconfont icon-qianyue" :class="item.icon"></i>
                     <span class="layout-text">{{item.text}}</span>
                 </template>
                 <template v-for="child in item.children">
                     <!--二级数据中的一级菜单 -->
 
                     <!-- 多窗口跳转 -->
-                    <MenuItem  v-if="child.children.length<=0&&mode==2"  :name="child.code"  :key="child.code" :to='child.resourceFrontPath+"?flag="+index+"&code="+child.code+"&selectflag="+child.code'
+                    <MenuItem  v-if="child.children.length<=0&&mode==2"  :name="child.code"  :key="child.code" :to='child.resourceFrontPath+"?flag="+index+"&code="+child.code+"&selectflag="+child.code+"&fistTitle="+item.text+"&title="+child.text'
                     target="_blank">
                         <Icon :type="child.icon" :size="iconSize" :key="child.code"/>
                         <span style="margin-left:20px" class="layout-text" :key='child.code'>{{child.text}}</span>
@@ -82,7 +83,7 @@
                              <!-- 三级菜单中三级菜单 -->
                          <template v-for="child2 in child.children">
                              <!--多窗口跳转-->
-                             <MenuItem v-if="mode==2" :name="child2.code" :key="child2.code"  :to='child2.resourceFrontPath+"?flag="+index+"&code="+child2.code+"&selectflag="+child2.code'  target="_blank">
+                             <MenuItem v-if="mode==2" :name="child2.code" :key="child2.code"  :to='child2.resourceFrontPath+"?flag="+index+"&code="+child2.code+"&selectflag="+child2.code+"&fistTitle="+item.text+"&title="+child2.text'  target="_blank">
                                     <Icon :type="child2.icon" :size="iconSize" :key="'icon' + child2.code"></Icon>
                                     <span  style="margin-left:35px" class="layout-text" :key=" child2.code">{{child2.text}}</span>
                              </MenuItem>
@@ -133,6 +134,7 @@ export default {
     methods: {
         //监听单页面跳转
         changeMenu (active) {
+             localStorage.setItem('activeMenu',active.split('?')[0])
             if(active.includes('?')){
                this.activeName=active
                 this.$router.push({

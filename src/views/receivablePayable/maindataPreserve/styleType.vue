@@ -91,7 +91,9 @@
 </template>
 
 <script>
+import {burypoint} from 'mixins/burypoint'
 export default {
+    mixins:[burypoint],
     data() {
         return {
             goodsList:[],
@@ -162,6 +164,7 @@ export default {
         },
          //同步
         synchronous() {
+             this.setBuryPoint('同步')
             let data = {}
             this.request('basicStyleType_sync', data, true).then(res => {
                 if (res.code == 1) {
@@ -438,6 +441,7 @@ export default {
         },
         //查询
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 

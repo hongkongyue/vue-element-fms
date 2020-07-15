@@ -325,9 +325,10 @@
   import filters from '../../../filter/'
   import fetchparams from 'fetchparams'
   import {debounce} from 'mixins/debounce'
+  import {burypoint} from 'mixins/burypoint'
   // import 
   export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
       return {
         userInfo     : {},             //用户信息
@@ -425,6 +426,7 @@
           })
       },
           onEdit(){
+                  this.setBuryPoint('编辑')
                  if(this.IDS.length==1){
                     this.editVisible=true
                     this.resetForm('ruleForms')
@@ -459,10 +461,12 @@
                     this.getData()
           },
           onAdd(){
+                    this.setBuryPoint('新增')
                     this.dialogtitle="新增"
                     this.dialogVisible=true    
           },
           onSearch(){
+                    this.setBuryPoint('查询')
                     this.page=1;
                     this.getData()
                    
@@ -474,6 +478,7 @@
           },
 
           submitForm(formName) {
+                    this.setBuryPoint('新增确认')
                     this.dialogVisible=true
                     this.$refs[formName].validate((valid) => {
                       if (valid) {
@@ -485,6 +490,7 @@
           },
            submitForms(formName) {
                     // this.editVisible=true
+                    this.setBuryPoint('编辑确认')
                     this.$refs[formName].validate((valid) => {
                       if (valid) {
                         this.edit()

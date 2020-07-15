@@ -133,8 +133,10 @@
 <script>
 let goodsList = []
     import filter from '../../../filter/'
+    import {burypoint} from 'mixins/burypoint'
 export default {
     name:'timelyComponent',
+    mixins:[burypoint],
     data() {
         return {
             busTypeList:[],
@@ -589,6 +591,7 @@ export default {
             })
         },
         onSearch() {
+             this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 

@@ -134,8 +134,9 @@
 import filters from '../../../filter/'
 import E from 'wangeditor'
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
         return {
             changeVisible: false, //编辑
@@ -204,6 +205,7 @@ export default {
     },
     methods: {
         onEdit() {
+            this.setBuryPoint('编辑')
             this.title='编辑'
             if (this.IDS.length == 1) {
                 this.clear()
@@ -242,12 +244,14 @@ export default {
             // },
         },
         onDel(id) {
+             this.setBuryPoint('删除')
             if (this.IDS.length == 1) {
                 this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
+                     this.setBuryPoint('删除确认')
                     let data = {}
                     data.id = this.IDS[0].id
                     this.request('masterData_versionLog_delete', data, true).then(res => {
@@ -337,6 +341,7 @@ export default {
             })
         },
         submitForm(formName) {
+            this.setBuryPoint('新增确认')
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     this.addLog()
@@ -346,6 +351,7 @@ export default {
             });
         },
         submitForms(formName){
+             this.setBuryPoint('编辑确认')
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     this.edit()
@@ -373,6 +379,7 @@ export default {
             this.onSearch()
         },
         onAdd() {
+            this.setBuryPoint('新增')
             this.title='新增'
             this.changeVisible = true
         },
@@ -395,6 +402,7 @@ export default {
             })
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 

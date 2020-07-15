@@ -10,12 +10,12 @@
             <el-form :inline="true" :model="formObj" label-width="120px" class="demo-form-inline ">
                 <el-row>
                     <el-col :span="6">
-                        <el-form-item label="任务编号：" size="small" style="margin-bottom:2px!important">
+                        <el-form-item label="检测任务编号：" size="small">
                             {{this.formObj.taskNo}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="品牌发起人：" size="small">
+                        <el-form-item label="发起人：" size="small">
                             {{this.formObj.initiatingPromoter}}
                         </el-form-item>
                     </el-col>
@@ -29,50 +29,42 @@
                             {{this.formObj.sampleSource}}
                         </el-form-item>
                     </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="是否有实物：" size="small">
+                            {{this.formObj.realMaterial == 1 ? '是' : '否'}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="是否撞色：" size="small">
+                            {{this.formObj.contrastColor == 1 ? '是' : '否'}}
+                        </el-form-item>
+                    </el-col>
+
                     <el-col :span="6" v-if="!bigGoods">
                         <el-form-item label="开发员：" size="small">
                             {{this.formObj.developer}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="6" v-if="!bigGoods">
-                        <el-form-item label="面料品类分类：" size="small">
+                        <el-form-item label="品类分类：" size="small">
                             {{this.formObj.kinds}}
                         </el-form-item>
                     </el-col>
-                    <el-col :span="6" v-if="!bigGoods">
+                    <el-col :span="6" v-if="!bigGoods && !bAddColor">
                         <el-form-item label="特殊工艺类目：" size="small">
                             {{this.formObj.specialProcessCategory}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="6" v-if="!bigGoods">
-                        <el-form-item label="面/辅料：" size="small">
+                        <el-form-item label="物料类型：" size="small">
                             {{this.formObj.majorClasses}}
                         </el-form-item>
                     </el-col>
-                    <el-col :span="6" v-if="!bigGoods">
-                        <el-form-item label="是否有实物：" size="small">
-                            {{this.formObj.realMaterial == 1 ? '是' : '否'}}
+                    <el-col :span="6" v-if="!bigGoods && !!bAddColor">
+                        <el-form-item label="物料编号：" size="small">
+                            {{this.formObj.materialNo}}
                         </el-form-item>
                     </el-col>
-                    <el-col :span="6" v-if="!bigGoods">
-                        <el-form-item label="是否撞色：" size="small">
-                            {{this.formObj.contrastColor == 1 ? '是' : '否'}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6" v-if="!bigGoods">
-                        <el-form-item label="图1：" size="small">
-                                   <el-image   v-if="this.formObj.styleImg" style="width: 40px; height: 40px" :src="this.formObj.styleImg" :preview-src-list="[this.formObj.styleImg]">
-                                   <el-image   v-if="!this.formObj.styleImg" style="width: 40px; height: 40px" :src="noneUrl"></el-image>
-                        </el-image>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6" v-if="!bigGoods">
-                        <el-form-item label="图2：" size="small">
-                            <el-image v-if="this.formObj.styleImg2" style="width: 40px; height: 40px" :src="this.formObj.styleImg2" :preview-src-list="[this.formObj.styleImg2]"></el-image>
-                            <el-image v-if="!this.formObj.styleImg2" style="width: 40px; height: 40px" :src="noneUrl"></el-image>
-                        </el-form-item>
-                    </el-col>
-
                     <!-- 大货 -->
                     <el-col :span="6" v-if="bigGoods">
                         <el-form-item label="大货款号：" size="small">
@@ -84,7 +76,7 @@
                             {{this.formObj.batchNo}}
                         </el-form-item>
                     </el-col>
-                    <el-col :span="6" >
+                    <el-col :span="6" v-if="bigGoods || aDevelop">
                         <el-form-item label="设计款号：" size="small">
                             {{this.formObj.designNo}}
                         </el-form-item>
@@ -104,7 +96,7 @@
                             {{this.formObj.usingPart}}
                         </el-form-item>
                     </el-col>
-                    <el-col :span="6" v-if="bigGoods">
+                    <el-col :span="6" v-if="!bDevelop" >
                         <el-form-item label="供应商：" size="small">
                             {{this.formObj.supplier}}
                         </el-form-item>
@@ -124,36 +116,59 @@
                             {{this.formObj.kinds }}{{this.formObj.majorClasses}}
                         </el-form-item>
                     </el-col>
-                    <el-col :span="6" v-if="bigGoods">
+                    <el-col :span="6">
                         <el-form-item label="织法：" size="small">
                             {{this.formObj.weaveMethod}}
                         </el-form-item>
                     </el-col>
-                     <el-col :span="6">
-                        <el-form-item label="检测说明：" size="small">
+                    <el-col :span="6">
+                        <el-form-item label="检测要求：" size="small">
                             {{this.formObj.description}}
                         </el-form-item>
                     </el-col>
-                    <el-col :span="6">
-                        <el-form-item label="受理说明：" size="small">
-                            <el-input type="textarea"  disabled :autosize="{ minRows: 4, maxRows: 6}" placeholder="请输入内容" v-model="formObj.acceptRemark">
-                            </el-input>
-
-                        </el-form-item>
-                    </el-col>
                     <el-col :span="6" v-if="!bigGoods">
-                        <el-form-item label="织法：" size="small">
-                            <div  style="width:180px;height:100px;border:1px solid #eee;padding:3px 3px;overflow-y:auto">
-                                       <el-radio-group v-model="formObj.weaveMethod" disabled v-for="v in weaveMethodList" :key="v.label">
-                                            <el-radio style="padding-left:10px" :label="v.name">{{v.name}}</el-radio>
-                                        </el-radio-group>
-                                 </div>
-                            <!-- <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="textarea2">
-                            </el-input> -->
-
+                        <el-form-item label="图1：" size="small">
+                            <el-image style="width: 40px; height: 40px" :src="this.formObj.styleImg" :preview-src-list="[this.formObj.styleImg]">
+                            </el-image>
                         </el-form-item>
                     </el-col>
-                    <!--  -->
+                    <el-col :span="6" v-if="!bigGoods && bDevelop">
+                        <el-form-item label="图2：" size="small">
+                            <el-image style="width: 40px; height: 40px" :src="this.formObj.styleImg2" :preview-src-list="[this.formObj.styleImg2]">
+                            </el-image>
+                        </el-form-item>
+                    </el-col>
+                    </el-row>
+                    <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="受理说明：" size="small">
+                            <el-input type="textarea" :autosize="{ minRows: 4, maxRows: 6}" disabled placeholder="请输入内容" v-model="formObj.acceptRemark">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="预判成分：" size="small">
+                            <el-input type="textarea" placeholder="请输入内容" disabled :autosize="{ minRows: 3, maxRows: 4}" v-model="formObj.forecastIngredient" maxlength="15" show-word-limit></el-input>
+                        </el-form-item>
+                    </el-col>
+                   <!-- <el-col :span="8" v-if="!bigGoods && bDevelop">
+                        <el-form-item label="织法：" size="small">
+                            <div style="width:180px;height:100px;border:1px solid #eee;padding:3px 3px;overflow-y:auto">
+                                <el-radio-group v-model="formObj.weaveMethod" disabled v-for="v in weaveMethodList" :key="v.label">
+                                    <el-radio style="padding-left:10px" :label="v.name">{{v.name}}</el-radio>
+                                </el-radio-group>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8" v-if="!bigGoods && !bDevelop">
+                        <el-form-item label="织法：" size="small">
+                            <div style="width:180px;height:100px;border:1px solid #eee;padding:3px 3px;overflow-y:auto">
+                                <el-radio-group v-model="formObj.weaveMethod" disabled v-for="v in weaveMethodList" :key="v.label">
+                                    <el-radio style="padding-left:10px" :label="v.name">{{v.name}}</el-radio>
+                                </el-radio-group>
+                            </div>
+                        </el-form-item>
+                    </el-col>-->
                 </el-row>
             </el-form>
             <el-divider></el-divider>
@@ -218,15 +233,18 @@
 <script>
 import Util from 'libs/util';
 import axios from 'axios';
-
+import {burypoint} from 'mixins/burypoint'
 import {debounce} from 'mixins/debounce'
 export default {
-    mixins: [debounce],
+    mixins: [debounce,burypoint],
     name: 'detectionConduct',
     data() {
         return {
+            bDevelop:false,//面料开发（B类开发）
+            bAddColor:false,//B类加色
+            aDevelop:false,//A类开发
+            bigGoods:false, //判断任务类型
             weaveMethodList:[],
-            bigGoods:false,
             noneUrl:'https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1562574299&di=846b4c904bd54d3c3821fa5938888c69&src=http://hbimg.b0.upaiyun.com/bdaca9a07e1a8947c00c2f826ebf848750927aa24963-cATwbg_fw658',
             testList:[{name:'合格',id:'1'},{name:'不合格',id:'0'}],
             basicUserName: '',
@@ -265,10 +283,17 @@ export default {
             data.taskType = this.$route.query.taskType
             this.request('showTaskNode', data, false).then((res) => {
                 if (res.code == 1) {
-                    if(res.data.sampleSource=='开发样'){
-                         this.bigGoods=false
-                    }else{
-                         this.bigGoods=true
+                    if (res.data.sampleSource == 'A类开发') {
+                        this.bigGoods = false
+                        this.aDevelop = true
+                    }else if (res.data.sampleSource == 'B类加色') {
+                        this.bAddColor = true
+                        this.bigGoods = false
+                    }else if (res.data.sampleSource == 'B类开发') {
+                        this.bigGoods = false
+                        this.bDevelop = true
+                    } else {
+                        this.bigGoods = true
                     }
                     this.fabricDevelopCheckTaskDetailId=res.data.fabricDevelopCheckTaskDetailId
                     this.formObj=res.data
@@ -281,6 +306,7 @@ export default {
         },
         //检测合格 保存
         submit() {
+            this.setBuryPoint('保存检测项目')
                 for(let i=0,len=this.innterList.length;i<len;i++){
                     if(this.innterList[i].internalInspectResult==1&&!this.innterList[i].internalRemark){
                         return this.$message.error('内检不合格时，请填写说明信息')
@@ -356,6 +382,7 @@ export default {
         },
         //检测合格  提交
         submitConfirm() {
+            this.setBuryPoint('提交')
             this.$confirm('提交操作不可逆, 是否继续?', '提交确认', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -368,44 +395,7 @@ export default {
                     message: '已取消提交'
                 });          
                 });
-            // console.log(this.addformdata.testing,'-------')
-            // if(this.addformdata.testing == undefined){
-            //     this.$message.error('请先选择检测结果');
-            // }else{
-            //     let getId = this.$route.query.taskDetailId
-            //     let data = Util.deepClone(this.tableData[0]);
-            // data.verify = this.addformdata.testing
-            // data.taskDetailId =  Number(this.$route.query.taskDetailId)
-            // console.log(data)
-            // this.request('fabricDevelopCheck_verfiy', data, true).then((res) => {
-            //     if (res.code == 1) {
-            //         // this.getData()
-            //         this.$message.success(res.msg);
-            //         this.visible = false
-            //         if(this.addformdata.testing == 1){
-            //             // setTimeout(()=>{ 
-            //                 this.$root.eventHub.$emit('closePageFromOtherPage', 'detectionConduct')
-            //                 //   },200); //关闭新增页面
-            //                         this.$router.push({
-            //                             name: 'detectionComplete',
-            //                             query:{
-            //                                 taskDetailId: getId,
-            //                             }
-            //                         });
-            //         }else{
-            //             // setTimeout(()=>{ 
-            //                 this.$root.eventHub.$emit('closePageFromOtherPage', 'detectionConduct')
-            //                 //   },200); //关闭新增页面
-            //                         this.$router.push({
-            //                             name: 'detectionList'
-            //                         });
-            //         }
-            //          this.addformdata = {}
-            //     }else{
-            //         this.$message.error(res.msg)
-            //     }
-            // })
-            // }
+            
         },
         //取消检测
         submitCancel() {

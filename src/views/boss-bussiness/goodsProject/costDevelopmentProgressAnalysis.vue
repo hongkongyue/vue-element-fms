@@ -1,10 +1,6 @@
 <template>
 <div>
      <header class="headerstyle" v-if="!showhidden" >
-         <!-- <div style="width:100%;text-align:center;">
-            <span @click="handleShowHidden('hidden')"><i v-if="showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-bottom"></i></span>
-            <span @click="handleShowHidden('show')"><i v-if="!showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-top"></i></span>
-        </div> -->
         <el-form  :inline="true" :model="formSearch" class="demo-form-inline" style="width:99%;maxHeight:120px;overflow-y:auto;overflow-x:hidden;">
         <!-- <el-form :inline="true" :model="formSearch" class="demo-form-inline "> -->
             <el-form-item size="small">
@@ -40,11 +36,6 @@
                             <el-option v-for="item in waveList" :key="item.name" :label="item.name" :value="item.name"></el-option>
                         </el-select>
                  </el-form-item>
-                  <!-- <el-form-item label="二级品类：" size="small">
-                        <el-select v-model="formSearch.secondLevel" clearable  filterable placeholder="请选择" style="width:150px">
-                            <el-option v-for="item in secondLevel" :key="item.secondLevel" :label="item.secondLevel" :value="item.secondLevel"></el-option>
-                        </el-select>
-                 </el-form-item> -->
                 <el-form-item label="组别：" size="small">
                         <el-select v-model="formSearch.groups" clearable  filterable placeholder="请选择" style="width:150px">
                             <el-option v-for="item in groupList" :key="item" :label="item" :value="item"></el-option>
@@ -95,38 +86,28 @@
                     <plx-table-column prop="waveBand" label="波段" sortable min-width="120" align="center" show-overflow-tooltip>
                     </plx-table-column>
                     <plx-table-column prop="developTypeName" label="开发类型" sortable min-width="120" align="center" show-overflow-tooltip>
-                        <!-- <template slot-scope="scope">{{scope.row.planningType == "10" ? "规划型首单" : "非规划型首单" }}</template> -->
                     </plx-table-column>
-                    <!-- <el-table-column prop="size" label="二级品类" min-width="120" align="center" show-overflow-tooltip>
-                    </el-table-column> -->
                     <plx-table-column prop="planningDevelopDate" label="规划开发日期" sortable min-width="120" align="center" show-overflow-tooltip>
                     </plx-table-column>
                     <plx-table-column prop="planningDeliverDate" label="规划交接日期" sortable min-width="120" align="center" show-overflow-tooltip>
                     </plx-table-column>
                     <plx-table-column prop="colorSimpleDate" label="规划齐色样日期" sortable min-width="120" align="center" show-overflow-tooltip>
-                        <!-- <template slot-scope="scope">{{scope.row.taxIncludedTotalPurchaseUnitPrice|singlePrice}}</template> -->
                     </plx-table-column>
                     <plx-table-column prop="planningArriveDate" label="规划到货日期" sortable min-width="120" align="center" show-overflow-tooltip>
-                        <!-- <template slot-scope="scope">{{scope.row.taxIncludedPurchaseUnitPrice|singlePrice}}</template> -->
                     </plx-table-column>
                     <plx-table-column prop="photoDate" label="拍照日期" min-width="120" sortable align="center" show-overflow-tooltip>
-                         <!-- <template slot-scope="scope">{{scope.row.taxIncludedTrialFee|singlePrice}}</template> -->
                     </plx-table-column>
                      <plx-table-column prop="planningLaunchDate" label="可上新日期" sortable min-width="120" align="center" show-overflow-tooltip>
                     </plx-table-column>
                      <plx-table-column prop="launchDate" label="上新日期" min-width="120" sortable align="center" show-overflow-tooltip>
                     </plx-table-column>
                      <plx-table-column prop="developStyleQty" label="开发款数" min-width="120" sortable align="center" show-overflow-tooltip>
-                        <!-- <template slot-scope="scope">{{scope.row.excludingTaxTrialFee|singlePrice}}</template> -->
                     </plx-table-column>
                      <plx-table-column prop="finishStyleQty" label="已开发款数" min-width="120" sortable align="center" show-overflow-tooltip>
-                         <!-- <template slot-scope="scope">{{scope.row.excludingTaxPurchaseUnitPrice|singlePrice}}</template> -->
                     </plx-table-column>
                      <plx-table-column prop="planningDevelopPostponeDate" label="设计稿延期天数" sortable min-width="120" align="center" show-overflow-tooltip>
-                          <!-- <template slot-scope="scope">{{scope.row.excludingTaxTotalPurchaseUnitPrice|singlePrice}}</template> -->
                     </plx-table-column>
                     <plx-table-column prop="fillingPostponeDay" label="建档延期天数" min-width="120" sortable align="center" show-overflow-tooltip>
-                           <!-- <template slot-scope="scope">{{scope.row.contractAmount|moneyFilters}}</template> -->
                     </plx-table-column>
                      <plx-table-column prop="firstSimplePostponeDay" label="头版样衣指令延期天数" sortable min-width="120" align="center" show-overflow-tooltip>
                     </plx-table-column>
@@ -143,7 +124,6 @@
                     <plx-table-column prop="firstQty" label="下单数量" min-width="120" align="center" sortable show-overflow-tooltip>
                     </plx-table-column>
                     <plx-table-column prop="firstAmount" label="下单金额" min-width="120" align="center" sortable show-overflow-tooltip>
-                          <!-- <template slot-scope="scope">{{scope.row.excludingTaxTotalPurchaseUnitPrice|singlePrice}}</template> -->
                     </plx-table-column>
                     <plx-table-column prop="orderTotalAmount" label="规划开发金额" min-width="120" sortable align="center" show-overflow-tooltip>
                     </plx-table-column>
@@ -224,10 +204,11 @@ var totalPageSum = {}
 import DragList from '_c/drag-list'
 import filters from '../../../filter/'
 import {debounce} from 'mixins/debounce.js'
+import {burypoint} from 'mixins/burypoint'
 import {commonMixins} from 'mixins/common'
 import { export_json_to_excel,format_json_list_by_filter,convert26 } from '@/libs/excel/Export2Excel'
 export default {
-     mixins    : [debounce,commonMixins],
+     mixins    : [debounce,commonMixins,burypoint],
     components: {
            DragList
     },
@@ -530,7 +511,7 @@ export default {
             })
         },
         onSearch() {
-            console.log(this.formSearch.documentDate)
+           this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 
@@ -586,15 +567,13 @@ export default {
             // }
         },
        queryFollowByExportMdx(){
+           this.setBuryPoint('导出')
                   let arr=[]
                       arr.push('basicBrandName')
                     //   arr.push('finishStyleQty')
                  this.columns.map(item=>{
                         arr.push(item.prop)
                  }) 
-                //  arr.push('basicBrandName')
-                //  arr.push('finishStyleQty')
-            // this.delaiList = []
             const{basicBrandName,season,years,waveBand,secondLevel,groups,developTypeName}=this.formSearch
             let data = {}
                 data.pageSize = this.pagesize

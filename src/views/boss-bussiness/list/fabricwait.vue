@@ -29,7 +29,9 @@
     </div>
 </template>
 <script>
+import {burypoint} from 'mixins/burypoint'
     export default {
+        mixins: [burypoint],
             name:'aa',
             data(){
                  return{

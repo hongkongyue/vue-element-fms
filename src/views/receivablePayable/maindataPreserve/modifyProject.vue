@@ -210,9 +210,10 @@
 </template>
 <script>
 import filters  from "../../../filter/";
-import { debounce } from 'mixins/debounce'
+import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-  mixins:[debounce],
+  mixins:[debounce,burypoint],
   data() {
     return {
       true: true,
@@ -331,6 +332,7 @@ export default {
       this.cancelVisible = false;
     },
       delAll(ids){
+        this.setBuryPoint('删除确认')
         this.request('discount_markChangeProcessProject_delete',{ids:ids},false).then(res=>{
           if(res.code==1){
           this.$message({
@@ -342,6 +344,7 @@ export default {
         })
     },
     del111() {
+       this.setBuryPoint('删除')
       if (this.IDS.length >0) {
        this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -364,6 +367,7 @@ export default {
       } 
     },
     onEdit() {
+       this.setBuryPoint('编辑')
       if (this.IDS.length == 1) {
         this.dialogtitle = "编辑";
         this.dialogVisible = true;
@@ -435,10 +439,12 @@ export default {
       });
     },
     onAdd() {
+       this.setBuryPoint('新增')
       this.dialogtitle = "新增";
       this.dialogVisible = true;
     },
     onSearch() {
+       this.setBuryPoint('查询')
       this.page = 1;
       this.getData();
     },
@@ -451,6 +457,7 @@ export default {
     },
 
     submitForm(formName) {
+      this.setBuryPoint('新增确认')
       this.dialogVisible = true;
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -461,6 +468,7 @@ export default {
       });
     },
     submitFormEdit(formName) {
+       this.setBuryPoint('编辑确认')
       this.dialogVisible = true;
       this.$refs[formName].validate(valid => {
         if (valid) {

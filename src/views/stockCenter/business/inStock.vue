@@ -98,8 +98,9 @@
 import filter from '../../../filter/'
 import { mapState } from 'vuex'
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     name:'inStockComponent',
     data() {
         return {
@@ -386,6 +387,7 @@ export default {
             })
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 

@@ -4,9 +4,23 @@
         <Row class="background-color-white exhibition">
             <Tabs style="min-height:880px;padding-left:0px" type="card" @on-click='changeTab(changeTabs)' v-model='changeTabs'>
                 <TabPane label="待完成" name='dwc'>
+                    <el-form :inline="true" :model="formSearch" class="demo-form-inline" @submit.native.prevent>
+                                    <el-form-item size="mini" label="开发任务编号:" style="margin-bottom:0px!important">
+                                        <el-input size="mini" v-model="formSearch.taskNo"  clearable></el-input>
+                                    </el-form-item>
+                                    <el-form-item size="mini" label="发起人:" style="margin-bottom:0px!important">
+                                        <!-- <el-input size="mini" v-model="formSearch.person"  clearable></el-input> -->
+                                        <el-select v-model="formSearch.person" clearable placeholder="请选择" style="width:150px" filterable>
+                                  <el-option v-for="v in developerList" :key="v"  :label="v"  :value="v"></el-option>
+                              </el-select>
+                                    </el-form-item>
+                                 <el-form-item size="mini" style="margin-bottom:0px!important">
+                                      <el-button @click="initdata(1)" type="primary">查询</el-button>
+                                </el-form-item>
+                    </el-form>
                     <Row class="background-color-white exhibition" style="min-height:630px;padding-left:0px">
                         <Page style="margin-top:5px;text-align:right" :total="total" :page-size="pageSize" :current="page" show-sizer show-total show-elevator @on-change="currentChange" @on-page-size-change="sizeChange"></Page>
-                        <div @click="handleSave(item.taskNo,item)" v-model="changeRoute" v-for="item in List" :value="item.id" :key="item.id" style="margin-bottom:10px;background-color:#f5f7f9">
+                        <div @click="handleSave(item.taskNo,item)" v-for="item in List" :value="item.id" :key="item.id" style="margin-bottom:10px;background-color:#f5f7f9">
                             <Row style="height:80px;line-height:80px;font-size:16px">
                                 <Col span="2">
                                 <Icon type="md-notifications" class="f16 pl20" />
@@ -27,6 +41,19 @@
                     </Row>
                 </TabPane>
                 <TabPane label="进行中" name='jxz'>
+                    <el-form :inline="true" :model="formSearch" class="demo-form-inline" @submit.native.prevent>
+                                    <el-form-item size="mini" label="开发任务编号:" style="margin-bottom:0px!important">
+                                        <el-input size="mini" v-model="formSearch.taskNo"  clearable></el-input>
+                                    </el-form-item>
+                                    <el-form-item size="mini" label="发起人:" style="margin-bottom:0px!important">
+                                        <el-select v-model="formSearch.person" clearable placeholder="请选择" style="width:150px" filterable>
+                                  <el-option v-for="v in developerList" :key="v"  :label="v"  :value="v"></el-option>
+                              </el-select>
+                                    </el-form-item>
+                                 <el-form-item size="mini" style="margin-bottom:0px!important">
+                                      <el-button @click="getConduct(1)" type="primary">查询</el-button>
+                                </el-form-item>
+                    </el-form>
                     <Row class="background-color-white exhibition" style="min-height:630px;padding-left:0px">
                        
                         <Page style="margin-top:5px;text-align:right" :total="total" :page-size="pageSize" :current="page" show-sizer show-total show-elevator @on-change="currentChange1" @on-page-size-change="sizeChange1"></Page>
@@ -37,6 +64,19 @@
                 </Modal>
                 </TabPane>
                 <TabPane label="已完成" name='ywc'>
+                    <el-form :inline="true" :model="formSearch" class="demo-form-inline" @submit.native.prevent>
+                                    <el-form-item size="mini" label="开发任务编号:" style="margin-bottom:0px!important">
+                                        <el-input size="mini" v-model="formSearch.taskNo"  clearable></el-input>
+                                    </el-form-item>
+                                    <el-form-item size="mini" label="发起人:" style="margin-bottom:0px!important">
+                                        <el-select v-model="formSearch.person" clearable placeholder="请选择" style="width:150px" filterable>
+                                  <el-option v-for="v in developerList" :key="v"  :label="v"  :value="v"></el-option>
+                              </el-select>
+                                    </el-form-item>
+                                 <el-form-item size="mini" style="margin-bottom:0px!important">
+                                      <el-button @click="getComplete(1)" type="primary">查询</el-button>
+                                </el-form-item>
+                    </el-form>
                     <Row class="background-color-white exhibition" style="min-height:630px;padding-left:0px">
                         
                         <Page style="margin-top:5px;text-align:right" :total="total" :page-size="pageSize" :current="page" show-sizer show-total show-elevator @on-change="currentChange2" @on-page-size-change="sizeChange2"></Page>
@@ -51,13 +91,16 @@
 
 <script>
 import Util from 'libs/util';
-// import Util from 'libs/util';
-// import axios from 'axios';
-
+import {burypoint} from 'mixins/burypoint'
 export default {
+    mixins:[burypoint],
     name: 'pricingList',
     data() {
         return {
+            formSearch:{
+                taskNo:'',
+                person:''
+            },
             bigstyleImg:'',
             visible:false,
             userInfo: '', //缓存
@@ -68,7 +111,7 @@ export default {
                     width: 80,
                 },
                 {
-                    title: '任务编号',
+                    title: '开发任务编号',
                     key: 'taskNo',
                     align: 'center',
                     minWidth: 100,
@@ -176,6 +219,7 @@ export default {
                                 },
                                 on: {
                                     click: (e) => {
+                                        this.setBuryPoint('进入进行中详情')
                                         this.handleEditSave(params.row.taskNo, params.row)
                                     }
                                 }
@@ -191,7 +235,7 @@ export default {
                     width: 80,
                 },
                 {
-                    title: '任务编号',
+                    title: '开发任务编号',
                     key: 'taskNo',
                     align: 'center',
                     minWidth: 100,
@@ -246,6 +290,7 @@ export default {
                                 },
                                 on: {
                                     click: (e) => {
+                                        this.setBuryPoint('已完成查看')
                                         this.handleSaveT(params.row.taskNo, params.row)
                                     }
                                 }
@@ -261,6 +306,7 @@ export default {
                                 },
                                 on: {
                                     click: (e) => {
+                                        this.setBuryPoint('已完成撤回')
                                         // const {
                                         //     taskCode,
                                         //     taskName,
@@ -275,7 +321,6 @@ export default {
                 }
             ],
             List: [],
-            changeRoute: '',
             list1: [],
             list2: [],
             total: 0,
@@ -291,17 +336,27 @@ export default {
             changeTabs: 'dwc',
             taskStatus: '100',
             task: [],
+            developerList:[],
         }
     },
     mounted() {
         this.userInfo = JSON.parse(window.sessionStorage.getItem('userinfo'));
         // this.getData()//根据状态查询任务列表
         this.clickSearch()
+        this.getDeveloperList()
     },
     activated() {
 
     },
     methods: {
+         getDeveloperList(){//
+            let data = {}
+            this.request('fabric_getdeveloperList', data, false).then(res => {
+                if (res.code == 1) {
+                    this.developerList = res.data;
+                }
+            })
+        },
         clickSearch() {
             this.getTaskId();
             setTimeout(() => {
@@ -323,11 +378,17 @@ export default {
                 }
             }
         },
-        initdata() {
+        initdata(num) {
+            this.setBuryPoint('待完成查询')
+            if(num == 1){
+                this.page = 1
+            }
             let data = {};
             data.currentPage = this.page;
             data.pageSize = this.pageSize
             data.status = 0
+            data.developer = this.formSearch.person
+            data.taskNo = this.formSearch.taskNo
             data.taskConfigurationId = this.getID()
             this.request('fabric_fabricTaskDetail_dingding', data, false).then((res) => {
                 if (res.code == 1) {
@@ -339,11 +400,17 @@ export default {
             })
         },
         //进行中
-        getConduct() {
+        getConduct(num) {
+            this.setBuryPoint('进行中查询')
+            if(num == 1){
+                this.page = 1
+            }
             let data = {};
             data.currentPage = this.page;
             data.pageSize = this.pageSize
             data.status = 1
+            data.developer = this.formSearch.person
+            data.taskNo = this.formSearch.taskNo
             data.taskConfigurationId = this.getID()
             this.request('fabric_fabricTaskDetail_page', data, false).then((res) => {
                 if (res.code == 1) {
@@ -354,11 +421,17 @@ export default {
                 }
             })
         },
-        getComplete() {
+        getComplete(num) {
+            this.setBuryPoint('已完成查询')
+            if(num == 1){
+                this.page = 1
+            }
             let data = {};
             data.currentPage = this.page;
             data.pageSize = this.pageSize
             data.status = 2
+            data.developer = this.formSearch.person
+            data.taskNo = this.formSearch.taskNo
             data.taskConfigurationId = this.getID()
             this.request('fabric_fabricTaskDetail_page', data, false).then((res) => {
                 if (res.code == 1) {
@@ -384,6 +457,10 @@ export default {
         },
         //改变tabs选项
         changeTab(name) {
+            this.formSearch={
+                taskNo:'',
+                person:''
+            },
             console.log(name)
             if (name == 'jxz') {
                 this.page = 1

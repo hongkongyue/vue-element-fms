@@ -139,6 +139,8 @@ const methodMap = {
       user_unlock:{url:'/eop-boot/masterData/user/unlock',method:'get'},               //用户-解锁
       user_resetPassword:{url:'/eop-boot/masterData/user/resetPassword', method:'get'},//用户-重置密码
       masterData_code_selector:{url:'/eop-boot/masterData/code/selector',method:'post'},//单据编码-下拉框
+      masterData_copyPermission:{url:'/eop-boot/masterData/user/copyPermission',method:'post'},//用户-权限复制
+      supplierUserMapping_copyPermission:{url:'/eop-boot/dataPermission/supplierUserMapping/copyPermission',method:'post'},//用户-权限复制
 
       //角色
       masterData_basicRole_selector:{url:'/eop-boot/masterData/basic-role/selector',                                   method:'post'},//下拉框
@@ -220,6 +222,7 @@ const methodMap = {
       payable_reconciliationOrder_command:{url:'/eop-boot/payable/reconciliationOrder/command',   method:'post'},//对账单-审核/取消审核/删除
       payable_reconciliationOrder_export :{url:'/eop-boot/payable/reconciliationOrder/export',    method:'post'},//对账单-异步导出
       //供应商
+      getInitiateUserList:{url:'/eop-boot/fabric/fabric-develop-initiate/getInitiateUserList',method:'post'},//查询发起人下拉
       supplier_page:{url:'/eop-boot/masterData/supplier/page',method:'post'},//供应商列表查询（author:张明杰
       supplier_add:{url:'/eop-boot/masterData/supplier/add',method:'post'},//供应商新增（author:张明杰
       supplier_update:{url:'/eop-boot/masterData/supplier/update',method:'post'},//供应商修改（author:张明杰
@@ -464,6 +467,19 @@ const methodMap = {
       materialType_type:{url:'/eop-boot/masterData/materialType/page', method:'post'},//物料类型-列表筛选
       materialType_sync:{url:'/eop-boot/masterData/materialType/sync', method:'post'},//物料类型-同步
       materialType_selector:{url:'/eop-boot/masterData/materialType/selector', method:'post'},//物料类型-下拉
+      fabric_addAdevelop:{url:'/eop-boot/fabric/fabric-develop-initiate/addAdevelop', method:'post'},//面料开发发起流程-A类开发
+      fabric_addBAddColor:{url:'/eop-boot/fabric/fabric-develop-initiate/addBAddColor', method:'post'},//面料开发发起流程-B类加色
+      fabric_getFactoryByDesignNo:{url:'/eop-boot/fabric/fabric-develop-initiate/getFactoryByDesignNo', method:'post'},//加工厂
+      fabric_getFabricStyleTree:{url:'/eop-boot/fabric/fabric-develop-initiate/getFabricStyleTree', method:'post'},//查询品类树
+      fabric_cancelTask:{url:'/eop-boot/fabric/goodsCheck/cancelTask', method:'post'},//大货检测 取消流程
+      fabric_getColorList:{url:'/eop-boot/fabric/fabric-develop-initiate/getColorList', method:'post'},//查询物料颜色列表
+      fabric_getInfoByNo:{url:'/eop-boot/fabric/fabric-develop-initiate/getInfoByNo', method:'post'},//根据物料编号查询物料信息
+      fabric_getPrice:{url:'/eop-boot/fabric/fabric-develop-initiate/getPrice', method:'post'},//根据条件查询价格
+      fabric_showBackReason:{url:'/eop-boot/fabric/developConfirm/showBackReason', method:'post'},//开发确认进行中详情
+      fabric_checkQualified:{url:'/eop-boot/fabric/goodsCheck/checkQualified', method:'post'},//调整检测结果
+      fabric_getdeveloperList:{url:'/eop-boot/fabric/goodsCheck/getdeveloperList', method:'post'},//开发员下拉
+      fabric_getSupplierByFactory:{url:'/eop-boot/fabric/fabric-develop-initiate/getSupplierByFactory', method:'post'},//根据加工厂查询供应商
+      fabric_sortLevel:{url:'/eop-boot/fabric/basicFabricQcItem/sortLevel', method:'post'},//保存排序
       
       fabric_developCycle_select:{url:'/eop-boot/fabric/developCycle/select',method:'post'},//开发周期-列表筛选
       fabric_developCycle_uploadAsync:{url:'/eop-boot/fabric/developCycle/uploadAsync',method:'post'},//开发周期-异步导入
@@ -636,6 +652,8 @@ const methodMap = {
       accPayable_invoiceRegister_settle:{url:'/eop-boot/accPayable/invoiceRegister/settle',method:'post'},//立账
       accPayable_invoiceRegister_cancelSettle:{url:'/eop-boot/accPayable/invoiceRegister/cancelSettle',method:'post'},//取消立账
       accPayable_invoiceRegister_export:{url:'/eop-boot/accPayable/invoiceRegister/export',method:'post'},//发票登记导出
+      accPayable_invoiceRegister_checkDate:{url:'/eop-boot/accPayable/invoiceRegister/checkDate',method:'post'},//校验日期调整
+      accPayable_invoiceRegister_updateList:{url:'/eop-boot/accPayable/invoiceRegister/updateList',method:'post'},//日期调整
 
       supplier_allSelector:{url:'/eop-boot/masterData/supplier/allSelector',method:'post'},//供应商下拉接口
 
@@ -785,7 +803,31 @@ const methodMap = {
       goodsCheck_simpleCategorySelector:{url:'/eop-boot/fabric/goodsCheck/design/simpleCategorySelector',method:'post'},//查询类别
       goodsCheck_design_materielDetail:{url:'/eop-boot/fabric/goodsCheck/design/materielDetail',method:'post'},//查询类别
       goodsCheck_export:{url:'/eop-boot/fabric/goodsCheck/export',method:'post'},//导出
+      goodsCheck_detail:{url:'/eop-boot/fabric/goodsCheck/detail',method:'post'},//检测项目明细
 
+      //企划管理迭代 ？？？？？
+      goods_planning_manage_checkEdit:{url:'/eop-boot/boss/goods_planning_manage/checkEdit',method:'post'},//校验数据能否编辑
+      goods_planning_manage_queryWaveBandList:{url:'/eop-boot/boss/goods_planning_manage/queryWaveBandList',method:'post'},//发起调整指令 获取波段
+
+      //采购入库异常池
+      stocks_bizStockIn_exceptionPage:{url:'/eop-boot/stocks/bizStockIn/exceptionPage', method:'post'},
+      stocks_bizStockIn_exportExPoInAsync:{url:'/eop-boot/stocks/bizStockIn/exportExPoInAsync',method:'post'},//异常池导出
+      stocks_bizStockIn_manualChoose:{url:'/eop-boot/stocks/bizStockIn/manualChoose',method:'post'},//指定公司
+      //全局
+      sys_epLog_add:{url:'/eop-boot/sys/epLog/add',method:'post'},//新增埋点
+
+      //应付暂估报表
+      payable_payable_provisional_estimate_detail_page:{url:'/eop-boot/payable/payable-provisional-estimate-detail/page',method:'post'},//列表筛选
+      payable_payable_provisional_estimate_detail_allPages:{url:'/eop-boot/payable/payable-provisional-estimate-detail/allPages',method:'post'},//导出（LMyang）请求参数参考列表筛选
+
+       //应付暂估报表
+       payable_payable_provisional_estimate_detail_detailPage:{url:'/eop-boot/payable/payable-provisional-estimate-detail/detailPage',method:'post'},//应付暂估明细表分页查询
+       payable_payable_provisional_estimate_detail_exportDetailTotal:{url:'/eop-boot/payable/payable-provisional-estimate-detail/exportDetailTotal',method:'post'},//应付暂估明细表导出总条数
+       payable_payable_provisional_estimate_detail_exportDetail:{url:'/eop-boot/payable/payable-provisional-estimate-detail/exportDetail',method:'post'},//应付暂估明细表导出
+       
+       //应付暂估汇总表分页查询
+       payable_payable_provisional_estimate_detail_sumPage:{url:'/eop-boot/payable/payable-provisional-estimate-detail/sumPage',method:'post'},//应付暂估汇总表分页查询
+       payable_payable_provisional_estimate_detail_exportSumTotal:{url:'/eop-boot/payable/payable-provisional-estimate-detail/exportSumTotal',method:'post'},//应付暂估汇总表导出总条数
+       payable_payable_provisional_estimate_detail_exportSum:{url:'/eop-boot/payable/payable-provisional-estimate-detail/exportSum',method:'post'},//应付暂估汇总表导出
 };
 export default methodMap; 
-//   /business/get_develop_simple,

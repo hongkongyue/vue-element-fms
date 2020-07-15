@@ -1,10 +1,6 @@
 <template>
 <div>
     <header class="headerstyle" v-if="!showhidden">
-        <!-- <div style="width:100%;text-align:center;">
-            <span @click="handleShowHidden('hidden')"><i v-if="showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-bottom"></i></span>
-            <span @click="handleShowHidden('show')"><i v-if="!showhidden" style="font-size: 20px;cursor:pointer" class="el-icon-caret-top"></i></span>
-        </div> -->
         <el-form  :inline="true" :model="formSearch" class="demo-form-inline" style="width:99%;maxHeight:102px;overflow-y:auto;overflow-x:hidden;">
             <!-- <el-form :inline="true" :model="formSearch" class="demo-form-inline "> -->
             <el-form-item size="small">
@@ -211,15 +207,13 @@
 var totalPageSum = {}
 import DragList from '_c/drag-list'
 import filters from '../../../filter/'
-// import {
-//     debounce
-// } from 'mixins/debounce.js'
+import {burypoint} from 'mixins/burypoint'
 import {
     commonMixins
 } from 'mixins/common'
 import { export_json_to_excel,format_json_list_by_filter,convert26 } from '@/libs/excel/Export2Excel'
 export default {
-    mixins: [commonMixins],
+    mixins: [commonMixins,burypoint],
     components: {
         DragList
     },
@@ -518,6 +512,7 @@ export default {
         },
         //导出
         onExport(){
+            this.setBuryPoint('导出')
             let data = {}
             let propList = ["basicBrandName"]
             data.paramMap = {}
@@ -605,6 +600,7 @@ export default {
         },
 
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 

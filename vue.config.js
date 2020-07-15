@@ -53,9 +53,9 @@ module.exports = {
     lintOnSave: false,
     devServer: {
         disableHostCheck: true,
-        port: 8070, //端口号
+        port : 8070, //端口号
         https: false, // https:{type:Boolean}
-        open: true, //配置自动启动浏览器
+        open : true, //配置自动启动浏览器
         proxy: {
             // '/eop-boot': {
             //     target: 'http://newweb.eptison.com/',
@@ -67,20 +67,16 @@ module.exports = {
             // },
             '/eop-boot': {
                 //    target: 'http://eop.quanshangtech.com:888/',
-                //    target: 'http://localhost:9080/',     
-                //    target:'http://172.168.109.22:9080/',               //许克胜
-                //    target : 'http://172.168.109.16:9080/',            //刘新星
-                //    target : 'http://172.168.108.64:9080/',             //石明科
-                //    target : 'http://172.168.108.151:9080/',         //张明杰
-                      target: 'http://newweb.eptison.com/',            
-                //    target:'http://172.168.109.82:9080',                //刘孟洋
-                //    target:'http://172.168.110.253:9080/',              //高露
-                //    pathRewrite: { '^/eop-boot': '/' },                 //重写代理路径
+                //    target:'http://172.168.109.22:9080/',             //许克胜
+                //    target : 'http://172.168.109.16:9080/',          //刘新星
+                //    target : 'http://172.168.108.64:9080/',        //石明科
+                    //   target : 'http://172.168.108.101:9080/',        //张明杰
+                      target: 'http://newweb.eptison.com/',
+                    //   target:'http://172.168.111.75:9080',              //刘孟洋
+                //  target:'http://172.168.110.253:9080/',        //高露
+                    //   pathRewrite: { '^/eop-boot': '/' },              //重写代理路径
                       changeOrigin: true,
                       secure: false,
-                // pathRewrite: {
-                //     '^/eop-boot': '/'
-                // }
             },
             '/eop-node': {
                 // target: 'http://eop.quanshangtech.com:888/',

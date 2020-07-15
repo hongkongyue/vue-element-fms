@@ -6,24 +6,11 @@
                     <el-input v-model="formSearch.code" :disabled="true"></el-input>
                 </el-form-item>
                 <el-form-item label="人员名称：" size="small">
-                    <!-- <el-input  v-model="formSearch.name"></el-input> -->
                     <el-select v-model="formSearch.userName" placeholder="请选择" style="width:150px" filterable>
                         <el-option v-for="v in staffSelectList" :disabled="v.used == 0" :key="v.id" :label="v.name"
                                    :value="v.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <!-- <el-form-item label="部门：" size="small">
-                    <el-input v-model="formSearch.bm"></el-input>
-                </el-form-item>
-                <el-form-item label="岗位：" size="small">
-                    <el-input v-model="formSearch.gw"></el-input>
-                </el-form-item>
-                <el-form-item label="手机号：" size="small">
-                    <el-input v-model="formSearch.phone"></el-input>
-                </el-form-item>
-                <el-form-item label="绑定邮箱：" size="small">
-                    <el-input v-model="formSearch.email"></el-input>
-                </el-form-item> -->
                 <el-form-item label="状态：" size="small">
                     <el-select v-model="formSearch.status" placeholder="请选择" style="width:100px" filterable>
                         <el-option label="冻结" value="2"></el-option>
@@ -34,15 +21,6 @@
                 <el-form-item size="small">
                     <el-button size="small" type="primary" @click="onSave">保存</el-button>
                 </el-form-item>
-                <!-- <el-form-item   size="small">
-                   <el-button   size="small" type="primary" @click="onReset">重置密码</el-button>
-               </el-form-item>
-               <el-form-item   size="small">
-                   <el-button   size="small" type="default" @click="unLock">解锁</el-button>
-               </el-form-item>
-                <el-form-item   size="small">
-                   <el-button   size="small" type="primary" @click="weChat">微信解绑</el-button>
-               </el-form-item> -->
                 <el-form-item size="small">
                     <el-button size="small" type="primary" @click="goBlack">返回上一页</el-button>
                 </el-form-item>
@@ -117,56 +95,7 @@
                 <el-tab-pane label="角色包含权限" name="second">
                     <el-tree :data="dataUser" :props="defaultPropsQ" @node-click="handleNodeClick"></el-tree>
                 </el-tab-pane>
-                <!-- <el-tab-pane label="分配公司" name="third">
-                     <div style="text-align: center">
-                      <el-transfer
-                        style="text-align: left; display: inline-block"
-                        v-model="valueCompany"
-                        :props="{
-                          key: 'id',
-                          label: 'name'
-                        }"
-                        filterable
-                        :render-content="renderFunc"
-                        :titles="['待分配公司', '已分配公司']"
-                        :button-texts="['撤销分配', '分配']"
-                        :format="{
-                          noChecked: '${total}',
-                          hasChecked: '${checked}/${total}'
-                        }"
-                        @change="handleChangeCompany"
-                        :data="datags">
-                      </el-transfer>
-                    </div>
-                </el-tab-pane> -->
-                <!--
-                                    <el-tab-pane label="分配品牌" name="fourth">
-                                        <div style="text-align: center">
-                                          <el-transfer
-                                            style="text-align: left; display: inline-block"
-                                            v-model="valueBrand"
-                                            :props="{
-                                              key: 'id',
-                                              label: 'name'
-                                            }"
-                                            filterable
-                                            :render-content="renderFunc"
-                                            :titles="['待分配品牌', '已分配品牌']"
-                                            :button-texts="['撤销分配', '分配']"
-                                            :format="{
-                                              noChecked: '${total}',
-                                              hasChecked: '${checked}/${total}'
-                                            }"
-                                            @change="handleChangeBrand"
-                                            :data="dataPP">
-                                          </el-transfer>
-                                        </div>
-                                    </el-tab-pane> -->
-                <!-- <el-tab-pane label="分配店铺" name="five">
-                    <tree-transfer :title="titleDP" :from_data='fromData' :button_text='["分配 ","撤销分配"]' :to_data='toData' :defaultProps="defaultPropsDp" @addBtn='addStore'
-                        @removeBtn='removeStore' :mode='mode' height='540px' filter openAll>
-                    </tree-transfer>
-                </el-tab-pane> -->
+                
             </el-tabs>
         </section>
         <Modal v-model="visible" @on-cancel="cancelvisible" :width="250" class-name="customize-modal-center"
@@ -184,10 +113,10 @@
 <script>
     import filters from '../../../filter/'
     import treeTransfer from 'el-tree-transfer' // 引入
-
+    import {burypoint} from 'mixins/burypoint'
     import {debounce} from 'mixins/debounce'
 export default {
-    mixins: [debounce],
+    mixins: [debounce,burypoint],
         data() {
             return {
                 idString: '',
@@ -525,6 +454,7 @@ export default {
                 }
             },
             onSave() {
+                this.setBuryPoint('保存')
                 let arr = [];
                 for (let i = 0, len = this.userList.length; i < len; i++) {
                     arr.push(this.userList[i].id)
@@ -568,6 +498,7 @@ export default {
                 })
             },
             goBlack() {
+                this.setBuryPoint('返回上一页')
                 this.$router.push({
                     name: 'supply_user_list',
                 })

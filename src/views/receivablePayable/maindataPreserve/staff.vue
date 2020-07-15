@@ -292,8 +292,9 @@
   import downLoad from '../../../filter/downLoad'
   import { setTimeout } from 'timers';
   import {debounce} from 'mixins/debounce'
+  import {burypoint} from 'mixins/burypoint'
   export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
       return {
         dialogVisible:false,
@@ -348,6 +349,7 @@
           })
       },
           exportImport(){
+                  this.setBuryPoint('导出')
                   let data={}
                           data.currentPage        = this.page
                           data.pageSize           = this.pageSize
@@ -370,10 +372,12 @@
                     this.getData()
           },
           onAdd(){
+                    this.setBuryPoint('新增')
                     this.dialogtitle="新增"
                     this.dialogVisible=true    
           },
           onSearch(){
+                    this.setBuryPoint('查询')
                     this.page=1;
                     this.getData()
                    
@@ -384,6 +388,7 @@
                     this.getData()
           },
           onEdit(row){
+                    this.setBuryPoint('编辑')
                     this.dialogtitle="编辑"
                     this.dialogVisible=true
           },
@@ -481,6 +486,7 @@
                     this.$refs[formName].resetFields();
           },
           sync(){
+                   this.setBuryPoint('同步')
                   let data={}
                       this.request('masterData_staff_sync', data, true).then((res) => {
                               if (res.code == 1) {

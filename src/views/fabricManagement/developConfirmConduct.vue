@@ -10,17 +10,17 @@
                      -->
             <el-table ref="multipleTable" :data="tableData" size="mini" style="width: 100%" @row-click="showLog" border tooltip-effect="dark" max-height="350" @selection-change="handleSelectionChange">
                 <el-table-column type="index" width="55" label="序号" align="center"></el-table-column>
-                <el-table-column prop="taskNo" label="任务流编号" min-width="90" align="center" show-overflow-tooltip>
+                <el-table-column prop="taskNo" label="开发任务编号" min-width="90" align="center" show-overflow-tooltip>
                 </el-table-column>
                 <el-table-column prop="processStatus" label="流程状态" align="center" min-width="80" show-overflow-tooltip>
                 </el-table-column>
-                <el-table-column prop="initiateUserName" label="品牌发起人" min-width="90" align="center" show-overflow-tooltip>
+                <el-table-column prop="initiateUserName" label="发起人" min-width="90" align="center" show-overflow-tooltip>
                 </el-table-column>
                 <el-table-column prop="initiateDepartmentName" label="发起部门" min-width="80" align="center" show-overflow-tooltip>
                 </el-table-column>
-                <el-table-column prop="majorClasses" label="面/辅料" min-width="120" align="center" show-overflow-tooltip>
+                <el-table-column prop="majorClasses" label="物料类型" min-width="120" align="center" show-overflow-tooltip>
                 </el-table-column>
-                <el-table-column prop="kinds" label="面辅料品类分类" min-width="120" align="center" show-overflow-tooltip>
+                <el-table-column prop="kinds" label="品类分类" min-width="120" align="center" show-overflow-tooltip>
                 </el-table-column>
                 <el-table-column prop="specialCategory" label="是否特殊工艺" min-width="120" align="center" show-overflow-tooltip>
                     <template slot-scope="scope">{{scope.row.specialCategory == 1 ? '是' : '否'}}</template>
@@ -86,7 +86,7 @@
                          </el-select>
                     </el-form-item>
                     <span style="position:relative;top:10px;left:35px;color:red">*</span>
-                    <el-form-item label="检测说明：" size="small" label-width="120px">
+                    <el-form-item label="检测要求：" size="small" label-width="120px">
                         <el-input type="textarea" style="width:400px" :rows="2" placeholder="请输入内容" v-model="description">
                         </el-input>
                     </el-form-item>
@@ -201,12 +201,12 @@
 <script>
 import Util from 'libs/util';
 import axios from 'axios';
-
+import {burypoint} from 'mixins/burypoint'
 import {
     debounce
 } from 'mixins/debounce'
 export default {
-    mixins: [debounce],
+    mixins: [debounce,burypoint],
     name: 'developConfirmConduct',
     data() {
         return {
@@ -248,6 +248,7 @@ export default {
         },
         //确认
         submit() {
+            this.setBuryPoint('确认')
             this.visible = true
             this.addformdata.requireDate = Util.currentDate()
         },
@@ -301,6 +302,7 @@ export default {
         },
         //转交
         turnAlround() {
+            this.setBuryPoint('转交')
             this.turnvisible = true
             let data = {}
             this.request('queryNextId', data, true).then((res) => {

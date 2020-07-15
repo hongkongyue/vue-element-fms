@@ -303,8 +303,9 @@
 <script>
 import filters from '../../../filter/'
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
   export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
       return {
         logList:[],//日志
@@ -513,11 +514,13 @@ import {debounce} from 'mixins/debounce'
              this. getLoglist(row.id)  
           },
       onSearch(){
+         this.setBuryPoint('查询')
          this.currentPage = 1
          this.getData()
        
       },
       addSave(){
+         this.setBuryPoint('新增确认')
         console.log('11')
         this.$refs['ruleForm'].validate((valid) => {
            console.log(valid)
@@ -556,6 +559,7 @@ import {debounce} from 'mixins/debounce'
       },
         //编辑
         clickTable(row){
+           this.setBuryPoint('编辑')
           if(this.rowLenght == 0){
             this.$message.error('请先选择修改的数据！')
           }else if(this.rowLenght > 1){
@@ -578,6 +582,7 @@ import {debounce} from 'mixins/debounce'
         },
         //编辑保存
         changeSave(){
+           this.setBuryPoint('编辑确认')
           let data = {}
           data.id = this.rowId
           data.code = this.formChange.code
@@ -614,6 +619,7 @@ import {debounce} from 'mixins/debounce'
               this.getData()
           },
           onAdd(){
+                this.setBuryPoint('新增')
                 this.dialogVisible=true  
           }
 

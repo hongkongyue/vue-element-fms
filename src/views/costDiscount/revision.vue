@@ -198,8 +198,9 @@ var record
 import filters from '../../filter/'
 import Util from 'libs/util'
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
         return {
           newId:null,
@@ -507,9 +508,11 @@ export default {
         },
         //导入
         onImport() {
+            this.setBuryPoint('导入')
             this.visible = true
         },
         upload() {
+            this.setBuryPoint('导入确认')
             if (this.file == null) {
                 this.$message.warning('请先选择文件再导入')
             } else {
@@ -559,10 +562,12 @@ export default {
         },
         //下载模板
         downLoad() {
+            this.setBuryPoint('下载模板')
             window.location.href = 'https://eptison.oss-cn-hangzhou.aliyuncs.com/upload/prd/eop-fms/MarkChangeRecordBizServiceImpl/uploadOssFile/C1CD733240112EAD7697F72E36CB21D6.xlsx'
         },
         //异步导出
         onExport() {
+            this.setBuryPoint('导出')
             let data = {}
             data.oldYear = this.formData.year //年份
             data.oldBasicBrandId = this.formData.old_brandId //品牌主键id(老)
@@ -679,6 +684,7 @@ export default {
             })
         },
         onDelete() {
+            this.setBuryPoint('删除')
             let arr = w2ui.revision.getSelection()
             if (arr.length > 0) {
                 this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
@@ -755,6 +761,7 @@ export default {
             this.processTypeId = processTypeId
         },
         onEdit() {
+            this.setBuryPoint('编辑')
             let arr = w2ui.revision.getSelection()
             let obj = {}
             console.log(arr, '0987689', w2ui['revision'].records, arr[0])
@@ -799,37 +806,6 @@ export default {
                 this.addformdata.people = obj.costTaker //费用承担人
                 this.addformdata.busines = obj.costTaker //业务单位
             }
-            //  if(this.IDS.length==1){
-            //     this.dialogtitle="编辑"
-            //     this.dialogVisible=true
-            //     this.addformdata.year = this.IDS[0].oldYear //年份
-            //     this.addformdata.oldcompany = this.IDS[0].oldBasicCompanyName //公司(老)
-            //     this.addformdata.oldbrand = this.IDS[0].oldBasicBrandName //品牌(老)
-            //     this.addformdata.oldgoodsNo = this.IDS[0].oldGoodsNo //款号/货品编码(老)
-            //     this.addformdata.oldmerchCode = this.IDS[0].oldMerchantCode //条码/商家编码(老)
-            //     this.addformdata.oldcost = this.IDS[0].oldCost //成本(老)
-
-            //     this.addformdata.newcompany = this.IDS[0].newBasicCompanyName //公司(新)
-            //     this.newBasicCompanyId = this.IDS[0].newBasicCompanyId
-            //     this.newBasicCompanyCode = this.IDS[0].newBasicCompanyCode
-
-            //     this.addformdata.newbrand = this.IDS[0].newBasicBrandName //品牌(新)
-            //     this.newBasicBrandId = this.IDS[0].newBasicBrandId
-
-            //     this.addformdata.newgoodsNo = this.IDS[0].newGoodsNo //款号/货品编码(新)
-            //     this.addformdata.newmerchCode = this.IDS[0].newMerchantCode //条码/商家编码(新)
-            //     this.addformdata.newcost = this.IDS[0].newCost //成本(新)
-
-            //     this.addformdata.jgnum = this.IDS[0].processQuantity //加工数量
-            //     this.addformdata.jgtype = this.IDS[0].processType //加工类型
-            //     this.processTypeId = this.IDS[0].processTypeId
-
-            //     this.IDS[0].processProject ? this.addformdata.jgproject = this.IDS[0].processProject.split(',') : this.addformdata.jgproject = '' //加工项目
-            //     this.addformdata.startTime = this.IDS[0].startTime //改标发起时间
-            //     this.addformdata.endTime = this.IDS[0].endTime //改标完成时间
-            //     this.addformdata.people = this.IDS[0].costTaker //费用承担人
-            //     this.addformdata.busines = this.IDS[0].costTaker //业务单位
-            //  }
         },
         selection(selection) {
             this.IDS = selection
@@ -912,6 +888,7 @@ export default {
             })
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.page = 1;
             this.getData()
         },
@@ -920,6 +897,7 @@ export default {
             this.page = 1;
         },
         submitFormEdit() {
+            this.setBuryPoint('编辑保存')
             this.dialogVisible = true
             console.log(this.addformdata.newgoodsNo, '09889')
             if (this.addformdata.newcompany == null || this.addformdata.newcompany.length == 0) {

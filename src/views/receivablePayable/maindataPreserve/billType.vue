@@ -37,7 +37,7 @@
                                   :total="total"
                                   >
                               </el-pagination>
-                             <el-table 
+                              <el-table 
                                     @selection-change="selection"
                                     @select-all="selection"
                                     @select="selection"
@@ -277,8 +277,9 @@
   import filters from '../../../filter/'
   import fetchData from '../../../filter/axios'
   import {debounce} from 'mixins/debounce'
+  import {burypoint} from 'mixins/burypoint'
   export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
       return {
         add:false,
@@ -372,6 +373,7 @@
           //               this.editformdata.id=row.id;
           //   },
            onEdit(){
+                 this.setBuryPoint('编辑')
                  if(this.IDS.length==1){
                         this.editVisible=true
                         this.editformdata.name=this.IDS[0].basicPlatformName;
@@ -418,6 +420,7 @@
                   }
           },
            confirmSub(){
+                this.setBuryPoint('新增确认')
                 let arr=[]
                if(this.addList.length>0){
                   for(let i=0;i<this.addList.length;i++){
@@ -459,9 +462,11 @@
                     this.getData()
           },
           onAdd(){
+                    this.setBuryPoint('新增')
                     this.dialogVisible=true    
           },
           onSearch(){
+                    this.setBuryPoint('查询')
                     this.page = 1;    
                     this.getData()  
           },
@@ -512,6 +517,7 @@
           },
           //编辑提交
           submitForms(formName) {
+                    this.setBuryPoint('编辑确认')
                     this.editVisible=true
                     this.$refs[formName].validate((valid) => {
                       if (valid) {
@@ -522,6 +528,7 @@
                     });
           },
           submitForm(formName) {
+                    this.setBuryPoint('新增添加')
                     this.dialogVisible=true
                     this.$refs[formName].validate((valid) => {
                       if (valid) {

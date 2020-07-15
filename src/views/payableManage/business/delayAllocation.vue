@@ -73,8 +73,9 @@
 import filters from '../../../filter/'
 import fetchparams from 'fetchparams'
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
         return {
             userInfo: {}, //用户信息
@@ -147,6 +148,7 @@ export default {
     methods: {
       //禁用
       onClosed(){
+          this.setBuryPoint('禁用')
         if(this.IDS.length == 0){
           this.$message.error('请先选择数据，再禁用')
         }else if(this.IDS.length > 1){
@@ -236,6 +238,7 @@ export default {
             this.getData()
         },
         onAdd() {
+            this.setBuryPoint('新增')
             this.dialogtitle = "新增"
             this.dialogVisible = true
         },
@@ -251,6 +254,7 @@ export default {
         },
 
         submitForm(formName) {
+            this.setBuryPoint('新增确认')
             this.dialogVisible = true
             this.$refs[formName].validate((valid) => {
                 if (valid) {
@@ -260,7 +264,9 @@ export default {
                 }
             });
         },
+        
         submitForms(formName) {
+            this.setBuryPoint('新增确认')
             // this.editVisible=true
             this.$refs[formName].validate((valid) => {
                 if (valid) {
@@ -338,6 +344,7 @@ export default {
             this.$refs[formName].resetFields();
         },
         cancel() {
+            this.setBuryPoint('新增取消')
             this.resetForm('ruleForm')
             this.dialogVisible = false;
             this.ruleForm = {}

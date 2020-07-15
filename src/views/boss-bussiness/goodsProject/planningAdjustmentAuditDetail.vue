@@ -311,8 +311,9 @@
 var totalPageSum = {}
 import filters from '../../../filter/'
 import{debounce}  from 'mixins/debounce.js'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     components: {
         //    DragList
     },
@@ -393,6 +394,7 @@ export default {
                         })
        },
        confirmAgain1(){
+           this.setBuryPoint('审核')
                    this.$confirm('该操作是将该任务进行审核，是否继续？', '审核确认', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -407,6 +409,7 @@ export default {
                 });
        },
        confirmAgain2(){
+           this.setBuryPoint('驳回')
                    this.$confirm('该操作是将该任务进行驳回，是否继续？', '驳回确认', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',

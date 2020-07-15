@@ -186,8 +186,10 @@
 </template>
 
 <script>
+import {burypoint} from 'mixins/burypoint'
 let socket = null;
 export default {
+    mixins:[burypoint],
     name: 'applyForPrint',
     data() {
         return {
@@ -202,10 +204,6 @@ export default {
                     name: '待提交',
                     value: 100
                 },
-                // {
-                //     name: '已提交',
-                //     value: 200
-                // },
                 {
                     name: '获取异常',
                     value: 400
@@ -353,6 +351,7 @@ export default {
 
         //打印合格证
         onPrintone(name) {
+            this.setBuryPoint('合格证打印')
             this.chosePrint = name
             let arr = w2ui.applyForPrint.getSelection()
             if (arr.length == 0) {
@@ -387,6 +386,7 @@ export default {
         },
         //洗水唛打印
         onPrinttwo(name) {
+            this.setBuryPoint('洗水唛打印')
             this.chosePrint = name
             let arr = w2ui.applyForPrint.getSelection()
             if (arr.length == 0) {
@@ -674,14 +674,17 @@ export default {
         },
         //合格证预览PDF
         seePdfOne(id) {
+            this.setBuryPoint('合格证预览')
             this.sendPrinterDataOne(id)
         },
         //洗水唛预览
         seePdfTwo(id) {
+            this.setBuryPoint('洗水唛预览')
             this.sendPrinterDataTwo(id)
         },
         //导入
         onImport() {
+            this.setBuryPoint('导入')
             this.uploadvisible = true
         },
         upLoadFile() {
@@ -744,6 +747,7 @@ export default {
         },
         //任务完成   
         onFinish() {
+            this.setBuryPoint('任务完成')
             let arr = w2ui.applyForPrint.getSelection()
             if (arr.length == 0) {
                 this.$message.warning('请先选择需要完成的数据')
@@ -762,6 +766,7 @@ export default {
         },
         //提交
         onSubmit() {
+            this.setBuryPoint('提交')
             let arr = w2ui.applyForPrint.getSelection()
             if (arr.length == 0) {
                 this.$message.warning('请先选择提交的数据')
@@ -780,10 +785,12 @@ export default {
         },
         //模板下载
         onDownload() {
+            this.setBuryPoint('模板下载')
             window.location.href = 'https://eptison.oss-cn-hangzhou.aliyuncs.com/upload/prd/eop-fms/WashLabelPrintApplyBizServiceImpl/importTask/合格证洗水唛打印导入模板20200421.xlsx'
         },
         //新增
         onAdd() {
+            this.setBuryPoint('新增')
             let name = this.$route.query.code
             this.$router.push({
                 name: 'addPrint',
@@ -794,6 +801,7 @@ export default {
         },
         //编辑
         onEdit() {
+            this.setBuryPoint('编辑')
             let arr = w2ui.applyForPrint.getSelection()
             if (arr.length == 0) {
                 this.$message.warning('请先选择需要完成的数据')
@@ -825,6 +833,7 @@ export default {
         },
         //查看详情
         onSee() {
+            this.setBuryPoint('详情查看')
             let arr = w2ui.applyForPrint.getSelection()
             if (arr.length == 0) {
                 this.$message.warning('请先选择需要完成的数据')
@@ -843,6 +852,7 @@ export default {
         },
         //变更任务
         changeStatus(){
+            this.setBuryPoint('变更')
             let arr = w2ui.applyForPrint.getSelection()
             if (arr.length == 0) {
                 this.$message.warning('请先选择变更任务的数据')
@@ -1104,6 +1114,7 @@ export default {
         },
 
         onSearch() {
+            this.setBuryPoint('查询')
             this.currentPage = 1
             this.getData()
 

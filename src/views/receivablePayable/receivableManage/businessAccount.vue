@@ -1,7 +1,7 @@
 <template>
      <div>
           <header class="headerstyle">
-                <el-form :inline="true" :model="formSearch" class="demo-form-inline ">
+                <el-form :inline="true" :model="formSearch" class="demo-form-inline " >
                           <el-form-item><span style="color:red">*</span></el-form-item>
                           <el-form-item label="公司" size="small">
                                 <el-select v-model="formSearch.basicCompanyId" placeholder="请选择公司" style="width:220px" filterable>
@@ -29,7 +29,7 @@
                 <div class="grid-content bg-purple"  style="background:#fff!important">
                       <el-col style="text-align:center;height:40px;line-height:40px">
                            <el-button v-if="judgeMenu.indexOf('新增') !== -1" size="mini" type="primary" @click="onAdd">新增</el-button>
-                           <el-button v-if="judgeMenu.indexOf('删除') !== -1" size="mini" type="primary" @click="delBillList">删除</el-button>
+                           <el-button v-if="judgeMenu.indexOf('删除') !== -1" size="mini" type="primary" @click="delChecked">删除</el-button>
                       </el-col>
                       <el-col  style="text-align:center;height:40px;line-height:40px;font-size:20px">
                             期间方案
@@ -38,9 +38,9 @@
                 <div v-if="Alist.length>0" class="grid-content bg-purple" style="background:#fff;margin-left:3%;width:94%;padding:2% 2%;padding-left:1%;height:310px; overflow-y: scroll;">
                       <el-col style="padding-left:20%;padding-top:15%">
                           <Timeline>
-                            <TimelineItem   v-for="(v,$index) in Alist" :key="v">
-                                <Icon type="ios-trophy" slot="dot" v-if="$index==0"></Icon>
-                                <p class="time pointer" @click="selected(v)"  :class="{active: active == v}">{{v}}</p>
+                            <TimelineItem   v-for="v in Alist" :key="v">
+                                <Icon type="ios-trophy" slot="dot" v-if="v.sign"></Icon>
+                                <p class="time pointer" @click="selected(v)"  :class="{active: active == v}">{{v.name}}</p>
                             </TimelineItem>
                           </Timeline>
                       </el-col>
@@ -50,7 +50,7 @@
                 <div class="grid-content bg-purple-light">
                        <section class="middle">
                                <!-- 编辑赋值 -->
-                             <el-form :inline="true" :model="editformdata" class="demo-form-inline " v-if="!add">
+                             <el-form :inline="true" :model="editformdata" class="demo-form-inline " v-if="add==false" >
                                  <el-row>
                                       <el-form-item label="公司" size="small" label-width="95px">
                                           <el-select :disabled="!add" v-model="editformdata.company" placeholder="公司" style="width:140px" filterable	>
@@ -98,7 +98,7 @@
                              </el-form>
 
                              <!-- 新增部分表单 -->
-                            <el-form :inline="true" :model="formData" class="demo-form-inline " v-if="add">
+                            <el-form :inline="true" :model="formData" class="demo-form-inline " v-if="add===true">
                                  <el-row>
                                       <el-form-item label="公司" size="small" label-width="95px">
                                           <!-- <el-select :disabled="!add" v-model="formData.company" placeholder="请选择" style="width:140px" filterable	>
@@ -153,7 +153,8 @@
                                             </el-form-item>
                                   </el-row>
                              </el-form>
-                             <el-table v-if="!add"
+                             <span v-if="add==false">
+                             <el-table 
                                     ref="multipleTabless"
                                     :data="list"
                                     style="width: 100%"
@@ -190,7 +191,7 @@
                                       show-overflow-tooltip>
                                        <template slot-scope="scope">{{scope.row.endDate|Y_M_D}}</template>
                                     </el-table-column>
-                                    <el-table-column
+                                    <el-table-column 
                                       prop="enable"
                                       label="开启状态"
                                       min-width="120"
@@ -205,8 +206,9 @@
                                      </template>
                                     </el-table-column>
                           </el-table>
+                          </span>
                           <!-- 新增表格 -->
-                          <el-table v-if="add"
+                          <el-table  v-if="add===true"
                                     ref="multipleTable"
                                     :data="addList"
                                     style="width: 100%"
@@ -321,7 +323,7 @@
           <Modal v-model="dialogVisible" :styles="mystyle" :rules="rules" title="新建期间方案"  @on-cancel='cancelAdd' :width="470" @on-ok="editSubmit"
             class-name="customize-modal-center"> 
             <Row class="margin-bottom-10 background-color-white exhibition">   
-            <el-form :inline="true" ref="ruleForm" :model="addformdata" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="rules" >
+            <el-form :inline="true" ref="ruleForm" :model="addformdata" class="demo-form-inline demo-ruleForm " :label-position="left" :rules="rules"  @submit.native.prevent>
                          <Col>
                                 <el-form-item label="账期名称"   size="small" label-width="95px"  prop="platform">
                                       <el-input v-model="addformdata.billName" maxlength="30" style="width:190px" ></el-input>
@@ -348,8 +350,9 @@
 <script>
   import filters from '../../../filter/'
   import {debounce} from 'mixins/debounce'
+  import {burypoint} from 'mixins/burypoint'
   export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint],
     data() {
       return {
         add:false,
@@ -435,8 +438,9 @@
                
           },
           selected(name) {
-                    this.formSearch.name=name
+                    this.formSearch.name=name.name
                     this.active= name;
+                    this.add=false;
                     console.log(this.active)
                      this.getData()
            },
@@ -462,7 +466,9 @@
                                             type: 'error'
                                 })
                          }
-                      }         
+                      }    
+                      console.log(this.addList,'新增的数据')     
+                      console.log(this.add,'显示条件')
           },
           //判断时间有误交叉
           judgeTimeRepeat(scope){
@@ -556,10 +562,12 @@
                     this.getData()
           },
           onAdd(){
+                    this.setBuryPoint('新增')
                     this.dialogtitle="新增"
                     this.dialogVisible=true    
           },
           onSearch(){
+                     this.setBuryPoint('查询')
                      this.logList=[]
                      this.resetEdit()
                      this.getBillList()
@@ -600,6 +608,7 @@
                                       this.list=[]
           },
           getData(){
+                  this.add=false
                   this.logList=[]
                   let data={}
                       // data.page=this.page
@@ -682,6 +691,24 @@
                               }
                         }) 
           },
+          delChecked(){
+                      this.setBuryPoint('删除') 
+                      if(!this.formSearch.basicCompanyId)return this.$message.error('公司不能为空!')
+                      if(!this.formSearch.type) return this.$message.error('账务类型不能为空!')
+                      if(!this.formSearch.name) return this.$message.error('要删除的账期名称不能为空!')
+                 this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                  }).then(() => {
+                       this.delBillList()
+                  }).catch(() => {
+                    this.$message({
+                      type: 'info',
+                      message: '已取消删除'
+                    });          
+                  });
+          },
           delBillList(){//sys_accountPeriod_delete
                            
                      let    data={}
@@ -690,7 +717,7 @@
                             data.name          =this.formSearch.name
                       if(!data.basicCompanyId)return this.$message.error('公司不能为空!')
                       if(!this.formSearch.type) return this.$message.error('账务类型不能为空!')
-                      if(!data.name) return this.$message.error('账期名称不能为空!')
+                      if(!data.name) return this.$message.error('要删除的账期名称不能为空!')
                     this.request('sys_accountPeriod_delete', data, true).then((res) => {
                               if (res.code == 1) {
                                      this.$message({
@@ -716,10 +743,13 @@
                     this.dialogVisible=false
           },
           confirm(){
+                    this.setBuryPoint('新增确认')
                    if(!this.addformdata.billName) return this.$message.error('账期名单不能为空')
                     this.add=true
                     this.dialogVisible=false;
                     this.Alist.push(this.addformdata.billName)
+                    this.addformdata.billName=''
+                    console.log(this.add,'显示条件')
 
           },
           getName(id){

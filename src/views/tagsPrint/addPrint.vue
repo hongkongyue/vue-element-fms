@@ -103,8 +103,10 @@
 </template>
 
 <script>
+import {burypoint} from 'mixins/burypoint'
 export default {
     name: 'addPrint',
+    mixins:[burypoint],
     data() {
         return {
             testList: [{
@@ -238,6 +240,7 @@ export default {
         // },
         //新增
         onAdd() {
+            this.setBuryPoint('新增明细')
             if (!this.formSearch.brand) {
                 this.$message.error('请先选择品牌')
             } else {
@@ -376,6 +379,7 @@ export default {
         },
         //删除
         onDelete() {
+            this.setBuryPoint('删除明细')
             if (this.selectionList.length == 0) {
                 this.$message.warning('请先选中删除的数据')
             } else {
@@ -399,6 +403,7 @@ export default {
         },
         //保存
         onSave() {
+            this.setBuryPoint('保存明细')
             if (this.tableList.length == 0) {
                 this.$message.warning('请先新增明细再保存')
             } else {
@@ -433,6 +438,7 @@ export default {
         },
         //取消
         onCancel() {
+            this.setBuryPoint('取消新增申请')
             let name = this.$route.query.code
             this.$root.eventHub.$emit('closePageFromOtherPage', 'addPrint'); //关闭新增页面
             this.$router.push({ //跳转打印申请

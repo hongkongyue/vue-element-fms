@@ -13,16 +13,16 @@
                 </el-select>
             </el-form-item>
             <el-form-item size="small">
-                <el-button size="small" type="primary" @click="onSearch">查询</el-button>
+                <el-button size="small" type="primary" v-if="judgeMenu.indexOf('查询') !== -1" @click="onSearch">查询</el-button>
             </el-form-item>
             <el-form-item size="small">
                 <el-button size="small" type="default" @click="onReset">重置</el-button>
             </el-form-item>
             <el-form-item size="small">
-                <el-button size="small" type="primary" @click="onAdd">新增</el-button>
+                <el-button size="small" type="primary" v-if="judgeMenu.indexOf('新增') !== -1" @click="onAdd">新增</el-button>
             </el-form-item>
             <el-form-item size="small">
-                <el-button size="small" type="primary" @click="onEdit">编辑</el-button>
+                <el-button size="small" type="primary" v-if="judgeMenu.indexOf('编辑') !== -1" @click="onEdit">编辑</el-button>
             </el-form-item>
         </el-form>
     </header>
@@ -72,8 +72,9 @@
 <script>
 import filters from '../../../filter/'
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins:[debounce],
+    mixins:[debounce,burypoint], 
     data() {
         return {
             IDS: [],
@@ -112,13 +113,30 @@ export default {
             currentPage: 1,
             // 日志相关
             list: [],
+            judgeMenu: [],
+            buttonList: [], //按钮权限
         }
     },
     mounted() {
         this.getData()
         this.getRoleCode()
+        this.getButtonJurisdiction()
     },
     methods: {
+        getButtonJurisdiction() {
+            let data = {}
+                data.parentResourceCode = this.$route.query.code
+            this.request('masterData_resource_buttonResource', data, true).then(res => {
+                if (res.code == 1) {
+                    this.buttonList = res.data
+                    let newList = []
+                    this.buttonList.map(function (item) {
+                        newList.push(item.resourceName)
+                    })
+                    this.judgeMenu = newList
+                }
+            })
+        },
         onEdit() {
             if (this.IDS.length == 1) {
                 this.$router.push({
@@ -146,11 +164,13 @@ export default {
             this.getData()
         },
         onAdd() {
+            //  this.setBuryPoint('新增')
             this.$router.push({
                 name: 'add__role',
             })
         },
         onSearch() {
+            this.setBuryPoint('查询')
             this.page = 1;
             this.getData()
             

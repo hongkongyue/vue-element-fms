@@ -29,7 +29,7 @@
         <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
               <el-tab-pane label="角色包含权限" name="first">
                        <section class="middle">
-                               <tree-transfer :defaultTransfer="true" :title="title" :defaultCheckedKeys='fromData' :button_text='["分配 ","撤销"]' :from_data='fromData' @addBtn='addsss' @removeBtn='remove' :to_data='toData' :defaultProps="{label:'label'}" :mode='mode' height='540px' placeholder="请输入权限名称" filter openAll>
+                               <tree-transfer  :title="title"  :button_text='["分配 ","撤销"]' :from_data='fromData' @addBtn='addsss' @removeBtn='remove' :to_data='toData' :defaultProps="{label:'label'}" :mode='mode' height='540px' placeholder="请输入权限名称" filter :defaultTransfer="true" :transferOpenNode="false">
                                </tree-transfer>
                        </section>
               </el-tab-pane>
@@ -166,8 +166,9 @@
   import filters from '../../../filter/'
   import treeTransfer from 'el-tree-transfer' // 引入
 import {debounce} from 'mixins/debounce'
+import {burypoint} from 'mixins/burypoint'
 export default {
-    mixins: [debounce],
+    mixins: [debounce,burypoint],
     data() {
       return {
         activeName2  :'first',
@@ -271,6 +272,7 @@ export default {
                     this.list[$index].departmentName=''
              },
              confirmSave(){
+               this.setBuryPoint('保存')
                     let arr=[]
                     let userIds=[]
                     if(!this.formSearch.code)return this.$message.error('角色编码不能为空')
@@ -412,6 +414,7 @@ export default {
                           })
           },
           directSave(){
+            this.setBuryPoint('返回上一页')
                     this.$router.push({
                                              name:'supply_role_list',
                                         })  

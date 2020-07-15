@@ -22,13 +22,14 @@
     import goingB  from '../list/going.vue'
     import completedC from '../list/finish.vue'
     import {debounce} from 'mixins/debounce'
+    import {burypoint} from 'mixins/burypoint'
     function formSearch() {
         return {
             search: ''
         }
     }
     export default {
-        mixins: [debounce],
+        mixins: [debounce,burypoint],
         data() {
             return {
             }
