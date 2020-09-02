@@ -13,8 +13,7 @@ const buildMsg = 'build at ' + new Date()
 
 const resolve = dir => {
     return path.join(__dirname, dir)
-}
-
+} //
 // 这里需要修改为你线上项目存放的路径
 // 比如你打包的文件放到服务器的my-app文件夹，域名为a.com，则应改为
 // http(s)://a.com/my-app/
@@ -53,9 +52,9 @@ module.exports = {
     lintOnSave: false,
     devServer: {
         disableHostCheck: true,
-        port : 8070, //端口号
+        port: 8070, //端口号
         https: false, // https:{type:Boolean}
-        open : true, //配置自动启动浏览器
+        open: true, //配置自动启动浏览器
         proxy: {
             // '/eop-boot': {
             //     target: 'http://newweb.eptison.com/',
@@ -70,13 +69,13 @@ module.exports = {
                 //    target:'http://172.168.109.22:9080/',             //许克胜
                 //    target : 'http://172.168.109.16:9080/',          //刘新星
                 //    target : 'http://172.168.108.64:9080/',        //石明科
-                    //   target : 'http://172.168.108.101:9080/',        //张明杰
-                      target: 'http://newweb.eptison.com/',
-                    //   target:'http://172.168.111.75:9080',              //刘孟洋
+                //   target : 'http://172.168.108.101:9080/',        //张明杰
+                target: 'http://newweb.eptison.com/',
+                //   target:'http://172.168.111.75:9080',              //刘孟洋
                 //  target:'http://172.168.110.253:9080/',        //高露
-                    //   pathRewrite: { '^/eop-boot': '/' },              //重写代理路径
-                      changeOrigin: true,
-                      secure: false,
+                //   pathRewrite: { '^/eop-boot': '/' },              //重写代理路径
+                changeOrigin: true,
+                secure: false,
             },
             '/eop-node': {
                 // target: 'http://eop.quanshangtech.com:888/',
@@ -88,7 +87,7 @@ module.exports = {
                 target: 'http://localhost:8091/',
                 //target:'http://172.168.108.66:8080',
                 //target: 'http://eopsit.eptison.com:8080',
-               
+
                 changeOrigin: true,
                 secure: false
             },
@@ -101,8 +100,8 @@ module.exports = {
     //If the value is an Object, it will be merged into the final config using webpack-merge.
     configureWebpack: {
         plugins: [
-            new HtmlWebpackPlugin( {
-                template : './public/index.html'
+            new HtmlWebpackPlugin({
+                template: './public/index.html'
             }),
             new webpack.BannerPlugin(buildMsg),
             new HappyPack({
@@ -112,7 +111,7 @@ module.exports = {
             })
         ]
     },
-    css:{
-        sourceMap:false
+    css: {
+        sourceMap: false
     }
 }
