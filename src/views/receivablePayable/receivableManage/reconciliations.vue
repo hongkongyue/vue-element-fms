@@ -257,7 +257,7 @@ export default {
     },
     methods: {
         getButtonJurisdiction() {
-            console.log(this.$route.query.code, '0895643345\879')
+            console.log(this.$route.query.code, '089564334')
             let data = {}
             data.parentResourceCode = this.$route.query.code
             this.request('masterData_resource_buttonResource', data, true).then(res => {

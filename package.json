@@ -41,7 +41,6 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.5.0",
-    "@vue/cli-plugin-eslint": "^3.5.0",
     "@vue/cli-service": "^3.5.0",
     "@vue/cli-shared-utils": "^3.10.0",
     "fetchparams": "^1.0.3",
@@ -55,7 +54,6 @@
     "vuedraggable": "^2.23.2",
     "yallist": "^3.0.3"
   },
-  "eslintConfig": {},
   "postcss": {
     "plugins": {
       "autoprefixer": {}

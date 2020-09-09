@@ -1367,5 +1367,5 @@ export default {
 }
 .plx-table .warning-row {
   background: oldlace;
-
+}
 </style>
